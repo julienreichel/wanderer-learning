@@ -67,7 +67,7 @@ const schema = a.schema({
       id: a.id().required(),
       type: a.string().required(),
       lectureId: a.id().required(),
-      lecture: a.belongsTo("Lecture", "lectureID"),
+      lecture: a.belongsTo("Lecture", "lectureId"),
       order: a.string(),
       title: a.string().required(),
       owner: a.string(),
