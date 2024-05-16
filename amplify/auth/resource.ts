@@ -35,6 +35,7 @@ export const auth = defineAuth({
   multifactor: {
     mode: "OPTIONAL",
     totp: true,
+    sms: true,
   },
 
   userAttributes: {
