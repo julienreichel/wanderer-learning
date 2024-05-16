@@ -2,6 +2,132 @@
 // so you can safely delete all default props below
 
 export default {
-  failed: 'Action failed',
-  success: 'Action was successful'
+  error: {
+    form: {
+      no_empty_text: 'Please type something',
+      save_error: 'Something went wrong'
+    }
+  },
+  generic: {
+    form: {
+      submit: 'Submit',
+      saved: 'Saved',
+      confirm_delete_title: 'Confirm Delete'
+    },
+    app_name: 'Wanderer Learing',
+    sign_out: 'Sign Out',
+    sign_in: 'Sign In',
+    welcome: 'Welcome',
+  },
+  quiz: {
+    form: {
+      title: 'Quiz Title',
+      confirm_delete_question: 'Do you really want to delete this question ?'
+    },
+    question: {
+      type: {
+        shorttext: 'Short Text',
+        longtext: 'Long Text',
+        radio: 'Multiple Choices',
+        checkbox: 'Check boxes',
+        feedback: 'Feedback'
+      }
+    },
+    feedback: {
+      type: {
+        roti: 'ROTI',
+        difficulty: 'Difficulty',
+        stars: 'Stars',
+        text: 'Free Text'
+      },
+      question: {
+        roti: 'What is your Return on Time Invested (ROTI) ?',
+        difficulty: 'How challenging did you find this lecture ?',
+        stars: 'How likely are you to recommend this lecture to others ?',
+        text: 'Do you have any feedback ?'
+      },
+      tooltips: {
+        roti: {
+          1: 'Didn’t justify the time spent',
+          2: 'I gained something',
+          3: 'I gained enough to justify the time spent',
+          4: 'I gained more than the time spent',
+          5: 'This was really worth the time invested'
+        },
+        difficulty: {
+          1: 'Too easy',
+          2: 'Easy',
+          3: 'Average',
+          4: 'Hard',
+          5: 'Too hard'
+        }
+      }
+    }
+  },
+  course: {
+    list: 'Courses',
+    form: {
+      add: 'New course',
+      title: 'Course Title',
+      confirm_delete_course: 'Do you really want to delete this course ?'
+    }
+  },
+  concept: {
+    list: 'Concepts',
+    form: {
+      add: 'New concept',
+      title: 'Concept Title',
+      duplicate: 'Concept already exists',
+      confirm_delete_concept: 'Do you really want to delete this concept ?',
+      no_results: 'No results found',
+    }
+  },
+  step: {
+    form: {
+      add: {
+        quiz: 'New quiz',
+        step: 'New Step',
+      },
+      quiz: 'Quiz',
+      step: 'Step',
+      title: 'Step Title',
+      confirm_delete_step: 'Do you really want to delete this step ?'
+    }
+  },
+
+  lecture: {
+    form: {
+      add: 'New lecture',
+      title: 'Lecture Title',
+      confirm_delete_lecture: 'Do you really want to delete this lecture ?'
+    },
+    step: {
+      not_completed: 'Lecture step not completed, no result recorded',
+    }
+  },
+  parts: {
+    form: {
+      add: {
+        text: 'New text',
+        img: 'New image',
+        video: 'New video',
+      },
+      text: 'Text',
+      img: 'Image',
+      video: 'Video',
+    }
+  },
+  reporting: {
+    list: 'Reporting',
+    graphs: {
+      time_distribution: {
+        labels: {
+          too_short: 'Less than 5 min',
+          good_time: 'Between 5 and 10 min',
+          long_time: 'Between 10 and 15 min',
+          too_long: 'More than 15 min',
+        }
+      }
+    }
+  }
 }

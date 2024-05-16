@@ -1,0 +1,64 @@
+<template>
+  <q-page class="">
+    <div v-if="course.id" class="q-pa-md q-gutter-sm">
+      <q-card>
+        <q-card-section>
+          <div class="text-h5">{{ course.title }}</div>
+        </q-card-section>
+        <q-card-actions>
+          <q-space />
+          <q-btn square size="sm" icon="straight" @click="finished()" />
+        </q-card-actions>
+      </q-card>
+      <lectures-editing v-model="course.lectures.items" />
+    </div>
+  </q-page>
+</template>
+
+<script setup>
+import { ref, onMounted, inject } from 'vue';
+import LecturesEditing from 'src/components/lecture/LecturesEditing.vue';
+
+import { useIris } from 'src/composables/iris';
+const { t, $q, router, canEdit } = useIris();
+const { course: courseService, stepReporting: reportingService } =
+  inject('services');
+
+const { updateBreadcrumbs } = inject('breadcrumbs');
+const userAttributes = inject('userAttributes');
+const { username, userId } = userAttributes.value;
+
+const props = defineProps({
+  id: String,
+});
+
+const course = ref({});
+onMounted(async () => {
+  const data = await courseService.get(props.id);
+  course.value = data;
+
+  updateBreadcrumbs([
+    { label: t('course.list'), to: { name: 'CourseList' } },
+    {
+      label: data.title,
+      id: data.id,
+      edit: canEdit(data) ? 'CourseEdit' : null,
+    },
+  ]);
+  // load stats for the user for each lecture
+  course.value.lectures.items.forEach(async (lecture) => {
+    const reports = await reportingService.list({
+      lectureID: lecture.id,
+      username,
+      userId,
+    });
+    if (reports.items.length) {
+      lecture.stepsSummary = reportingService.getLastReports(reports.items);
+    }
+  });
+});
+
+const finished = () => {
+  router.push({ name: 'CourseList' });
+};
+</script>
