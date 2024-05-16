@@ -1,27 +1,13 @@
-// Utils
-import axios from 'axios';
-
-// Constants
-
-// XHR library global configuration
-axios.defaults.withCredentials = false;
+import { generateClient } from 'aws-amplify/data';
 
 /**
- * This is the prototype of any service.
+ * This is the prototype of any service using GraphQL
  */
 export default class ServicePrototype {
 
   constructor() {
-  }
-
-  getQuery(type) {
-    return {
-      create: null,
-      update: null,
-      get: null,
-      delete: null,
-      list: null,
-    }[type]
+    this.client = generateClient();
+    this.model = null;
   }
 
   /**
@@ -31,35 +17,24 @@ export default class ServicePrototype {
    * @returns {Promise<object>}
    */
   async create(input) {
-    const { data } = await this.client.graphql({
-      query: this.getQuery('create'),
-      variables: {
-        input
-      },
-    });
-    //()
+    const { data } = await this.models.create(input);
     return Object.values(data)[0];
   }
 
   /**
    * Update a model
    *
-   * @param {object} payload the model data
+   * @param {object} input the model data
    * @returns {Promise<object>}
    */
-  async update(payload) {
-    let input = { ...payload };
+  async update(input) {
+    let payload = { ...input };
 
     // Cleanup fields that should not be updated
-    this.cleanGraphQLUpdate(input);
+    this.cleanGraphQLUpdate(payload);
 
-    const { data } = await this.client.graphql({
-      query: this.getQuery('update'),
-      variables: {
-        input
-      },
-    });
-    //()
+    const { data } = await this.model.update(payload);
+
     return Object.values(data)[0];
   }
 
@@ -70,12 +45,7 @@ export default class ServicePrototype {
    * @returns {Promise<object>}
    */
   async get(id) {
-    const { data } = await this.client.graphql({
-      query: this.getQuery('get'),
-      variables: { id }
-    });
-    //()
-
+    const { data } = await this.model.get({ id });
     return Object.values(data)[0];
   }
 
@@ -93,14 +63,9 @@ export default class ServicePrototype {
       model._version = fullModel._version;
     }
     const { id, _version } = model;
-    const input = { id, _version };
-    const { data } = await this.client.graphql({
-      query: this.getQuery('delete'),
-      variables: {
-        input
-      }
-    });
-    //()
+    const payload = { id, _version };
+    const { data } = await this.model.delete(payload);
+
     return Object.values(data)[0];
   }
 
@@ -120,11 +85,8 @@ export default class ServicePrototype {
       _deleted: { attributeExists: false }
     };
 
-    const { data } = await this.client.graphql({
-      query: this.getQuery('list'),
-      variables: params
-    });
-    //()
+    const { data } = await this.model.list(params);
+
     return Object.values(data)[0];
   }
 

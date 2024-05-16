@@ -1,7 +1,4 @@
 import ServicePrototype from './service-prototype';
-import { generateClient } from 'aws-amplify/api';
-import { createStepReporting, updateStepReporting, deleteStepReporting } from '../graphql/mutations';
-import { getStepReporting, listStepReportings, stepReportingsByLectureStepIDAndOwner, stepReportingsByLectureIDAndOwner, stepReportingsByOwnerAndCreatedAt } from '../graphql/queries';
 
 /**
  * Provide service to get and store reporting
@@ -15,16 +12,7 @@ export default class StepReportingService extends ServicePrototype {
   constructor() {
     super();
 
-    this.client = generateClient();
-  }
-
-  getQuery(type) {
-    return {
-      create: createStepReporting,
-      update: updateStepReporting,
-      get: getStepReporting,
-      delete: deleteStepReporting,
-    }[type]
+    this.model = this.client.models.StepReporting;
   }
 
   /**
@@ -54,31 +42,26 @@ export default class StepReportingService extends ServicePrototype {
     }
     let query = null
     if (params.lectureID) {
-      query = stepReportingsByLectureIDAndOwner;
+      query = this.model.listStepReportingByLectureIdAndOwner;
       if (params.owner) {
         params.owner = { eq: params.owner };
       }
     } else if (params.lectureStepID) {
-      query = stepReportingsByLectureStepIDAndOwner;
+      query = this.model.listStepReportingByLectureStepIdAndOwner;
       if (params.owner) {
         params.owner = { eq: params.owner };
       }
     } else if (params.owner) {
-      query = stepReportingsByOwnerAndCreatedAt;
+      query = this.model.listStepReportingByOwnerAndCreatedAt;
       if (!params.sortDirection) {
         params.sortDirection = 'DESC';
       }
     } else {
-      query = listStepReportings;
-      return [];
+      query = this.model.listStepReportings;
     }
 
-    const { data } = await this.client.graphql({
-      query,
-      variables: params
-    });
+    const { data } = await query(params);
 
-    //()
     return Object.values(data)[0];
   }
 

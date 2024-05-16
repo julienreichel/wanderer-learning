@@ -1,7 +1,4 @@
 import ServicePrototype from './service-prototype';
-import { generateClient } from 'aws-amplify/api';
-import { createCourse, updateCourse, deleteCourse } from '../graphql/mutations';
-import { getCourse, listCourses } from '../graphql/queries';
 
 import LectureService from './lecture';
 
@@ -17,18 +14,8 @@ export default class CourseService extends ServicePrototype {
   constructor() {
     super();
 
-    this.client = generateClient();
+    this.model = this.client.models.Course;
     this.lectureService = new LectureService();
-  }
-
-  getQuery(type) {
-    return {
-      create: createCourse,
-      update: updateCourse,
-      get: getCourse,
-      delete: deleteCourse,
-      list: listCourses,
-    }[type]
   }
 
   /**

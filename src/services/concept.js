@@ -1,7 +1,5 @@
 import ServicePrototype from './service-prototype';
-import { generateClient } from 'aws-amplify/api';
-import { createConcept, updateConcept, deleteConcept } from '../graphql/mutations';
-import { getConcept, listConcepts } from '../graphql/queries';
+
 import LectureConceptService from './lecture-concept';
 
 /**
@@ -16,18 +14,8 @@ export default class ConceptService extends ServicePrototype {
   constructor() {
     super();
 
-    this.client = generateClient();
+    this.model = this.client.models.Concept;
     this.lectureConceptService = new LectureConceptService();
-  }
-
-  getQuery(type) {
-    return {
-      create: createConcept,
-      update: updateConcept,
-      get: getConcept,
-      delete: deleteConcept,
-      list: listConcepts,
-    }[type]
   }
 
   /**

@@ -1,12 +1,13 @@
 import { boot } from "quasar/wrappers";
 import { Amplify } from "aws-amplify";
-import awsExports from "../aws-exports";
+import outputs from '../../amplify_outputs.json';
+
 import AmplifyVue from "@aws-amplify/ui-vue";
 
 import { getCurrentUser, fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
 import { ref } from 'vue';
 
-Amplify.configure(awsExports);
+Amplify.configure(outputs);
 
 export default boot(({ app, router }) => {
   app.use(AmplifyVue);

@@ -1,7 +1,4 @@
 import ServicePrototype from './service-prototype';
-import { generateClient } from 'aws-amplify/api';
-import { createLectureStep, updateLectureStep, deleteLectureStep } from '../graphql/mutations';
-import { getLectureStep, listLectureSteps } from '../graphql/queries';
 import StorageService from './storage'
 
 /**
@@ -16,20 +13,10 @@ export default class LectureStepService extends ServicePrototype {
   constructor() {
     super();
 
-    this.client = generateClient();
+    this.model = this.client.models.LectureStep;
     this.storageService = new StorageService();
 
     this.lastSaved = null;
-  }
-
-  getQuery(type) {
-    return {
-      create: createLectureStep,
-      update: updateLectureStep,
-      get: getLectureStep,
-      delete: deleteLectureStep,
-      list: listLectureSteps,
-    }[type]
   }
 
   /**

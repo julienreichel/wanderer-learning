@@ -1,5 +1,4 @@
-import ServicePrototype from './service-prototype';
-import { getUrl, remove, uploadData } from 'aws-amplify/storage';
+import { getUrl, remove } from 'aws-amplify/storage';
 
 /**
  * Provide service to get and store images
@@ -9,9 +8,8 @@ import { getUrl, remove, uploadData } from 'aws-amplify/storage';
  * ...
  * const storageService = new StorageService();
  */
-export default class StorageService extends ServicePrototype {
+export default class StorageService {
   constructor() {
-    super();
   }
 
   /**
@@ -24,7 +22,6 @@ export default class StorageService extends ServicePrototype {
     const getUrlResult = await getUrl({
       key: key,
       options: {
-        accessLevel: 'protected',
         targetIdentityId
       },
     });
@@ -42,7 +39,6 @@ export default class StorageService extends ServicePrototype {
       await remove({
         key: key,
         options: {
-          accessLevel: 'protected',
         },
       });
     }
