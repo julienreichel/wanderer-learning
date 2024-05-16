@@ -132,13 +132,18 @@ const schema = a.schema({
       allow.group("teacher"),
     ]),
 
-  LectureConceptJoinTable: a.model({
-    lectureId: a.id().required(),
-    conceptId: a.id().required(),
+  LectureConceptJoinTable: a
+    .model({
+      lectureId: a.id().required(),
+      conceptId: a.id().required(),
 
-    lecture: a.belongsTo("Lecture", "lectureId"),
-    concept: a.belongsTo("Concept", "conceptId"),
-  }),
+      lecture: a.belongsTo("Lecture", "lectureId"),
+      concept: a.belongsTo("Concept", "conceptId"),
+    })
+    .authorization((allow) => [
+      allow.authenticated().to(["read"]),
+      allow.group("teacher"),
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
