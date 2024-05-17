@@ -29,7 +29,7 @@
         <q-icon right name="sentiment_satisfied_alt" />
       </template>
       <template v-slot:difficulty>
-        <q-icon right name="battery_5_bar" />
+        <q-icon right name="speed" />
       </template>
       <template v-slot:stars>
         <q-icon right name="grade" />
@@ -126,35 +126,41 @@ const allInvalid = ref(false);
 watch(allInvalid, (value) => setOption('allInvalid', value));
 
 const feedbackType = ref(getOption('feedbackType') || 'roti');
-watch(feedbackType, (value) => {
-  if (value === 'roti') {
+watch([feedbackType, () => question.value.type], (value) => {
+  if (question.value.type !== 'feedback') {
+    return;
+  }
+  if (feedbackType.value === 'roti') {
     question.value.text = t('quiz.feedback.question.roti');
     question.value.answers = [1, 2, 3, 4, 5].map((index) => ({
       text: t('quiz.feedback.tooltips.roti.' + index),
     }));
   }
-  if (value === 'difficulty') {
+  if (feedbackType.value === 'difficulty') {
     question.value.text = t('quiz.feedback.question.difficulty');
     question.value.answers = [1, 2, 3, 4, 5].map((index) => ({
       text: t('quiz.feedback.tooltips.difficulty.' + index),
     }));
   }
-  if (value === 'stars') {
+  if (feedbackType.value === 'stars') {
     question.value.text = t('quiz.feedback.question.stars');
   }
-  if (value === 'text') {
+  if (feedbackType.value === 'text') {
     question.value.text = t('quiz.feedback.question.text');
   }
-  setOption('feedbackType', value);
-});
+  setOption('feedbackType', feedbackType.value);
+
+
+},{ immediate: true });
+
 if (
   question.value.type === 'feedback' &&
   (feedbackType.value === 'roti' || feedbackType.value === 'difficulty') &&
-  !question.value.answers?.length
+  !question.value.answers?.length === 5
 ) {
   question.value.answers = [1, 2, 3, 4, 5].map((index) => ({
     text: t(
-      'quiz.feedback.tooltips.' + getOption('feedbackType') + '.' + index
+      'quiz.feedback.tooltips.' + feedbackType.value + '.' + index
     ),
   }));
 }

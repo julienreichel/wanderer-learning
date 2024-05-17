@@ -16,27 +16,7 @@ export default class CourseService extends ServicePrototype {
 
     this.model = this.client.models.Course;
     this.lectureService = new LectureService();
-    this.selectionSet = ['id', 'title', 'owner', 'lectures.*', 'lectures.steps.*'];
-  }
-
-  /**
-   * Remove deleted content
-   * @param {object} course the course data
-   * @returns {object}
-   */
-  removeDeletedContent(course) {
-    if (!course) return;
-
-    /*
-    // remove deleted items
-    course.lectures = course.lectures?.filter(lecture => !lecture._deleted) || [];
-    course.lectures.forEach(lecture => {
-      if (lecture.concepts) {
-        lecture.concepts = lecture.concepts.filter(concept => !concept._deleted);
-      }
-    })
-    */
-    return course;
+    this.selectionSet = ['id', 'title', 'owner', 'lectures.*', 'lectures.steps.*', , 'lectures.concepts.concept.*'];
   }
 
   /**
@@ -50,7 +30,7 @@ export default class CourseService extends ServicePrototype {
     delete input.lectures;
     let course = await super.update(input, options);
 
-    return this.removeDeletedContent(course);
+    return course;
   }
 
   /**
@@ -64,7 +44,7 @@ export default class CourseService extends ServicePrototype {
 
     course.lectures = course.lectures.sort((a, b) => Number(a.order) - Number(b.order));
 
-    return this.removeDeletedContent(course);
+    return course;
   }
 
   /**
@@ -75,9 +55,9 @@ export default class CourseService extends ServicePrototype {
    */
   async list(params = {}) {
     params.selectionSet = ['id', 'title', 'owner'];
-    let course = await super.list(params)
+    let courses = await super.list(params)
 
-    return this.removeDeletedContent(course);
+    return courses;
   }
 
   /**

@@ -16,6 +16,8 @@ export default class ConceptService extends ServicePrototype {
 
     this.model = this.client.models.Concept;
     this.lectureConceptService = new LectureConceptService();
+
+    this.selectionSet = ['id', 'title', 'description', 'lectures.lecture.*', 'lectures.lecture.steps.id', , 'lectures.lecture.concepts.concept.*', 'steps.*'];
   }
 
   /**
@@ -30,24 +32,17 @@ export default class ConceptService extends ServicePrototype {
     return super.update(payload)
   }
 
+
   /**
-   * Get a concept
+   * List concept
+   * @param {object} params options
    *
-   * @param {string} id the concept id
    * @returns {Promise<object>}
    */
-  async get(id) {
-    let concept = await super.get(id)
+  async list(params = {}) {
+    params.selectionSet = ['id', 'title', 'description'];
+    let concept = await super.list(params)
 
-    /*
-    // remove deleted lectures
-    concept.lectures = concept.lectures?.filter(lc => !lc._deleted) || [];
-    concept.lectures?.forEach(({ lecture }) => {
-      if (lecture.concepts) {
-        lecture.concepts = lecture.concepts.filter(concept => !concept._deleted);
-      }
-    });
-    */
     return concept;
   }
 
@@ -63,7 +58,6 @@ export default class ConceptService extends ServicePrototype {
     // get missing data if needed
     if (!input.lectures) {
       const fullConcept = await this.get(input.id);
-      input._version = fullConcept._version;
       input.lectures = fullConcept.lectures;
     }
     // remove all items from the concept

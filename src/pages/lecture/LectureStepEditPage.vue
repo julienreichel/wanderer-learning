@@ -104,7 +104,7 @@ onMounted(async () => {
         label: data.lecture.title,
         to: { name: 'LectureEdit', params: { id: data.lecture.id } },
       },
-      { label: data.title, id: data.id, stepIdx: lectureStep.value, view: 'LectureStepView', beforeNavigate: saveSteps},
+      { label: data.title, id: data.id, view: 'LectureStepView', beforeNavigate: saveSteps},
     ]);
     lectureStepInitial = toJSON(data);
   }
@@ -115,9 +115,10 @@ onBeforeUnmount(async () => {
 });
 
 const finish = async () => {
+  console.log('finish', lectureStep.value);
   router.push({
     name: 'LectureEdit',
-    params: { id: lectureStep.value.lectureId },
+    params: { id: lectureStep.value.lecture.id },
   });
 };
 </script>

@@ -77,14 +77,12 @@ onMounted(async () => {
   // load stats for for each lecture
   course.value.lectures.forEach(async (lecture) => {
     const reports = await reportingService.list({ lectureId: lecture.id });
-    console.log(reports);
     if (reports.length) {
       lecture.userTimeReportings = reportingService.computeUserTimeReportings(
         reports
       );
 
       lecture.ratings = reportingService.computeRatings(reports);
-      console.log(lecture);
     }
   });
 });
