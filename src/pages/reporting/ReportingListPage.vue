@@ -53,7 +53,7 @@ const reports = ref([]);
 onMounted(async () => {
   // format in the tables
   const data = await reportingService.list({userId, username});
-  reports.value = data.items;
+  reports.value = data;
 
   reports.value.forEach(async (report) => {
     report.createdAt = new Date(report.createdAt).toLocaleString();
@@ -72,7 +72,7 @@ onMounted(async () => {
 
     report.totalQuiz = quizzes.length;
 
-    report.step = await lectureStepService.get(report.lectureStepID);
+    report.step = await lectureStepService.get(report.lectureStepId);
   });
 });
 </script>

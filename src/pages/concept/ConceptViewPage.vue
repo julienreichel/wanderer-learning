@@ -8,7 +8,7 @@
         <div class="q-pa-sm" v-html="concept.description"></div>
       </q-card-section>
     </q-card>
-    <lectures-editing v-model="concept.lectures.items" />
+    <lectures-editing v-model="concept.lectures" />
   </q-page>
 </template>
 
@@ -45,13 +45,13 @@ const loadConcept = async (id) => {
   ]);
 
   // load stats for the user for each lecture
-  concept.value.lectures.items.forEach(async ({lecture}) => {
-    const reports = await reportingService.list({ lectureID: lecture.id, username, userId });
-    if (reports.items.length){
+  concept.value.lectures.forEach(async ({lecture}) => {
+    const reports = await reportingService.list({ lectureId: lecture.id, username, userId });
+    if (reports.length){
       // keep only the latest report for each step
-      const summary = reports.items.reduce((acc, report) => {
-        if (!acc[report.lectureStepID] || acc[report.lectureStepID].createdAt < report.createdAt){
-          acc[report.lectureStepID] = report;
+      const summary = reports.reduce((acc, report) => {
+        if (!acc[report.lectureStepId] || acc[report.lectureStepId].createdAt < report.createdAt){
+          acc[report.lectureStepId] = report;
         }
         return acc;
       }, {});

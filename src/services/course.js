@@ -16,6 +16,7 @@ export default class CourseService extends ServicePrototype {
 
     this.model = this.client.models.Course;
     this.lectureService = new LectureService();
+    this.selectionSet = ['id', 'title', 'owner', 'lectures.*', 'lectures.steps.*'];
   }
 
   /**
@@ -26,13 +27,15 @@ export default class CourseService extends ServicePrototype {
   removeDeletedContent(course) {
     if (!course) return;
 
+    /*
     // remove deleted items
-    course.lectures.items = course.lectures.items.filter(lecture => !lecture._deleted);
-    course.lectures.items.forEach(lecture => {
-      if (lecture.concepts?.items) {
-        lecture.concepts.items = lecture.concepts.items.filter(concept => !concept._deleted);
+    course.lectures = course.lectures?.filter(lecture => !lecture._deleted) || [];
+    course.lectures.forEach(lecture => {
+      if (lecture.concepts) {
+        lecture.concepts = lecture.concepts.filter(concept => !concept._deleted);
       }
     })
+    */
     return course;
   }
 
@@ -42,10 +45,10 @@ export default class CourseService extends ServicePrototype {
    * @param {object} payload the lectureSegment data
    * @returns {Promise<object>}
    */
-  async update(payload, params = {}) {
+  async update(payload, options = {}) {
     let input = { ...payload };
     delete input.lectures;
-    let course = await super.update(input);
+    let course = await super.update(input, options);
 
     return this.removeDeletedContent(course);
   }
@@ -58,6 +61,21 @@ export default class CourseService extends ServicePrototype {
    */
   async get(id) {
     let course = await super.get(id)
+
+    course.lectures = course.lectures.sort((a, b) => Number(a.order) - Number(b.order));
+
+    return this.removeDeletedContent(course);
+  }
+
+  /**
+   * List courses
+   * @param {object} params options
+   *
+   * @returns {Promise<object>}
+   */
+  async list(params = {}) {
+    params.selectionSet = ['id', 'title', 'owner'];
+    let course = await super.list(params)
 
     return this.removeDeletedContent(course);
   }
@@ -72,14 +90,13 @@ export default class CourseService extends ServicePrototype {
     if (!input.id) return;
 
     // get missing data if needed
-    if (!input._version || !input.lectures?.items) {
+    if (!input.lectures) {
       const fullCourse = await this.get(input.id);
-      input._version = fullCourse._version;
       input.lectures = fullCourse.lectures;
     }
     // remove all items from the lectures
-    if (input.lectures?.items) {
-      await Promise.all(input.lectures.items.map(async item => {
+    if (input.lectures) {
+      await Promise.all(input.lectures.map(async item => {
         await this.lectureService.delete(item);
       }));
     }

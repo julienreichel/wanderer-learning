@@ -22,7 +22,7 @@
         />
       </q-card-actions>
     </q-card>
-    <q-card v-for="(step, index) in lecture.steps.items" :key="index" clickable
+    <q-card v-for="(step, index) in lecture.steps" :key="index" clickable
             @click="canEdit(step) ? editStep(step) : viewStep(step)">
       <q-card-section horizontal>
         <q-card-section class="col q-pa-sm">
@@ -131,16 +131,16 @@ onMounted(async () => {
   ]);
 
   // load stats for each step
-  lecture.value.steps.items.forEach(async (step) => {
-    const reports = await reportingService.list({ lectureStepID: step.id });
-    if (reports.items.length) {
+  lecture.value.steps.forEach(async (step) => {
+    const reports = await reportingService.list({ lectureStepId: step.id });
+    if (reports.length) {
       // keep only the most recent
       step.timestampDistribution = reportingService.computeTimestampDistribution(
-        reports.items
+        reports
       );
-      step.userTimeReportings = reportingService.computeUserTimeReportings(reports.items);
+      step.userTimeReportings = reportingService.computeUserTimeReportings(reports);
 
-      step.ratings = reportingService.computeRatings(reports.items);
+      step.ratings = reportingService.computeRatings(reports);
     }
   });
 });
@@ -196,7 +196,7 @@ const deleteStep = async (step) => {
     persistent: true,
   }).onOk(async () => {
     await lectureStepService.delete(step);
-    lecture.value.steps.items = lecture.value.steps.items.filter(
+    lecture.value.steps = lecture.value.steps.filter(
       ({ id }) => id !== step.id
     );
   });
@@ -231,12 +231,12 @@ const addStep = async (type) => {
   const step = await lectureStepService.create({
     title: newTitle.value,
     type,
-    lectureID: lecture.value.id,
-    order: lecture.value.steps.items.length,
+    lectureId: lecture.value.id,
+    order: '' + Date.now(),
     parts: [],
   });
 
-  lecture.value.steps.items.push(step);
+  lecture.value.steps.push(step);
 
   newTitle.value = null;
 };
@@ -249,7 +249,7 @@ const deleteLecture = async (lecture) => {
     persistent: true,
   }).onOk(async () => {
     await lectureService.delete(lecture);
-    router.push({ name: 'CourseEdit', params: { id: lecture.courseID } });
+    router.push({ name: 'CourseEdit', params: { id: lecture.courseId } });
   });
 };
 </script>

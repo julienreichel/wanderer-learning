@@ -63,7 +63,7 @@ const userAttributes = inject('userAttributes');
 const concepts = ref([]);
 onMounted(async () => {
   const data = await conceptService.list();
-  concepts.value = data.items;
+  concepts.value = data;
 });
 
 const deleteConcept = async (concept) => {

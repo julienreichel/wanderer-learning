@@ -6,47 +6,64 @@ import { generateClient } from 'aws-amplify/data';
 export default class ServicePrototype {
 
   constructor() {
+    /**
+     * @type {import('aws-amplify/data').Client<import('../amplify/data/resource').Schema>}
+     */
     this.client = generateClient();
+
     this.model = null;
+    this.selectionSet = undefined
   }
 
   /**
    * Create a model
    *
    * @param {object} input the model data
+   * @param {object} options the options
    * @returns {Promise<object>}
    */
-  async create(input) {
-    const { data } = await this.models.create(input);
-    return Object.values(data)[0];
+  async create(input, options = {}) {
+    options.authMode = 'userPool';
+    options.selectionSet = options.selectionSet || this.selectionSet;
+    const { data } = await this.model.create(input, options);
+
+    return data;
   }
 
   /**
    * Update a model
    *
    * @param {object} input the model data
+   * @param {object} options the options
    * @returns {Promise<object>}
    */
-  async update(input) {
+  async update(input, options = {}) {
+    options.authMode = 'userPool';
+    options.selectionSet = options.selectionSet || this.selectionSet;
+
     let payload = { ...input };
 
     // Cleanup fields that should not be updated
     this.cleanGraphQLUpdate(payload);
 
-    const { data } = await this.model.update(payload);
+    const { data } = await this.model.update(payload, options);
 
-    return Object.values(data)[0];
+    return data;
   }
 
   /**
    * Get a model
    *
    * @param {string} id the model id
+   * @param {object} options the options
    * @returns {Promise<object>}
    */
-  async get(id) {
-    const { data } = await this.model.get({ id });
-    return Object.values(data)[0];
+  async get(id, options = {}) {
+    options.authMode = 'userPool';
+    options.selectionSet = options.selectionSet || this.selectionSet;
+
+    const { data } = await this.model.get({ id }, options);
+    return data;
   }
 
   /**
@@ -55,18 +72,17 @@ export default class ServicePrototype {
    * @param {object} model the model
    * @returns {Promise<object>}
    */
-  async delete(model) {
+  async delete(model, options = {}) {
+    options.authMode = 'userPool';
+    options.selectionSet = options.selectionSet || this.selectionSet;
+
     if (!model.id) return;
 
-    if (!model._version) {
-      const fullModel = await this.get(model.id);
-      model._version = fullModel._version;
-    }
-    const { id, _version } = model;
-    const payload = { id, _version };
-    const { data } = await this.model.delete(payload);
+    const { id } = model;
+    const payload = { id };
+    const { data } = await this.model.delete(payload, options);
 
-    return Object.values(data)[0];
+    return data;
   }
 
   /**
@@ -76,18 +92,28 @@ export default class ServicePrototype {
    * @param {string} [params.filter] filter
    * @param {number} [params.limit] limit
    * @param {string} [params.nextToken] nextToken
+   * @param {string} [params.sortDirection] sortDirection
+   * @param {object} options the options
+   *
    * @returns {Promise<object>}
    */
   async list(params = {}) {
+    params.authMode = 'userPool';
+    params.selectionSet = params.selectionSet || this.selectionSet;
 
     // List all items
+    /*
     params.filter = params.filter || {
       _deleted: { attributeExists: false }
     };
+    */
 
-    const { data } = await this.model.list(params);
+    const { data, nextToken } = await this.model.list(params);
 
-    return Object.values(data)[0];
+    if (nextToken) {
+      // do something with it
+    }
+    return data
   }
 
   /**

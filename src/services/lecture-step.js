@@ -17,6 +17,8 @@ export default class LectureStepService extends ServicePrototype {
     this.storageService = new StorageService();
 
     this.lastSaved = null;
+
+    this.selectionSet = ['id', 'title', 'type', 'order', 'owner', 'identityId', 'lecture.*', 'lecture.course.*', 'concept.*', 'parts.*'];
   }
 
   /**
@@ -74,6 +76,7 @@ export default class LectureStepService extends ServicePrototype {
     if (!this.lastSaved || this.lastSaved.id !== id) {
       this.lastSaved = await super.get(id);
     }
+
     const step = this.lastSaved;
     // inject the url of the image
     if (params.resolveImg && step.parts) {
@@ -83,6 +86,7 @@ export default class LectureStepService extends ServicePrototype {
         }
       }
     }
+
     return step;
   }
 
@@ -98,7 +102,7 @@ export default class LectureStepService extends ServicePrototype {
     if (!content.id) return;
 
     // get missing data if needed
-    if (!content._version || (!content.parts && content.type === 'step')) {
+    if (!content.parts && content.type === 'step') {
       const fullLectureStep = await this.get(content.id, { resolveImg: false });
       content._version = fullLectureStep._version;
       content.parts = fullLectureStep.parts;

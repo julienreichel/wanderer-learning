@@ -117,7 +117,7 @@ onBeforeUnmount(async () => {
 const finish = async () => {
   router.push({
     name: 'LectureEdit',
-    params: { id: lectureStep.value.lectureID },
+    params: { id: lectureStep.value.lectureId },
   });
 };
 </script>

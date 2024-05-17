@@ -42,7 +42,7 @@ const userAttributes = inject('userAttributes');
 const courses = ref([]);
 onMounted(async () => {
   const data = await courseService.list();
-  courses.value = data.items;
+  courses.value = data;
 });
 
 const viewCourse = (course) => {

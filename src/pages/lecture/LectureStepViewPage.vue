@@ -69,8 +69,8 @@ const finished = async ({ finished, reportings } = {}) => {
     });
   } else {
     await stepReportingService.create({
-      lectureStepID: lectureStep.value.id,
-      lectureID: lectureStep.value.lecture.id,
+      lectureStepId: lectureStep.value.id,
+      lectureId: lectureStep.value.lecture.id,
       reportings,
     });
   }

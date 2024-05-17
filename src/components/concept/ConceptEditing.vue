@@ -1,6 +1,6 @@
 <template>
   <q-card-section
-    v-if="lecture?.concepts?.items"
+    v-if="lecture?.concepts"
     class="q-gutter-sm truncate-chip-labels"
   >
     <q-chip
@@ -11,7 +11,7 @@
       @remove="removeConcept(item)"
       @mouseleave="showRemove[index] = false"
       @mouseenter="showRemove[index] = true"
-      v-for="(item, index) in lecture.concepts.items"
+      v-for="(item, index) in lecture.concepts"
       :key="index"
     >
       <div class="ellipsis">
@@ -59,11 +59,11 @@ const filterFn = async (val, update, abort) => {
   if (!conceptList) {
     conceptList = await conceptService.list();
   }
-  options.value = conceptList.items
+  options.value = conceptList
     .filter(
       (concept) =>
         concept.title.toLowerCase().includes(val.toLowerCase()) &&
-        lecture.value.concepts.items.find(({ id }) => id === concept.id) ===
+        lecture.value.concepts.find(({ id }) => id === concept.id) ===
           undefined
     )
     .map((concept) => ({
@@ -78,7 +78,7 @@ const abortFilterFn = () => {
 };
 
 const addConcept = async (concept) => {
-  if (lecture.value.concepts.items.find(({ id }) => id === concept.id)) {
+  if (lecture.value.concepts.find(({ id }) => id === concept.id)) {
     return;
   }
 
@@ -86,7 +86,7 @@ const addConcept = async (concept) => {
     lectureId: lecture.value.id,
     conceptId: concept.id,
   });
-  lecture.value.concepts.items.push(item);
+  lecture.value.concepts.push(item);
 
   newConceptTitle.value = null;
 };
@@ -97,12 +97,12 @@ const selectConcept = (val) => {
 
 const createConcept = async (val, done) => {
   let concept = null;
-  concept = conceptList.items.find(({ title }) => title === val);
+  concept = conceptList.find(({ title }) => title === val);
   if (!concept) {
     concept = await conceptService.create({
       title: val,
     });
-    conceptList.items.push(concept);
+    conceptList.push(concept);
   }
   await addConcept(concept);
 
@@ -110,7 +110,7 @@ const createConcept = async (val, done) => {
 };
 
 const removeConcept = async (item) => {
-  lecture.value.concepts.items = lecture.value.concepts.items.filter(
+  lecture.value.concepts = lecture.value.concepts.filter(
     ({ id }) => id !== item.id
   );
 

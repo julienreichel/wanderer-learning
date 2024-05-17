@@ -15,7 +15,7 @@
         <q-btn size="sm" icon="delete" @click="deleteCourse(course)" />
       </q-card-actions>
     </q-card>
-    <lectures-editing v-model="course.lectures.items" :allow-delete="true" />
+    <lectures-editing v-model="course.lectures" :allow-delete="true" />
     <q-card>
       <q-card-section>
         <q-input
@@ -75,14 +75,16 @@ onMounted(async () => {
     }
   }
   // load stats for for each lecture
-  course.value.lectures.items.forEach(async (lecture) => {
-    const reports = await reportingService.list({ lectureID: lecture.id });
-    if (reports.items.length) {
+  course.value.lectures.forEach(async (lecture) => {
+    const reports = await reportingService.list({ lectureId: lecture.id });
+    console.log(reports);
+    if (reports.length) {
       lecture.userTimeReportings = reportingService.computeUserTimeReportings(
-        reports.items
+        reports
       );
 
-      lecture.ratings = reportingService.computeRatings(reports.items);
+      lecture.ratings = reportingService.computeRatings(reports);
+      console.log(lecture);
     }
   });
 });
@@ -127,10 +129,10 @@ const newTitle = ref();
 const addLecture = async () => {
   const lecture = await lectureService.create({
     title: newTitle.value,
-    courseID: course.value.id,
-    order: course.value.lectures.items.length,
+    courseId: course.value.id,
+    order: '' + Date.now(),
   });
-  course.value.lectures.items.push(lecture);
+  course.value.lectures.push(lecture);
 
   newTitle.value = null;
 };

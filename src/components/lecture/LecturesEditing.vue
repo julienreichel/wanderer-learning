@@ -5,13 +5,13 @@
         <q-card-section class="q-pa-sm">
           <div class="text-h5">{{ lecture.title }}</div>
         </q-card-section>
-        <concept-display class="q-pa-sm" :concepts="lecture.concepts?.items" />
+        <concept-display class="q-pa-sm" :concepts="lecture.concepts" />
       </q-card-section>
       <q-card-section class="q-pa-sm">
         <user-lecture-reporting
           v-if="lecture.stepsSummary"
           :steps-summary="lecture.stepsSummary"
-          :steps="lecture.steps.items"
+          :steps="lecture.steps"
           />
         <step-reporting v-if="lecture.ratings" :ratings="lecture.ratings"></step-reporting>
       </q-card-section>

@@ -15,9 +15,11 @@ export default class LectureService extends ServicePrototype {
   constructor() {
     super();
 
-    this.model = this.client.models.Course;
+    this.model = this.client.models.Lecture;
     this.lectureConceptService = new LectureConceptService();
     this.lectureStepService = new LectureStepService();
+
+    this.selectionSet = ['id', 'title', 'order', 'owner', 'course.*', 'steps.*', 'concepts.concept.*'];
   }
 
   /**
@@ -27,9 +29,10 @@ export default class LectureService extends ServicePrototype {
    */
   removeDeletedContent(lecture) {
     if (!lecture) return;
-
-    lecture.steps.items = lecture.steps.items.filter(step => !step._deleted);
-    lecture.concepts.items = lecture.concepts.items.filter(concept => !concept._deleted);
+    /*
+    lecture.steps = lecture.steps?.filter(step => !step._deleted);
+    lecture.concepts = lecture.concepts?.filter(concept => !concept._deleted);
+    */
     return lecture;
   }
 
@@ -42,6 +45,7 @@ export default class LectureService extends ServicePrototype {
   async get(id) {
     let lecture = await super.get(id)
 
+    lecture.steps = lecture.steps.sort((a, b) => Number(a.order) - Number(b.order));
     return this.removeDeletedContent(lecture);
   }
 
@@ -84,21 +88,20 @@ export default class LectureService extends ServicePrototype {
     if (!input.id) return;
 
     // get missing data if needed
-    if (!input._version || !input.concepts?.items || !input.steps?.items) {
+    if (!input.concepts || !input.steps) {
       const fullLecture = await this.get(input.id);
-      input._version = fullLecture._version;
       input.concepts = fullLecture.concepts;
       input.steps = fullLecture.steps;
     }
     // remove all associated concepts
-    if (input.concepts?.items) {
-      await Promise.all(input.concepts.items.map(async item => {
+    if (input.concepts) {
+      await Promise.all(input.concepts.map(async item => {
         await this.lectureConceptService.delete(item);
       }));
     }
     // remove all content
-    if (input.steps?.items) {
-      await Promise.all(input.steps.items.map(async item => {
+    if (input.steps) {
+      await Promise.all(input.steps.map(async item => {
         await this.lectureStepService.delete(item);
       }));
     }

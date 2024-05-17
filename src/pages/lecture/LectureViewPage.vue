@@ -4,13 +4,13 @@
       <q-card-section>
         <div class="text-h5">{{ lecture.title }}</div>
       </q-card-section>
-      <concept-display :concepts="lecture.concepts.items" />
+      <concept-display :concepts="lecture.concepts" />
       <q-card-actions>
         <q-space />
         <q-btn square size="sm" icon="straight" @click="finished()" />
       </q-card-actions>
     </q-card>
-    <q-card v-for="(step, index) in lecture.steps.items" :key="index">
+    <q-card v-for="(step, index) in lecture.steps" :key="index">
       <q-card-section horizontal clickable @click="viewStep(step)">
         <q-card-section class="col">
           <q-card-section class="q-pa-sm q-pb-md">
@@ -73,11 +73,11 @@ onMounted(async () => {
   ]);
 
   // load stats for the user for each step
-  lecture.value.steps.items.forEach(async (step) => {
-    const reports = await reportingService.list({ lectureStepID: step.id, username, userId });
-    if (reports.items.length){
+  lecture.value.steps.forEach(async (step) => {
+    const reports = await reportingService.list({ lectureStepId: step.id, username, userId });
+    if (reports.length){
       // keep only the most recent
-      let report = reports.items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+      let report = reports.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
       const totalTime = report.reportings.reduce(
         (acc, val) => acc + val.time,
         0

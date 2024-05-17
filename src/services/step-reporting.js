@@ -13,6 +13,7 @@ export default class StepReportingService extends ServicePrototype {
     super();
 
     this.model = this.client.models.StepReporting;
+
   }
 
   /**
@@ -20,19 +21,22 @@ export default class StepReportingService extends ServicePrototype {
    *
    * @param {object} params options
    * @param {string} [params.owner] owner
-   * @param {string} [params.lectureStepID] lectureStepID
-   * @param {string} [params.lectureID] lectureID
+   * @param {string} [params.lectureStepId] lectureStepId
+   * @param {string} [params.lectureId] lectureId
    * @param {string} [params.filter] filter
    * @param {number} [params.limit] limit
    * @param {string} [params.nextToken] nextToken
    * @returns {Promise<object>}
    */
   async list(params = {}) {
+    params.authMode = 'userPool';
 
     // Remove deleted items from the list
+    /*
     params.filter = params.filter || {
       _deleted: { attributeExists: false }
     };
+    */
 
     if (params.owner) {
       // Somehow the graphQL owner has this weird format
@@ -41,12 +45,12 @@ export default class StepReportingService extends ServicePrototype {
       params.owner = `${params.userId}::${params.username}`;
     }
     let query = null
-    if (params.lectureID) {
+    if (params.lectureId) {
       query = this.model.listStepReportingByLectureIdAndOwner;
       if (params.owner) {
         params.owner = { eq: params.owner };
       }
-    } else if (params.lectureStepID) {
+    } else if (params.lectureStepId) {
       query = this.model.listStepReportingByLectureStepIdAndOwner;
       if (params.owner) {
         params.owner = { eq: params.owner };
@@ -62,7 +66,7 @@ export default class StepReportingService extends ServicePrototype {
 
     const { data } = await query(params);
 
-    return Object.values(data)[0];
+    return data;
   }
 
   /**
@@ -156,7 +160,7 @@ export default class StepReportingService extends ServicePrototype {
   */
   computePointsPerStep(step, stepsSummary) {
     const stepSummary = stepsSummary.find(
-      (item) => item.lectureStepID === step.id
+      (item) => item.lectureStepId === step.id
     );
     if (!stepSummary || !stepSummary.reportings?.length)
       return { averagePoints: 0 };
@@ -197,8 +201,8 @@ export default class StepReportingService extends ServicePrototype {
   getLastReports(reports) {
     // keep only the latest report for each step
     const stepReports = reports.reduce((acc, report) => {
-      if (!acc[report.lectureStepID] || acc[report.lectureStepID].createdAt < report.createdAt) {
-        acc[report.lectureStepID] = report;
+      if (!acc[report.lectureStepId] || acc[report.lectureStepId].createdAt < report.createdAt) {
+        acc[report.lectureStepId] = report;
       }
       return acc;
     }, {});

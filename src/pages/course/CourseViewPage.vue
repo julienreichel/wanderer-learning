@@ -10,7 +10,7 @@
           <q-btn square size="sm" icon="straight" @click="finished()" />
         </q-card-actions>
       </q-card>
-      <lectures-editing v-model="course.lectures.items" />
+      <lectures-editing v-model="course.lectures" />
     </div>
   </q-page>
 </template>
@@ -45,15 +45,16 @@ onMounted(async () => {
       edit: canEdit(data) ? 'CourseEdit' : null,
     },
   ]);
+
   // load stats for the user for each lecture
-  course.value.lectures.items.forEach(async (lecture) => {
+  course.value.lectures.forEach(async (lecture) => {
     const reports = await reportingService.list({
-      lectureID: lecture.id,
+      lectureId: lecture.id,
       username,
       userId,
     });
-    if (reports.items.length) {
-      lecture.stepsSummary = reportingService.getLastReports(reports.items);
+    if (reports.length) {
+      lecture.stepsSummary = reportingService.getLastReports(reports);
     }
   });
 });
