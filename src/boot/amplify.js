@@ -28,6 +28,7 @@ export default boot(({ app, router }) => {
         try {
           const authSession = await fetchAuthSession();
           let { identities, ...userAttributes } = await fetchUserAttributes();
+          console.log(currentUser, authSession, identities, userAttributes);
           const groups = authSession.tokens.accessToken.payload['cognito:groups'];
           const isAdmin = groups && groups.includes('admin');
           const isTeacher = groups && groups.includes('teacher');
@@ -36,9 +37,6 @@ export default boot(({ app, router }) => {
 
           userAttributes.name = userAttributes.name || userAttributes.email;
           userAttributesRef.value = { ...userAttributes, groups, identityId, userId, username, isAdmin, isTeacher };
-
-          app.provide('userId', currentUser.userId);
-          app.provide('identityId', authSession.identityId);
 
           userIdSet = true;
         } catch (err) {

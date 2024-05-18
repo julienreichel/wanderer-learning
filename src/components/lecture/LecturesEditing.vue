@@ -45,7 +45,6 @@ const lectures = defineModel();
 const props = defineProps({
   allowDelete: Boolean,
 });
-const userId = inject('userId');
 
 const graphSection = ref([]);
 const graphWidth = computed(() => {

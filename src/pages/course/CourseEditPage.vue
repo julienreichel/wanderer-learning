@@ -47,7 +47,6 @@ const {
 } = inject('services');
 
 const { updateBreadcrumbs } = inject('breadcrumbs');
-const userId = inject('userId');
 
 const props = defineProps({
   id: String,

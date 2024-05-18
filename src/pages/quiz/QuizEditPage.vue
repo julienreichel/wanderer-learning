@@ -27,6 +27,8 @@ const { t, $q, router } = useIris();
 const {lectureStep: lectureStepService} = inject('services');
 
 const { updateBreadcrumbs } = inject('breadcrumbs');
+const userAttributes = inject('userAttributes');
+const { identityId } = userAttributes.value;
 
 const props = defineProps({
   id: String,
@@ -35,7 +37,7 @@ const props = defineProps({
 const quiz = ref({
   title: null,
   parts: [ { type: 'quiz', questions: [] }],
-  identityId: inject('identityId'),
+  identityId,
 });
 
 const toJSON = ({ title, type, parts }) => {
