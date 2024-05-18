@@ -4,7 +4,7 @@ export const storage = defineStorage({
   name: "wandererLearningStorage",
   access: (allow) => ({
     "public/*": [
-      allow.guest.to(["read"]),
+      allow.guest.to(["read", "write"]),
       allow.authenticated.to(["read", "write", "delete"]),
     ],
     "profile-pictures/{entity_id}/*": [

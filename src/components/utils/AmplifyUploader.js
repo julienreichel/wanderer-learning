@@ -14,9 +14,9 @@ export default createUploaderComponent({
         return file => file.name
       }
     },
-    accessLevel: {
+    folder: {
       type: [Function, String],
-      default: 'protected'
+      default: "public"
     },
     contentType: {
       type: [Function, String],
@@ -46,7 +46,7 @@ export default createUploaderComponent({
 
     const storageProps = computed(() => ({
       filename: getFn(props.filename),
-      accessLevel: getFn(props.accessLevel),
+      folder: getFn(props.folder),
       contentType: getFn(props.contentType),
       metadata: getFn(props.metadata),
 
@@ -145,23 +145,22 @@ export default createUploaderComponent({
 
       emit('uploading', { files })
       for (const file of files) {
-        const key = getProp('filename', file)
-        if (!key) {
+        const filename = getProp('filename', file)
+        if (!filename) {
           console.error('amplify-uploader: invalid or no URL specified')
           workingThreads.value--
           return
         }
-        const accessLevel = getProp('accessLevel', file)
+        const folder = getProp('folder', file)
         const contentType = getProp('contentType', file)
         const metadata = getProp('metadata', file)
 
-        file.key = key;
         try {
           const storage = uploadData({
-            key,
+            //path: ({ identityId }) => `${folder}/${identityId}/${filename}`,
+            path: `${folder}/${filename}`,
             data: file,
             options: {
-              accessLevel,
               contentType,
               metadata
             },
@@ -170,6 +169,8 @@ export default createUploaderComponent({
               helpers.updateFileStatus(file, 'uploading', transferredBytes);
             }
           });
+
+          file.path = storage.path;
 
           storages.value.push(storage);
           helpers.updateFileStatus(file, 'uploading', 0)

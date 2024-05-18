@@ -172,7 +172,7 @@ const uploaded = async (part, msg, idx) => {
   if (part.src) {
     storageService.removeImg(part.src);
   }
-  part.src = file?.key;
+  part.src = file?.path;
   part.url = file?.url;
 
   const uploader = uploaderRefs.value[idx];

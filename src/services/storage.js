@@ -18,11 +18,10 @@ export default class StorageService {
    * @param {string} key of the img to remove
    * @returns {Promise<object>}
    */
-  async resolveUrl(key, targetIdentityId) {
+  async resolveUrl(path) {
     const getUrlResult = await getUrl({
-      key: key,
+      path: path,
       options: {
-        targetIdentityId
       },
     });
     return getUrlResult.url.toString();
@@ -34,10 +33,10 @@ export default class StorageService {
    * @param {string} key of the img to remove
    * @returns {Promise<object>}
    */
-  async removeImg(key) {
+  async removeImg(path) {
     if (key) {
       await remove({
-        key: key,
+        path: path,
         options: {
         },
       });
