@@ -105,7 +105,7 @@ onMounted(async () => {
         label: data.lecture.title,
         to: { name: 'LectureEdit', params: { id: data.lecture.id } },
       },
-      { label: data.title, id: data.id, view: 'LectureStepView', beforeNavigate: saveSteps},
+      { label: data.title, id: data.id, stepIdx: 0, view: 'LectureStepView', beforeNavigate: saveSteps},
     ]);
     lectureStepInitial = toJSON(data);
   }

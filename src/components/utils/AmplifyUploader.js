@@ -1,5 +1,6 @@
 import { createUploaderComponent } from 'quasar'
 import { ref, computed } from 'vue'
+import mime from 'mime-types'
 
 import { getUrl, uploadData } from 'aws-amplify/storage';
 
@@ -16,11 +17,13 @@ export default createUploaderComponent({
     },
     folder: {
       type: [Function, String],
-      default: "public"
+      default: "protected"
     },
     contentType: {
       type: [Function, String],
-      default: "text/html"
+      default: () => {
+        return file => mime.contentType(file.name)
+      }
     },
     metadata: {
       type: [Function, Object],
@@ -170,18 +173,16 @@ export default createUploaderComponent({
             }
           });
 
-          file.path = storage.path;
-
           storages.value.push(storage);
           helpers.updateFileStatus(file, 'uploading', 0)
 
           const result = await storage.result;
           console.log('amplify-uploader: succeeded: ', result);
 
+          file.path = result.path;
           const getUrlResult = await getUrl({
-            key: key,
+            path: result.path,
             options: {
-              accessLevel
             },
           });
           file.url = getUrlResult.url.toString();

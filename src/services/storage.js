@@ -19,6 +19,9 @@ export default class StorageService {
    * @returns {Promise<object>}
    */
   async resolveUrl(path) {
+    if (!path) {
+      return null;
+    }
     const getUrlResult = await getUrl({
       path: path,
       options: {
@@ -34,13 +37,14 @@ export default class StorageService {
    * @returns {Promise<object>}
    */
   async removeImg(path) {
-    if (key) {
-      await remove({
-        path: path,
-        options: {
-        },
-      });
-    }
+    if (!path) return;
+
+    await remove({
+      path: path,
+      options: {
+      },
+    });
+
   }
 
 }
