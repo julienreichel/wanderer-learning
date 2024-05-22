@@ -15,7 +15,7 @@
         <q-btn size="sm" icon="delete" @click="deleteCourse(course)" />
       </q-card-actions>
     </q-card>
-    <lectures-editing v-model="course.lectures" :allow-delete="true" />
+    <lectures-editing v-model="course.lectures" :allow-delete="true" :edit-mode="true"/>
     <q-card>
       <q-card-section>
         <q-input

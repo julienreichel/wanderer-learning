@@ -1,6 +1,6 @@
 <template>
   <q-card v-for="(lecture, index) in lecturesArray" :key="index">
-    <q-card-section horizontal clickable @click="viewLecture(lecture)">
+    <q-card-section horizontal clickable @click="editMode ? editLecture(lecture) : viewLecture(lecture)">
       <q-card-section class="col q-pa-sm">
         <q-card-section class="q-pa-sm">
           <div class="text-h5">{{ lecture.title }}</div>
@@ -44,6 +44,7 @@ const { lecture: lectureService } = inject('services');
 const lectures = defineModel();
 const props = defineProps({
   allowDelete: Boolean,
+  editMode: Boolean,
 });
 
 const graphSection = ref([]);
@@ -67,6 +68,10 @@ const deleteLecture = async (lecture) => {
     await lectureService.delete(lecture);
     lectures.value = lectures.value.filter(({ id }) => id !== lecture.id);
   });
+};
+
+const editLecture = (lecture) => {
+  router.push({ name: 'LectureEdit', params: { id: lecture.id } });
 };
 
 const viewLecture = (lecture) => {
