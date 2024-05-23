@@ -61,25 +61,14 @@
           outlined
           dense
           v-model="newTitle"
-          :label="$t('step.form.add.' + contentType)"
-          @keydown.enter="addStep(contentType)"
+          :label="$t('step.form.add.step')"
+          @keydown.enter="addStep()"
         >
-          <template v-slot:append>
-            <q-btn-toggle v-model="contentType" size="sm" :options="optionType">
-              <template v-slot:quiz>
-                <q-icon name="quiz" />
-              </template>
-
-              <template v-slot:step>
-                <q-icon name="library_books" />
-              </template>
-            </q-btn-toggle>
-          </template>
         </q-input>
       </q-card-section>
       <q-card-actions>
         <q-space />
-        <q-btn size="sm" icon="add" @click="addStep(contentType)" />
+        <q-btn size="sm" icon="add" @click="addStep()" />
       </q-card-actions>
     </q-card>
   </q-page>
@@ -144,20 +133,6 @@ onMounted(async () => {
   });
 });
 
-const getRotiIcon = (roti) => {
-  if (roti < 1.5) return 'sentiment_very_dissatisfied';
-  if (roti < 2.5) return 'sentiment_dissatisfied';
-  if (roti < 3.5) return 'sentiment_neutral';
-  if (roti < 4.5) return 'sentiment_satisfied';
-  return 'sentiment_very_satisfied';
-}
-const getDifficultyColor = (difficulty) => {
-  if (difficulty < 1.5) return 'lime';
-  if (difficulty < 2.5) return 'light-green';
-  if (difficulty < 3.5) return 'green';
-  if (difficulty < 4.5) return 'teal';
-  return 'purple';
-}
 const dirty = computed(() => {
   return initalLecture.value.title !== lecture.value.title;
 });
@@ -201,20 +176,10 @@ const deleteStep = async (step) => {
   });
 };
 const viewStep = (step) => {
-  if (step.type === 'quiz') {
-    router.push({ name: 'QuizView', params: { id: step.id } });
-  }
-  if (step.type === 'step') {
-    router.push({ name: 'LectureStepView', params: { id: step.id } });
-  }
+  router.push({ name: 'LectureStepView', params: { id: step.id } });
 };
 const editStep = (step) => {
-  if (step.type === 'quiz') {
-    router.push({ name: 'QuizEdit', params: { id: step.id } });
-  }
-  if (step.type === 'step') {
-    router.push({ name: 'LectureStepEdit', params: { id: step.id } });
-  }
+  router.push({ name: 'LectureStepEdit', params: { id: step.id } });
 };
 
 const newTitle = ref();
@@ -226,10 +191,10 @@ const optionType = [
     slot: 'step',
   },
 ];
-const addStep = async (type) => {
+const addStep = async () => {
   const step = await lectureStepService.create({
     title: newTitle.value,
-    type,
+    type: 'step',
     lectureId: lecture.value.id,
     order: '' + Date.now(),
     parts: [],

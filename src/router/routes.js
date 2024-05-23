@@ -67,22 +67,7 @@ const routes = [
                 component: () => import('src/pages/lecture/LectureStepViewPage.vue'),
                 props: true
               }],
-          },
-          {
-            path: 'quiz',
-            children: [
-              {
-                name: 'QuizEdit',
-                path: 'edit/:id',
-                component: () => import('src/pages/quiz/QuizEditPage.vue'),
-                props: true
-              }, {
-                name: 'QuizView',
-                path: 'view/:id/:stepIdx',
-                component: () => import('src/pages/lecture/LectureStepViewPage.vue'),
-                props: true
-              }],
-          },
+          }
         ]
       },
     ],
