@@ -54,7 +54,7 @@ if (props.mode === 'full') {
     {
       icon: $q.iconSet.editor.formatting,
       list: 'no-icons',
-      options: ['h3', 'h4', 'h5', 'h6', 'p', 'code'],
+      options: ['h3', 'h5', 'p', 'code'],
     },
     {
       icon: $q.iconSet.editor.align,
