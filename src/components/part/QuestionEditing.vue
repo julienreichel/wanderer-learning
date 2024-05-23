@@ -103,7 +103,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useIris } from 'src/composables/iris';
-const { t } = useIris();
+const { t, getIconFromType } = useIris();
 const question = defineModel();
 
 const setOption = (name, value) => {
@@ -205,16 +205,7 @@ const feedbackTypeOptions = [
 
 const questionTypeOptions = ['shorttext', 'radio', 'checkbox', 'feedback'];
 
-const selectIcon = (value) => {
-  return (
-    {
-      shorttext: 'short_text',
-      radio: 'radio_button_checked',
-      checkbox: 'check_box',
-      feedback: 'rate_review',
-    }[value] || value
-  );
-};
+const selectIcon = (value) => getIconFromType(value);
 
 const getIcon = (question, add) => {
   if (question.type === 'radio') {

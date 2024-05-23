@@ -15,6 +15,12 @@ export function useIris() {
   const canEdit = (item) => {
     return isAdmin || item?.owner === userId
   }
+  const getIconFromType = (type) => ({
+    shorttext: 'short_text',
+    radio: 'radio_button_checked',
+    checkbox: 'check_box',
+    feedback: 'rate_review',
+  }[type] || type);
 
-  return { router, t, $q, uid, canEdit }
+  return { router, t, $q, uid, canEdit, getIconFromType }
 }

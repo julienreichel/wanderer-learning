@@ -38,12 +38,7 @@ onMounted(async () => {
   const data = await lectureStepService.get(props.id);
   lectureStep.value = data;
 
-  const edit =
-    canEdit(data)
-      ? data.parts.length === 1 && data.parts[0].type === 'quiz'
-        ? 'QuizEdit'
-        : 'LectureStepEdit'
-      : null;
+  const edit = canEdit(data) ? 'LectureStepEdit' : null;
   updateBreadcrumbs([
     { label: t('course.list'), to: { name: 'CourseList' } },
     {

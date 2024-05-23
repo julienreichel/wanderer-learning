@@ -1,5 +1,5 @@
 <template>
-  <q-card class="q-pt-sm">
+  <q-card class="q-pt-sm" v-if="parts.length > 1">
     <q-card-section class="q-pt-sm q-px-sm q-col-gutter-sm row">
       <NavigationCard
         :step="step"

@@ -93,12 +93,7 @@ onMounted(async () => {
 });
 
 const viewStep = (step, index) => {
-  if (step.type === 'quiz') {
-    router.push({ name: 'QuizView', params: { id: step.id, stepIdx: index || 0} });
-  }
-  if (step.type === 'step') {
-    router.push({ name: 'LectureStepView', params: { id: step.id, stepIdx: index || 0 } });
-  }
+  router.push({ name: 'LectureStepView', params: { id: step.id, stepIdx: index || 0 } });
 };
 
 
