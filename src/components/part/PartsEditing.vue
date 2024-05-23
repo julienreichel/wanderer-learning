@@ -75,7 +75,8 @@ import { ref, computed, watch, nextTick, inject } from "vue";
 import { useIris } from "src/composables/iris";
 const { uid, router, $q, t } = useIris();
 
-const {storage: storageService} = inject('services');
+import { useChecks } from "src/composables/checks";
+const { checkPart } = useChecks();
 
 const parts = defineModel();
 const props = defineProps({
@@ -122,9 +123,9 @@ const editJson = (index, json = null) => {
   editJsonStep.value = index;
   jsonDialog.value = true;
 
-  if (!json){
-    let data = {...parts.value[index]};
-    if (data.type === "img" ){
+  if (!json) {
+    let data = { ...parts.value[index] };
+    if (data.type === "img") {
       delete data.text;
       delete data.questions;
       delete data.url;
@@ -141,38 +142,7 @@ const updateJsonPart = async (json) => {
   // check that when type = quiz, there is at least one question
   // check that each question has at least one answer
   try {
-    if (data.type === "quiz") {
-      if (data.questions.length === 0) {
-        throw { message: t("quiz.json.quiz_no_questions") };
-      }
-      data.questions.forEach((question) => {
-        if (question.answers.length === 0) {
-          throw { message: t("quiz.json.quiz_no_answers") };
-        }
-        // check that at least one answer is valid
-        if (question.answers.filter((a) => a.valid).length === 0) {
-          throw { message: t("quiz.json.quiz_no_valid_answers") };
-        }
-      });
-
-      // make sure all questions have an id, otherwise generate one
-      // make sure all id are unique, if not, uptade them
-      let ids = new Map();
-      data.questions.forEach((question) => {
-        if (!question.id || ids.has(question.id)) {
-          question.id = uid();
-        }
-        ids.set(question.id, true);
-      });
-    }
-
-    if (data.type === "img") {
-      if (data.src.startsWith("http")) {
-        data.url = data.src;
-      } else {
-        data.url = await storageService.resolveUrl(data.src);
-      }
-    }
+    data = await checkPart(data);
 
     parts.value[editJsonStep.value] = data;
   } catch (error) {
