@@ -52,7 +52,6 @@
         icon-right="check_box"
         @click="addQuestion('checkbox')"
       />
-      <q-btn size="sm" icon="check" @click="finish()" />
     </q-card-actions>
   </q-card>
 </template>
@@ -67,7 +66,6 @@ const quiz = defineModel();
 if (!quiz.value) {
   quiz.value = [];
 }
-const emit = defineEmits(['finished']);
 
 const removeQuestion = ({ index }) => {
   return quiz.value.splice(index, 1)[0];
@@ -98,9 +96,5 @@ const addQuestion = (type) => {
     answers: [],
     options: []
   });
-};
-
-const finish = (success = true) => {
-  emit('finished', { success });
 };
 </script>

@@ -1,83 +1,31 @@
 <template>
-  <q-card v-for="(part, index) in parts" :key="index">
-    <rich-text-editing v-if="part.type === 'text'" v-model="part.text">
-    </rich-text-editing>
-    <div class="row" v-if="part.type === 'img'">
-      <amplify-uploader
-        :ref="(el) => (uploaderRefs[index] = el)"
-        accept=".jpg, image/*"
-        :filename="(file) => uid() + '.' + file.name.split('.').pop()"
-        @uploaded="(msg) => uploaded(part, msg, index)"
-      >
-        <template v-slot:header="scope">
-          <div class="row no-wrap items-center q-pa-sm q-gutter-sm">
-            <q-spinner v-if="scope.isUploading" class="q-uploader__spinner" />
-            <q-btn
-              v-if="scope.canAddFiles"
-              type="a"
-              icon="add_box"
-              @click="scope.pickFiles"
-              round
-              dense
-              flat
-            >
-              <q-uploader-add-trigger />
-              <q-tooltip>Pick Files</q-tooltip>
-            </q-btn>
-            <q-btn
-              v-if="scope.canUpload"
-              icon="cloud_upload"
-              @click="scope.upload"
-              round
-              dense
-              flat
-            >
-            </q-btn>
-          </div>
-        </template>
-      </amplify-uploader>
-      <q-img class="col" :ratio="16 / 9" fit="cover" :src="part.url" />
-    </div>
-    <div class="row q-pa-md" v-if="part.type === 'video'">
-      <q-input
-        class="col-8"
-        v-model="part.src"
-        :label="$t('parts.form.add.video')"
-      />
-      <div class="col-4">
-        <q-video :ratio="16 / 9" :src="part.src" />
-      </div>
-    </div>
-    <question-editing
-      v-if="part.type === 'quiz' && !allowMultipleQuestions"
-      v-model="part.questions[0]"
-    />
-    <q-card-section v-if="part.type === 'quiz' && allowMultipleQuestions" class="q-mt-sm q-pa-sm q-gutter-sm">
-        <questions-editing
-          v-model="part.questions"
-        />
-    </q-card-section>
-
-    <q-separator />
-
-    <q-card-actions >
-      <q-space />
-      <q-btn size="sm" icon="delete" @click="remove(index)" />
-      <q-btn
-        v-if="index > 0"
-        size="sm"
-        icon="arrow_upward"
-        @click="moveUp(index)"
-      />
-      <q-btn
-        v-if="index + 1 < parts.length"
-        size="sm"
-        icon="arrow_downward"
-        @click="moveDown(index)"
-      />
-    </q-card-actions>
-  </q-card>
   <q-card>
+    <q-card-section class="q-pt-sm q-px-sm q-col-gutter-sm row">
+      <NavigationCard
+        :step="step"
+        :showPrevious="hasPrevious"
+        @stepChange="step = $event"
+      />
+      <PartCard
+        v-for="part in previewParts"
+        :key="part.id"
+        :part="part"
+        :step="parts.indexOf(part)"
+        :maxStep="parts.length"
+        :active="step == parts.indexOf(part)"
+        :editing="true"
+        @stepChange="step = $event"
+        @remove="remove"
+        @moveLeft="moveUp"
+        @moveRight="moveRight"
+      />
+      <NavigationCard
+        :step="step"
+        :hasNext="hasNext"
+        @stepChange="step = $event"
+        @finish="finish"
+      />
+    </q-card-section>
     <q-card-actions>
       <q-space/>
       <q-btn
@@ -107,24 +55,43 @@
       <q-btn size="sm" icon="check" @click="finish()" />
     </q-card-actions>
   </q-card>
+  <questions-editing v-if="part && part.type === 'quiz'" v-model="part.questions" />
+  <part-editing v-else-if="part" v-model="part" />
 </template>
 
 <script setup>
-import { ref, inject } from 'vue';
-
-import RichTextEditing from './RichTextEditing.vue';
-import QuestionEditing from './QuestionEditing.vue';
+import NavigationCard from "./NavigationCard.vue";
+import PartCard from "./PartCard.vue";
+import PartEditing from './PartEditing.vue';
 import QuestionsEditing from './QuestionsEditing.vue';
-import AmplifyUploader from '../utils/AmplifyUploader.js';
+
+import { ref, computed } from 'vue';
 
 import { useIris } from 'src/composables/iris';
 const { uid } = useIris();
-const {storage: storageService} = inject('services');
-
 
 const parts = defineModel();
-const props = defineProps({ allowMultipleQuestions: { type: Boolean, default: false }});
+const props = defineProps({
+  stepIdx: { type: String },
+});
 const emit = defineEmits(['finished']);
+
+
+const step = ref(Number(props.stepIdx) || 0);
+const part = computed(() => parts.value[step.value]);
+const previewParts = computed(() => {
+  const toDisplay = 5;
+  if (parts.value.length < toDisplay) return parts.value;
+
+  const start = Math.min(
+    Math.max(0, step.value - Math.floor(toDisplay / 2)),
+    parts.value.length - toDisplay,
+  );
+  return parts.value.slice(start, start + toDisplay);
+});
+
+const hasPrevious = computed(() => step.value > 0 );
+const hasNext = computed(() => step.value < parts.value.length - 1);
 
 const remove = (index) => {
   return parts.value.splice(index, 1)[0];
@@ -133,7 +100,7 @@ const moveUp = (index) => {
   const part = remove(index);
   parts.value.splice(index - 1, 0, part);
 };
-const moveDown = (index) => {
+const moveRight = (index) => {
   const part = remove(index);
   parts.value.splice(index + 1, 0, part);
 };
@@ -157,29 +124,18 @@ const add = (type) => {
       options: []
     }];
   }
-
-  parts.value.push({
+  const newStep = {
     type,
     src,
     text,
     questions,
     options: [],
-  });
-};
-const uploaderRefs = ref([]);
-const uploaded = async (part, msg, idx) => {
-  const file = msg.files[0];
-  if (part.src) {
-    storageService.removeImg(part.src);
   }
-  part.src = file?.path;
-  part.url = file?.url;
 
-  const uploader = uploaderRefs.value[idx];
-  if (uploader) {
-    uploader.removeUploadedFiles();
-  }
+  parts.value.splice(step.value + 1, 0, newStep);
+  step.value = step.value + 1;
 };
+
 
 const finish = (success = true) => {
   emit('finished', { success });
