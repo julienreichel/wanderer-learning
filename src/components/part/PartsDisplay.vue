@@ -1,81 +1,42 @@
 <template>
   <q-card class="q-pt-sm">
     <q-card-section class="q-pt-sm q-px-sm q-col-gutter-sm row">
-      <div class="col-1">
-        <q-card
-          v-if="step !== 0"
-          class="row justify-center items-center full-height"
-          clickable
-          @click="step --"
-          flat
-        >
-        <q-icon  name="chevron_left" size="xl" />
-        </q-card>
-      </div>
-      <div v-for="part in previewParts" :key="part.id" class="col-2">
-        <q-card
-          class="full-height"
-          clickable
-          @click="step = parts.indexOf(part)"
-          :class="{ 'custom-highlight': step == parts.indexOf(part) }"
-          flat
-          bordered
-        >
-          <q-card-section v-if="part.type === 'text'">
-            <q-item-label v-for="idx in 4" :key="idx">
-              <q-skeleton type="text" animation="none" />
-            </q-item-label>
-          </q-card-section>
-          <q-img
-            v-if="part.type === 'img'"
-            :ratio="16 / 9"
-            fit="scale-down"
-            :src="part.url"
-          />
-          <q-card-section v-if="part.type === 'quiz'" class="row justify-center items-center full-height">
-            <q-icon v-if="!hasQuizAnswer(part)" name="assignment" size="xl" />
-            <q-icon v-else name="assignment_turned_in" size="xl" />
-          </q-card-section>
-          <q-card-section v-if="part.type === 'video'" class="row justify-center items-center full-height">
-            <q-icon  name="play_circle" size="xl" />
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-1">
-        <q-card
-        v-if="hasNext || hasAnsweredAllQuizzes"
-          class="row justify-center items-center full-height"
-          clickable
-          @click="hasNext ? step ++ : finish(true)"
-          flat
-        >
-        <q-icon v-if="hasNext" name="chevron_right" size="xl" />
-        <q-icon v-else-if="hasAnsweredAllQuizzes" name="check" size="xl" />
-        </q-card>
-      </div>
+      <NavigationCard
+        :step="step"
+        :showPrevious="step !== 0"
+        @stepChange="step = $event"
+      />
+      <PartCard
+        v-for="part in previewParts"
+        :key="part.id"
+        :part="part"
+        :step="step"
+        :parts="parts"
+        :reportings="reportings"
+        @stepChange="step = $event"
+      />
+      <NavigationCard
+        :step="step"
+        :hasNext="hasNext"
+        :hasAnsweredAllQuizzes="hasAnsweredAllQuizzes"
+        @stepChange="step = $event"
+        @finish="finish"
+      />
     </q-card-section>
   </q-card>
-  <q-card v-if="part">
-    <div class="q-pa-md" v-if="part.type === 'text'" v-html="part.text"></div>
-    <q-img
-      v-if="part.type === 'img'"
-      :ratio="16 / 9"
-      fit="scale-down"
-      :src="part.url"
-    />
-    <q-video v-if="part.type === 'video'" :ratio="16 / 9" :src="part.src" />
-    <questions-display
-      v-if="part.type === 'quiz'"
-      :questions="part.questions"
-      :responses="reponses"
-      @results="processResults"
-    />
-  </q-card>
-
+  <PartDisplay
+    v-if="part"
+    :part="part"
+    :responses="responses"
+    @results="processResults"
+  />
 </template>
 
 <script setup>
-import QuestionsDisplay from "src/components/part/QuestionsDisplay.vue";
+import NavigationCard from "./NavigationCard.vue";
+import PartCard from "./PartCard.vue";
+import PartDisplay from "./PartDisplay.vue";
+
 import { ref, computed, watch } from "vue";
 
 const props = defineProps({
@@ -111,7 +72,7 @@ const processResults = ({ responses }) => {
 };
 
 const part = computed(() => props.parts[step.value]);
-const reponses = computed(() => {
+const responses = computed(() => {
   return reportings.value[step.value]?.responses;
 });
 
@@ -129,31 +90,8 @@ const previewParts = computed(() => {
 const hasNext = computed(() => step.value < props.parts.length - 1);
 const hasAnsweredAllQuizzes = computed(() => quizLeft.value === 0);
 
-const hasQuizAnswer = (part) => {
-  const idx = props.parts.indexOf(part);
-  return part.type === "quiz" && reportings.value[idx]?.responses;
-};
-
 const finish = (finished = true) => {
   updateTimings(step.value);
   emit("finished", { finished, reportings: reportings.value });
 };
 </script>
-
-<style type="text/scss" scoped>
-.custom-highlight {
-  border-color: var(--q-primary);
-}
-.skeleton-row {
-  display: flex;
-  align-items: center;
-}
-.skeleton-checkbox {
-  width: 12px;
-  height: 12px;
-  margin-right: 8px; /* Spacing between the checkbox and text */
-}
-.skeleton-text {
-  width: 80%;
-}
-</style>
