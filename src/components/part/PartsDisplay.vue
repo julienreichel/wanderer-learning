@@ -10,9 +10,9 @@
         v-for="part in previewParts"
         :key="part.id"
         :part="part"
-        :step="step"
-        :parts="parts"
-        :reportings="reportings"
+        :step="parts.indexOf(part)"
+        :hasQuizAnswer="hasQuizAnswer(part)"
+        :active="step == parts.indexOf(part)"
         @stepChange="step = $event"
       />
       <NavigationCard
@@ -90,6 +90,10 @@ const previewParts = computed(() => {
 const hasNext = computed(() => step.value < props.parts.length - 1);
 const hasAnsweredAllQuizzes = computed(() => quizLeft.value === 0);
 
+const hasQuizAnswer = (part) => {
+  const idx = props.parts.indexOf(part);
+  return part.type === "quiz" && reportings.value[idx]?.responses;
+};
 const finish = (finished = true) => {
   updateTimings(step.value);
   emit("finished", { finished, reportings: reportings.value });

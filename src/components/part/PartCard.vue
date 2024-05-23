@@ -3,8 +3,8 @@
     <q-card
       class="full-height"
       clickable
-      @click="stepChange(parts.indexOf(part))"
-      :class="{ 'custom-highlight': step == parts.indexOf(part) }"
+      @click="stepChange(step)"
+      :class="{ 'custom-highlight': active }"
       flat
       bordered
     >
@@ -20,7 +20,7 @@
         :src="part.url"
       />
       <q-card-section v-if="part.type === 'quiz'" class="row justify-center items-center full-height">
-        <q-icon v-if="!hasQuizAnswer(part)" name="assignment" size="xl" />
+        <q-icon v-if="!hasQuizAnswer" name="assignment" size="xl" />
         <q-icon v-else name="assignment_turned_in" size="xl" />
       </q-card-section>
       <q-card-section v-if="part.type === 'video'" class="row justify-center items-center full-height">
@@ -33,20 +33,15 @@
 <script setup>
 const props = defineProps({
   part: { type: Object, required: true },
+  hasQuizAnswer: { type: Boolean, default: false },
+  active: { type: Boolean, default: false },
   step: { type: Number, required: true },
-  parts: { type: Array, required: true },
-  reportings: { type: Array, required: true },
 });
 
 const emit = defineEmits(["stepChange"]);
 
 const stepChange = (newStep) => {
   emit("stepChange", newStep);
-};
-
-const hasQuizAnswer = (part) => {
-  const idx = props.parts.indexOf(part);
-  return part.type === "quiz" && props.reportings[idx]?.responses;
 };
 
 </script>
