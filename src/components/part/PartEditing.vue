@@ -74,7 +74,7 @@ const part = defineModel();
 const uploaderRef = ref(null);
 const uploaded = async (msg) => {
   const file = msg.files[0];
-  if (part.value.src) {
+  if (part.value.src && !part.value.src.startsWith('http')) {
     storageService.removeImg(part.value.src);
   }
   part.value.src = file?.path;

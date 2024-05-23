@@ -45,14 +45,18 @@
           @click.stop="$emit('moveRight', step)"
         />
         <q-space />
+        <q-btn v-if="isAdmin" size="sm" icon="data_object" flat round @click.stop="$emit('edit', step)" />
         <q-btn size="sm" icon="delete" flat round @click.stop="$emit('remove', step)" />
-
       </q-card-actions>
     </q-card>
   </div>
 </template>
 
 <script setup>
+import { inject } from 'vue';
+const userAttributes = inject('userAttributes');
+const { isAdmin } = userAttributes.value;
+
 const props = defineProps({
   part: { type: Object, required: true },
   hasQuizAnswer: { type: Boolean, default: false },

@@ -12,12 +12,19 @@ export default {
     form: {
       submit: 'Submit',
       saved: 'Saved',
-      confirm_delete_title: 'Confirm Delete'
+      confirm_delete_title: 'Confirm Delete',
+      cancel: 'Cancel',
+      apply: 'apply',
     },
     app_name: 'Wanderer Learing',
     sign_out: 'Sign Out',
     sign_in: 'Sign In',
     welcome: 'Welcome',
+    edit: {
+      json: 'Edit JSON',
+      text: 'Edit Text',
+      invalid_json: 'Invalid JSON'
+    }
   },
   quiz: {
     form: {
@@ -32,6 +39,11 @@ export default {
         checkbox: 'Check boxes',
         feedback: 'Feedback'
       }
+    },
+    json: {
+      no_questions: 'A quiz must have at least one question',
+      quiz_no_answers: 'A question must have at least one answer',
+      quiz_no_valid_answers: 'A question must have at least one valid answer',
     },
     feedback: {
       type: {

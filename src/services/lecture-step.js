@@ -82,6 +82,10 @@ export default class LectureStepService extends ServicePrototype {
     if (params.resolveImg && step.parts) {
       for (const part of step.parts) {
         if (part.type === 'img' && part.src && part.src !== "") {
+          if (part.src.startsWith('http')) {
+            part.url = part.src;
+            continue;
+          }
           part.url = await this.storageService.resolveUrl(part.src);
         }
       }
