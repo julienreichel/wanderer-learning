@@ -5,6 +5,7 @@
     <div class="row" v-if="part.type === 'img'">
       <amplify-uploader
         ref="uploaderRef"
+        class="col-8"
         accept=".jpg, image/*"
         :filename="(file) => uid() + '.' + file.name.split('.').pop()"
         @uploaded="uploaded"
@@ -36,7 +37,7 @@
           </div>
         </template>
       </amplify-uploader>
-      <q-img class="col" :ratio="16 / 9" fit="cover" :src="part.url" />
+      <q-img class="col" :ratio="16 / 9" fit="scale-down" :src="part.url" />
     </div>
     <div class="row q-pa-md" v-if="part.type === 'video'">
       <q-input

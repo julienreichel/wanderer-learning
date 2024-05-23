@@ -9,7 +9,7 @@
         <q-btn square size="sm" icon="straight" @click="finished()" />
       </q-card-actions>
     </q-card>
-    <parts-display :parts="lectureStep.parts" @finished="finished" :stepIdx="stepIdx" />
+    <parts-display :parts="lectureStep.parts" @finished="finished" :stepIdx="stepIdx"/>
   </q-page>
 </template>
 

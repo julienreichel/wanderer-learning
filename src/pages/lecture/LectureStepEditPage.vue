@@ -12,6 +12,7 @@
     </q-card>
     <parts-editing
       v-model="lectureStep.parts"
+      :stepIdx="stepIdx"
       @finished="finish"
     ></parts-editing>
   </q-page>
@@ -31,6 +32,10 @@ const userAttributes = inject('userAttributes');
 const { identityId } = userAttributes.value;
 const props = defineProps({
   id: String,
+  stepIdx: {
+    type: String,
+    default: '0'
+  }
 });
 
 const lectureStep = ref({
@@ -105,7 +110,7 @@ onMounted(async () => {
         label: data.lecture.title,
         to: { name: 'LectureEdit', params: { id: data.lecture.id } },
       },
-      { label: data.title, id: data.id, stepIdx: 0, view: 'LectureStepView', beforeNavigate: saveSteps},
+      { label: data.title, id: data.id, view: 'LectureStepView', beforeNavigate: saveSteps},
     ]);
     lectureStepInitial = toJSON(data);
   }

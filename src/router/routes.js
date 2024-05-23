@@ -58,7 +58,7 @@ const routes = [
             children: [
               {
                 name: 'LectureStepEdit',
-                path: 'edit/:id',
+                path: 'edit/:id/:stepIdx',
                 component: () => import('src/pages/lecture/LectureStepEditPage.vue'),
                 props: true
               }, {

@@ -13,6 +13,7 @@
         :step="parts.indexOf(part)"
         :hasQuizAnswer="hasQuizAnswer(part)"
         :active="step == parts.indexOf(part)"
+        :maxStep="parts.length"
         @stepChange="step = $event"
       />
       <NavigationCard

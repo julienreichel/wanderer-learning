@@ -65,10 +65,10 @@ import PartCard from "./PartCard.vue";
 import PartEditing from './PartEditing.vue';
 import QuestionsEditing from './QuestionsEditing.vue';
 
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 import { useIris } from 'src/composables/iris';
-const { uid } = useIris();
+const { uid, router } = useIris();
 
 const parts = defineModel();
 const props = defineProps({
@@ -88,6 +88,10 @@ const previewParts = computed(() => {
     parts.value.length - toDisplay,
   );
   return parts.value.slice(start, start + toDisplay);
+});
+
+watch(step, (newStep) => {
+  router.push({ params: { stepIdx: newStep.toString() } });
 });
 
 const hasPrevious = computed(() => step.value > 0 );

@@ -176,10 +176,10 @@ const deleteStep = async (step) => {
   });
 };
 const viewStep = (step) => {
-  router.push({ name: 'LectureStepView', params: { id: step.id } });
+  router.push({ name: 'LectureStepView', params: { id: step.id, stepIdx: 0 } });
 };
 const editStep = (step) => {
-  router.push({ name: 'LectureStepEdit', params: { id: step.id } });
+  router.push({ name: 'LectureStepEdit', params: { id: step.id, stepIdx: 0 } });
 };
 
 const newTitle = ref();
