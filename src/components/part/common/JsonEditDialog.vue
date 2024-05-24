@@ -46,10 +46,10 @@ const emit = defineEmits(['input', 'save']);
 
 const changed = ref(false);
 const editorOptions = ref({
-  mode: 'tree', // or 'tree', 'view'
-  mainMenuBar: true,
-  navigationBar: true,
-  statusBar: true,
+  mode: 'text', // or 'tree', 'view'
+  mainMenuBar: false,
+  navigationBar: false,
+  statusBar: false,
   onChange: () => {
     changed.value = true;
   }
