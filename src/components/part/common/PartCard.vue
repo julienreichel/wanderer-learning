@@ -9,7 +9,8 @@
       bordered
     >
       <q-card-section v-if="part.type === 'text'">
-        <q-item-label v-for="idx in 4" :key="idx">
+        <q-item-label>{{ textPreview }}</q-item-label>
+        <q-item-label v-for="idx in 2" :key="idx">
           <q-skeleton type="text" animation="none" />
         </q-item-label>
       </q-card-section>
@@ -53,7 +54,7 @@
 </template>
 
 <script setup>
-import { inject } from 'vue';
+import { inject, computed } from 'vue';
 const userAttributes = inject('userAttributes');
 const { isAdmin } = userAttributes.value;
 
@@ -71,6 +72,17 @@ const emit = defineEmits(["stepChange", "remove", "moveLeft", "moveRight", "edit
 const stepChange = (newStep) => {
   emit("stepChange", newStep);
 };
+
+const textPreview = computed(() => {
+  // find the first <h3> or <h5> block and return it
+  const text = props.part.text || "";
+  const h = text.match(/<h\d>(.*?)<\/h\d>/);
+  if (h) {
+    // remove all html, keep only the text
+    return h[1].replace(/<[^>]*>?/gm, '');
+  }
+  return text.substring(0, 20) + '[...]';
+})
 </script>
 
 <style type="text/scss" scoped>
