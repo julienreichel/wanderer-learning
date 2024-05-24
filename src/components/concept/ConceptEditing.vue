@@ -15,10 +15,10 @@
       :key="index"
     >
       <div class="ellipsis">
-        {{ item.concept.title }}
+        {{ item.concept?.title }}
         <q-tooltip>
-          <div class="text-weight-bold">{{ item.concept.title }}</div>
-          <div v-html="item.concept.description"></div>
+          <div class="text-weight-bold">{{ item.concept?.title }}</div>
+          <div v-html="item.concept?.description"></div>
         </q-tooltip>
       </div>
     </q-chip>
@@ -110,6 +110,7 @@ const createConcept = async (val, done) => {
 };
 
 const removeConcept = async (item) => {
+  console.log(item, lecture.value.concepts);
   lecture.value.concepts = lecture.value.concepts.filter(
     ({ id }) => id !== item.id
   );

@@ -51,7 +51,7 @@
           v-if="canEdit(step)"
           size="sm"
           icon="delete"
-          @click="deleteStep(step)"
+          @click.stop="deleteStep(step)"
         />
       </q-card-actions>
     </q-card>

@@ -16,7 +16,7 @@ export default class ConceptService extends ServicePrototype {
 
     this.model = this.client.models.LectureConceptJoinTable;
 
-    this.selectionSet = ['lecture.*', 'concept.*'];
+    this.selectionSet = ['id', 'lecture.*', 'concept.*'];
   }
 
 }

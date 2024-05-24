@@ -12,7 +12,7 @@
       </q-card-section>
       <q-card-actions>
         <q-space />
-        <q-btn size="sm" icon="delete" @click="deleteCourse(course)" />
+        <q-btn size="sm" icon="delete" @click.stop="deleteCourse(course)" />
       </q-card-actions>
     </q-card>
     <lectures-editing v-model="course.lectures" :allow-delete="true" :edit-mode="true"/>

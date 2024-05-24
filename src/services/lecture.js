@@ -19,7 +19,7 @@ export default class LectureService extends ServicePrototype {
     this.lectureConceptService = new LectureConceptService();
     this.lectureStepService = new LectureStepService();
 
-    this.selectionSet = ['id', 'title', 'order', 'owner', 'course.*', 'steps.*', 'concepts.concept.*'];
+    this.selectionSet = ['id', 'title', 'order', 'owner', 'course.*', 'steps.*', 'concepts.id', 'concepts.concept.*'];
   }
 
   /**

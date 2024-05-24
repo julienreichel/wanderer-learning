@@ -17,7 +17,7 @@ export default class ConceptService extends ServicePrototype {
     this.model = this.client.models.Concept;
     this.lectureConceptService = new LectureConceptService();
 
-    this.selectionSet = ['id', 'title', 'description', 'lectures.lecture.*', 'lectures.lecture.steps.id', , 'lectures.lecture.concepts.concept.*', 'steps.*'];
+    this.selectionSet = ['id', 'title', 'description', 'lectures.id', 'lectures.lecture.*', 'lectures.lecture.steps.id', , 'lectures.lecture.concepts.concept.*', 'steps.*'];
   }
 
   /**
