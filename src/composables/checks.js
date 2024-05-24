@@ -44,5 +44,19 @@ export function useChecks() {
     return part;
   }
 
-  return { checkPart }
+  const preparePart = (part) => {
+    let data = { ...part };
+    if (data.type === "img") {
+      delete data.text;
+      delete data.questions;
+      delete data.url;
+    }
+    if (data.type === "quiz") {
+      delete data.text;
+      delete data.src;
+    }
+    return data;
+  }
+
+  return { checkPart, preparePart }
 }

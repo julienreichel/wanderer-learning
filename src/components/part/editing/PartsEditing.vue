@@ -18,7 +18,7 @@
         @remove="remove"
         @moveLeft="moveUp"
         @moveRight="moveRight"
-        @edit="editJson"
+        @edit="editJsonStep"
       />
       <NavigationCard
         :step="step"
@@ -28,7 +28,7 @@
       />
     </q-card-section>
     <q-card-actions>
-      <q-space />
+
       <q-btn
         size="sm"
         icon="add"
@@ -48,6 +48,8 @@
         @click="add('video')"
       />
       <q-btn size="sm" icon-right="quiz" icon="add" @click="add('quiz')" />
+      <q-space />
+      <q-btn v-if="isAdmin" size="sm" icon="data_object" @click="editJsonPart()" />
       <q-btn size="sm" icon="check" @click="finish()" />
     </q-card-actions>
   </q-card>
@@ -58,8 +60,8 @@
   <part-editing v-else-if="part" v-model="part" />
   <json-edit-dialog
     v-model="jsonDialog"
-    :json="editJsonPart"
-    @save="updateJsonPart"
+    :json="jsonToEdit"
+    @save="updateFromJson"
   />
 </template>
 
@@ -76,7 +78,10 @@ import { useIris } from "src/composables/iris";
 const { uid, router, $q, t } = useIris();
 
 import { useChecks } from "src/composables/checks";
-const { checkPart } = useChecks();
+const { checkPart, preparePart } = useChecks();
+
+const userAttributes = inject('userAttributes');
+const { isAdmin } = userAttributes.value;
 
 const parts = defineModel();
 const props = defineProps({
@@ -116,35 +121,49 @@ const moveRight = (index) => {
   parts.value.splice(index + 1, 0, part);
 };
 
-const editJsonStep = ref(null);
+const jsonEditStep = ref(null);
 const jsonDialog = ref(false);
-const editJsonPart = ref("");
-const editJson = (index, json = null) => {
-  editJsonStep.value = index;
+const jsonToEdit = ref("");
+const editJsonStep = (index, json = null) => {
+  jsonEditStep.value = index;
   jsonDialog.value = true;
 
   if (!json) {
-    let data = { ...parts.value[index] };
-    if (data.type === "img") {
-      delete data.text;
-      delete data.questions;
-      delete data.url;
-    }
+    let data = preparePart(parts.value[index]);
     json = JSON.stringify(data, null, 2);
   }
 
-  editJsonPart.value = json;
+  jsonToEdit.value = json;
 };
-const updateJsonPart = async (json) => {
+
+const editJsonPart = (json = null) => {
+  jsonEditStep.value = null;
+  jsonDialog.value = true;
+
+  if (!json) {
+    let data = parts.value.map(part => preparePart(part));
+    json = JSON.stringify(data, null, 2);
+  }
+
+  jsonToEdit.value = json;
+};
+
+const updateFromJson = async (json) => {
   let data = JSON.parse(json);
 
+try {
+    if (jsonEditStep.value === null) {
+      const promises = data.map(async (part) => {
+        return await checkPart(part);
+      });
 
-  // check that when type = quiz, there is at least one question
-  // check that each question has at least one answer
-  try {
+      parts.value = await Promise.all(promises);
+      return;
+    }
+
     data = await checkPart(data);
+    parts.value[jsonEditStep.value] = data;
 
-    parts.value[editJsonStep.value] = data;
   } catch (error) {
     $q.notify({
       color: "negative",
@@ -152,7 +171,11 @@ const updateJsonPart = async (json) => {
       message: error.message,
     });
     nextTick(() => {
-      editJson(editJsonStep.value, json);
+      if(jsonEditStep.value === null){
+        editJsonPart(json);
+      } else {
+        editJsonStep(jsonEditStep.value, json);
+      }
     });
   }
 };
