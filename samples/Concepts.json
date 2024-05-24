@@ -41,7 +41,7 @@
       {
         "id": "ba96b53e-9ced-4601-b0af-6566f8753cec",
         "type": "shorttext",
-        "text": "A short question were the answer is a single word",
+        "text": "A short question were the answer is a single word, all proposed answer are valid",
         "answers": [
           {
             "text": "Valid",
@@ -53,6 +53,10 @@
           },
           {
             "text": "Yes",
+            "valid": true
+          },
+          {
+            "text": "Right",
             "valid": true
           }
         ],
