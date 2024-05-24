@@ -125,6 +125,13 @@ const getOption = (name) => {
 const allInvalid = ref(false);
 watch(allInvalid, (value) => setOption('allInvalid', value));
 
+watch(() => question.value.options, (options) => {
+  if (!options) {
+    return;
+  }
+  feedbackType.value = getOption('feedbackType') || 'roti';
+});
+
 const feedbackType = ref(getOption('feedbackType') || 'roti');
 watch([feedbackType, () => question.value.type], (value) => {
   if (question.value.type !== 'feedback') {
