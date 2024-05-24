@@ -15,7 +15,7 @@
       <q-card-actions>
         <q-space />
         <q-btn flat :label="$t('generic.form.cancel')" @click="closeDialog" />
-        <q-btn :label="$t('generic.form.apply')" color="primary" @click="saveJson" />
+        <q-btn :label="$t('generic.form.apply')" color="primary" @click="saveJson" :disable="!changed"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -23,6 +23,9 @@
 
 <script setup>
 import JsonEditor from 'json-editor-vue';
+
+import { useIris } from 'src/composables/iris';
+const { $q, t } = useIris();
 
 import { ref, watch, defineProps, defineEmits } from 'vue';
 
@@ -41,11 +44,15 @@ const props = defineProps({
 
 const emit = defineEmits(['input', 'save']);
 
+const changed = ref(false);
 const editorOptions = ref({
   mode: 'tree', // or 'tree', 'view'
   mainMenuBar: true,
   navigationBar: true,
   statusBar: true,
+  onChange: () => {
+    changed.value = true;
+  }
 });
 
 const isOpen = defineModel();
@@ -61,8 +68,7 @@ watch(() => props.data, (value) => {
 
 function validateJson(value) {
   try {
-    JSON.parse(value);
-    return true;
+    return JSON.parse(value);
   } catch (error) {
     $q.notify({
       color: 'negative',
@@ -77,15 +83,13 @@ function closeDialog() {
 }
 
 function saveJson() {
-  if (!props.emitJson) {
-    emit('save', jsonText.value);
-    closeDialog();
-    return;
-  }
-
-  const json = JSON.stringify(jsonText.value);
-  if (validateJson(json) === true) {
-    emit('save', json);
+  const data = validateJson(jsonText.value)
+  if (data) {
+    if (!props.emitJson) {
+      emit('save', data);
+    } else {
+      emit('save', jsonText.value);
+    }
     closeDialog();
   }
 }
