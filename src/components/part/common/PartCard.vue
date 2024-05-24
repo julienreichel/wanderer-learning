@@ -66,7 +66,7 @@ const props = defineProps({
   editing: { type: Boolean, default: false },
 });
 
-const emit = defineEmits(["stepChange", "remove", "moveLeft", "moveRight"]);
+const emit = defineEmits(["stepChange", "remove", "moveLeft", "moveRight", "edit"]);
 
 const stepChange = (newStep) => {
   emit("stepChange", newStep);

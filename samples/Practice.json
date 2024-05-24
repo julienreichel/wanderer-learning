@@ -1,0 +1,154 @@
+[
+  {
+    "type": "quiz",
+    "questions": [
+      {
+        "id": "ba96b53e-9ced-4601-b0af-6566f8753cec",
+        "type": "shorttext",
+        "text": "A short question",
+        "answers": [
+          {
+            "text": "Valid answer",
+            "valid": true
+          },
+          {
+            "text": "Another valid answer",
+            "valid": true
+          }
+        ],
+        "options": [
+          {
+            "name": "allInvalid",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": "34e7fde8-f6e2-4a55-b246-1b004c0eb542",
+        "type": "radio",
+        "text": "A choice question",
+        "answers": [
+          {
+            "text": "Wrong answer",
+            "valid": false
+          },
+          {
+            "text": "Good answer",
+            "valid": true
+          },
+          {
+            "text": "Wrong answer",
+            "valid": false
+          }
+        ],
+        "options": []
+      }
+    ],
+    "options": []
+  },
+  {
+    "type": "quiz",
+    "questions": [
+      {
+        "id": "20d6f47b-3a0d-4fb6-aaa2-68133609e647",
+        "type": "checkbox",
+        "text": "A check question",
+        "answers": [
+          {
+            "text": "Should be checked",
+            "valid": true
+          },
+          {
+            "text": "Should also be checked",
+            "valid": true
+          },
+          {
+            "text": "Should not be checked",
+            "valid": false
+          }
+        ],
+        "options": []
+      },
+      {
+        "id": "5b81c773-8cf9-4d7a-9ddf-cb0f8908776f",
+        "type": "radio",
+        "text": "A false question",
+        "answers": [
+          {
+            "text": "True",
+            "valid": false
+          },
+          {
+            "text": "False",
+            "valid": true
+          }
+        ],
+        "options": []
+      },
+      {
+        "id": "03707ce1-3d98-4f83-bd3c-89e95640067b",
+        "type": "radio",
+        "text": "A true question",
+        "answers": [
+          {
+            "text": "True",
+            "valid": true
+          },
+          {
+            "text": "False",
+            "valid": false
+          }
+        ],
+        "options": []
+      }
+    ],
+    "options": []
+  },
+  {
+    "type": "quiz",
+    "questions": [
+      {
+        "id": "ba96b53e-9ced-4601-b0af-6566f8753cec",
+        "type": "shorttext",
+        "text": "A short question",
+        "answers": [
+          {
+            "text": "Valid answer",
+            "valid": true
+          },
+          {
+            "text": "Another valid answer",
+            "valid": true
+          }
+        ],
+        "options": [
+          {
+            "name": "allInvalid",
+            "value": true
+          }
+        ]
+      },
+      {
+        "id": "34e7fde8-f6e2-4a55-b246-1b004c0eb542",
+        "type": "radio",
+        "text": "A choice question",
+        "answers": [
+          {
+            "text": "Wrong answer",
+            "valid": false
+          },
+          {
+            "text": "Good answer",
+            "valid": true
+          },
+          {
+            "text": "Wrong answer",
+            "valid": false
+          }
+        ],
+        "options": []
+      }
+    ],
+    "options": []
+  }
+]

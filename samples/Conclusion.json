@@ -1,0 +1,36 @@
+[
+  {
+    "type": "quiz",
+    "questions": [
+      {
+        "id": "21896480-e58c-44a9-a39b-34c8d35b86b1",
+        "type": "feedback",
+        "answers": [
+          {
+            "text": "Didn’t justify the time spent"
+          },
+          {
+            "text": "I gained something"
+          },
+          {
+            "text": "I gained enough to justify the time spent"
+          },
+          {
+            "text": "I gained more than the time spent"
+          },
+          {
+            "text": "This was really worth the time invested"
+          }
+        ],
+        "options": [
+          {
+            "name": "feedbackType",
+            "value": "roti"
+          }
+        ],
+        "text": "What is your Return on Time Invested (ROTI) ?"
+      }
+    ],
+    "options": []
+  }
+]
