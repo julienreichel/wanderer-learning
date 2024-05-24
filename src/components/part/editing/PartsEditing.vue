@@ -60,7 +60,7 @@
   <part-editing v-else-if="part" v-model="part" />
   <json-edit-dialog
     v-model="jsonDialog"
-    :json="jsonToEdit"
+    :data="jsonToEdit"
     @save="updateFromJson"
   />
 </template>
@@ -123,14 +123,13 @@ const moveRight = (index) => {
 
 const jsonEditStep = ref(null);
 const jsonDialog = ref(false);
-const jsonToEdit = ref("");
+const jsonToEdit = ref({});
 const editJsonStep = (index, json = null) => {
   jsonEditStep.value = index;
   jsonDialog.value = true;
 
   if (!json) {
-    let data = preparePart(parts.value[index]);
-    json = JSON.stringify(data, null, 2);
+    json = preparePart(parts.value[index]);
   }
 
   jsonToEdit.value = json;
@@ -141,15 +140,14 @@ const editJsonPart = (json = null) => {
   jsonDialog.value = true;
 
   if (!json) {
-    let data = parts.value.map(part => preparePart(part));
-    json = JSON.stringify(data, null, 2);
+    json = parts.value.map(part => preparePart(part));
   }
 
   jsonToEdit.value = json;
 };
 
 const updateFromJson = async (json) => {
-  let data = JSON.parse(json);
+  let data = json;
 
 try {
     if (jsonEditStep.value === null) {

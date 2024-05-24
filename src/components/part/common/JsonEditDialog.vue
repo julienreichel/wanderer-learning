@@ -6,15 +6,10 @@
       </q-card-section>
 
       <q-card-section>
-        <q-input
+        <json-editor
           v-model="jsonText"
-          type="textarea"
-          autogrow
-          rows="10"
-          filled
-          :rules="[validateJson]"
-          lazy-rules
-        />
+          v-bind="editorOptions"
+        ></json-editor>
       </q-card-section>
 
       <q-card-actions>
@@ -27,23 +22,42 @@
 </template>
 
 <script setup>
+import JsonEditor from 'json-editor-vue';
+
 import { ref, watch, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   json: {
     type: String,
-    required: true,
+  },
+  data: {
+    type: [Object, Array],
+  },
+  emitJson: {
+    type: Boolean,
+    default: false,
   },
 });
 
 const emit = defineEmits(['input', 'save']);
 
+const editorOptions = ref({
+  mode: 'tree', // or 'tree', 'view'
+  mainMenuBar: true,
+  navigationBar: true,
+  statusBar: true,
+});
+
 const isOpen = defineModel();
 
-const jsonText = ref(props.json);
+const jsonText = ref(props.data || props.json && JSON.parse(props.json));
 watch(() => props.json, (value) => {
+  jsonText.value = JSON.parse(value);
+});
+watch(() => props.data, (value) => {
   jsonText.value = value;
 });
+
 
 function validateJson(value) {
   try {
@@ -63,8 +77,15 @@ function closeDialog() {
 }
 
 function saveJson() {
-  if (validateJson(jsonText.value) === true) {
+  if (!props.emitJson) {
     emit('save', jsonText.value);
+    closeDialog();
+    return;
+  }
+
+  const json = JSON.stringify(jsonText.value);
+  if (validateJson(json) === true) {
+    emit('save', json);
     closeDialog();
   }
 }
