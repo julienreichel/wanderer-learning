@@ -1,7 +1,12 @@
 [
   {
     "type": "text",
-    "text": "<h3>First subject</h3><h5>Sub title</h5><div>Some explanations with a</div><div><ul><li>Bullet list A</li><li>Bullet list B</li><li>Bullet list C</li></ul><h5>Sub title 2</h5></div><div><ol><li>Number list A</li><li>Number list B</li><li>Number list C</li></ol></div>",
+    "text": "<h3>First subject</h3><h5>Sub title</h5><div>Some explanations with a</div><ul><li>Bullet list A</li><li>Bullet list B</li><li>Bullet list C</li></ul><h5>Sub title 2</h5>Some more explanation as text",
+    "options": []
+  },
+  {
+    "type": "text",
+    "text": "<h5>Sub title</h5><div>Some explanations as text<h5>Sub title 2</h5></div><div><ol><li>Number list A</li><li>Number list B</li><li>Number list C</li></ol></div>",
     "options": []
   },
   {
@@ -26,18 +31,7 @@
         ],
         "options": [],
         "text": "A Choice question"
-      }
-    ],
-    "options": []
-  },
-  {
-    "type": "text",
-    "text": "<h3>Another subject</h3><h5>Sub title</h5><div>Plain text paragraph using <b>bold</b> and <i>italic</i>.&nbsp;</div>",
-    "options": []
-  },
-  {
-    "type": "quiz",
-    "questions": [
+      },
       {
         "id": "ba96b53e-9ced-4601-b0af-6566f8753cec",
         "type": "shorttext",
@@ -85,7 +79,7 @@
       },
       {
         "type": "radio",
-        "text": "A true question",
+        "text": "A true/false question",
         "answers": [
           {
             "text": "True",
