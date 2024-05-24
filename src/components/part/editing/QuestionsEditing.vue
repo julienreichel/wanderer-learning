@@ -60,8 +60,8 @@
 </template>
 
 <script setup>
-import QuestionEditing from "src/components/part/QuestionEditing.vue";
-import QuestionEditingPreview from "src/components/part/QuestionEditingPreview.vue";
+import QuestionEditing from "src/components/part/editing/QuestionEditing.vue";
+import QuestionEditingPreview from "src/components/part/editing/QuestionEditingPreview.vue";
 
 import { ref, watch } from 'vue';
 

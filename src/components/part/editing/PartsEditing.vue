@@ -64,11 +64,11 @@
 </template>
 
 <script setup>
-import NavigationCard from "./NavigationCard.vue";
-import PartCard from "./PartCard.vue";
+import NavigationCard from "../common/NavigationCard.vue";
+import PartCard from "../common/PartCard.vue";
 import PartEditing from "./PartEditing.vue";
 import QuestionsEditing from "./QuestionsEditing.vue";
-import JsonEditDialog from "./JsonEditDialog.vue";
+import JsonEditDialog from "../common/JsonEditDialog.vue";
 
 import { ref, computed, watch, nextTick, inject } from "vue";
 

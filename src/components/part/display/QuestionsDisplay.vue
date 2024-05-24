@@ -17,7 +17,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import QuestionDisplay from 'src/components/part/QuestionDisplay.vue';
+import QuestionDisplay from 'src/components/part/display/QuestionDisplay.vue';
 
 const props = defineProps({
   questions: { type: Array },

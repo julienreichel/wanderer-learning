@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, onMounted, inject } from 'vue';
-import RichTextEditing from 'src/components/part/RichTextEditing.vue';
+import RichTextEditing from 'src/components/part/common/RichTextEditing.vue';
 
 import { useIris } from 'src/composables/iris';
 const { t, $q, router } = useIris();

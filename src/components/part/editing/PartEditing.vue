@@ -59,10 +59,10 @@
 <script setup>
 import { ref, inject } from 'vue';
 
-import RichTextEditing from './RichTextEditing.vue';
+import RichTextEditing from '../common/RichTextEditing.vue';
 import QuestionEditing from './QuestionEditing.vue';
 
-import AmplifyUploader from '../utils/AmplifyUploader.js';
+import AmplifyUploader from '../../utils/AmplifyUploader.js';
 
 import { useIris } from 'src/composables/iris';
 const { uid } = useIris();

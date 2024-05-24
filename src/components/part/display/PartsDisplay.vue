@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
-import NavigationCard from "./NavigationCard.vue";
-import PartCard from "./PartCard.vue";
+import NavigationCard from "../common/NavigationCard.vue";
+import PartCard from "../common/PartCard.vue";
 import PartDisplay from "./PartDisplay.vue";
 
 import { ref, computed, watch } from "vue";

@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import QuestionsDisplay from "src/components/part/QuestionsDisplay.vue";
+import QuestionsDisplay from "./QuestionsDisplay.vue";
 
 const props = defineProps({
   part: { type: Object, required: true },

@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import PartsDisplay from 'src/components/part/PartsDisplay.vue';
+import PartsDisplay from 'src/components/part/display/PartsDisplay.vue';
 
 import { ref, onMounted, inject } from 'vue';
 

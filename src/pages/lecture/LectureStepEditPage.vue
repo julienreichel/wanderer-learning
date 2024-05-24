@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import PartsEditing from 'src/components/part/PartsEditing.vue';
+import PartsEditing from 'src/components/part/editing/PartsEditing.vue';
 
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 
