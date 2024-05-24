@@ -1,106 +1,111 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
+  <q-layout view="hHh lpR fFf">
+    <q-header elevated >
+      <q-toolbar  :class="{'bg-accent': userAttributes.isAdmin, 'bg-secondary': userAttributes.isTeacher && !userAttributes.isAdmin }">
+        <q-btn flat :label="$t('generic.app_name')" to="/"/>
+        <q-tabs inline-label shrink>
+          <q-route-tab
+            icon="school"
+            :label="t('course.list')"
+            :to="{ name: 'CourseList' }"
+          />
+          <q-route-tab
+            icon="square_foot"
+            :label="t('concept.list')"
+            :to="{ name: 'ConceptList' }"
+          />
+          <q-route-tab
+            icon="query_stats"
+            :label="t('reporting.list')"
+            :to="{ name: 'ReportingList' }"
+          />
+        </q-tabs>
+        <q-space/>
+
+        <q-toggle
+          v-if="enableEditing"
+          v-model="editMode"
+          color="purple"
+          checked-icon="edit"
+          unchecked-icon="visibility"
         />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-breadcrumbs active-color="white">
+          <q-breadcrumbs-el
+            v-for="breadcrumb in breadcrumbs"
+            :key="breadcrumb.label"
+            :label="breadcrumb.label"
+            :to="breadcrumb.to"
+            :icon="breadcrumb.icon"
+          />
+        </q-breadcrumbs>
+        <q-btn-dropdown stretch flat icon="person">
+          <q-list>
+            <q-item>
+              <q-item-section>{{userAttributes.name}}</q-item-section>
+            </q-item>
+            <q-item clickable @click="logOut" >
+              <q-item-section>{{$t('generic.sign_out')}}</q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-toolbar>
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
+    <q-page-container :style="{maxWidth: '1280px', margin: '0 auto' }">
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import { ref, provide, inject, watch } from 'vue';
 
-defineOptions({
-  name: 'MainLayout'
-})
+import { signOut } from 'aws-amplify/auth';
+import { useIris } from 'src/composables/iris';
+const { t, router } = useIris();
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+const userAttributes = inject('userAttributes');
+watch(userAttributes, (value) => {
+  console.log('userAttributes', value);
+  if (!value.userId) {
+    router.push({ name: 'SignIn' });
   }
-]
+});
 
-const leftDrawerOpen = ref(false)
+const breadcrumbs = ref([]);
+const enableEditing = ref(false);
+let viewRoute, editRoute, id, stepIdx, beforeNavigateAction;
+function updateBreadcrumbs(data) {
+  breadcrumbs.value = data;
 
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+  const routeInfo = data[data.length - 1];
+  enableEditing.value = Boolean(routeInfo.view) || Boolean(routeInfo.edit);
+  editMode.value = !Boolean(routeInfo.edit);
+  viewRoute = routeInfo.view;
+  editRoute = routeInfo.edit;
+  id = routeInfo.id;
+  stepIdx = routeInfo.stepIdx;
+  beforeNavigateAction = routeInfo.beforeNavigate;
 }
+provide('breadcrumbs', {
+  breadcrumbs,
+  updateBreadcrumbs,
+});
+
+const editMode = ref(false);
+watch(editMode, async (value) => {
+  if (beforeNavigateAction && !await beforeNavigateAction()) {
+    return;
+  }
+  if (value) {
+    router.push({ name: editRoute, params: { id } });
+  } else {
+    router.push({ name: viewRoute, params: { id, stepIdx } });
+  }
+});
+
+const logOut = async () => {
+  await signOut();
+  router.push({ name: 'SignIn' });
+};
+
 </script>

@@ -9,6 +9,14 @@ import { fileURLToPath } from 'node:url';
 
 export default configure((ctx) => {
   return {
+    eslint: {
+      // fix: true,
+      // include = [],
+      // exclude = [],
+      // rawOptions = {},
+      warnings: true,
+      errors: true,
+    },
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
 
@@ -17,7 +25,9 @@ export default configure((ctx) => {
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
       'i18n',
-      
+      'amplify',
+      'services',
+      'apexcharts',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
@@ -42,11 +52,11 @@ export default configure((ctx) => {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       target: {
-        browser: [ 'es2022', 'firefox115', 'chrome115', 'safari14' ],
+        browser: ['es2022', 'firefox115', 'chrome115', 'safari14'],
         node: 'node20'
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -62,7 +72,13 @@ export default configure((ctx) => {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf(viteConf) {
+        if (process.env.NODE_ENV === 'development') {
+          viteConf.define.global = viteConf.define.global || {};
+        }
+        viteConf.resolve.alias["./runtimeConfig"] = "./runtimeConfig.browser";
+        console.log(viteConf);
+      },
       // viteVuePluginOptions: {},
 
       vitePlugins: [
@@ -77,7 +93,7 @@ export default configure((ctx) => {
           ssr: ctx.modeName === 'ssr',
 
           // you need to set i18n resource including paths !
-          include: [ fileURLToPath(new URL('./src/i18n', import.meta.url)) ],
+          include: [fileURLToPath(new URL('./src/i18n', import.meta.url))],
         }],
         ['vite-plugin-checker', {
           eslint: {
@@ -95,7 +111,17 @@ export default configure((ctx) => {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {},
+      config: {
+        notify: {
+          position: 'bottom'
+        },
+        loadingBar: {
+          color: 'primary',
+          position: 'bottom',
+          size: '10px',
+          skipHijack: true
+        }
+      },
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
@@ -108,7 +134,11 @@ export default configure((ctx) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Dialog',
+        'Notify',
+        'LoadingBar'
+      ],
     },
 
     // animations: 'all', // --- includes all animations
@@ -131,7 +161,7 @@ export default configure((ctx) => {
     // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
     ssr: {
       prodPort: 3000, // The default port that the production server should use
-                      // (gets superseded if process.env.PORT is specified at runtime)
+      // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
         'render' // keep this as last one
@@ -148,7 +178,7 @@ export default configure((ctx) => {
       pwa: false
 
       // pwaOfflineHtmlFilename: 'offline.html', // do NOT use index.html as name!
-                                                 // will mess up SSR
+      // will mess up SSR
 
       // pwaExtendGenerateSWOptions (cfg) {},
       // pwaExtendInjectManifestOptions (cfg) {}
@@ -185,7 +215,7 @@ export default configure((ctx) => {
       // extendPackageJson (json) {},
 
       // Electron preload scripts (if any) from /src-electron, WITHOUT file extension
-      preloadScripts: [ 'electron-preload' ],
+      preloadScripts: ['electron-preload'],
 
       // specify the debugging port to use for the Electron app when running in development mode
       inspectPort: 5858,
