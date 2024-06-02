@@ -21,6 +21,10 @@ export default class LectureStepService extends ServicePrototype {
     this.selectionSet = ['id', 'title', 'type', 'order', 'owner', 'identityId', 'lecture.*', 'lecture.course.*', 'concept.*', 'parts.*'];
   }
 
+  sort(steps) {
+    return steps.sort((a, b) => Number(a.order) - Number(b.order));
+  }
+
   /**
    * Cleanup data from parts before sending the payload
    *

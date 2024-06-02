@@ -22,6 +22,10 @@ export default class LectureService extends ServicePrototype {
     this.selectionSet = ['id', 'title', 'order', 'owner', 'course.*', 'steps.*', 'concepts.id', 'concepts.concept.*'];
   }
 
+  sort(lectures) {
+    return lectures.sort((a, b) => Number(a.order) - Number(b.order));
+  }
+
   /**
    * Remove deleted content
    * @param {object} lecture the lecture data
@@ -45,7 +49,7 @@ export default class LectureService extends ServicePrototype {
   async get(id) {
     let lecture = await super.get(id)
 
-    lecture.steps = lecture.steps.sort((a, b) => Number(a.order) - Number(b.order));
+    lecture.steps = this.sort(lecture.steps);
     return this.removeDeletedContent(lecture);
   }
 

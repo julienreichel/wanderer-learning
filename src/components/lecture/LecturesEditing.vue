@@ -25,6 +25,18 @@
     </q-card-section>
     <q-card-actions v-if="canEdit(lecture) && allowDelete">
       <q-space />
+      <q-btn
+        v-if="index > 0"
+        size="sm"
+        icon="arrow_upward"
+        @click="moveUp(index)"
+      />
+      <q-btn
+        v-if="index < lecturesArray.length - 1"
+        size="sm"
+        icon="arrow_downward"
+        @click="moveDown(index)"
+      />
       <q-btn size="sm" icon="delete" @click="deleteLecture(lecture)" />
     </q-card-actions>
   </q-card>
@@ -57,6 +69,30 @@ const lecturesArray = computed(() => {
   if (!lectures.value) return [];
   return lectures.value.map((item) => item.lecture || item);
 });
+
+const moveUp = async (index) => {
+  const previousOrder = index > 1 ? Number(lectures.value[index - 2].order) : 0;
+  const nextOrder = index > 0 ? Number(lectures.value[index - 1].order) : 0;
+  const lecture = lectures.value[index];
+  lecture.order = '' + (previousOrder + nextOrder) / 2;
+  await lectureService.update(lecture);
+
+  lectures.value = lectureService.sort(lectures.value);
+};
+const moveDown = async (index) => {
+  const lecture = lectures.value[index];
+  if (index >= lectures.value.length - 2) {
+    lecture.order = '' + Date.now();
+  } else {
+    const previousOrder = Number(lectures.value[index + 1].order);
+    const nextOrder = Number(lectures.value[index + 2].order);
+    lecture.order = '' + (previousOrder + nextOrder) / 2;
+  };
+  await lectureService.update(lecture);
+
+
+  lectures.value = lectureService.sort(lectures.value);
+};
 
 const deleteLecture = async (lecture) => {
   $q.dialog({
