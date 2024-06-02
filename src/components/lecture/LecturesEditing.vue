@@ -1,6 +1,6 @@
 <template>
-  <q-card v-for="(lecture, index) in lecturesArray" :key="index">
-    <q-card-section horizontal clickable @click="editMode ? editLecture(lecture) : viewLecture(lecture)">
+  <q-card v-for="(lecture, index) in lecturesArray" :key="index" clickable @click="editMode ? editLecture(lecture) : viewLecture(lecture)">
+    <q-card-section horizontal>
       <q-card-section class="col q-pa-sm">
         <q-card-section class="q-pa-sm">
           <div class="text-h5">{{ lecture.title }}</div>
@@ -29,15 +29,15 @@
         v-if="index > 0"
         size="sm"
         icon="arrow_upward"
-        @click="moveUp(index)"
+        @click.stop="moveUp(index)"
       />
       <q-btn
         v-if="index < lecturesArray.length - 1"
         size="sm"
         icon="arrow_downward"
-        @click="moveDown(index)"
+        @click.stop="moveDown(index)"
       />
-      <q-btn size="sm" icon="delete" @click="deleteLecture(lecture)" />
+      <q-btn size="sm" icon="delete" @click.stop="deleteLecture(lecture)" />
     </q-card-actions>
   </q-card>
 </template>

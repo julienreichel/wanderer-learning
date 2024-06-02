@@ -45,10 +45,21 @@
           <step-reporting :ratings="step.ratings"></step-reporting>
         </q-card-section>
       </q-card-section>
-      <q-card-actions>
+      <q-card-actions v-if="canEdit(step)">
         <q-space />
+          <q-btn
+          v-if="index > 0"
+          size="sm"
+          icon="arrow_upward"
+          @click.stop="moveUp(index)"
+        />
         <q-btn
-          v-if="canEdit(step)"
+          v-if="index < lecture.steps.length - 1"
+          size="sm"
+          icon="arrow_downward"
+          @click.stop="moveDown(index)"
+        />
+        <q-btn
           size="sm"
           icon="delete"
           @click.stop="deleteStep(step)"
@@ -160,6 +171,32 @@ const saveLecture = async () => {
       message: err.errors[0]?.message || t('error.form.save_error'),
     });
   }
+};
+
+const moveUp = async (index) => {
+  const steps = lecture.value.steps;
+  const previousOrder = index > 1 ? Number(steps[index - 2].order) : 0;
+  const nextOrder = index > 0 ? Number(steps[index - 1].order) : 0;
+  const step = steps[index];
+  step.order = '' + (previousOrder + nextOrder) / 2;
+  await lectureStepService.update(step);
+
+  lecture.value.steps = lectureStepService.sort(steps);
+};
+const moveDown = async (index) => {
+  const steps = lecture.value.steps;
+  const step = steps[index];
+  if (index >= steps.length - 2) {
+    step.order = '' + Date.now();
+  } else {
+    const previousOrder = Number(steps[index + 1].order);
+    const nextOrder = Number(steps[index + 2].order);
+    step.order = '' + (previousOrder + nextOrder) / 2;
+  };
+  await lectureStepService.update(step);
+
+
+  lecture.value.steps = lectureStepService.sort(steps);
 };
 
 const deleteStep = async (step) => {
