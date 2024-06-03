@@ -117,12 +117,17 @@ const colorSelected = {
 const mouseOver = ref(false);
 
 const getOptions = (question) => {
-  return question.type === 'radio' || question.type === 'checkbox'
-    ? question.answers.map((answer, index) => ({
+  if(question.type === 'radio' || question.type === 'checkbox'){
+    const options = question.answers.map((answer, index) => ({
         label: answer.text,
         value: index,
-      }))
-    : {};
+      }));
+      // randomize order of options
+      options.sort(() => Math.random() - 0.5);
+    return options;
+  } else {
+     return {};
+  }
 };
 
 const options = ref(getOptions(props.question));
@@ -130,8 +135,8 @@ const validated = ref(false);
 
 const highlightAnswers = (valid) => {
   if (props.question.type === 'radio' || props.question.type === 'checkbox') {
-    options.value.forEach((element, index) => {
-      element.color = props.question.answers[index].valid ? 'green' : 'red';
+    options.value.forEach((element) => {
+      element.color = props.question.answers[element.value].valid ? 'green' : 'red';
       element.keepColor = true;
     });
   }
