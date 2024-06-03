@@ -92,11 +92,6 @@
       </q-item>
     </q-list>
     <q-btn @click="addAnswer(question)" size="sm" icon="add" />
-    <q-toggle
-      v-if="question.type === 'shorttext'"
-      label="Mark all other answers incorrect"
-      v-model="allInvalid"
-    />
   </q-card-section>
 </template>
 
@@ -121,9 +116,6 @@ const setOption = (name, value) => {
 const getOption = (name) => {
   return question.value.options?.find((option) => option.name === name)?.value;
 };
-
-const allInvalid = ref(false);
-watch(allInvalid, (value) => setOption('allInvalid', value));
 
 watch(() => question.value.options, (options) => {
   if (!options) {

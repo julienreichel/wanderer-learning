@@ -194,7 +194,7 @@ const validateAnswers = () => {
     responseAsString = newResponse.value.join(',');
   }
   if (props.question.type === 'shorttext') {
-    valid = props.question.options.find(({value}) => name === 'allInvalid')?.value;
+    valid = false;
     props.question.answers.forEach((answer) => {
       if (newResponse.value?.toLowerCase() === answer.text.toLowerCase()) {
         valid = answer.valid;
