@@ -28,6 +28,7 @@ export default class CourseService extends ServicePrototype {
   async update(payload, options = {}) {
     let input = { ...payload };
     delete input.lectures;
+
     let course = await super.update(input, options);
 
     return course;
@@ -43,6 +44,10 @@ export default class CourseService extends ServicePrototype {
     let course = await super.get(id)
 
     course.lectures = course.lectures.sort((a, b) => Number(a.order) - Number(b.order));
+
+    course.lectures.forEach(lecture => {
+      lecture.steps = lecture.steps?.sort((a, b) => Number(a.order) - Number(b.order));
+    });
 
     return course;
   }

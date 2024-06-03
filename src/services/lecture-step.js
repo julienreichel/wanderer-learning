@@ -63,6 +63,10 @@ export default class LectureStepService extends ServicePrototype {
     this.cleanParts(payload.parts);
     delete payload.lecture;
     delete payload.concept;
+    delete payload.timestampDistribution;
+    delete payload.userTimeReportings;
+    delete payload.ratings;
+
 
     this.lastSaved = await super.update(payload);
     return this.lastSaved;
