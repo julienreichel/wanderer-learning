@@ -49,32 +49,40 @@
         <q-video :ratio="16 / 9" :src="part.src" />
       </div>
     </div>
-    <question-editing
-      v-if="part.type === 'quiz'"
-      v-model="part.questions[0]"
-    />
+    <div class="row q-pa-md" v-if="part.type === 'iframe'">
+      <q-input
+        class="col-8"
+        v-model="part.src"
+        :label="$t('parts.form.add.iframe')"
+      />
+      <div class="col-4">
+        <div class="iframe-16-9">
+          <iframe :title="part.text" :src="part.src"></iframe>
+        </div>
+      </div>
+    </div>
+    <question-editing v-if="part.type === 'quiz'" v-model="part.questions[0]" />
   </q-card>
 </template>
 
 <script setup>
-import { ref, inject } from 'vue';
+import { ref, inject } from "vue";
 
-import RichTextEditing from '../common/RichTextEditing.vue';
-import QuestionEditing from './QuestionEditing.vue';
+import RichTextEditing from "../common/RichTextEditing.vue";
+import QuestionEditing from "./QuestionEditing.vue";
 
-import AmplifyUploader from '../../utils/AmplifyUploader.js';
+import AmplifyUploader from "../../utils/AmplifyUploader.js";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { uid } = useIris();
-const {storage: storageService} = inject('services');
-
+const { storage: storageService } = inject("services");
 
 const part = defineModel();
 
 const uploaderRef = ref(null);
 const uploaded = async (msg) => {
   const file = msg.files[0];
-  if (part.value.src && !part.value.src.startsWith('http')) {
+  if (part.value.src && !part.value.src.startsWith("http")) {
     storageService.removeImg(part.value.src);
   }
   part.value.src = file?.path;
@@ -85,5 +93,23 @@ const uploaded = async (msg) => {
     uploader.removeUploadedFiles();
   }
 };
-
 </script>
+
+<style scoped>
+.iframe-16-9 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+}
+.iframe-16-9 iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400%;
+  height: 400%;
+  border: 0; /* no border */
+  transform: scale(0.25);
+  transform-origin: 0 0;
+}
+</style>

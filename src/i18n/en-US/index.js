@@ -125,6 +125,7 @@ export default {
         text: 'New text',
         img: 'New image',
         video: 'New video',
+        iframe: 'New iframe',
       },
       text: 'Text',
       img: 'Image',

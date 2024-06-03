@@ -47,6 +47,12 @@
         icon="add"
         @click="add('video')"
       />
+      <q-btn
+        size="sm"
+        icon-right="folder_copy"
+        icon="add"
+        @click="add('iframe')"
+      />
       <q-btn size="sm" icon-right="quiz" icon="add" @click="add('quiz')" />
       <q-space />
       <q-btn v-if="isAdmin" size="sm" icon="data_object" @click="editJsonPart()" />

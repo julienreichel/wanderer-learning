@@ -30,6 +30,14 @@
       >
         <q-icon name="play_circle" size="xl" />
       </q-card-section>
+      <q-card-section
+        v-if="part.type === 'iframe'"
+        class="q-pa-none"
+      >
+      <div class="aspect-ratio-16-9">
+        <iframe :title="part.text" :src="part.src"></iframe>
+      </div>
+      </q-card-section>
       <q-card-actions v-if="editing" class="q-pa-xs">
         <q-btn
           v-if="step > 0"
@@ -95,11 +103,19 @@ const textPreview = computed(() => {
   padding-top: 56.25%; /* 16:9 aspect ratio (9/16 * 100) */
 }
 
-.aspect-ratio-16-9 > .q-card__section {
+.aspect-ratio-16-9 > .q-card__section, .aspect-ratio-16-9 > iframe {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+iframe {
+  width: 500%;
+  height: 500%;
+  border: 0; /* no border */
+  transform: scale(0.2);
+  transform-origin: 0 0;
 }
 </style>
