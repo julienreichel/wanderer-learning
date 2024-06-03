@@ -16,7 +16,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>{{
-              $t('quiz.question.type.' + scope.opt)
+              $t("quiz.question.type." + scope.opt)
             }}</q-item-label>
           </q-item-section>
         </q-item>
@@ -93,13 +93,38 @@
     </q-list>
     <q-btn @click="addAnswer(question)" size="sm" icon="add" />
   </q-card-section>
+  <q-card-section
+    v-if="question.type !== 'feedback'"
+  >
+    <q-toggle
+      v-model="provideExplanation"
+      :label="$t('quiz.question.explanation')"
+    />
+    <rich-text-editing
+      v-if="provideExplanation"
+      v-model="question.explanations"
+      mode="simple"
+    >
+    </rich-text-editing>
+  </q-card-section>
+  <q-card-section v-if="feedbackType === 'text'">
+    <q-input
+      v-model="question.answers[0].text"
+      label="The answer"
+    />
+  </q-card-section>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { useIris } from 'src/composables/iris';
+import RichTextEditing from "../common/RichTextEditing.vue";
+
+import { ref, watch } from "vue";
+import { useIris } from "src/composables/iris";
 const { t, getIconFromType } = useIris();
 const question = defineModel();
+if (!question.value.explanations) {
+  question.value.explanations = "";
+}
 
 const setOption = (name, value) => {
   if (!question.value.options) {
@@ -117,112 +142,122 @@ const getOption = (name) => {
   return question.value.options?.find((option) => option.name === name)?.value;
 };
 
-watch(() => question.value.options, (options) => {
-  if (!options) {
-    return;
-  }
-  feedbackType.value = getOption('feedbackType') || 'roti';
-});
+watch(
+  () => question.value.options,
+  (options) => {
+    if (!options) {
+      return;
+    }
+    feedbackType.value = getOption("feedbackType") || "roti";
+  },
+);
 
-const feedbackType = ref(getOption('feedbackType') || 'roti');
-watch([feedbackType, () => question.value.type], (value) => {
-  if (question.value.type !== 'feedback') {
-    return;
-  }
-  if (feedbackType.value === 'roti') {
-    question.value.text = t('quiz.feedback.question.roti');
-    question.value.answers = [1, 2, 3, 4, 5].map((index) => ({
-      text: t('quiz.feedback.tooltips.roti.' + index),
-    }));
-  }
-  if (feedbackType.value === 'difficulty') {
-    question.value.text = t('quiz.feedback.question.difficulty');
-    question.value.answers = [1, 2, 3, 4, 5].map((index) => ({
-      text: t('quiz.feedback.tooltips.difficulty.' + index),
-    }));
-  }
-  if (feedbackType.value === 'stars') {
-    question.value.text = t('quiz.feedback.question.stars');
-  }
-  if (feedbackType.value === 'text') {
-    question.value.text = t('quiz.feedback.question.text');
-  }
-  setOption('feedbackType', feedbackType.value);
-
-
-},{ immediate: true });
+const feedbackType = ref(getOption("feedbackType") || "roti");
+watch(
+  [feedbackType, () => question.value.type],
+  () => {
+    if (question.value.type !== "feedback") {
+      return;
+    }
+    if (feedbackType.value === "roti") {
+      question.value.text = t("quiz.feedback.question.roti");
+      question.value.answers = [1, 2, 3, 4, 5].map((index) => ({
+        text: t("quiz.feedback.tooltips.roti." + index),
+      }));
+    }
+    if (feedbackType.value === "difficulty") {
+      question.value.text = t("quiz.feedback.question.difficulty");
+      question.value.answers = [1, 2, 3, 4, 5].map((index) => ({
+        text: t("quiz.feedback.tooltips.difficulty." + index),
+      }));
+    }
+    if (feedbackType.value === "stars") {
+      question.value.text = t("quiz.feedback.question.stars");
+    }
+    if (feedbackType.value === "text") {
+      question.value.text = t("quiz.feedback.question.text");
+    }
+    setOption("feedbackType", feedbackType.value);
+  },
+  { immediate: true },
+);
 
 if (
-  question.value.type === 'feedback' &&
-  (feedbackType.value === 'roti' || feedbackType.value === 'difficulty') &&
+  question.value.type === "feedback" &&
+  (feedbackType.value === "roti" || feedbackType.value === "difficulty") &&
   !question.value.answers?.length === 5
 ) {
   question.value.answers = [1, 2, 3, 4, 5].map((index) => ({
-    text: t(
-      'quiz.feedback.tooltips.' + feedbackType.value + '.' + index
-    ),
+    text: t("quiz.feedback.tooltips." + feedbackType.value + "." + index),
   }));
 }
 
 const icons = {
-  difficulty: 'speed',
+  difficulty: "speed",
   roti: [
-    'sentiment_very_dissatisfied',
-    'sentiment_dissatisfied',
-    'sentiment_neutral',
-    'sentiment_satisfied',
-    'sentiment_satisfied_alt',
+    "sentiment_very_dissatisfied",
+    "sentiment_dissatisfied",
+    "sentiment_neutral",
+    "sentiment_satisfied",
+    "sentiment_satisfied_alt",
   ],
-  stars: 'star_border',
+  stars: "star_border",
 };
 const colors = {
-  difficulty: ['lime', 'light-green', 'green', 'teal', 'purple'],
+  difficulty: ["lime", "light-green", "green", "teal", "purple"],
 };
 
 const feedbackTypeOptions = [
   {
-    label: t('quiz.feedback.type.roti'),
-    value: 'roti',
-    slot: 'roti',
+    label: t("quiz.feedback.type.roti"),
+    value: "roti",
+    slot: "roti",
   },
   {
-    label: t('quiz.feedback.type.difficulty'),
-    value: 'difficulty',
-    slot: 'difficulty',
+    label: t("quiz.feedback.type.difficulty"),
+    value: "difficulty",
+    slot: "difficulty",
   },
   {
-    label: t('quiz.feedback.type.stars'),
-    value: 'stars',
-    slot: 'stars',
+    label: t("quiz.feedback.type.stars"),
+    value: "stars",
+    slot: "stars",
   },
   {
-    label: t('quiz.feedback.type.text'),
-    value: 'text',
-    slot: 'text',
+    label: t("quiz.feedback.type.text"),
+    value: "text",
+    slot: "text",
   },
 ];
 
-const questionTypeOptions = ['shorttext', 'radio', 'checkbox', 'feedback'];
+const questionTypeOptions = ["shorttext", "radio", "checkbox", "feedback"];
 
 const selectIcon = (value) => getIconFromType(value);
 
 const getIcon = (question, add) => {
-  if (question.type === 'radio') {
-    return add ? 'add_circle' : 'radio_button_unchecked';
+  if (question.type === "radio") {
+    return add ? "add_circle" : "radio_button_unchecked";
   }
-  if (question.type === 'checkbox') {
-    return add ? 'add_box' : 'check_box_outline_blank';
+  if (question.type === "checkbox") {
+    return add ? "add_box" : "check_box_outline_blank";
   }
-  if (question.type === 'shorttext') {
-    return 'short_text';
+  if (question.type === "shorttext") {
+    return "short_text";
   }
-  if (question.type === 'longtext') {
-    return 'notes';
+  if (question.type === "longtext") {
+    return "notes";
   }
-  if (question.type === 'feedback') {
-    return 'rate_review';
+  if (question.type === "feedback") {
+    return "rate_review";
   }
 };
+
+const provideExplanation = ref(question.value.explanations !== "");
+watch(provideExplanation, (value) => {
+  if (!value) {
+    question.value.explanations = "";
+  }
+});
 
 const removeAnswer = (question, index) => {
   return question.answers.splice(index, 1)[0];
@@ -230,7 +265,7 @@ const removeAnswer = (question, index) => {
 
 const addAnswer = (question) => {
   question.answers.push({
-    text: '',
+    text: "",
     valid: false,
   });
 };

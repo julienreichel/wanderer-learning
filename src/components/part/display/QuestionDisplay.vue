@@ -26,6 +26,18 @@
       </template>
     </q-input>
   </q-card-section>
+  <q-card-section
+    v-if="validated && question.explanations && question.explanations !== ''"
+    class="q-pa-md"
+  >
+    <div v-html="question.explanations"></div>
+  </q-card-section>
+  <q-card-section
+    v-else-if="validated && question.type === 'shorttext'"
+    class="q-pa-md"
+  >
+    <div>{{ $t('quiz.question.valid_answers') + '\'' + question.answers.filter(a => a.valid).map(a => a.text).join('\', \'') + '\'' }}</div>
+  </q-card-section>
   <q-card-section v-if="question.type === 'feedback'">
     <q-input
       v-if="feedbackType === 'text'"
@@ -82,51 +94,51 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch } from "vue";
 
 const props = defineProps({
   question: { type: Object },
   response: { type: [Object] },
 });
 
-const emit = defineEmits(['result']);
+const emit = defineEmits(["result"]);
 
 const feedbackType = computed(
   () =>
-    props.question.options?.find((option) => option.name === 'feedbackType')
-      ?.value
+    props.question.options?.find((option) => option.name === "feedbackType")
+      ?.value,
 );
 const icons = {
-  difficulty: 'speed',
+  difficulty: "speed",
   roti: [
-    'sentiment_very_dissatisfied',
-    'sentiment_dissatisfied',
-    'sentiment_neutral',
-    'sentiment_satisfied',
-    'sentiment_satisfied_alt',
+    "sentiment_very_dissatisfied",
+    "sentiment_dissatisfied",
+    "sentiment_neutral",
+    "sentiment_satisfied",
+    "sentiment_satisfied_alt",
   ],
-  stars: 'star_border',
+  stars: "star_border",
 };
 const iconsSelected = {
-  stars: 'star',
+  stars: "star",
 };
 const colorSelected = {
-  difficulty: ['lime', 'light-green', 'green', 'teal', 'purple'],
+  difficulty: ["lime", "light-green", "green", "teal", "purple"],
 };
 
 const mouseOver = ref(false);
 
 const getOptions = (question) => {
-  if(question.type === 'radio' || question.type === 'checkbox'){
+  if (question.type === "radio" || question.type === "checkbox") {
     const options = question.answers.map((answer, index) => ({
-        label: answer.text,
-        value: index,
-      }));
-      // randomize order of options
-      options.sort(() => Math.random() - 0.5);
+      label: answer.text,
+      value: index,
+    }));
+    // randomize order of options
+    options.sort(() => Math.random() - 0.5);
     return options;
   } else {
-     return {};
+    return {};
   }
 };
 
@@ -134,30 +146,32 @@ const options = ref(getOptions(props.question));
 const validated = ref(false);
 
 const highlightAnswers = (valid) => {
-  if (props.question.type === 'radio' || props.question.type === 'checkbox') {
+  if (props.question.type === "radio" || props.question.type === "checkbox") {
     options.value.forEach((element) => {
-      element.color = props.question.answers[element.value].valid ? 'green' : 'red';
+      element.color = props.question.answers[element.value].valid
+        ? "green"
+        : "red";
       element.keepColor = true;
     });
   }
-  if (props.question.type === 'shorttext') {
-    options.value.icon = valid ? 'check' : 'clear';
-    options.value.color = valid ? 'green' : 'red';
+  if (props.question.type === "shorttext") {
+    options.value.icon = valid ? "check" : "clear";
+    options.value.color = valid ? "green" : "red";
   }
 };
 
 const getResponse = () => {
   if (!props.response) {
-    return props.question.type === 'checkbox'
+    return props.question.type === "checkbox"
       ? []
-      : props.question.type === 'feedback' && feedbackType.value !== 'text'
-      ? NaN
-      : undefined;
+      : props.question.type === "feedback" && feedbackType.value !== "text"
+        ? NaN
+        : undefined;
   }
   validated.value = true;
   highlightAnswers(props.response.valid);
-  return props.question.type === 'checkbox'
-    ? props.response.response.split(',').map(Number)
+  return props.question.type === "checkbox"
+    ? props.response.response.split(",").map(Number)
     : props.response.response;
 };
 
@@ -169,14 +183,14 @@ watch(
     options.value = getOptions(props.question);
     newResponse.value = getResponse();
     validated.value = false;
-  }
+  },
 );
 
 watch(
   () => props.response,
   () => {
     newResponse.value = getResponse();
-  }
+  },
 );
 
 const validateAnswers = () => {
@@ -184,11 +198,11 @@ const validateAnswers = () => {
   let valid = false;
   let responseAsString;
 
-  if (props.question.type === 'radio') {
+  if (props.question.type === "radio") {
     valid = props.question.answers[newResponse.value]?.valid;
     responseAsString = newResponse.value;
   }
-  if (props.question.type === 'checkbox') {
+  if (props.question.type === "checkbox") {
     valid = true;
     props.question.answers.forEach((answer, idx2) => {
       const found =
@@ -196,9 +210,9 @@ const validateAnswers = () => {
       if (found && !answer.valid) valid = false;
       if (!found && answer.valid) valid = false;
     });
-    responseAsString = newResponse.value.join(',');
+    responseAsString = newResponse.value.join(",");
   }
-  if (props.question.type === 'shorttext') {
+  if (props.question.type === "shorttext") {
     valid = false;
     props.question.answers.forEach((answer) => {
       if (newResponse.value?.toLowerCase() === answer.text.toLowerCase()) {
@@ -207,12 +221,12 @@ const validateAnswers = () => {
     });
     responseAsString = newResponse.value;
   }
-  if (props.question.type === 'feedback') {
+  if (props.question.type === "feedback") {
     valid = true;
     responseAsString = newResponse.value;
   }
 
-  emit('result', {
+  emit("result", {
     question: props.question,
     response: responseAsString,
     valid,

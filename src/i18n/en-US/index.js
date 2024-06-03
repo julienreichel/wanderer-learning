@@ -29,7 +29,7 @@ export default {
   quiz: {
     form: {
       title: 'Quiz Title',
-      confirm_delete_question: 'Do you really want to delete this question ?'
+      confirm_delete_question: 'Do you really want to delete this question ?',
     },
     question: {
       type: {
@@ -38,7 +38,9 @@ export default {
         radio: 'Multiple Choices',
         checkbox: 'Check boxes',
         feedback: 'Feedback'
-      }
+      },
+      explanation: 'Provide an explanation',
+      valid_answers: 'Valid answer(s): ',
     },
     json: {
       no_questions: 'A quiz must have at least one question',

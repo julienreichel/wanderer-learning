@@ -50,6 +50,7 @@ const schema = a.schema({
     id: a.id().required(),
     type: a.string(),
     text: a.string(),
+    explanations: a.string(),
     answers: a.ref("QuestionAnswer").array(),
     options: a.ref("Option").array(),
   }),

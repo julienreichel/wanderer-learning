@@ -1,6 +1,8 @@
 <template>
   <q-card>
-    <div class="q-pa-md" v-if="part.type === 'text'" v-html="part.text"></div>
+    <q-card-section class="q-pa-md" v-if="part.type === 'text'">
+      <div  v-html="part.text"></div>
+    </q-card-section>
     <q-img
       v-if="part.type === 'img'"
       :ratio="16 / 9"
