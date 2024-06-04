@@ -67,8 +67,11 @@ watch(step, (newStep, oldStep) => {
 
 const quizLeft = ref(props.parts.filter((part) => part.type === "quiz").length);
 const processResults = ({ responses }) => {
-  quizLeft.value--;
+
   const index = step.value;
+  if (!reportings.value[index].responses){
+    quizLeft.value--;
+  }
   reportings.value[index].responses = responses;
 };
 
@@ -93,7 +96,7 @@ const hasAnsweredAllQuizzes = computed(() => quizLeft.value === 0);
 
 const hasQuizAnswer = (part) => {
   const idx = props.parts.indexOf(part);
-  return part.type === "quiz" && reportings.value[idx]?.responses;
+  return part.type === "quiz" && Boolean(reportings.value[idx]?.responses);
 };
 const finish = (finished = true) => {
   updateTimings(step.value);

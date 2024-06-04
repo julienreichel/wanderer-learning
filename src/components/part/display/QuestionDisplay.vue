@@ -38,62 +38,17 @@
   >
     <div>{{ $t('quiz.question.valid_answers') + '\'' + question.answers.filter(a => a.valid).map(a => a.text).join('\', \'') + '\'' }}</div>
   </q-card-section>
-  <q-card-section v-if="question.type === 'feedback'">
-    <q-input
-      v-if="feedbackType === 'text'"
-      clearable
-      v-model="newResponse"
-      :readonly="validated"
-    >
-    </q-input>
-    <div v-else-if="feedbackType === 'roti'">
-      <q-icon
-        v-for="index in 5"
-        :key="index"
-        size="xl"
-        :name="icons[feedbackType][index - 1]"
-        color="primary"
-        :style="{
-          opacity: index === newResponse || index === mouseOver ? 1 : 0.4,
-          scale: index === mouseOver ? 1.3 : 1,
-        }"
-        @mouseover="!validated ? (mouseOver = index) : null"
-        @mouseout="mouseOver = false"
-        @click="!validated ? (newResponse = index) : null"
-      >
-        <q-tooltip>{{ question.answers?.[index - 1].text }}</q-tooltip>
-      </q-icon>
-    </div>
-    <q-rating
-      v-else
-      v-model="newResponse"
-      :readonly="validated"
-      size="xl"
-      color="primary"
-      :icon="icons[feedbackType]"
-      :icon-selected="iconsSelected[feedbackType]"
-      :color-selected="colorSelected[feedbackType]"
-    >
-      <template #tip-1 v-if="question.answers?.[0]">
-        <q-tooltip>{{ question.answers[0].text }}</q-tooltip>
-      </template>
-      <template #tip-2 v-if="question.answers?.[1]">
-        <q-tooltip>{{ question.answers[1].text }}</q-tooltip>
-      </template>
-      <template #tip-3 v-if="question.answers?.[2]">
-        <q-tooltip>{{ question.answers[2].text }}</q-tooltip>
-      </template>
-      <template #tip-4 v-if="question.answers?.[3]">
-        <q-tooltip>{{ question.answers[3].text }}</q-tooltip>
-      </template>
-      <template #tip-5 v-if="question.answers?.[4]">
-        <q-tooltip>{{ question.answers[4].text }}</q-tooltip>
-      </template>
-    </q-rating>
-  </q-card-section>
+  <feedback-question-display
+    v-if="question.type === 'feedback'"
+    v-model="newResponse"
+    :question="question"
+    @feedback="$emit('feedback', $event)"
+    />
 </template>
 
 <script setup>
+import FeedbackQuestionDisplay from "./FeedbackQuestionDisplay.vue";
+
 import { computed, ref, watch } from "vue";
 
 const props = defineProps({
@@ -101,30 +56,7 @@ const props = defineProps({
   response: { type: [Object] },
 });
 
-const emit = defineEmits(["result"]);
-
-const feedbackType = computed(
-  () =>
-    props.question.options?.find((option) => option.name === "feedbackType")
-      ?.value,
-);
-const icons = {
-  difficulty: "speed",
-  roti: [
-    "sentiment_very_dissatisfied",
-    "sentiment_dissatisfied",
-    "sentiment_neutral",
-    "sentiment_satisfied",
-    "sentiment_satisfied_alt",
-  ],
-  stars: "star_border",
-};
-const iconsSelected = {
-  stars: "star",
-};
-const colorSelected = {
-  difficulty: ["lime", "light-green", "green", "teal", "purple"],
-};
+const emit = defineEmits(["result", "feedback"]);
 
 const mouseOver = ref(false);
 
@@ -159,6 +91,12 @@ const highlightAnswers = (valid) => {
     options.value.color = valid ? "green" : "red";
   }
 };
+
+const feedbackType = computed(
+  () =>
+    props.question.options?.find((option) => option.name === "feedbackType")
+      ?.value,
+);
 
 const getResponse = () => {
   if (!props.response) {

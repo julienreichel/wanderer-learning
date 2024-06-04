@@ -5,10 +5,11 @@
       :question="question"
       :response="responses && responses[index]"
       @result="processResult"
+      @feedback="feedbackReceived"
       />
   </q-card>
   <q-card>
-    <q-card-actions v-if="!validate">
+    <q-card-actions v-if="!validate && !singleFeedback">
       <q-space />
       <q-btn square size="sm" icon="done" @click="validateAnswers" />
     </q-card-actions>
@@ -16,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import QuestionDisplay from 'src/components/part/display/QuestionDisplay.vue';
 
 const props = defineProps({
@@ -41,6 +42,7 @@ watch(() => props.questions, (questions) => {
   resultCount = 0;
   responsesStats = questions.map(() => null);
 });
+
 const processResult = ({ question, response, valid, points }) => {
   const index = props.questions.indexOf(question);
 
@@ -53,6 +55,16 @@ const processResult = ({ question, response, valid, points }) => {
   if (resultCount === props.questions.length){
     emit('results', {questions: props.questions, responses: responsesStats});
     resultCount = 0;
+  }
+};
+
+const singleFeedback = computed(() => {
+  return props.questions.length === 1 && props.questions[0].type === 'feedback';
+});
+
+const feedbackReceived = (response) => {
+  if (singleFeedback.value){
+    validateAnswers();
   }
 };
 </script>
