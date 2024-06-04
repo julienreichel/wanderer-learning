@@ -89,7 +89,7 @@ export default class LectureStepService extends ServicePrototype {
     // inject the url of the image
     if (params.resolveImg && step.parts) {
       for (const part of step.parts) {
-        if (part.type === 'img' && part.src && part.src !== "") {
+        if ((part.type === 'img' || part.type === 'text') && part.src && part.src !== "") {
           if (part.src.startsWith('http')) {
             part.url = part.src;
             continue;
@@ -132,4 +132,32 @@ export default class LectureStepService extends ServicePrototype {
     return super.delete(content);
   }
 
+  /**
+   *
+   * @param {object} part
+   * @param {string} name
+   * @param {any} value
+   */
+  setOption(part, name, value) {
+    if (!part.options) {
+      part.options = [];
+    }
+    let old = part.options.find(option => option.name === name);
+    if (old) {
+      old.value = value;
+    } else {
+      part.options.push({ name, value });
+    }
+  }
+
+  /**
+   *
+   * @param {string} name
+   */
+  getOption(part, name) {
+    if (!part.options) {
+      part.options = [];
+    }
+    return part.options.find(option => option.name === name)?.value;
+  }
 }

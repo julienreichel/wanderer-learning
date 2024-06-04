@@ -1,42 +1,30 @@
 <template>
   <q-card>
-    <rich-text-editing v-if="part.type === 'text'" v-model="part.text">
-    </rich-text-editing>
+    <q-card-section horizontal v-if="part.type === 'text'">
+      <rich-text-editing :class="textSizeClass" v-model="part.text">
+      </rich-text-editing>
+      <q-card-section v-if="part.url && !uploadingFile" :class="imageSizeClass" class="q-pa-none">
+        <q-img class="col" fit="scale-down" :src="part.url"/>
+
+        <q-card-actions>
+          <q-btn-toggle
+            v-model="imageSize"
+            size="sm"
+            toggle-color="primary"
+            :options="[
+              {label: '2|4', value: 8},
+              {label: '3|3', value: 6},
+              {label: '4|2', value: 4}
+            ]"
+          />
+          <q-btn size="sm" icon="edit" @click="uploadingFile = true"/>
+          <q-btn size="sm" icon="delete" @click="removeImage()"/>
+        </q-card-actions>
+      </q-card-section>
+      <file-uploader v-else  @uploaded="uploaded" />
+    </q-card-section>
     <div class="row" v-if="part.type === 'img'">
-      <amplify-uploader
-        ref="uploaderRef"
-        class="col-8"
-        accept=".jpg, image/*"
-        :filename="(file) => uid() + '.' + file.name.split('.').pop()"
-        @uploaded="uploaded"
-      >
-        <template v-slot:header="scope">
-          <div class="row no-wrap items-center q-pa-sm q-gutter-sm">
-            <q-spinner v-if="scope.isUploading" class="q-uploader__spinner" />
-            <q-btn
-              v-if="scope.canAddFiles"
-              type="a"
-              icon="add_box"
-              @click="scope.pickFiles"
-              round
-              dense
-              flat
-            >
-              <q-uploader-add-trigger />
-              <q-tooltip>Pick Files</q-tooltip>
-            </q-btn>
-            <q-btn
-              v-if="scope.canUpload"
-              icon="cloud_upload"
-              @click="scope.upload"
-              round
-              dense
-              flat
-            >
-            </q-btn>
-          </div>
-        </template>
-      </amplify-uploader>
+      <file-uploader class="col-6" @uploaded="uploaded" />
       <q-img class="col" :ratio="16 / 9" fit="scale-down" :src="part.url" />
     </div>
     <div class="row q-pa-md" v-if="part.type === 'video'">
@@ -66,36 +54,44 @@
 </template>
 
 <script setup>
-import { ref, inject } from "vue";
+import { ref, inject, computed, watch } from "vue";
 
 import RichTextEditing from "../common/RichTextEditing.vue";
 import QuestionEditing from "./QuestionEditing.vue";
+import FileUploader from "../common/FileUploader.vue";
 
-import AmplifyUploader from "../../utils/AmplifyUploader.js";
-
-import { useIris } from "src/composables/iris";
-const { uid } = useIris();
-const { storage: storageService } = inject("services");
+const { storage: storageService, lectureStep: lectureStepService } = inject("services");
 
 const part = defineModel();
 
-const uploaderRef = ref(null);
-const uploaded = async (msg) => {
-  const file = msg.files[0];
-  if (part.value.src && !part.value.src.startsWith("http")) {
-    storageService.removeImg(part.value.src);
+const imageSize = ref(Number(lectureStepService.getOption(part.value, 'imageSize')) || 4);
+const textSizeClass = computed(() => part.value.url && !uploadingFile.value ? 'col-' + (12 - imageSize.value) : 'col-10');
+const imageSizeClass = computed(() => part.value.url && !uploadingFile.value ? 'col-' + imageSize.value : 'col-2');
+const uploadingFile = ref(false);
+
+watch(imageSize, (value) => {
+  lectureStepService.setOption(part.value, 'imageSize', value);
+});
+
+
+const removeImage = () => {
+  if (part.value.url && !part.value.url.startsWith("http")) {
+    storageService.removeImg(part.value.url);
   }
+  part.value.url = null;
+  part.value.src = null;
+};
+
+const uploaded = async (files) => {
+  const file = files[0];
+  removeImage();
+
   part.value.src = file?.path;
   part.value.url = file?.url;
-
-  const uploader = uploaderRef.value;
-  if (uploader) {
-    uploader.removeUploadedFiles();
-  }
 };
 </script>
 
-<style scoped>
+<style lang="scss">
 .iframe-16-9 {
   position: relative;
   width: 100%;

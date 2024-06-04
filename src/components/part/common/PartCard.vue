@@ -93,7 +93,7 @@ const textPreview = computed(() => {
 })
 </script>
 
-<style type="text/scss" scoped>
+<style lang="scss" scoped>
 .custom-highlight {
   border-color: var(--q-primary);
 }
