@@ -21,6 +21,16 @@ const routes = [
   },
 
   {
+    path: '/query',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{
+      name: 'Query',
+      path: '',
+      component: () => import('src/pages/AIQuery.vue'),
+    }],
+  },
+
+  {
     path: '/course',
     component: () => import('layouts/MainLayout.vue'),
     children: [

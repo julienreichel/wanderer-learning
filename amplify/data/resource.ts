@@ -1,5 +1,15 @@
 import type { ClientSchema } from "@aws-amplify/backend";
-import { a, defineData } from "@aws-amplify/backend";
+import { a, defineData, defineFunction, secret } from "@aws-amplify/backend";
+
+const AIQueryHandler = defineFunction({
+  entry: "./ai-query/ai-query.ts",
+  environment: {
+    OPENAI_API_KEY: secret("OPENAI_API_KEY"),
+    OPENAI_MODEL: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
+    OPENAI_MAX_TOKEN: process.env.OPENAI_MAX_TOKEN || "50",
+    OPENAI_TEMPERATURE: process.env.OPENAI_TEMPERATURE || "0.7",
+  },
+});
 
 const schema = a.schema({
   ReportingResponse: a.customType({
@@ -145,6 +155,17 @@ const schema = a.schema({
       allow.authenticated().to(["read"]),
       allow.group("teacher"),
     ]),
+
+  AIQuery: a
+    .query()
+    .arguments({
+      prompt: a.string(),
+    })
+    // return type of the query
+    .returns(a.string())
+    // only allow signed-in users to call this API
+    .authorization((allow) => [allow.group("admin"), allow.group("teacher")])
+    .handler(a.handler.function(AIQueryHandler)),
 });
 
 export type Schema = ClientSchema<typeof schema>;
