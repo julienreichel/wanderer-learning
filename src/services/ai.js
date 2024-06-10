@@ -18,7 +18,7 @@ export default class ServicePrototype {
     this.model = null;
     this.style = `Emulate "Training from the Back of the Room" by Sharon Bowman.`;
     this.audience = `General readership.`;
-    this.tone = `Enthusiastic and engaging with a bit of hunmor.`;
+    this.tone = `Enthusiastic and engaging.`;
   }
 
   setStyle(style) {
@@ -103,13 +103,10 @@ export default class ServicePrototype {
 
   async getConceptContent(description, section) {
 
-    const sectionName = section.name;
-    const sectionItems = section.items.map(({ name, description }) => `- ${name}: ${description}`).join('\n');
-
     const system = conceptsText.system(this.style, this.tone, this.audience);
-    const prompt = conceptsText.prompt(description, sectionName, sectionItems);
+    const prompt = conceptsText.prompt(description, section);
 
-    return this.query({ system, prompt, token: 2000 });
+    return this.query({ system, prompt, token: 3000, model: 'gpt-4o' });
   }
 
   async getFinalQuiz(description, concepts, objectives, toc, nbQuestions = 10) {

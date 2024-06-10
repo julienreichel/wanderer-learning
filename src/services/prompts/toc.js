@@ -10,9 +10,10 @@ There should be between 3 to 5 sections, and each section should contain 3 to 5 
 `;
 
 const prompt = (description, conceptsList, objectivesList) => `
-Your task is to create the table of contents for an online lecture. The sections MUST be derived from the lecture description,
-the key concepts and learning outcomes provided. There should be between 3 to 5 sections, and each section should contain 3 to 5 items.
-You will be penalized for not following the given style, tone, and format.
+Your task is to create the table of contents for an online lecture.
+The sections MUST be derived from the lecture description, the key concepts and learning outcomes provided.
+There should be between 3 to 5 sections, and each section should contain 3 to 5 items.
+You will be penalized for not following the given format.
 Think step by step and consider all necessary information.
 Here are the details:
 

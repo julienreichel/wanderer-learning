@@ -8,7 +8,6 @@ export const handler: Schema["AIQuery"]["functionHandler"] = async (
   context,
 ) => {
   const apiKey = env.OPENAI_API_KEY;
-  const model = env.OPENAI_MODEL || "gpt-3.5-turbo";
   const temperature = Number(env.OPENAI_TEMPERATURE) || 0.7;
 
   console.log(event);
@@ -19,6 +18,7 @@ export const handler: Schema["AIQuery"]["functionHandler"] = async (
   const system = event.arguments.system;
   const prompt = event.arguments.prompt;
   const format = event.arguments.format || "json";
+  const model = event.arguments.model || env.OPENAI_MODEL || "gpt-3.5-turbo";
 
   let messages;
   if (event.arguments.messages) {
@@ -35,7 +35,7 @@ export const handler: Schema["AIQuery"]["functionHandler"] = async (
 
   let response_format;
   if (format === "json") {
-    response_format = { type: "json" };
+    response_format = { type: "json_object" };
   }
   const body = {
     messages,

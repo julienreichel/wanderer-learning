@@ -331,6 +331,23 @@ const createQuizParts = (quiz, nbQuestionPerQuiz) => {
         // remove starting A. or B. or C. or D. from the answer
         answer.text = answer.text.replace(/^[A-Z0-9a-z]\.\s*/, "");
       });
+
+      // if there is only one answer, we add the missing one
+      if (question.answers.length === 1) {
+        if (question.answers[0].text === "True"){
+          question.answers.push({text: "False"})
+        }
+        if (question.answers[0].text === "False"){
+          question.answers.push({text: "True"})
+        }
+        if (question.answers[0].text === "Myth"){
+          question.answers.push({text: "Fact"})
+        }
+        if (question.answers[0].text === "Fact"){
+          question.answers.push({text: "Myth"})
+        }
+      }
+
       // Open Ai has the tendancy to invent new types of questions
       const mappingTypes = {
         "multiple-choice": "radio",
@@ -342,6 +359,7 @@ const createQuizParts = (quiz, nbQuestionPerQuiz) => {
         "myth/fact": "radio",
         "fill-in-the-blank": "shorttext",
         "missing-word": "shorttext",
+        "sentence": "radio"
       };
       if (mappingTypes[question.type]) {
         question.type = mappingTypes[question.type];
@@ -437,7 +455,7 @@ const generateLecture = async () => {
       courseDescription.value,
       step,
     );
-    conceptText.content.forEach((text) => {
+    conceptText.pages.forEach((text) => {
       parts.push({
         type: "text",
         text,

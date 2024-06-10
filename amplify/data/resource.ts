@@ -170,6 +170,7 @@ const schema = a.schema({
       messages: a.json(),
       token: a.integer(),
       format: a.string(),
+      model: a.string(),
     })
     // return type of the query
     .returns(a.string())
