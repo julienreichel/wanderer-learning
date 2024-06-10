@@ -21,16 +21,6 @@ const routes = [
   },
 
   {
-    path: '/query',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{
-      name: 'Query',
-      path: '',
-      component: () => import('src/pages/AIQuery.vue'),
-    }],
-  },
-
-  {
     path: '/course',
     component: () => import('layouts/MainLayout.vue'),
     children: [
@@ -47,6 +37,12 @@ const routes = [
         name: 'CourseView',
         path: 'view/:id',
         component: () => import('src/pages/course/CourseViewPage.vue'),
+        props: true
+      },
+      {
+        name: 'LectureWizard',
+        path: 'wizzard/:id',
+        component: () => import('src/pages/LectureWizardPage.vue'),
         props: true
       },
       {

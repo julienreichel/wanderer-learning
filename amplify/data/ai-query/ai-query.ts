@@ -9,19 +9,40 @@ export const handler: Schema["AIQuery"]["functionHandler"] = async (
 ) => {
   const apiKey = env.OPENAI_API_KEY;
   const model = env.OPENAI_MODEL || "gpt-3.5-turbo";
-  const max_tokens = Number(env.OPENAI_MAX_TOKEN) || 50;
   const temperature = Number(env.OPENAI_TEMPERATURE) || 0.7;
 
   console.log(event);
-  console.log(apiKey);
 
+  const max_tokens =
+    event.arguments.token || Number(env.OPENAI_MAX_TOKEN) || 50;
+
+  const system = event.arguments.system;
   const prompt = event.arguments.prompt;
+  const format = event.arguments.format || "json";
 
+  let messages;
+  if (event.arguments.messages) {
+    messages = event.arguments.messages;
+  } else {
+    messages = [];
+    if (system) {
+      messages.push({ role: "system", content: system });
+    }
+    if (prompt) {
+      messages.push({ role: "user", content: prompt });
+    }
+  }
+
+  let response_format;
+  if (format === "json") {
+    response_format = { type: "json" };
+  }
   const body = {
-    messages: [{ role: "user", content: prompt }],
+    messages,
     model,
     max_tokens,
     temperature,
+    response_format,
   };
 
   console.log(body);

@@ -3,6 +3,7 @@ import { a, defineData, defineFunction, secret } from "@aws-amplify/backend";
 
 const AIQueryHandler = defineFunction({
   entry: "./ai-query/ai-query.ts",
+  timeoutSeconds: 60,
   environment: {
     OPENAI_API_KEY: secret("OPENAI_API_KEY"),
     OPENAI_MODEL: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
@@ -156,10 +157,19 @@ const schema = a.schema({
       allow.group("teacher"),
     ]),
 
+  AIMessage: a.customType({
+    role: a.string(),
+    content: a.string(),
+  }),
+
   AIQuery: a
     .query()
     .arguments({
+      system: a.string(),
       prompt: a.string(),
+      messages: a.json(),
+      token: a.integer(),
+      format: a.string(),
     })
     // return type of the query
     .returns(a.string())

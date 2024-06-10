@@ -144,5 +144,53 @@ export default {
         }
       }
     }
+  },
+  wizard: {
+    lecture: {
+      title: "Lecture Description",
+      description: "Descire the content of the lecture",
+      label: "Description"
+    },
+    titleKeyConceptsObjectives: {
+      title: "Concepts",
+      name: "Title",
+      concepts: "Concepts",
+      objectives: "Learning Objectives",
+      lectureTitle: "Lecture Title",
+      keyConcepts: "Key Concepts",
+      conceptName: "Concept Name",
+      conceptDescription: "Concept Description",
+      addConcept: "Add Concept",
+      learningObjectives: "Learning Objectives",
+      learningObjective: "Learning Objective",
+      addObjective: "Add Objective"
+    },
+    tableOfContent: {
+      title: "Table of Content",
+      description: "Edit the Table of Content",
+      stepName: "Step Title",
+      stepParts: "Items",
+      partName: "Subject",
+      partDescription: "Description",
+      addPart: "Add Part",
+      addStep: "Add Step"
+    },
+    generating: {
+      title: "Creating lecture",
+      create: "Creating lecture",
+      connect: "Creating connection step",
+      concept: "Creating concepts steps: {concept}",
+      practice: "Creating final quiz",
+      conclusion: "Creating conclusion step",
+      finished: "Finished",
+      theory: "Theory",
+      quiz: "Quiz"
+    },
+    common: {
+      next: "Next",
+      back: "Back",
+      finish: "Finish",
+      openLecture: "Open Lecture",
+    }
   }
 }

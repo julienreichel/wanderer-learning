@@ -29,6 +29,7 @@
       <q-card-actions>
         <q-space />
         <q-btn size="sm" icon="add" @click="addLecture()" />
+        <q-btn size="sm" icon="switch_access_shortcut_add" @click="openWizard()" />
       </q-card-actions>
     </q-card>
   </q-page>
@@ -132,5 +133,9 @@ const addLecture = async () => {
   course.value.lectures.push(lecture);
 
   newTitle.value = null;
+};
+
+const openWizard = () => {
+  router.push({ name: 'LectureWizard', params: { id: course.value.id } });
 };
 </script>

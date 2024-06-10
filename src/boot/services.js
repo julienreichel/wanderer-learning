@@ -7,6 +7,8 @@ import LectureStepService from 'src/services/lecture-step';
 import StepReportingService from 'src/services/step-reporting';
 import StorageService from 'src/services/storage';
 
+import AIService from 'src/services/ai';
+
 
 export default boot(({ app }) => {
   const concept = new ConceptService();
@@ -16,6 +18,7 @@ export default boot(({ app }) => {
   const lectureStep = new LectureStepService();
   const stepReporting = new StepReportingService();
   const storage = new StorageService();
+  const ai = new AIService();
 
   app.provide('services', {
     lectureStep,
@@ -24,6 +27,7 @@ export default boot(({ app }) => {
     lecture,
     lectureConcept,
     stepReporting,
-    storage
+    storage,
+    ai
   });
 })

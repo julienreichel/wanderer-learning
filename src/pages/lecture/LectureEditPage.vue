@@ -250,7 +250,7 @@ const deleteLecture = async (lecture) => {
     persistent: true,
   }).onOk(async () => {
     await lectureService.delete(lecture);
-    router.push({ name: 'CourseEdit', params: { id: lecture.courseId } });
+    router.push({ name: 'CourseEdit', params: { id: lecture.course.id } });
   });
 };
 </script>
