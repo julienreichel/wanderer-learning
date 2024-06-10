@@ -19,23 +19,23 @@
 </template>
 
 <script setup>
-import PartsEditing from 'src/components/part/editing/PartsEditing.vue';
+import PartsEditing from "src/components/part/editing/PartsEditing.vue";
 
-import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, inject, onMounted, onBeforeUnmount } from "vue";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { t, $q, router } = useIris();
-const {lectureStep: lectureStepService} = inject('services');
+const { lectureStep: lectureStepService } = inject("services");
 
-const { updateBreadcrumbs } = inject('breadcrumbs');
-const userAttributes = inject('userAttributes');
+const { updateBreadcrumbs } = inject("breadcrumbs");
+const userAttributes = inject("userAttributes");
 const { identityId } = userAttributes.value;
 const props = defineProps({
   id: String,
   stepIdx: {
     type: String,
-    default: '0'
-  }
+    default: "0",
+  },
 });
 
 const lectureStep = ref({
@@ -46,23 +46,23 @@ const lectureStep = ref({
 
 const toJSON = ({ title, type, parts }) => {
   // keep only the necessary fields
-  parts = parts.map(({type, text, src, questions, options}) => {
-    questions = questions?.map(({id, type, text, answers, options}) => {
-      answers = answers.map(({text, valid}) => ({text, valid}));
-      if (options){
+  parts = parts.map(({ type, text, src, questions, options }) => {
+    questions = questions?.map(({ id, type, text, answers, options }) => {
+      answers = answers.map(({ text, valid }) => ({ text, valid }));
+      if (options) {
         delete options.__typename;
-        options = options.map(({name, value}) => ({name, value}));
+        options = options.map(({ name, value }) => ({ name, value }));
       }
-      return {id, type, text, answers, options};
+      return { id, type, text, answers, options };
     });
-    if (options){
+    if (options) {
       delete options.__typename;
-      options = options.map(({name, value}) => ({name, value}));
+      options = options.map(({ name, value }) => ({ name, value }));
     }
-    return {type, text, src, questions, options};
+    return { type, text, src, questions, options };
   });
 
-  let simplified = { title, type, parts};
+  let simplified = { title, type, parts };
   return JSON.stringify(simplified);
 };
 
@@ -83,9 +83,9 @@ const saveSteps = async () => {
     lectureStepInitial = null;
     console.log(err);
     $q.notify({
-      color: 'warning',
-      icon: 'cloud_done',
-      message: err.errors[0]?.message || t('error.form.save_error'),
+      color: "warning",
+      icon: "cloud_done",
+      message: err.errors[0]?.message || t("error.form.save_error"),
     });
     return false;
   }
@@ -101,16 +101,21 @@ onMounted(async () => {
     lectureStep.value = data;
 
     updateBreadcrumbs([
-      { label: t('course.list'), to: { name: 'CourseList' } },
+      { label: t("course.list"), to: { name: "CourseList" } },
       {
         label: data.lecture.course.title,
-        to: { name: 'CourseEdit', params: { id: data.lecture.course.id } },
+        to: { name: "CourseEdit", params: { id: data.lecture.course.id } },
       },
       {
         label: data.lecture.title,
-        to: { name: 'LectureEdit', params: { id: data.lecture.id } },
+        to: { name: "LectureEdit", params: { id: data.lecture.id } },
       },
-      { label: data.title, id: data.id, view: 'LectureStepView', beforeNavigate: saveSteps},
+      {
+        label: data.title,
+        id: data.id,
+        view: "LectureStepView",
+        beforeNavigate: saveSteps,
+      },
     ]);
     lectureStepInitial = toJSON(data);
   }
@@ -121,9 +126,9 @@ onBeforeUnmount(async () => {
 });
 
 const finish = async () => {
-  console.log('finish', lectureStep.value);
+  console.log("finish", lectureStep.value);
   router.push({
-    name: 'LectureEdit',
+    name: "LectureEdit",
     params: { id: lectureStep.value.lecture.id },
   });
 };

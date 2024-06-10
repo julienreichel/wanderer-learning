@@ -1,14 +1,13 @@
-import { boot } from 'quasar/wrappers'
-import ConceptService from 'src/services/concept';
-import CourseService from 'src/services/course';
-import LectureService from 'src/services/lecture';
-import LectureConceptService from 'src/services/lecture-concept';
-import LectureStepService from 'src/services/lecture-step';
-import StepReportingService from 'src/services/step-reporting';
-import StorageService from 'src/services/storage';
+import { boot } from "quasar/wrappers";
+import ConceptService from "src/services/concept";
+import CourseService from "src/services/course";
+import LectureService from "src/services/lecture";
+import LectureConceptService from "src/services/lecture-concept";
+import LectureStepService from "src/services/lecture-step";
+import StepReportingService from "src/services/step-reporting";
+import StorageService from "src/services/storage";
 
-import AIService from 'src/services/ai';
-
+import AIService from "src/services/ai";
 
 export default boot(({ app }) => {
   const concept = new ConceptService();
@@ -20,7 +19,7 @@ export default boot(({ app }) => {
   const storage = new StorageService();
   const ai = new AIService();
 
-  app.provide('services', {
+  app.provide("services", {
     lectureStep,
     concept,
     course,
@@ -28,6 +27,6 @@ export default boot(({ app }) => {
     lectureConcept,
     stepReporting,
     storage,
-    ai
+    ai,
   });
-})
+});

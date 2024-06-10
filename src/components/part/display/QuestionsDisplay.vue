@@ -6,7 +6,7 @@
       :response="responses && responses[index]"
       @result="processResult"
       @feedback="feedbackReceived"
-      />
+    />
   </q-card>
   <q-card>
     <q-card-actions v-if="!validate && !singleFeedback">
@@ -17,19 +17,22 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
-import QuestionDisplay from 'src/components/part/display/QuestionDisplay.vue';
+import { ref, watch, computed } from "vue";
+import QuestionDisplay from "src/components/part/display/QuestionDisplay.vue";
 
 const props = defineProps({
   questions: { type: Array },
   responses: { type: Array },
 });
-const emit = defineEmits(['results', 'finished']);
+const emit = defineEmits(["results", "finished"]);
 
 const validate = ref(props.responses?.length > 0);
-watch(() => props.responses, (value) => {
-  validate.value = value?.length > 0;
-});
+watch(
+  () => props.responses,
+  (value) => {
+    validate.value = value?.length > 0;
+  },
+);
 
 const questionRefs = ref([]);
 const validateAnswers = () => {
@@ -38,32 +41,44 @@ const validateAnswers = () => {
 
 let resultCount = 0;
 let responsesStats = props.questions.map(() => null);
-watch(() => props.questions, (questions) => {
-  resultCount = 0;
-  responsesStats = questions.map(() => null);
-});
+watch(
+  () => props.questions,
+  (questions) => {
+    resultCount = 0;
+    responsesStats = questions.map(() => null);
+  },
+);
 
 const processResult = ({ question, response, valid, points }) => {
   const index = props.questions.indexOf(question);
 
-  const feedbackType = question.options?.find(option => option.name === 'feedbackType')?.value;
+  const feedbackType = question.options?.find(
+    (option) => option.name === "feedbackType",
+  )?.value;
   const type = question.type;
-  responsesStats[index] = {questionId: question.id, response, valid, points, feedbackType, type};
+  responsesStats[index] = {
+    questionId: question.id,
+    response,
+    valid,
+    points,
+    feedbackType,
+    type,
+  };
 
   resultCount++;
 
-  if (resultCount === props.questions.length){
-    emit('results', {questions: props.questions, responses: responsesStats});
+  if (resultCount === props.questions.length) {
+    emit("results", { questions: props.questions, responses: responsesStats });
     resultCount = 0;
   }
 };
 
 const singleFeedback = computed(() => {
-  return props.questions.length === 1 && props.questions[0].type === 'feedback';
+  return props.questions.length === 1 && props.questions[0].type === "feedback";
 });
 
 const feedbackReceived = (response) => {
-  if (singleFeedback.value){
+  if (singleFeedback.value) {
     validateAnswers();
   }
 };

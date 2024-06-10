@@ -1,4 +1,4 @@
-import { getUrl, remove } from 'aws-amplify/storage';
+import { getUrl, remove } from "aws-amplify/storage";
 
 /**
  * Provide service to get and store images
@@ -9,8 +9,7 @@ import { getUrl, remove } from 'aws-amplify/storage';
  * const storageService = new StorageService();
  */
 export default class StorageService {
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Gewt the url of an image
@@ -24,8 +23,7 @@ export default class StorageService {
     }
     const getUrlResult = await getUrl({
       path: path,
-      options: {
-      },
+      options: {},
     });
     return getUrlResult.url.toString();
   }
@@ -41,10 +39,7 @@ export default class StorageService {
 
     await remove({
       path: path,
-      options: {
-      },
+      options: {},
     });
-
   }
-
 }

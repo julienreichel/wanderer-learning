@@ -3,8 +3,12 @@
     <q-card-section horizontal v-if="part.type === 'text'">
       <rich-text-editing :class="textSizeClass" v-model="part.text">
       </rich-text-editing>
-      <q-card-section v-if="part.url && !uploadingFile" :class="imageSizeClass" class="q-pa-none">
-        <q-img class="col" fit="scale-down" :src="part.url"/>
+      <q-card-section
+        v-if="part.url && !uploadingFile"
+        :class="imageSizeClass"
+        class="q-pa-none"
+      >
+        <q-img class="col" fit="scale-down" :src="part.url" />
 
         <q-card-actions>
           <q-btn-toggle
@@ -12,16 +16,16 @@
             size="sm"
             toggle-color="primary"
             :options="[
-              {label: '2|4', value: 8},
-              {label: '3|3', value: 6},
-              {label: '4|2', value: 4}
+              { label: '2|4', value: 8 },
+              { label: '3|3', value: 6 },
+              { label: '4|2', value: 4 },
             ]"
           />
-          <q-btn size="sm" icon="edit" @click="uploadingFile = true"/>
-          <q-btn size="sm" icon="delete" @click="removeImage()"/>
+          <q-btn size="sm" icon="edit" @click="uploadingFile = true" />
+          <q-btn size="sm" icon="delete" @click="removeImage()" />
         </q-card-actions>
       </q-card-section>
-      <file-uploader v-else  @uploaded="uploaded" />
+      <file-uploader v-else @uploaded="uploaded" />
     </q-card-section>
     <div class="row" v-if="part.type === 'img'">
       <file-uploader class="col-6" @uploaded="uploaded" />
@@ -60,19 +64,27 @@ import RichTextEditing from "../common/RichTextEditing.vue";
 import QuestionEditing from "./QuestionEditing.vue";
 import FileUploader from "../common/FileUploader.vue";
 
-const { storage: storageService, lectureStep: lectureStepService } = inject("services");
+const { storage: storageService, lectureStep: lectureStepService } =
+  inject("services");
 
 const part = defineModel();
 
-const imageSize = ref(Number(lectureStepService.getOption(part.value, 'imageSize')) || 4);
-const textSizeClass = computed(() => part.value.url && !uploadingFile.value ? 'col-' + (12 - imageSize.value) : 'col-10');
-const imageSizeClass = computed(() => part.value.url && !uploadingFile.value ? 'col-' + imageSize.value : 'col-2');
+const imageSize = ref(
+  Number(lectureStepService.getOption(part.value, "imageSize")) || 4,
+);
+const textSizeClass = computed(() =>
+  part.value.url && !uploadingFile.value
+    ? "col-" + (12 - imageSize.value)
+    : "col-10",
+);
+const imageSizeClass = computed(() =>
+  part.value.url && !uploadingFile.value ? "col-" + imageSize.value : "col-2",
+);
 const uploadingFile = ref(false);
 
 watch(imageSize, (value) => {
-  lectureStepService.setOption(part.value, 'imageSize', value);
+  lectureStepService.setOption(part.value, "imageSize", value);
 });
-
 
 const removeImage = () => {
   if (part.value.url && !part.value.url.startsWith("http")) {

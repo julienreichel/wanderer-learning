@@ -21,9 +21,8 @@
 </template>
 
 <script setup>
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { router } = useIris();
-
 
 const props = defineProps({
   concepts: {
@@ -37,7 +36,7 @@ const getConcept = (item) => {
 };
 
 const openConcept = (item) => {
-  router.push({ name: 'ConceptView', params: { id: getConcept(item).id } });
+  router.push({ name: "ConceptView", params: { id: getConcept(item).id } });
 };
 </script>
 

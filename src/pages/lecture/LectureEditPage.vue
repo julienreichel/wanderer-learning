@@ -22,8 +22,12 @@
         />
       </q-card-actions>
     </q-card>
-    <q-card v-for="(step, index) in lecture.steps" :key="index" clickable
-            @click="canEdit(step) ? editStep(step) : viewStep(step)">
+    <q-card
+      v-for="(step, index) in lecture.steps"
+      :key="index"
+      clickable
+      @click="canEdit(step) ? editStep(step) : viewStep(step)"
+    >
       <q-card-section horizontal>
         <q-card-section class="col q-pa-sm">
           <q-card-section>
@@ -37,7 +41,8 @@
             />
           </q-card-section>
         </q-card-section>
-        <q-card-section class="q-pa-sm text-right"> <!-- Stats -->
+        <q-card-section class="q-pa-sm text-right">
+          <!-- Stats -->
           <time-distribution
             v-if="step.userTimeReportings"
             :serie="step.userTimeReportings"
@@ -47,7 +52,7 @@
       </q-card-section>
       <q-card-actions v-if="canEdit(step)">
         <q-space />
-          <q-btn
+        <q-btn
           v-if="index > 0"
           size="sm"
           icon="arrow_upward"
@@ -59,11 +64,7 @@
           icon="arrow_downward"
           @click.stop="moveDown(index)"
         />
-        <q-btn
-          size="sm"
-          icon="delete"
-          @click.stop="deleteStep(step)"
-        />
+        <q-btn size="sm" icon="delete" @click.stop="deleteStep(step)" />
       </q-card-actions>
     </q-card>
     <q-card>
@@ -86,22 +87,22 @@
 </template>
 
 <script setup>
-import ConceptEditing from 'src/components/concept/ConceptEditing.vue';
-import UsageHistogram from 'src/components/charts/UsageHistogram.vue';
-import TimeDistribution from 'src/components/charts/TimeDistribution.vue';
-import StepReporting from 'src/components/reporting/StepReporting.vue';
+import ConceptEditing from "src/components/concept/ConceptEditing.vue";
+import UsageHistogram from "src/components/charts/UsageHistogram.vue";
+import TimeDistribution from "src/components/charts/TimeDistribution.vue";
+import StepReporting from "src/components/reporting/StepReporting.vue";
 
-import { ref, inject, computed, onMounted } from 'vue';
+import { ref, inject, computed, onMounted } from "vue";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
 const {
   lecture: lectureService,
   lectureStep: lectureStepService,
   stepReporting: reportingService,
-} = inject('services');
+} = inject("services");
 
-const { updateBreadcrumbs } = inject('breadcrumbs');
+const { updateBreadcrumbs } = inject("breadcrumbs");
 
 const props = defineProps({
   id: String,
@@ -121,12 +122,12 @@ onMounted(async () => {
   initalLecture.value = { ...data };
 
   updateBreadcrumbs([
-    { label: t('course.list'), to: { name: 'CourseList' } },
+    { label: t("course.list"), to: { name: "CourseList" } },
     {
       label: data.course.title,
-      to: { name: 'CourseEdit', params: { id: data.course.id } },
+      to: { name: "CourseEdit", params: { id: data.course.id } },
     },
-    { label: data.title, id: data.id, view: 'LectureView' },
+    { label: data.title, id: data.id, view: "LectureView" },
   ]);
 
   // load stats for each step
@@ -134,10 +135,10 @@ onMounted(async () => {
     const reports = await reportingService.list({ lectureStepId: step.id });
     if (reports.length) {
       // keep only the most recent
-      step.timestampDistribution = reportingService.computeTimestampDistribution(
-        reports
-      );
-      step.userTimeReportings = reportingService.computeUserTimeReportings(reports);
+      step.timestampDistribution =
+        reportingService.computeTimestampDistribution(reports);
+      step.userTimeReportings =
+        reportingService.computeUserTimeReportings(reports);
 
       step.ratings = reportingService.computeRatings(reports);
     }
@@ -159,16 +160,16 @@ const saveLecture = async () => {
     }
     initalLecture.value = { ...lecture.value };
     $q.notify({
-      color: 'info',
-      icon: 'cloud_done',
-      message: t('generic.form.saved'),
+      color: "info",
+      icon: "cloud_done",
+      message: t("generic.form.saved"),
     });
   } catch (err) {
     console.log(err);
     $q.notify({
-      color: 'warning',
-      icon: 'cloud_done',
-      message: err.errors[0]?.message || t('error.form.save_error'),
+      color: "warning",
+      icon: "cloud_done",
+      message: err.errors[0]?.message || t("error.form.save_error"),
     });
   }
 };
@@ -178,7 +179,7 @@ const moveUp = async (index) => {
   const previousOrder = index > 1 ? Number(steps[index - 2].order) : 0;
   const nextOrder = index > 0 ? Number(steps[index - 1].order) : 0;
   const step = steps[index];
-  step.order = '' + (previousOrder + nextOrder) / 2;
+  step.order = "" + (previousOrder + nextOrder) / 2;
   await lectureStepService.update(step);
 
   lecture.value.steps = lectureStepService.sort(steps);
@@ -187,53 +188,52 @@ const moveDown = async (index) => {
   const steps = lecture.value.steps;
   const step = steps[index];
   if (index >= steps.length - 2) {
-    step.order = '' + Date.now();
+    step.order = "" + Date.now();
   } else {
     const previousOrder = Number(steps[index + 1].order);
     const nextOrder = Number(steps[index + 2].order);
-    step.order = '' + (previousOrder + nextOrder) / 2;
-  };
+    step.order = "" + (previousOrder + nextOrder) / 2;
+  }
   await lectureStepService.update(step);
-
 
   lecture.value.steps = lectureStepService.sort(steps);
 };
 
 const deleteStep = async (step) => {
   $q.dialog({
-    title: t('generic.form.confirm_delete_title'),
-    message: t('step.form.confirm_delete_step'),
+    title: t("generic.form.confirm_delete_title"),
+    message: t("step.form.confirm_delete_step"),
     cancel: true,
     persistent: true,
   }).onOk(async () => {
     await lectureStepService.delete(step);
     lecture.value.steps = lecture.value.steps.filter(
-      ({ id }) => id !== step.id
+      ({ id }) => id !== step.id,
     );
   });
 };
 const viewStep = (step) => {
-  router.push({ name: 'LectureStepView', params: { id: step.id, stepIdx: 0 } });
+  router.push({ name: "LectureStepView", params: { id: step.id, stepIdx: 0 } });
 };
 const editStep = (step) => {
-  router.push({ name: 'LectureStepEdit', params: { id: step.id, stepIdx: 0 } });
+  router.push({ name: "LectureStepEdit", params: { id: step.id, stepIdx: 0 } });
 };
 
 const newTitle = ref();
-const contentType = ref('step');
+const contentType = ref("step");
 const optionType = [
-  { value: 'quiz', slot: 'quiz' },
+  { value: "quiz", slot: "quiz" },
   {
-    value: 'step',
-    slot: 'step',
+    value: "step",
+    slot: "step",
   },
 ];
 const addStep = async () => {
   const step = await lectureStepService.create({
     title: newTitle.value,
-    type: 'step',
+    type: "step",
     lectureId: lecture.value.id,
-    order: '' + Date.now(),
+    order: "" + Date.now(),
     parts: [],
   });
 
@@ -244,13 +244,13 @@ const addStep = async () => {
 
 const deleteLecture = async (lecture) => {
   $q.dialog({
-    title: t('generic.form.confirm_delete_title'),
-    message: t('lecture.form.confirm_delete_lecture'),
+    title: t("generic.form.confirm_delete_title"),
+    message: t("lecture.form.confirm_delete_lecture"),
     cancel: true,
     persistent: true,
   }).onOk(async () => {
     await lectureService.delete(lecture);
-    router.push({ name: 'CourseEdit', params: { id: lecture.course.id } });
+    router.push({ name: "CourseEdit", params: { id: lecture.course.id } });
   });
 };
 </script>

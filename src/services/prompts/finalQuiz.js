@@ -14,7 +14,13 @@ JSON format following this structure:
 { "questions": [ { "type": "radio" | "shorttext" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ] ] }
 `;
 
-const prompt = (description, conceptsList, objectivesList, tocList, nbQuestions) => `
+const prompt = (
+  description,
+  conceptsList,
+  objectivesList,
+  tocList,
+  nbQuestions,
+) => `
 Your task is to create a final quiz for an online lecture.
 The quiz MUST have ${nbQuestions} questions and cover the lecture table of content and key concepts bellow.
 It MUST check if the user is able to perform the learning objectives.

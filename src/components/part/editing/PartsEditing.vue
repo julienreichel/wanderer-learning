@@ -28,7 +28,6 @@
       />
     </q-card-section>
     <q-card-actions>
-
       <q-btn
         size="sm"
         icon="add"
@@ -55,7 +54,12 @@
       />
       <q-btn size="sm" icon-right="quiz" icon="add" @click="add('quiz')" />
       <q-space />
-      <q-btn v-if="isAdmin" size="sm" icon="data_object" @click="editJsonPart()" />
+      <q-btn
+        v-if="isAdmin"
+        size="sm"
+        icon="data_object"
+        @click="editJsonPart()"
+      />
       <q-btn size="sm" icon="check" @click="finish()" />
     </q-card-actions>
   </q-card>
@@ -86,7 +90,7 @@ const { uid, router, $q, t } = useIris();
 import { useChecks } from "src/composables/checks";
 const { checkPart, preparePart } = useChecks();
 
-const userAttributes = inject('userAttributes');
+const userAttributes = inject("userAttributes");
 const { isAdmin } = userAttributes.value;
 
 const parts = defineModel();
@@ -146,7 +150,7 @@ const editJsonPart = (json = null) => {
   jsonDialog.value = true;
 
   if (!json) {
-    json = parts.value.map(part => preparePart(part));
+    json = parts.value.map((part) => preparePart(part));
   }
 
   jsonToEdit.value = json;
@@ -155,7 +159,7 @@ const editJsonPart = (json = null) => {
 const updateFromJson = async (json) => {
   let data = json;
 
-try {
+  try {
     if (jsonEditStep.value === null) {
       const promises = data.map(async (part) => {
         return await checkPart(part);
@@ -167,7 +171,6 @@ try {
 
     data = await checkPart(data);
     parts.value[jsonEditStep.value] = data;
-
   } catch (error) {
     $q.notify({
       color: "negative",
@@ -175,7 +178,7 @@ try {
       message: error.message,
     });
     nextTick(() => {
-      if(jsonEditStep.value === null){
+      if (jsonEditStep.value === null) {
         editJsonPart(json);
       } else {
         editJsonStep(jsonEditStep.value, json);

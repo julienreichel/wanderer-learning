@@ -67,9 +67,8 @@ watch(step, (newStep, oldStep) => {
 
 const quizLeft = ref(props.parts.filter((part) => part.type === "quiz").length);
 const processResults = ({ responses }) => {
-
   const index = step.value;
-  if (!reportings.value[index].responses){
+  if (!reportings.value[index].responses) {
     quizLeft.value--;
   }
   reportings.value[index].responses = responses;

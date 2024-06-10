@@ -30,40 +30,52 @@
       >
         <q-icon name="play_circle" size="xl" />
       </q-card-section>
-      <q-card-section
-        v-if="part.type === 'iframe'"
-        class="q-pa-none"
-      >
-      <div class="aspect-ratio-16-9">
-        <iframe :title="part.text" :src="part.src"></iframe>
-      </div>
+      <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
+        <div class="aspect-ratio-16-9">
+          <iframe :title="part.text" :src="part.src"></iframe>
+        </div>
       </q-card-section>
       <q-card-actions v-if="editing" class="q-pa-xs">
         <q-btn
           v-if="step > 0"
           size="sm"
           icon="arrow_back"
-          flat round
+          flat
+          round
           @click.stop="$emit('moveLeft', step)"
         />
         <q-btn
           v-if="step + 1 < maxStep"
           size="sm"
           icon="arrow_forward"
-          flat round
+          flat
+          round
           @click.stop="$emit('moveRight', step)"
         />
         <q-space />
-        <q-btn v-if="isAdmin" size="sm" icon="data_object" flat round @click.stop="$emit('edit', step)" />
-        <q-btn size="sm" icon="delete" flat round @click.stop="$emit('remove', step)" />
+        <q-btn
+          v-if="isAdmin"
+          size="sm"
+          icon="data_object"
+          flat
+          round
+          @click.stop="$emit('edit', step)"
+        />
+        <q-btn
+          size="sm"
+          icon="delete"
+          flat
+          round
+          @click.stop="$emit('remove', step)"
+        />
       </q-card-actions>
     </q-card>
   </div>
 </template>
 
 <script setup>
-import { inject, computed } from 'vue';
-const userAttributes = inject('userAttributes');
+import { inject, computed } from "vue";
+const userAttributes = inject("userAttributes");
 const { isAdmin } = userAttributes.value;
 
 const props = defineProps({
@@ -75,7 +87,13 @@ const props = defineProps({
   editing: { type: Boolean, default: false },
 });
 
-const emit = defineEmits(["stepChange", "remove", "moveLeft", "moveRight", "edit"]);
+const emit = defineEmits([
+  "stepChange",
+  "remove",
+  "moveLeft",
+  "moveRight",
+  "edit",
+]);
 
 const stepChange = (newStep) => {
   emit("stepChange", newStep);
@@ -87,10 +105,10 @@ const textPreview = computed(() => {
   const h = text.match(/<h\d>(.*?)<\/h\d>/);
   if (h) {
     // remove all html, keep only the text
-    return h[1].replace(/<[^>]*>?/gm, '');
+    return h[1].replace(/<[^>]*>?/gm, "");
   }
-  return text.substring(0, 20) + '[...]';
-})
+  return text.substring(0, 20) + "[...]";
+});
 </script>
 
 <style lang="scss" scoped>
@@ -103,7 +121,8 @@ const textPreview = computed(() => {
   padding-top: 56.25%; /* 16:9 aspect ratio (9/16 * 100) */
 }
 
-.aspect-ratio-16-9 > .q-card__section, .aspect-ratio-16-9 > iframe {
+.aspect-ratio-16-9 > .q-card__section,
+.aspect-ratio-16-9 > iframe {
   position: absolute;
   top: 0;
   right: 0;

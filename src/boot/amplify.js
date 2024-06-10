@@ -1,11 +1,15 @@
 import { boot } from "quasar/wrappers";
 import { Amplify } from "aws-amplify";
-import outputs from '../../amplify_outputs.json';
+import outputs from "../../amplify_outputs.json";
 
 import AmplifyVue from "@aws-amplify/ui-vue";
 
-import { getCurrentUser, fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
-import { ref } from 'vue';
+import {
+  getCurrentUser,
+  fetchAuthSession,
+  fetchUserAttributes,
+} from "aws-amplify/auth";
+import { ref } from "vue";
 
 Amplify.configure(outputs);
 
@@ -14,9 +18,9 @@ export default boot(({ app, router }) => {
 
   let userIdSet = false;
   const userAttributesRef = ref({});
-  app.provide('userAttributes', userAttributesRef);
+  app.provide("userAttributes", userAttributesRef);
   router.beforeEach(async (to, from, next) => {
-    if (to.meta.publicPage || to.path === '/login/') {
+    if (to.meta.publicPage || to.path === "/login/") {
       if (userAttributesRef.value.userId) {
         userAttributesRef.value = {};
       }
@@ -29,14 +33,23 @@ export default boot(({ app, router }) => {
           const authSession = await fetchAuthSession();
           let { identities, ...userAttributes } = await fetchUserAttributes();
           console.log(currentUser, authSession, identities, userAttributes);
-          const groups = authSession.tokens.accessToken.payload['cognito:groups'];
-          const isAdmin = groups && groups.includes('admin');
-          const isTeacher = groups && groups.includes('teacher');
+          const groups =
+            authSession.tokens.accessToken.payload["cognito:groups"];
+          const isAdmin = groups && groups.includes("admin");
+          const isTeacher = groups && groups.includes("teacher");
           const { identityId } = authSession;
           const { userId, username } = currentUser;
 
           userAttributes.name = userAttributes.name || userAttributes.email;
-          userAttributesRef.value = { ...userAttributes, groups, identityId, userId, username, isAdmin, isTeacher };
+          userAttributesRef.value = {
+            ...userAttributes,
+            groups,
+            identityId,
+            userId,
+            username,
+            isAdmin,
+            isTeacher,
+          };
 
           userIdSet = true;
         } catch (err) {
@@ -48,8 +61,8 @@ export default boot(({ app, router }) => {
       console.log(err);
       userAttributesRef.value = {};
       return next({
-        path: '/login'
-      })
+        path: "/login",
+      });
     }
-  })
+  });
 });

@@ -2,12 +2,12 @@
   <q-card>
     <q-card-section horizontal class="q-pa-md" v-if="part.type === 'text'">
       <div :class="textSizeClass" v-html="part.text"></div>
-        <q-img
-          v-if="part.url"
-          :class="imageSizeClass"
-          fit="scale-down"
-          :src="part.url"
-        />
+      <q-img
+        v-if="part.url"
+        :class="imageSizeClass"
+        fit="scale-down"
+        :src="part.url"
+      />
     </q-card-section>
     <q-img
       v-if="part.type === 'img'"
@@ -33,7 +33,7 @@
 <script setup>
 import QuestionsDisplay from "./QuestionsDisplay.vue";
 
-import {computed, inject, ref} from "vue";
+import { computed, inject, ref } from "vue";
 const { lectureStep: lectureStepService } = inject("services");
 
 const props = defineProps({
@@ -43,10 +43,15 @@ const props = defineProps({
 
 const emit = defineEmits(["results"]);
 
-
-const imageSize = ref(Number(lectureStepService.getOption(props.part, 'imageSize')) || 4);
-const textSizeClass = computed(() => props.part.url ? 'col-' + (12 - imageSize.value) : 'col-12');
-const imageSizeClass = computed(() => props.part.url ? 'col-' + imageSize.value : 'col-0');
+const imageSize = ref(
+  Number(lectureStepService.getOption(props.part, "imageSize")) || 4,
+);
+const textSizeClass = computed(() =>
+  props.part.url ? "col-" + (12 - imageSize.value) : "col-12",
+);
+const imageSizeClass = computed(() =>
+  props.part.url ? "col-" + imageSize.value : "col-0",
+);
 
 const submitResults = (results) => {
   //forward the results to the parent component
@@ -56,17 +61,17 @@ const submitResults = (results) => {
 
 <style scoped>
 .iframe-16-9 {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
-    height: 0;
-  }
-  .iframe-16-9 iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0; /* no border */
-  }
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+}
+.iframe-16-9 iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0; /* no border */
+}
 </style>

@@ -1,6 +1,6 @@
-import ServicePrototype from './service-prototype';
+import ServicePrototype from "./service-prototype";
 
-import LectureConceptService from './lecture-concept';
+import LectureConceptService from "./lecture-concept";
 
 /**
  * Provide service to get and store concepts
@@ -17,7 +17,17 @@ export default class ConceptService extends ServicePrototype {
     this.model = this.client.models.Concept;
     this.lectureConceptService = new LectureConceptService();
 
-    this.selectionSet = ['id', 'title', 'description', 'lectures.id', 'lectures.lecture.*', 'lectures.lecture.steps.id', , 'lectures.lecture.concepts.concept.*', 'steps.*'];
+    this.selectionSet = [
+      "id",
+      "title",
+      "description",
+      "lectures.id",
+      "lectures.lecture.*",
+      "lectures.lecture.steps.id",
+      ,
+      "lectures.lecture.concepts.concept.*",
+      "steps.*",
+    ];
   }
 
   /**
@@ -29,9 +39,8 @@ export default class ConceptService extends ServicePrototype {
   async update(input) {
     let payload = { ...input };
     delete payload.lectures;
-    return super.update(payload)
+    return super.update(payload);
   }
-
 
   /**
    * List concept
@@ -40,8 +49,8 @@ export default class ConceptService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async list(params = {}) {
-    params.selectionSet = ['id', 'title', 'description'];
-    let concept = await super.list(params)
+    params.selectionSet = ["id", "title", "description"];
+    let concept = await super.list(params);
 
     return concept;
   }
@@ -62,11 +71,12 @@ export default class ConceptService extends ServicePrototype {
     }
     // remove all items from the concept
     if (input.lectures) {
-      await Promise.all(input.lectures.map(async item => {
-        await this.lectureConceptService.delete(item);
-      }));
+      await Promise.all(
+        input.lectures.map(async (item) => {
+          await this.lectureConceptService.delete(item);
+        }),
+      );
     }
     return super.delete(input);
   }
 }
-

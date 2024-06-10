@@ -2,32 +2,34 @@
   <q-dialog v-model="isOpen">
     <q-card style="max-width: none; width: 75%">
       <q-card-section>
-        <div class="text-h6">{{ $t('generic.edit.json') }}</div>
+        <div class="text-h6">{{ $t("generic.edit.json") }}</div>
       </q-card-section>
 
       <q-card-section>
-        <json-editor
-          v-model="jsonText"
-          v-bind="editorOptions"
-        ></json-editor>
+        <json-editor v-model="jsonText" v-bind="editorOptions"></json-editor>
       </q-card-section>
 
       <q-card-actions>
         <q-space />
         <q-btn flat :label="$t('generic.form.cancel')" @click="closeDialog" />
-        <q-btn :label="$t('generic.form.apply')" color="primary" @click="saveJson" :disable="!changed"/>
+        <q-btn
+          :label="$t('generic.form.apply')"
+          color="primary"
+          @click="saveJson"
+          :disable="!changed"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <script setup>
-import JsonEditor from 'json-editor-vue';
+import JsonEditor from "json-editor-vue";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { $q, t } = useIris();
 
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref, watch, defineProps, defineEmits } from "vue";
 
 const props = defineProps({
   json: {
@@ -42,38 +44,43 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['input', 'save']);
+const emit = defineEmits(["input", "save"]);
 
 const changed = ref(false);
 const editorOptions = ref({
-  mode: 'text', // or 'tree', 'view'
+  mode: "text", // or 'tree', 'view'
   mainMenuBar: false,
   navigationBar: false,
   statusBar: false,
   onChange: () => {
     changed.value = true;
-  }
+  },
 });
 
 const isOpen = defineModel();
 
-const jsonText = ref(props.data || props.json && JSON.parse(props.json));
-watch(() => props.json, (value) => {
-  jsonText.value = JSON.parse(value);
-});
-watch(() => props.data, (value) => {
-  jsonText.value = value;
-});
-
+const jsonText = ref(props.data || (props.json && JSON.parse(props.json)));
+watch(
+  () => props.json,
+  (value) => {
+    jsonText.value = JSON.parse(value);
+  },
+);
+watch(
+  () => props.data,
+  (value) => {
+    jsonText.value = value;
+  },
+);
 
 function validateJson(value) {
   try {
     return JSON.parse(value);
   } catch (error) {
     $q.notify({
-      color: 'negative',
-      icon: 'warning',
-      message: t('generic.edit.invalid_json'),
+      color: "negative",
+      icon: "warning",
+      message: t("generic.edit.invalid_json"),
     });
   }
 }
@@ -83,12 +90,12 @@ function closeDialog() {
 }
 
 function saveJson() {
-  const data = validateJson(jsonText.value)
+  const data = validateJson(jsonText.value);
   if (data) {
     if (!props.emitJson) {
-      emit('save', data);
+      emit("save", data);
     } else {
-      emit('save', jsonText.value);
+      emit("save", jsonText.value);
     }
     closeDialog();
   }

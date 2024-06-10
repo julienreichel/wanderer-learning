@@ -13,7 +13,7 @@
 
 <script setup>
 defineOptions({
-  name: 'EssentialLink',
+  name: "EssentialLink",
 });
 
 const props = defineProps({
@@ -24,17 +24,17 @@ const props = defineProps({
 
   caption: {
     type: String,
-    default: '',
+    default: "",
   },
 
   to: {
     type: [String, Object],
-    default: '#',
+    default: "#",
   },
 
   icon: {
     type: String,
-    default: '',
+    default: "",
   },
 });
 </script>

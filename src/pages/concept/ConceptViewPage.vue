@@ -13,16 +13,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, inject } from 'vue';
-import LecturesEditing from 'src/components/lecture/LecturesEditing.vue';
+import { ref, onMounted, watch, inject } from "vue";
+import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { t, $q, router } = useIris();
-const {concept: conceptService, stepReporting: reportingService} = inject('services');
+const { concept: conceptService, stepReporting: reportingService } =
+  inject("services");
 
-const { updateBreadcrumbs } = inject('breadcrumbs');
-const userAttributes = inject('userAttributes');
-const {username, userId} = userAttributes.value;
+const { updateBreadcrumbs } = inject("breadcrumbs");
+const userAttributes = inject("userAttributes");
+const { username, userId } = userAttributes.value;
 
 const props = defineProps({
   id: String,
@@ -40,17 +41,24 @@ const loadConcept = async (id) => {
   concept.value = data;
 
   updateBreadcrumbs([
-    { label: t('concept.list'), to: { name: 'ConceptList' } },
+    { label: t("concept.list"), to: { name: "ConceptList" } },
     { label: data.title, id: data.id },
   ]);
 
   // load stats for the user for each lecture
-  concept.value.lectures.forEach(async ({lecture}) => {
-    const reports = await reportingService.list({ lectureId: lecture.id, username, userId });
-    if (reports.length){
+  concept.value.lectures.forEach(async ({ lecture }) => {
+    const reports = await reportingService.list({
+      lectureId: lecture.id,
+      username,
+      userId,
+    });
+    if (reports.length) {
       // keep only the latest report for each step
       const summary = reports.reduce((acc, report) => {
-        if (!acc[report.lectureStepId] || acc[report.lectureStepId].createdAt < report.createdAt){
+        if (
+          !acc[report.lectureStepId] ||
+          acc[report.lectureStepId].createdAt < report.createdAt
+        ) {
           acc[report.lectureStepId] = report;
         }
         return acc;
@@ -58,7 +66,6 @@ const loadConcept = async (id) => {
       lecture.stepsSummary = Object.values(summary);
     }
   });
-
 };
 
 onMounted(async () => {
@@ -69,6 +76,6 @@ watch(
   () => props.id,
   async (id) => {
     await loadConcept(id);
-  }
+  },
 );
 </script>

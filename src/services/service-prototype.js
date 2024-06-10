@@ -1,10 +1,9 @@
-import { generateClient } from 'aws-amplify/data';
+import { generateClient } from "aws-amplify/data";
 
 /**
  * This is the prototype of any service using GraphQL
  */
 export default class ServicePrototype {
-
   constructor() {
     /**
      * @type {import('aws-amplify/data').Client<import('../amplify/data/resource').Schema>}
@@ -12,7 +11,7 @@ export default class ServicePrototype {
     this.client = generateClient();
 
     this.model = null;
-    this.selectionSet = undefined
+    this.selectionSet = undefined;
   }
 
   /**
@@ -23,7 +22,7 @@ export default class ServicePrototype {
    * @returns {Promise<object>}
    */
   async create(input, options = {}) {
-    options.authMode = 'userPool';
+    options.authMode = "userPool";
     options.selectionSet = options.selectionSet || this.selectionSet;
     const { data } = await this.model.create(input, options);
 
@@ -38,7 +37,7 @@ export default class ServicePrototype {
    * @returns {Promise<object>}
    */
   async update(input, options = {}) {
-    options.authMode = 'userPool';
+    options.authMode = "userPool";
     options.selectionSet = options.selectionSet || this.selectionSet;
 
     let payload = { ...input };
@@ -59,7 +58,7 @@ export default class ServicePrototype {
    * @returns {Promise<object>}
    */
   async get(id, options = {}) {
-    options.authMode = 'userPool';
+    options.authMode = "userPool";
     options.selectionSet = options.selectionSet || this.selectionSet;
 
     const { data } = await this.model.get({ id }, options);
@@ -73,7 +72,7 @@ export default class ServicePrototype {
    * @returns {Promise<object>}
    */
   async delete(model, options = {}) {
-    options.authMode = 'userPool';
+    options.authMode = "userPool";
     options.selectionSet = options.selectionSet || this.selectionSet;
 
     if (!model.id) return;
@@ -98,7 +97,7 @@ export default class ServicePrototype {
    * @returns {Promise<object>}
    */
   async list(params = {}) {
-    params.authMode = 'userPool';
+    params.authMode = "userPool";
     params.selectionSet = params.selectionSet || this.selectionSet;
 
     // List all items
@@ -113,7 +112,7 @@ export default class ServicePrototype {
     if (nextToken) {
       // do something with it
     }
-    return data
+    return data;
   }
 
   /**
@@ -132,14 +131,13 @@ export default class ServicePrototype {
     delete input._deleted;
     delete input._lastChangedAt;
 
-    Object.values(input).forEach(attr => {
+    Object.values(input).forEach((attr) => {
       if (Array.isArray(attr)) {
-        attr.forEach(a => this.cleanGraphQLUpdate(a))
+        attr.forEach((a) => this.cleanGraphQLUpdate(a));
       } else if (typeof attr === "object") {
-        this.cleanGraphQLUpdate(attr)
+        this.cleanGraphQLUpdate(attr);
       }
-
-    })
+    });
     return input;
   }
 }

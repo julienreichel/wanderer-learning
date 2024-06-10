@@ -1,6 +1,8 @@
 <template>
   <q-page class="flex flex-center">
-    <h1 class="full-width text-center text-uppercase" >{{$t('generic.welcome')}}</h1>
+    <h1 class="full-width text-center text-uppercase">
+      {{ $t("generic.welcome") }}
+    </h1>
     <img
       class="bg-primary"
       alt="Wanderer Learning logo"
@@ -12,6 +14,6 @@
 
 <script setup>
 defineOptions({
-  name: 'IndexPage'
+  name: "IndexPage",
 });
 </script>

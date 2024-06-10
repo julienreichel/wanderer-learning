@@ -18,7 +18,7 @@
         </q-chip>
         <div class="q-pa-sm" v-html="concept.description"></div>
       </q-card-section>
-      <q-card-actions v-if="editing === concept.id" >
+      <q-card-actions v-if="editing === concept.id">
         <q-space />
         <q-btn size="sm" icon="done" @click="updateConcept(concept)" />
         <q-btn size="sm" icon="clear" @click="editing = null" />
@@ -49,16 +49,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
-import RichTextEditing from 'src/components/part/common/RichTextEditing.vue';
+import { ref, onMounted, inject } from "vue";
+import RichTextEditing from "src/components/part/common/RichTextEditing.vue";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { t, $q, router } = useIris();
-const {concept: conceptService} = inject('services');
+const { concept: conceptService } = inject("services");
 
-const { updateBreadcrumbs } = inject('breadcrumbs');
-updateBreadcrumbs([{ label: t('concept.list') }]);
-const userAttributes = inject('userAttributes');
+const { updateBreadcrumbs } = inject("breadcrumbs");
+updateBreadcrumbs([{ label: t("concept.list") }]);
+const userAttributes = inject("userAttributes");
 
 const concepts = ref([]);
 onMounted(async () => {
@@ -68,8 +68,8 @@ onMounted(async () => {
 
 const deleteConcept = async (concept) => {
   $q.dialog({
-    title: t('generic.form.confirm_delete_title'),
-    message: t('concept.form.confirm_delete_concept'),
+    title: t("generic.form.confirm_delete_title"),
+    message: t("concept.form.confirm_delete_concept"),
     cancel: true,
     persistent: true,
   }).onOk(async () => {
@@ -78,7 +78,7 @@ const deleteConcept = async (concept) => {
   });
 };
 const viewConcept = (concept) => {
-  router.push({ name: 'ConceptView', params: { id: concept.id } });
+  router.push({ name: "ConceptView", params: { id: concept.id } });
 };
 
 const editing = ref(null);
@@ -86,13 +86,13 @@ const editing = ref(null);
 const newTitle = ref();
 const checkDuplicate = (title, id) => {
   const duplicate = concepts.value.find(
-    (concept) => concept.title === title && concept.id !== id
+    (concept) => concept.title === title && concept.id !== id,
   );
   if (duplicate) {
     $q.notify({
-      color: 'negative',
-      icon: 'warning',
-      message: t('concept.form.duplicate'),
+      color: "negative",
+      icon: "warning",
+      message: t("concept.form.duplicate"),
     });
     return true;
   }
@@ -110,7 +110,7 @@ const addConcept = async () => {
     title: newTitle.value,
   });
   concepts.value.push(concept);
-  newTitle.value = '';
+  newTitle.value = "";
 };
 
 const updateConcept = async (concept) => {
@@ -122,9 +122,9 @@ const updateConcept = async (concept) => {
   await conceptService.update(concept);
 
   $q.notify({
-    color: 'info',
-    icon: 'cloud_done',
-    message: t('generic.form.saved'),
+    color: "info",
+    icon: "cloud_done",
+    message: t("generic.form.saved"),
   });
 };
 </script>

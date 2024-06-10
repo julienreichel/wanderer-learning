@@ -5,18 +5,17 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed } from "vue";
 
 const props = defineProps({
   roti: { type: Number },
 });
 
 const icon = computed(() => {
-  if (props.roti < 1.5) return 'sentiment_very_dissatisfied';
-  if (props.roti < 2.5) return 'sentiment_dissatisfied';
-  if (props.roti < 3.5) return 'sentiment_neutral';
-  if (props.roti < 4.5) return 'sentiment_satisfied';
-  return 'sentiment_very_satisfied';
+  if (props.roti < 1.5) return "sentiment_very_dissatisfied";
+  if (props.roti < 2.5) return "sentiment_dissatisfied";
+  if (props.roti < 3.5) return "sentiment_neutral";
+  if (props.roti < 4.5) return "sentiment_satisfied";
+  return "sentiment_very_satisfied";
 });
-
 </script>

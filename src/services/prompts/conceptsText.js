@@ -26,8 +26,9 @@ Multiple titles are allowed in one part. Descriptions may contain the following 
 
 const prompt = (description, section) => {
   const sectionName = section.name;
-  const sectionItems = section.items.map(({ name, description }) => `- ${name}: ${description}`).join('\n');
-
+  const sectionItems = section.items
+    .map(({ name, description }) => `- ${name}: ${description}`)
+    .join("\n");
 
   return `
 You are an expert instructor.
@@ -50,7 +51,7 @@ Section content:
 ${sectionItems}
 
 Example of output:
-{ "pages": [ "<h5>${sectionName}</h5><div>...</div>", ${section.items.map(({ name, description }) => `"<h5>${name}</h5><div>...</div>"`).join(", ") } ] }
+{ "pages": [ "<h5>${sectionName}</h5><div>...</div>", ${section.items.map(({ name, description }) => `"<h5>${name}</h5><div>...</div>"`).join(", ")} ] }
 `;
 };
 

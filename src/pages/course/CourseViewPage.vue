@@ -16,16 +16,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
-import LecturesEditing from 'src/components/lecture/LecturesEditing.vue';
+import { ref, onMounted, inject } from "vue";
+import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
 const { course: courseService, stepReporting: reportingService } =
-  inject('services');
+  inject("services");
 
-const { updateBreadcrumbs } = inject('breadcrumbs');
-const userAttributes = inject('userAttributes');
+const { updateBreadcrumbs } = inject("breadcrumbs");
+const userAttributes = inject("userAttributes");
 const { username, userId } = userAttributes.value;
 
 const props = defineProps({
@@ -38,11 +38,11 @@ onMounted(async () => {
   course.value = data;
 
   updateBreadcrumbs([
-    { label: t('course.list'), to: { name: 'CourseList' } },
+    { label: t("course.list"), to: { name: "CourseList" } },
     {
       label: data.title,
       id: data.id,
-      edit: canEdit(data) ? 'CourseEdit' : null,
+      edit: canEdit(data) ? "CourseEdit" : null,
     },
   ]);
 
@@ -60,6 +60,6 @@ onMounted(async () => {
 });
 
 const finished = () => {
-  router.push({ name: 'CourseList' });
+  router.push({ name: "CourseList" });
 };
 </script>

@@ -1,4 +1,4 @@
-<template >
+<template>
   <q-rating
     :model-value="stars"
     size="xs"

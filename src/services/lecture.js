@@ -1,7 +1,7 @@
-import ServicePrototype from './service-prototype';
+import ServicePrototype from "./service-prototype";
 
-import LectureConceptService from './lecture-concept';
-import LectureStepService from './lecture-step';
+import LectureConceptService from "./lecture-concept";
+import LectureStepService from "./lecture-step";
 
 /**
  * Provide service to get and store lectures
@@ -19,7 +19,16 @@ export default class LectureService extends ServicePrototype {
     this.lectureConceptService = new LectureConceptService();
     this.lectureStepService = new LectureStepService();
 
-    this.selectionSet = ['id', 'title', 'order', 'owner', 'course.*', 'steps.*', 'concepts.id', 'concepts.concept.*'];
+    this.selectionSet = [
+      "id",
+      "title",
+      "order",
+      "owner",
+      "course.*",
+      "steps.*",
+      "concepts.id",
+      "concepts.concept.*",
+    ];
   }
 
   sort(lectures) {
@@ -47,7 +56,7 @@ export default class LectureService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async get(id) {
-    let lecture = await super.get(id)
+    let lecture = await super.get(id);
 
     lecture.steps = this.sort(lecture.steps);
     return this.removeDeletedContent(lecture);
@@ -99,19 +108,21 @@ export default class LectureService extends ServicePrototype {
     }
     // remove all associated concepts
     if (input.concepts) {
-      await Promise.all(input.concepts.map(async item => {
-        await this.lectureConceptService.delete(item);
-      }));
+      await Promise.all(
+        input.concepts.map(async (item) => {
+          await this.lectureConceptService.delete(item);
+        }),
+      );
     }
     // remove all content
     if (input.steps) {
-      await Promise.all(input.steps.map(async item => {
-        await this.lectureStepService.delete(item);
-      }));
+      await Promise.all(
+        input.steps.map(async (item) => {
+          await this.lectureStepService.delete(item);
+        }),
+      );
     }
 
     return super.delete(input);
   }
-
 }
-

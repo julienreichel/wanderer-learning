@@ -45,9 +45,10 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue';
+import { ref, inject } from "vue";
 
-const {concept: conceptService, lectureConcept: lectureConceptService} = inject('services');
+const { concept: conceptService, lectureConcept: lectureConceptService } =
+  inject("services");
 
 const lecture = defineModel();
 
@@ -64,7 +65,7 @@ const filterFn = async (val, update, abort) => {
       (concept) =>
         concept.title.toLowerCase().includes(val.toLowerCase()) &&
         lecture.value.concepts.find(({ id }) => id === concept.id) ===
-          undefined
+          undefined,
     )
     .map((concept) => ({
       label: concept.title,
@@ -112,10 +113,9 @@ const createConcept = async (val, done) => {
 const removeConcept = async (item) => {
   console.log(item, lecture.value.concepts);
   lecture.value.concepts = lecture.value.concepts.filter(
-    ({ id }) => id !== item.id
+    ({ id }) => id !== item.id,
   );
 
   await lectureConceptService.delete(item);
 };
-
 </script>

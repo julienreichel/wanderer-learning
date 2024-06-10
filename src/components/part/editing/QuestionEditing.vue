@@ -93,9 +93,7 @@
     </q-list>
     <q-btn @click="addAnswer(question)" size="sm" icon="add" />
   </q-card-section>
-  <q-card-section
-    v-if="question.type !== 'feedback'"
-  >
+  <q-card-section v-if="question.type !== 'feedback'">
     <q-toggle
       v-model="provideExplanation"
       :label="$t('quiz.question.explanation')"
@@ -108,10 +106,7 @@
     </rich-text-editing>
   </q-card-section>
   <q-card-section v-if="feedbackType === 'text'">
-    <q-input
-      v-model="question.answers[0].text"
-      label="The answer"
-    />
+    <q-input v-model="question.answers[0].text" label="The answer" />
   </q-card-section>
 </template>
 

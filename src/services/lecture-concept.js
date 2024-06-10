@@ -1,6 +1,5 @@
-
-import ServicePrototype from './service-prototype';
-import { generateClient } from 'aws-amplify/api';
+import ServicePrototype from "./service-prototype";
+import { generateClient } from "aws-amplify/api";
 
 /**
  * Provide service to get and store concepts
@@ -16,8 +15,6 @@ export default class ConceptService extends ServicePrototype {
 
     this.model = this.client.models.LectureConceptJoinTable;
 
-    this.selectionSet = ['id', 'lecture.*', 'concept.*'];
+    this.selectionSet = ["id", "lecture.*", "concept.*"];
   }
-
 }
-

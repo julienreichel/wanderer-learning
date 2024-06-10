@@ -15,7 +15,11 @@
         <q-btn size="sm" icon="delete" @click.stop="deleteCourse(course)" />
       </q-card-actions>
     </q-card>
-    <lectures-editing v-model="course.lectures" :allow-delete="true" :edit-mode="true"/>
+    <lectures-editing
+      v-model="course.lectures"
+      :allow-delete="true"
+      :edit-mode="true"
+    />
     <q-card>
       <q-card-section>
         <q-input
@@ -29,25 +33,29 @@
       <q-card-actions>
         <q-space />
         <q-btn size="sm" icon="add" @click="addLecture()" />
-        <q-btn size="sm" icon="switch_access_shortcut_add" @click="openWizard()" />
+        <q-btn
+          size="sm"
+          icon="switch_access_shortcut_add"
+          @click="openWizard()"
+        />
       </q-card-actions>
     </q-card>
   </q-page>
 </template>
 
 <script setup>
-import { ref, inject, computed, onMounted } from 'vue';
-import LecturesEditing from 'src/components/lecture/LecturesEditing.vue';
+import { ref, inject, computed, onMounted } from "vue";
+import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
 const {
   course: courseService,
   lecture: lectureService,
   stepReporting: reportingService,
-} = inject('services');
+} = inject("services");
 
-const { updateBreadcrumbs } = inject('breadcrumbs');
+const { updateBreadcrumbs } = inject("breadcrumbs");
 
 const props = defineProps({
   id: String,
@@ -66,21 +74,20 @@ onMounted(async () => {
     initalCourse.value = { ...data };
 
     updateBreadcrumbs([
-      { label: t('course.list'), to: { name: 'CourseList' } },
-      { label: data.title, id: data.id, view: 'CourseView' },
+      { label: t("course.list"), to: { name: "CourseList" } },
+      { label: data.title, id: data.id, view: "CourseView" },
     ]);
 
     if (!canEdit(data)) {
-      router.push({ name: 'CourseView', params: { id: data.id } });
+      router.push({ name: "CourseView", params: { id: data.id } });
     }
   }
   // load stats for for each lecture
   course.value.lectures.forEach(async (lecture) => {
     const reports = await reportingService.list({ lectureId: lecture.id });
     if (reports.length) {
-      lecture.userTimeReportings = reportingService.computeUserTimeReportings(
-        reports
-      );
+      lecture.userTimeReportings =
+        reportingService.computeUserTimeReportings(reports);
 
       lecture.ratings = reportingService.computeRatings(reports);
     }
@@ -104,22 +111,22 @@ const saveCourse = async () => {
   } catch (err) {
     console.log(err);
     $q.notify({
-      color: 'warning',
-      icon: 'cloud_done',
-      message: err.errors[0]?.message || t('error.form.save_error'),
+      color: "warning",
+      icon: "cloud_done",
+      message: err.errors[0]?.message || t("error.form.save_error"),
     });
   }
 };
 
 const deleteCourse = async (course) => {
   $q.dialog({
-    title: t('generic.form.confirm_delete_title'),
-    message: t('course.form.confirm_delete_course'),
+    title: t("generic.form.confirm_delete_title"),
+    message: t("course.form.confirm_delete_course"),
     cancel: true,
     persistent: true,
   }).onOk(async () => {
     await courseService.delete(course);
-    router.push({ name: 'CourseList' });
+    router.push({ name: "CourseList" });
   });
 };
 
@@ -128,7 +135,7 @@ const addLecture = async () => {
   const lecture = await lectureService.create({
     title: newTitle.value,
     courseId: course.value.id,
-    order: '' + Date.now(),
+    order: "" + Date.now(),
   });
   course.value.lectures.push(lecture);
 
@@ -136,6 +143,6 @@ const addLecture = async () => {
 };
 
 const openWizard = () => {
-  router.push({ name: 'LectureWizard', params: { id: course.value.id } });
+  router.push({ name: "LectureWizard", params: { id: course.value.id } });
 };
 </script>

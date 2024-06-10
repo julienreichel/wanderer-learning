@@ -1,5 +1,10 @@
 <template>
-  <q-card v-for="(lecture, index) in lecturesArray" :key="index" clickable @click="editMode ? editLecture(lecture) : viewLecture(lecture)">
+  <q-card
+    v-for="(lecture, index) in lecturesArray"
+    :key="index"
+    clickable
+    @click="editMode ? editLecture(lecture) : viewLecture(lecture)"
+  >
     <q-card-section horizontal>
       <q-card-section class="col q-pa-sm">
         <q-card-section class="q-pa-sm">
@@ -12,8 +17,11 @@
           v-if="lecture.stepsSummary"
           :steps-summary="lecture.stepsSummary"
           :steps="lecture.steps"
-          />
-        <step-reporting v-if="lecture.ratings" :ratings="lecture.ratings"></step-reporting>
+        />
+        <step-reporting
+          v-if="lecture.ratings"
+          :ratings="lecture.ratings"
+        ></step-reporting>
       </q-card-section>
     </q-card-section>
     <q-card-section ref="graphSection" v-if="lecture.timestampDistribution">
@@ -43,15 +51,15 @@
 </template>
 
 <script setup>
-import { inject, computed, ref } from 'vue';
-import ConceptDisplay from 'src/components/concept/ConceptDisplay.vue';
-import UserLectureReporting from 'src/components/reporting/UserLectureReporting.vue';
-import UsageHistogram from 'src/components/charts/UsageHistogram.vue';
-import StepReporting from 'src/components/reporting/StepReporting.vue';
+import { inject, computed, ref } from "vue";
+import ConceptDisplay from "src/components/concept/ConceptDisplay.vue";
+import UserLectureReporting from "src/components/reporting/UserLectureReporting.vue";
+import UsageHistogram from "src/components/charts/UsageHistogram.vue";
+import StepReporting from "src/components/reporting/StepReporting.vue";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
-const { lecture: lectureService } = inject('services');
+const { lecture: lectureService } = inject("services");
 
 const lectures = defineModel();
 const props = defineProps({
@@ -74,7 +82,7 @@ const moveUp = async (index) => {
   const previousOrder = index > 1 ? Number(lectures.value[index - 2].order) : 0;
   const nextOrder = index > 0 ? Number(lectures.value[index - 1].order) : 0;
   const lecture = lectures.value[index];
-  lecture.order = '' + (previousOrder + nextOrder) / 2;
+  lecture.order = "" + (previousOrder + nextOrder) / 2;
   await lectureService.update(lecture);
 
   lectures.value = lectureService.sort(lectures.value);
@@ -82,22 +90,21 @@ const moveUp = async (index) => {
 const moveDown = async (index) => {
   const lecture = lectures.value[index];
   if (index >= lectures.value.length - 2) {
-    lecture.order = '' + Date.now();
+    lecture.order = "" + Date.now();
   } else {
     const previousOrder = Number(lectures.value[index + 1].order);
     const nextOrder = Number(lectures.value[index + 2].order);
-    lecture.order = '' + (previousOrder + nextOrder) / 2;
-  };
+    lecture.order = "" + (previousOrder + nextOrder) / 2;
+  }
   await lectureService.update(lecture);
-
 
   lectures.value = lectureService.sort(lectures.value);
 };
 
 const deleteLecture = async (lecture) => {
   $q.dialog({
-    title: t('generic.form.confirm_delete_title'),
-    message: t('lecture.form.confirm_delete_step'),
+    title: t("generic.form.confirm_delete_title"),
+    message: t("lecture.form.confirm_delete_step"),
     cancel: true,
     persistent: true,
   }).onOk(async () => {
@@ -107,10 +114,10 @@ const deleteLecture = async (lecture) => {
 };
 
 const editLecture = (lecture) => {
-  router.push({ name: 'LectureEdit', params: { id: lecture.id } });
+  router.push({ name: "LectureEdit", params: { id: lecture.id } });
 };
 
 const viewLecture = (lecture) => {
-  router.push({ name: 'LectureView', params: { id: lecture.id } });
+  router.push({ name: "LectureView", params: { id: lecture.id } });
 };
 </script>

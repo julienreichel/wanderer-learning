@@ -207,10 +207,19 @@
       </q-step>
       <!-- Step 3: Generating lecture -->
       <q-step :title="$t('wizard.generating.title')" :name="4">
-        <q-spinner-gears color="primary" size="xl" v-if="progress < 1"/>
-        <q-linear-progress :value="progress" class="q-mt-md" size="25px" animation-speed="10000">
+        <q-spinner-gears color="primary" size="xl" v-if="progress < 1" />
+        <q-linear-progress
+          :value="progress"
+          class="q-mt-md"
+          size="25px"
+          animation-speed="10000"
+        >
           <div class="absolute-full flex flex-center">
-            <q-badge color="white" text-color="primary" :label="progressLabel" />
+            <q-badge
+              color="white"
+              text-color="primary"
+              :label="progressLabel"
+            />
           </div>
         </q-linear-progress>
         <q-stepper-navigation>
@@ -334,17 +343,17 @@ const createQuizParts = (quiz, nbQuestionPerQuiz) => {
 
       // if there is only one answer, we add the missing one
       if (question.answers.length === 1) {
-        if (question.answers[0].text === "True"){
-          question.answers.push({text: "False"})
+        if (question.answers[0].text === "True") {
+          question.answers.push({ text: "False" });
         }
-        if (question.answers[0].text === "False"){
-          question.answers.push({text: "True"})
+        if (question.answers[0].text === "False") {
+          question.answers.push({ text: "True" });
         }
-        if (question.answers[0].text === "Myth"){
-          question.answers.push({text: "Fact"})
+        if (question.answers[0].text === "Myth") {
+          question.answers.push({ text: "Fact" });
         }
-        if (question.answers[0].text === "Fact"){
-          question.answers.push({text: "Myth"})
+        if (question.answers[0].text === "Fact") {
+          question.answers.push({ text: "Myth" });
         }
       }
 
@@ -352,14 +361,14 @@ const createQuizParts = (quiz, nbQuestionPerQuiz) => {
       const mappingTypes = {
         "multiple-choice": "radio",
         "true-false": "radio",
-        "truefalse": "radio",
+        truefalse: "radio",
         "true/false": "radio",
         "myth-fact": "radio",
-        "mythfact": "radio",
+        mythfact: "radio",
         "myth/fact": "radio",
         "fill-in-the-blank": "shorttext",
         "missing-word": "shorttext",
-        "sentence": "radio"
+        sentence: "radio",
       };
       if (mappingTypes[question.type]) {
         question.type = mappingTypes[question.type];

@@ -1,7 +1,11 @@
 <template>
   <q-card v-for="(question, index) in quiz" :key="index">
     <question-editing v-if="activeQuestion === index" v-model="quiz[index]" />
-    <question-editing-preview v-else :question="question" @selected="activeQuestion = index"/>
+    <question-editing-preview
+      v-else
+      :question="question"
+      @selected="activeQuestion = index"
+    />
     <q-card-actions>
       <q-space />
       <q-btn
@@ -63,7 +67,7 @@
 import QuestionEditing from "src/components/part/editing/QuestionEditing.vue";
 import QuestionEditingPreview from "src/components/part/editing/QuestionEditingPreview.vue";
 
-import { ref, watch } from 'vue';
+import { ref, watch } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { uid } = useIris();
@@ -94,10 +98,10 @@ const moveUpQuestion = ({ index }) => {
   const question = removeQuestion({ index });
   quiz.value.splice(index - 1, 0, question);
 
-  if (activeQuestion.value === index ) {
+  if (activeQuestion.value === index) {
     console.log("move up");
     activeQuestion.value = activeQuestion.value - 1;
-  } else if (activeQuestion.value === index - 1 ) {
+  } else if (activeQuestion.value === index - 1) {
     activeQuestion.value = activeQuestion.value + 1;
   }
 };
@@ -106,9 +110,9 @@ const moveDownQuestion = ({ index }) => {
   const question = removeQuestion({ index });
   quiz.value.splice(index + 1, 0, question);
 
-  if (activeQuestion.value === index ) {
+  if (activeQuestion.value === index) {
     activeQuestion.value = activeQuestion.value + 1;
-  } else if (activeQuestion.value === index + 1 ) {
+  } else if (activeQuestion.value === index + 1) {
     activeQuestion.value = activeQuestion.value - 1;
   }
 };

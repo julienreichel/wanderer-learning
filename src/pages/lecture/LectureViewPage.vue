@@ -20,21 +20,32 @@
             <q-icon
               v-for="(part, index) in step.parts"
               :key="index"
-              :name="{text:'article', img:'image', video: 'smart_display', quiz: 'help_center'}[part.type]"
+              :name="
+                {
+                  text: 'article',
+                  img: 'image',
+                  video: 'smart_display',
+                  quiz: 'help_center',
+                }[part.type]
+              "
               color="primary"
-              clickable @click="viewStep(step, index)"
+              clickable
+              @click="viewStep(step, index)"
             />
           </q-card-section>
         </q-card-section>
         <q-card-section class="col-1">
           <q-card-section class="q-pa-sm">
-            <q-icon v-if="step.reporting" name="check_box" color="positive" size="lg" right/>
+            <q-icon
+              v-if="step.reporting"
+              name="check_box"
+              color="positive"
+              size="lg"
+              right
+            />
           </q-card-section>
           <q-card-section class="q-pa-sm">
-            <q-badge
-              v-if="step.reporting"
-              :label="step.reporting.totalTime"
-            />
+            <q-badge v-if="step.reporting" :label="step.reporting.totalTime" />
           </q-card-section>
         </q-card-section>
       </q-card-section>
@@ -43,16 +54,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
-import ConceptDisplay from 'src/components/concept/ConceptDisplay.vue';
+import { ref, onMounted, inject } from "vue";
+import ConceptDisplay from "src/components/concept/ConceptDisplay.vue";
 
-import { useIris } from 'src/composables/iris';
+import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
-const {lecture: lectureService, stepReporting: reportingService } = inject('services');
+const { lecture: lectureService, stepReporting: reportingService } =
+  inject("services");
 
-const { updateBreadcrumbs } = inject('breadcrumbs');
-const userAttributes = inject('userAttributes');
-const {username, userId} = userAttributes.value;
+const { updateBreadcrumbs } = inject("breadcrumbs");
+const userAttributes = inject("userAttributes");
+const { username, userId } = userAttributes.value;
 
 const props = defineProps({
   id: String,
@@ -64,28 +76,38 @@ onMounted(async () => {
   lecture.value = data;
 
   updateBreadcrumbs([
-    { label: t('course.list'), to: { name: 'CourseList' } },
+    { label: t("course.list"), to: { name: "CourseList" } },
     {
       label: data.course.title,
-      to: { name: 'CourseView', params: { id: data.course.id } },
+      to: { name: "CourseView", params: { id: data.course.id } },
     },
-    { label: data.title, id: data.id, edit: canEdit(data) ? 'LectureEdit' : null},
+    {
+      label: data.title,
+      id: data.id,
+      edit: canEdit(data) ? "LectureEdit" : null,
+    },
   ]);
 
   // load stats for the user for each step
   lecture.value.steps.forEach(async (step) => {
-    const reports = await reportingService.list({ lectureStepId: step.id, username, userId });
-    if (reports.length){
+    const reports = await reportingService.list({
+      lectureStepId: step.id,
+      username,
+      userId,
+    });
+    if (reports.length) {
       // keep only the most recent
-      let report = reports.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+      let report = reports.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      )[0];
       const totalTime = report.reportings.reduce(
         (acc, val) => acc + val.time,
-        0
+        0,
       );
       if (totalTime < 60) {
-        report.totalTime = totalTime + ' sec';
+        report.totalTime = totalTime + " sec";
       } else {
-        report.totalTime = Math.round(totalTime / 60) + ' min';
+        report.totalTime = Math.round(totalTime / 60) + " min";
       }
       step.reporting = report;
     }
@@ -93,12 +115,14 @@ onMounted(async () => {
 });
 
 const viewStep = (step, index) => {
-  router.push({ name: 'LectureStepView', params: { id: step.id, stepIdx: index || 0 } });
+  router.push({
+    name: "LectureStepView",
+    params: { id: step.id, stepIdx: index || 0 },
+  });
 };
 
-
 const finished = () => {
-  router.push({ name: 'CourseView', params: { id: lecture.value.course.id } });
+  router.push({ name: "CourseView", params: { id: lecture.value.course.id } });
 };
 </script>
 

@@ -1,6 +1,6 @@
-import ServicePrototype from './service-prototype';
+import ServicePrototype from "./service-prototype";
 
-import LectureService from './lecture';
+import LectureService from "./lecture";
 
 /**
  * Provide service to get and store courses
@@ -16,7 +16,15 @@ export default class CourseService extends ServicePrototype {
 
     this.model = this.client.models.Course;
     this.lectureService = new LectureService();
-    this.selectionSet = ['id', 'title', 'owner', 'lectures.*', 'lectures.steps.*', , 'lectures.concepts.concept.*'];
+    this.selectionSet = [
+      "id",
+      "title",
+      "owner",
+      "lectures.*",
+      "lectures.steps.*",
+      ,
+      "lectures.concepts.concept.*",
+    ];
   }
 
   /**
@@ -41,12 +49,16 @@ export default class CourseService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async get(id) {
-    let course = await super.get(id)
+    let course = await super.get(id);
 
-    course.lectures = course.lectures.sort((a, b) => Number(a.order) - Number(b.order));
+    course.lectures = course.lectures.sort(
+      (a, b) => Number(a.order) - Number(b.order),
+    );
 
-    course.lectures.forEach(lecture => {
-      lecture.steps = lecture.steps?.sort((a, b) => Number(a.order) - Number(b.order));
+    course.lectures.forEach((lecture) => {
+      lecture.steps = lecture.steps?.sort(
+        (a, b) => Number(a.order) - Number(b.order),
+      );
     });
 
     return course;
@@ -59,8 +71,8 @@ export default class CourseService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async list(params = {}) {
-    params.selectionSet = ['id', 'title', 'owner'];
-    let courses = await super.list(params)
+    params.selectionSet = ["id", "title", "owner"];
+    let courses = await super.list(params);
 
     return courses;
   }
@@ -81,11 +93,12 @@ export default class CourseService extends ServicePrototype {
     }
     // remove all items from the lectures
     if (input.lectures) {
-      await Promise.all(input.lectures.map(async item => {
-        await this.lectureService.delete(item);
-      }));
+      await Promise.all(
+        input.lectures.map(async (item) => {
+          await this.lectureService.delete(item);
+        }),
+      );
     }
     return super.delete(input);
   }
-
 }

@@ -36,14 +36,24 @@
     v-else-if="validated && question.type === 'shorttext'"
     class="q-pa-md"
   >
-    <div>{{ $t('quiz.question.valid_answers') + '\'' + question.answers.filter(a => a.valid).map(a => a.text).join('\', \'') + '\'' }}</div>
+    <div>
+      {{
+        $t("quiz.question.valid_answers") +
+        "'" +
+        question.answers
+          .filter((a) => a.valid)
+          .map((a) => a.text)
+          .join("', '") +
+        "'"
+      }}
+    </div>
   </q-card-section>
   <feedback-question-display
     v-if="question.type === 'feedback'"
     v-model="newResponse"
     :question="question"
     @feedback="$emit('feedback', $event)"
-    />
+  />
 </template>
 
 <script setup>

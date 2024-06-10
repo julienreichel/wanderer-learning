@@ -1,4 +1,4 @@
-import ServicePrototype from './service-prototype';
+import ServicePrototype from "./service-prototype";
 
 /**
  * Provide service to get and store reporting
@@ -13,7 +13,6 @@ export default class StepReportingService extends ServicePrototype {
     super();
 
     this.model = this.client.models.StepReporting;
-
   }
 
   /**
@@ -29,7 +28,7 @@ export default class StepReportingService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async list(params = {}) {
-    params.authMode = 'userPool';
+    params.authMode = "userPool";
 
     // Remove deleted items from the list
     /*
@@ -44,7 +43,7 @@ export default class StepReportingService extends ServicePrototype {
     } else if (params.userId && params.username) {
       params.owner = `${params.userId}::${params.username}`;
     }
-    let query = null
+    let query = null;
     if (params.lectureId) {
       query = this.model.listStepReportingByLectureIdAndOwner;
       if (params.owner) {
@@ -58,7 +57,7 @@ export default class StepReportingService extends ServicePrototype {
     } else if (params.owner) {
       query = this.model.listStepReportingByOwnerAndCreatedAt;
       if (!params.sortDirection) {
-        params.sortDirection = 'DESC';
+        params.sortDirection = "DESC";
       }
     } else {
       query = this.model.listStepReportings;
@@ -78,7 +77,7 @@ export default class StepReportingService extends ServicePrototype {
   async update(input) {
     let payload = { ...input };
     delete payload.lectureStep;
-    return super.update(payload)
+    return super.update(payload);
   }
 
   /**
@@ -87,14 +86,22 @@ export default class StepReportingService extends ServicePrototype {
    * @returns {Array} userTimeReportings
    */
   computeUserTimeReportings(reports) {
-    const buckets = [60 * 5, 60 * 10, 60 * 15, 'more'];
+    const buckets = [60 * 5, 60 * 10, 60 * 15, "more"];
 
-    const stats = reports.reduce((acc, stepReport) => {
-      const stepTimeSpent = stepReport.reportings.reduce((acc, partReport) => acc += partReport.time, 0);
-      const bucket = buckets.findIndex((bucket) => stepTimeSpent < bucket || bucket === 'more');
-      acc[bucket] += 1;
-      return acc;
-    }, buckets.map(() => 0));
+    const stats = reports.reduce(
+      (acc, stepReport) => {
+        const stepTimeSpent = stepReport.reportings.reduce(
+          (acc, partReport) => (acc += partReport.time),
+          0,
+        );
+        const bucket = buckets.findIndex(
+          (bucket) => stepTimeSpent < bucket || bucket === "more",
+        );
+        acc[bucket] += 1;
+        return acc;
+      },
+      buckets.map(() => 0),
+    );
 
     return stats;
   }
@@ -105,30 +112,29 @@ export default class StepReportingService extends ServicePrototype {
    */
   computeRatings(reports) {
     const stats = reports.reduce((accStep, stepReport) => {
-
       return stepReport.reportings.reduce((accPart, partReport) => {
-
         if (!partReport.responses) return accPart;
         return partReport.responses.reduce((acc, response) => {
-
           if (!response.feedbackType) return acc;
           if (!acc[response.feedbackType]) {
             acc[response.feedbackType] = { total: 0, divisor: 0, texts: [] };
           }
-          if (response.feedbackType === 'text') {
+          if (response.feedbackType === "text") {
             acc[response.feedbackType].texts.push(response.response);
           } else {
             acc[response.feedbackType].total += Number(response.response);
           }
           acc[response.feedbackType].divisor += 1;
           return acc;
-
         }, accPart);
-
       }, accStep);
-
     }, {});
-    Object.keys(stats).forEach(key => stats[key] = stats[key].texts.length ? stats[key].texts : Math.round(stats[key].total / stats[key].divisor * 10) / 10);
+    Object.keys(stats).forEach(
+      (key) =>
+        (stats[key] = stats[key].texts.length
+          ? stats[key].texts
+          : Math.round((stats[key].total / stats[key].divisor) * 10) / 10),
+    );
     return stats;
   }
 
@@ -138,18 +144,25 @@ export default class StepReportingService extends ServicePrototype {
    * @param {'day'|'month'} [granularity] granularity of the histogram, can be 'day' or 'month'
    * @returns {Array} timestampDistribution
    */
-  computeTimestampDistribution(reports, granularity = 'day') {
-    const timestampDistribution = reports.map(stepReport => stepReport.createdAt).reduce((acc, timestamp) => {
-      const date = new Date(timestamp);
-      const key = granularity === 'day' ? `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}` : `${date.getFullYear()}-${date.getMonth()}}`;
-      if (!acc[key]) {
-        acc[key] = 0;
-      }
-      acc[key]++;
-      return acc;
-    }, {});
+  computeTimestampDistribution(reports, granularity = "day") {
+    const timestampDistribution = reports
+      .map((stepReport) => stepReport.createdAt)
+      .reduce((acc, timestamp) => {
+        const date = new Date(timestamp);
+        const key =
+          granularity === "day"
+            ? `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+            : `${date.getFullYear()}-${date.getMonth()}}`;
+        if (!acc[key]) {
+          acc[key] = 0;
+        }
+        acc[key]++;
+        return acc;
+      }, {});
 
-    return Object.entries(timestampDistribution).map(([key, value]) => ({ key, value })).sort((a, b) => a.key.localeCompare(b.key));
+    return Object.entries(timestampDistribution)
+      .map(([key, value]) => ({ key, value }))
+      .sort((a, b) => a.key.localeCompare(b.key));
   }
 
   /**
@@ -157,10 +170,10 @@ export default class StepReportingService extends ServicePrototype {
    * @param {Array} steps
    * @param {Array} stepsSummary
    * @returns {Array} pointsPerStep
-  */
+   */
   computePointsPerStep(step, stepsSummary) {
     const stepSummary = stepsSummary.find(
-      (item) => item.lectureStepId === step.id
+      (item) => item.lectureStepId === step.id,
     );
     if (!stepSummary || !stepSummary.reportings?.length)
       return { averagePoints: 0 };
@@ -169,7 +182,7 @@ export default class StepReportingService extends ServicePrototype {
       if (!part.responses?.length) return {};
       const totalPoints = part.responses.reduce(
         (acc, response) => acc + response.points,
-        0
+        0,
       );
       const averagePoints = totalPoints / part.responses.length;
 
@@ -177,15 +190,15 @@ export default class StepReportingService extends ServicePrototype {
     });
     const totalPoints = parts.reduce(
       (acc, part) => acc + (part.totalPoints || 0),
-      0
+      0,
     );
     const averageSumPoints = parts.reduce(
       (acc, part) => acc + (part.averagePoints || 0),
-      0
+      0,
     );
     const divisor = parts.reduce(
       (acc, part) => acc + (part.divisor ? 1 : 0),
-      0
+      0,
     );
     const averagePoints = divisor ? averageSumPoints / divisor : 1;
 
@@ -201,13 +214,14 @@ export default class StepReportingService extends ServicePrototype {
   getLastReports(reports) {
     // keep only the latest report for each step
     const stepReports = reports.reduce((acc, report) => {
-      if (!acc[report.lectureStepId] || acc[report.lectureStepId].createdAt < report.createdAt) {
+      if (
+        !acc[report.lectureStepId] ||
+        acc[report.lectureStepId].createdAt < report.createdAt
+      ) {
         acc[report.lectureStepId] = report;
       }
       return acc;
     }, {});
     return Object.values(stepReports);
-  };
-
+  }
 }
-

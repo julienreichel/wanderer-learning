@@ -1,15 +1,13 @@
 import { inject } from "vue";
-import { useI18n } from 'vue-i18n';
-import { uid } from 'quasar';
+import { useI18n } from "vue-i18n";
+import { uid } from "quasar";
 
 export function useChecks() {
-
   const { storage: storageService } = inject("services");
   const { t } = useI18n();
 
   const checkPart = async (part) => {
     if (part.type === "quiz") {
-
       if (part.questions.length === 0) {
         throw { message: t("quiz.json.quiz_no_questions") };
       }
@@ -19,7 +17,10 @@ export function useChecks() {
         }
 
         // check that at least one answer is valid
-        if (question.type !== "feedback" && question.answers.filter((a) => a.valid).length === 0) {
+        if (
+          question.type !== "feedback" &&
+          question.answers.filter((a) => a.valid).length === 0
+        ) {
           throw { message: t("quiz.json.quiz_no_valid_answers") };
         }
       });
@@ -43,7 +44,7 @@ export function useChecks() {
       }
     }
     return part;
-  }
+  };
 
   const preparePart = (part) => {
     let data = { ...part };
@@ -57,7 +58,7 @@ export function useChecks() {
       delete data.src;
     }
     return data;
-  }
+  };
 
-  return { checkPart, preparePart }
+  return { checkPart, preparePart };
 }

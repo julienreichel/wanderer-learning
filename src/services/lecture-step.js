@@ -1,5 +1,5 @@
-import ServicePrototype from './service-prototype';
-import StorageService from './storage'
+import ServicePrototype from "./service-prototype";
+import StorageService from "./storage";
 
 /**
  * Provide service to get and store lecture contents
@@ -18,7 +18,18 @@ export default class LectureStepService extends ServicePrototype {
 
     this.lastSaved = null;
 
-    this.selectionSet = ['id', 'title', 'type', 'order', 'owner', 'identityId', 'lecture.*', 'lecture.course.*', 'concept.*', 'parts.*'];
+    this.selectionSet = [
+      "id",
+      "title",
+      "type",
+      "order",
+      "owner",
+      "identityId",
+      "lecture.*",
+      "lecture.course.*",
+      "concept.*",
+      "parts.*",
+    ];
   }
 
   sort(steps) {
@@ -34,9 +45,9 @@ export default class LectureStepService extends ServicePrototype {
   cleanParts(parts) {
     if (!parts) return;
 
-    parts.forEach(part => {
+    parts.forEach((part) => {
       delete part.url;
-    })
+    });
   }
 
   /**
@@ -67,7 +78,6 @@ export default class LectureStepService extends ServicePrototype {
     delete payload.userTimeReportings;
     delete payload.ratings;
 
-
     this.lastSaved = await super.update(payload);
     return this.lastSaved;
   }
@@ -89,8 +99,12 @@ export default class LectureStepService extends ServicePrototype {
     // inject the url of the image
     if (params.resolveImg && step.parts) {
       for (const part of step.parts) {
-        if ((part.type === 'img' || part.type === 'text') && part.src && part.src !== "") {
-          if (part.src.startsWith('http')) {
+        if (
+          (part.type === "img" || part.type === "text") &&
+          part.src &&
+          part.src !== ""
+        ) {
+          if (part.src.startsWith("http")) {
             part.url = part.src;
             continue;
           }
@@ -114,7 +128,7 @@ export default class LectureStepService extends ServicePrototype {
     if (!content.id) return;
 
     // get missing data if needed
-    if (!content.parts && content.type === 'step') {
+    if (!content.parts && content.type === "step") {
       const fullLectureStep = await this.get(content.id, { resolveImg: false });
       content._version = fullLectureStep._version;
       content.parts = fullLectureStep.parts;
@@ -123,7 +137,7 @@ export default class LectureStepService extends ServicePrototype {
     // actually soft deleted in the backend
     if (content.part && params.clearImg) {
       for (const part of content.parts) {
-        if (part.type === 'img' && part.src) {
+        if (part.type === "img" && part.src) {
           this.storageService.removeImg(part.src);
           part.src = null;
         }
@@ -142,7 +156,7 @@ export default class LectureStepService extends ServicePrototype {
     if (!part.options) {
       part.options = [];
     }
-    let old = part.options.find(option => option.name === name);
+    let old = part.options.find((option) => option.name === name);
     if (old) {
       old.value = value;
     } else {
@@ -158,6 +172,6 @@ export default class LectureStepService extends ServicePrototype {
     if (!part.options) {
       part.options = [];
     }
-    return part.options.find(option => option.name === name)?.value;
+    return part.options.find((option) => option.name === name)?.value;
   }
 }

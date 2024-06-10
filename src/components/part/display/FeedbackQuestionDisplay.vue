@@ -1,10 +1,6 @@
 <template>
   <q-card-section>
-    <q-input
-      v-if="feedbackType === 'text'"
-      clearable
-      v-model="newResponse"
-    >
+    <q-input v-if="feedbackType === 'text'" clearable v-model="newResponse">
     </q-input>
     <div v-else-if="feedbackType === 'roti'">
       <q-icon
@@ -58,7 +54,7 @@ import { computed, ref, watch } from "vue";
 const newResponse = defineModel();
 
 const props = defineProps({
-  question: { type: Object, required: true }
+  question: { type: Object, required: true },
 });
 
 const emit = defineEmits(["feedback"]);

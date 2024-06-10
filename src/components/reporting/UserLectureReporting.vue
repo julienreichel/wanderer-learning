@@ -16,9 +16,9 @@
 </template>
 
 <script setup>
-import PointsPerStepPolarChart from 'src/components/charts/PointsPerStepPolarChar.vue';
-import { computed, inject } from 'vue';
-const { stepReporting: reportingService } = inject('services');
+import PointsPerStepPolarChart from "src/components/charts/PointsPerStepPolarChar.vue";
+import { computed, inject } from "vue";
+const { stepReporting: reportingService } = inject("services");
 
 const props = defineProps({
   stepsSummary: { type: Object },
@@ -33,26 +33,23 @@ const chartSerie = computed(() => {
   if (!props.stepsSummary?.length) return [];
 
   const stepsSerie = props.steps.map((step) =>
-    reportingService.computePointsPerStep(step, props.stepsSummary)
+    reportingService.computePointsPerStep(step, props.stepsSummary),
   );
   return stepsSerie.map(
-    ({ averagePoints }) => Math.round(averagePoints * 10) / 10
+    ({ averagePoints }) => Math.round(averagePoints * 10) / 10,
   );
 });
 
 const totalTime = computed(() => {
   if (!props.stepsSummary?.length) return;
   const times = props.stepsSummary.map((item) => {
-    return item.reportings.reduce(
-      (acc, reporting) => acc + reporting.time,
-      0
-    );
+    return item.reportings.reduce((acc, reporting) => acc + reporting.time, 0);
   });
   const totalTime = times.reduce((acc, item) => acc + item, 0);
   if (totalTime < 60) {
-    return totalTime + ' sec';
+    return totalTime + " sec";
   } else {
-    return Math.round(totalTime / 60) + ' min';
+    return Math.round(totalTime / 60) + " min";
   }
 });
 </script>
