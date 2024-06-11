@@ -11,6 +11,33 @@
           type="textarea"
           rows="5"
         />
+        <q-toggle
+          v-model="advanced"
+          :label="$t('wizard.lecture.advanced')"
+        />
+        <div v-if="advanced" class="q-pa-md q-col-gutter-sm">
+          <q-input
+            outlined
+            v-model="style"
+            :label="$t('wizard.lecture.style')"
+          />
+          <q-input
+            outlined
+            v-model="tone"
+            :label="$t('wizard.lecture.tone')"
+          />
+          <q-input
+            outlined
+            v-model="audience"
+            :label="$t('wizard.lecture.audience')"
+          />
+          <q-select
+            outlined
+            v-model="model"
+            :options="['gpt-3.5-turbo', 'gpt-4o']"
+            :label="$t('wizard.lecture.model')"
+          />
+        </div>
         <q-stepper-navigation>
           <q-space />
           <q-btn
@@ -254,6 +281,12 @@ const props = defineProps({
 
 const step = ref(1);
 const courseDescription = ref("Introduction to Agile Methodologies");
+const advanced = ref(false);
+const style = ref("Richard Feldman Style: Focus on practical and Hands-On learning, simplifying complex concepts, iterative Learning and encouraging exploration and experimentation.");
+const tone = ref("General readership.");
+const audience = ref("Enthusiastic and engaging with a touch of humour.");
+const model = ref("gpt-3.5-turbo");
+
 const title = ref("");
 const keyConcepts = ref([]);
 const learningObjectives = ref([]);
@@ -296,6 +329,12 @@ const removePart = (stepIndex, itemIndex) => {
 
 const generateTitleAndObjectives = async () => {
   loading.value = true;
+  aiService.setOptions({
+    style: style.value,
+    tone: tone.value,
+    audience: audience.value,
+    model: model.value,
+  });
 
   const response = await aiService.getConcepts(courseDescription.value);
 

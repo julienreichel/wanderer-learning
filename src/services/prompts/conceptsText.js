@@ -21,7 +21,7 @@ ${audience}
 Response Format:
 The response should be in JSON format following this structure:
 { "pages": [ "<h5>Title</h5><div>Description</div>", "..." ] }
-Multiple titles are allowed in one part. Descriptions may contain the following HTML tags: <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <hr>, <a>.
+Multiple titles are allowed in one part. Descriptions should contain only the following HTML tags: <h3>, <h5>, <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <hr>, <a>.
 `;
 
 const prompt = (description, section) => {
@@ -51,7 +51,7 @@ Section content:
 ${sectionItems}
 
 Example of output:
-{ "pages": [ "<h5>${sectionName}</h5><div>...</div>", ${section.items.map(({ name, description }) => `"<h5>${name}</h5><div>...</div>"`).join(", ")} ] }
+{ "pages": [ "<h5>${sectionName}</h5><div>...</div>", ${section.items.map(({ name }) => `"<h5>${name}</h5><div>...</div>"`).join(", ")} ] }
 `;
 };
 

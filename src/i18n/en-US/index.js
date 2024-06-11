@@ -150,6 +150,11 @@ export default {
       title: "Lecture Description",
       description: "Descire the content of the lecture",
       label: "Description",
+      style: "Style",
+      audience: "Audience",
+      tone: "Tone",
+      model: "Model",
+      advanced: "Advanced"
     },
     titleKeyConceptsObjectives: {
       title: "Concepts",

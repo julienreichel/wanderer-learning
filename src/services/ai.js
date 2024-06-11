@@ -15,23 +15,24 @@ export default class ServicePrototype {
     this.client = generateClient();
 
     this.model = null;
-    this.style = `Emulate "Training from the Back of the Room" by Sharon Bowman.`;
+    this.style = `Richard Feldman Style: Engaging and practical teaching style. Focus on practical and Hands-On Learning, simplifying complex concepts, iterative Learning and encouraging exploration and experimentation.`;
     this.audience = `General readership.`;
-    this.tone = `Enthusiastic and engaging.`;
+    this.tone = `Enthusiastic and engaging with a touch of humour.`;
+    this.model = "gpt-3.5-turbo";
   }
 
-  setStyle(style) {
-    this.style = style;
-  }
-
-  setAudience(audience) {
-    this.audience = audience;
+  setOptions(options = {}) {
+    if (options.style && options.style !== "") this.style = options.style;
+    if (options.model && options.model !== "") this.model = options.model;
+    if (options.audience && options.audience !== "") this.audience = options.audience;
+    if (options.tone) this.tone = options.tone;
   }
 
   async query(query) {
     console.log(query.system);
     console.log(query.prompt);
 
+    query.model = query.model || this.model;
     try {
       const { data, errors } = await this.client.queries.AIQuery(query, {
         authMode: "userPool",
@@ -112,6 +113,13 @@ export default class ServicePrototype {
   }
 
   async getConceptContent(description, section) {
+    const system = conceptsText.system(this.style, this.tone, this.audience);
+    const prompt = conceptsText.prompt(description, section);
+
+    return this.query({ system, prompt, token: 3000, model: "gpt-4o" });
+  }
+
+  async getConceptContentAsHtml(description, section) {
     const system = conceptsText.system(this.style, this.tone, this.audience);
     const prompt = conceptsText.prompt(description, section);
 
