@@ -154,7 +154,8 @@ export default {
       audience: "Audience",
       tone: "Tone",
       model: "Model",
-      advanced: "Advanced"
+      advanced: "Advanced",
+      queryType: "Use extended query for the concepts",
     },
     titleKeyConceptsObjectives: {
       title: "Concepts",

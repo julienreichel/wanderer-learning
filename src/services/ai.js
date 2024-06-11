@@ -5,6 +5,8 @@ import connectQuiz from "./prompts/connectQuiz.js";
 import connectText from "./prompts/connectText.js";
 import conceptsQuiz from "./prompts/conceptsQuiz.js";
 import conceptsText from "./prompts/conceptsText.js";
+import conceptsTextHtml from "./prompts/conceptsTextHtml.js";
+import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import practiceQuiz from "./prompts/finalQuiz.js";
 
 export default class ServicePrototype {
@@ -42,6 +44,9 @@ export default class ServicePrototype {
         return {};
       }
       console.log(data);
+      if (query.format === "text") {
+        return data;
+      }
       return JSON.parse(data);
     } catch (e) {
       console.error(e);
@@ -112,18 +117,34 @@ export default class ServicePrototype {
     return this.query({ system, prompt, token: nbQuestions * 200 });
   }
 
-  async getConceptContent(description, section) {
-    const system = conceptsText.system(this.style, this.tone, this.audience);
-    const prompt = conceptsText.prompt(description, section);
+  async getConceptContent(description, section, useHtmlQuery = false) {
 
-    return this.query({ system, prompt, token: 3000, model: "gpt-4o" });
-  }
+    if (useHtmlQuery) {
+      let pages = [];
+      let system = conceptsTextHtmlIntro.system(this.style, this.tone, this.audience);
+      let prompt = conceptsTextHtmlIntro.prompt(description, section);
 
-  async getConceptContentAsHtml(description, section) {
-    const system = conceptsText.system(this.style, this.tone, this.audience);
-    const prompt = conceptsText.prompt(description, section);
+      let html = await this.query({ system, prompt, token: 2000, format: "text" });
+      // remove starting "```html" and ending "```" if present
+      html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
+      pages.push(html);
 
-    return this.query({ system, prompt, token: 3000, model: "gpt-4o" });
+      for (let i = 0; i < section.items.length; i++) {
+        system = conceptsTextHtml.system(this.style, this.tone, this.audience);
+        prompt = conceptsTextHtml.prompt(description, section, i);
+        let html = await this.query({ system, prompt, token: 2000, format: "text" });
+        // remove starting "```html" and ending "```" if present
+        html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
+        pages.push(html);
+      }
+
+      return { pages };
+    } else {
+      const system = conceptsText.system(this.style, this.tone, this.audience);
+      const prompt = conceptsText.prompt(description, section);
+
+      return this.query({ system, prompt, token: 3000, model: "gpt-4o" });
+    }
   }
 
   async getFinalQuiz(description, concepts, objectives, toc, nbQuestions = 10) {

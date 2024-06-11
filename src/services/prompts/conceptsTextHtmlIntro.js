@@ -22,7 +22,7 @@ The response should be in HTML format, using only the following HTML tags: <h5> 
 The link <a> can only be use to link public web pages.
 `;
 
-const prompt = (description, section, idx) => {
+const prompt = (description, section) => {
   const sectionName = section.name;
   const sectionItems = section.items
     .map(({ name, description }) => `- ${name}: ${description}`)

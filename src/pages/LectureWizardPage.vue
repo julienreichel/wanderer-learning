@@ -37,6 +37,10 @@
             :options="['gpt-3.5-turbo', 'gpt-4o']"
             :label="$t('wizard.lecture.model')"
           />
+          <q-toggle
+            v-model="extendedQueryForConcept"
+            :label="$t('wizard.lecture.queryType')"
+          />
         </div>
         <q-stepper-navigation>
           <q-space />
@@ -282,10 +286,11 @@ const props = defineProps({
 const step = ref(1);
 const courseDescription = ref("Introduction to Agile Methodologies");
 const advanced = ref(false);
-const style = ref("Richard Feldman Style: Focus on practical and Hands-On learning, simplifying complex concepts, iterative Learning and encouraging exploration and experimentation.");
-const tone = ref("General readership.");
-const audience = ref("Enthusiastic and engaging with a touch of humour.");
+const style = ref("Richard Feynman Style: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.");
+const audience = ref("General readership.");
+const tone = ref("Accessible, Engaging, Entertaining, Challenging");
 const model = ref("gpt-3.5-turbo");
+const extendedQueryForConcept = ref(false);
 
 const title = ref("");
 const keyConcepts = ref([]);
@@ -412,6 +417,12 @@ const createQuizParts = (quiz, nbQuestionPerQuiz) => {
       if (mappingTypes[question.type]) {
         question.type = mappingTypes[question.type];
       }
+
+      //sometimes it changes explanations to explanation
+      if (question.explanation) {
+        question.explanations = question.explanation;
+        delete question.explanation;
+      }
     });
     parts.push({
       type: "quiz",
@@ -498,17 +509,21 @@ const generateLecture = async () => {
     progressLabel.value = t("wizard.generating.concept", {
       concept: conceptName,
     });
+    progress.value += 0.25 / tableOfContent.value.length;
 
     const conceptText = await aiService.getConceptContent(
-      courseDescription.value,
-      step,
-    );
+        courseDescription.value,
+        step,
+        extendedQueryForConcept.value
+      );
+
     conceptText.pages.forEach((text) => {
       parts.push({
         type: "text",
         text,
       });
     });
+
     progress.value += 0.25 / tableOfContent.value.length;
 
     const conceptQuiz = await aiService.getConceptQuiz(
@@ -528,13 +543,11 @@ const generateLecture = async () => {
       order: "" + Date.now(),
       parts,
     });
-
-    progress.value += 0.25 / tableOfContent.value.length;
   }
 
   // creating the practive quiz step
-  progress.value = 80 / 100;
   progressLabel.value = t("wizard.generating.practice");
+  progress.value = 90 / 100;
 
   // Generating the practice quiz
   nbQuiz = 4;
