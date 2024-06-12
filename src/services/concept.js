@@ -23,11 +23,32 @@ export default class ConceptService extends ServicePrototype {
       "description",
       "lectures.id",
       "lectures.lecture.*",
+      "lectures.lecture.steps.title",
       "lectures.lecture.steps.id",
-      ,
+      "lectures.lecture.steps.order",
       "lectures.lecture.concepts.concept.*",
       "steps.*",
     ];
+  }
+
+  /**
+   * Get a concept
+   *
+   * @param {string} id the lectureSegment id
+   * @returns {Promise<object>}
+   */
+  async get(id) {
+    let concept = await super.get(id);
+    if (!concept) return;
+
+    concept.lectures?.forEach(({ lecture }) => {
+      console.log(lecture);
+      lecture.steps = lecture.steps?.sort(
+        (a, b) => Number(a.order) - Number(b.order),
+      );
+    });
+
+    return concept;
   }
 
   /**

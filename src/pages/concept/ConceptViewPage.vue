@@ -53,17 +53,7 @@ const loadConcept = async (id) => {
       userId,
     });
     if (reports.length) {
-      // keep only the latest report for each step
-      const summary = reports.reduce((acc, report) => {
-        if (
-          !acc[report.lectureStepId] ||
-          acc[report.lectureStepId].createdAt < report.createdAt
-        ) {
-          acc[report.lectureStepId] = report;
-        }
-        return acc;
-      }, {});
-      lecture.stepsSummary = Object.values(summary);
+      lecture.stepsSummary = reportingService.getLastReports(reports);
     }
   });
 };

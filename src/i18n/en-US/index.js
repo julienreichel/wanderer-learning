@@ -145,6 +145,7 @@ export default {
         },
       },
     },
+    step_not_found: "<deleted>",
   },
   wizard: {
     lecture: {

@@ -7,10 +7,11 @@
         :to="{ name: 'LectureView', params: { id: report.step?.lecture.id } }"
       >
         <q-item-section>
-          <q-item-label
+          <q-item-label v-if="report.step"
             >{{ report.step?.lecture.title }} /
             {{ report.step?.title }}</q-item-label
           >
+          <q-item-label v-else>{{ $t('reporting.step_not_found') }}</q-item-label>
           <q-item-label caption>{{ report.createdAt }}</q-item-label>
         </q-item-section>
         <q-item-section side top>

@@ -22,7 +22,6 @@ export default class CourseService extends ServicePrototype {
       "owner",
       "lectures.*",
       "lectures.steps.*",
-      ,
       "lectures.concepts.concept.*",
     ];
   }
@@ -50,6 +49,7 @@ export default class CourseService extends ServicePrototype {
    */
   async get(id) {
     let course = await super.get(id);
+    if (!course) return;
 
     course.lectures = course.lectures.sort(
       (a, b) => Number(a.order) - Number(b.order),
