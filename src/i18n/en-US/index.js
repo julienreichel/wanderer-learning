@@ -105,6 +105,7 @@ export default {
       quiz: "Quiz",
       step: "Step",
       title: "Step Title",
+      file_upload: "Drag and drop file(s) to create slides",
       confirm_delete_step: "Do you really want to delete this step ?",
     },
   },
