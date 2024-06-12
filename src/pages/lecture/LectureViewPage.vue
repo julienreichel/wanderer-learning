@@ -26,6 +26,7 @@
                   img: 'image',
                   video: 'smart_display',
                   quiz: 'help_center',
+                  iframe: 'open_in_browser',
                 }[part.type]
               "
               color="primary"
