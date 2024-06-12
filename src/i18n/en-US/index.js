@@ -148,7 +148,7 @@ export default {
   wizard: {
     lecture: {
       title: "Lecture Description",
-      description: "Descire the content of the lecture",
+      description: "Describe the content of the lecture",
       label: "Description",
       style: "Style",
       audience: "Audience",

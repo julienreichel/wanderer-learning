@@ -151,13 +151,10 @@ export default class ServicePrototype {
       .map(({ name, description }) => `${name}: ${description}`)
       .join("\n");
     const objectivesList = objectives.join("\n");
+
     const tocList = toc
       .map(
-        ({ name, items }) =>
-          `${name}
-  ${items.map(({ name, description }) => `- ${name}: ${description}`).join("\n")}
-  `,
-      )
+        ({ name, items }) => name + "\n" + items.map(({ name, description }) => `- ${name}: ${description}`).join("\n"))
       .join("\n");
 
     const system = practiceQuiz.system(this.style, this.tone, this.audience);
