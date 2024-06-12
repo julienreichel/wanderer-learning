@@ -3,7 +3,7 @@ import { a, defineData, defineFunction, secret } from "@aws-amplify/backend";
 
 const AIQueryHandler = defineFunction({
   entry: "./ai-query/ai-query.ts",
-  timeoutSeconds: 300,
+  timeoutSeconds: 30, // more than 30s is useless, because AppSync has a hard 30s timeout
   environment: {
     OPENAI_API_KEY: secret("OPENAI_API_KEY"),
     OPENAI_MODEL: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
