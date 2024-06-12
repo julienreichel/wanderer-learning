@@ -22,7 +22,7 @@ The response should be in HTML format, using only the following HTML tags: <h5> 
 The link <a> can only be use to link public web pages.
 `;
 
-const prompt = (description, section) => {
+const prompt = (section) => {
   const sectionName = section.name;
   const sectionItems = section.items
     .map(({ name, description }) => `- ${name}: ${description}`)
@@ -30,7 +30,7 @@ const prompt = (description, section) => {
 
   return `
 You are an expert instructor.
-Your task is to create introduction page for an online self-study course chapter titled "${sectionName}" of the lecture titled "${description}".
+Your task is to create introduction page for an online self-study course chapter titled "${sectionName}".
 You MUST cover the content thoroughly.
 You will be penalized if the descriptions are not detailed enough.
 

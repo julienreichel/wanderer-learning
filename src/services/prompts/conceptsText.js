@@ -21,10 +21,11 @@ ${audience}
 Response Format:
 The response should be in JSON format following this structure:
 { "pages": [ "<h5>Title</h5><div>Description</div>", "..." ] }
-Multiple titles are allowed in one part. Descriptions should contain only the following HTML tags: <h3>, <h5>, <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <hr>, <a>.
+Multiple titles are allowed in one part. Descriptions should contain only the following HTML tags: <h3>, <h5>, <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <hr>, <a>, <table>, <tr>, <td>.
+The link <a> can only be use to link public web pages.
 `;
 
-const prompt = (description, section) => {
+const prompt = (section) => {
   const sectionName = section.name;
   const sectionItems = section.items
     .map(({ name, description }) => `- ${name}: ${description}`)
@@ -40,9 +41,6 @@ You will be penalized if the descriptions are not detailed enough.
 Think step by step and consider all necessary information.
 
 Here are the details:
-
-Lecture description:
-${description}
 
 Section title:
 ${sectionName}

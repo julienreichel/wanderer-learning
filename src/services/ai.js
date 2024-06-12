@@ -100,7 +100,7 @@ export default class ServicePrototype {
     return this.query({ system, prompt, token: 2000 });
   }
 
-  async getConceptQuiz(description, section, nbQuestions = 10) {
+  async getConceptQuiz(section, nbQuestions = 10) {
     const sectionName = section.name;
     const sectionItems = section.items
       .map(({ name, description }) => `${name}: ${description}`)
@@ -108,7 +108,6 @@ export default class ServicePrototype {
 
     const system = conceptsQuiz.system(this.style, this.tone, this.audience);
     const prompt = conceptsQuiz.prompt(
-      description,
       sectionName,
       sectionItems,
       nbQuestions,
@@ -117,12 +116,12 @@ export default class ServicePrototype {
     return this.query({ system, prompt, token: nbQuestions * 200 });
   }
 
-  async getConceptContent(description, section, useHtmlQuery = false) {
+  async getConceptContent(section, useHtmlQuery = false) {
 
     if (useHtmlQuery) {
       let pages = [];
       let system = conceptsTextHtmlIntro.system(this.style, this.tone, this.audience);
-      let prompt = conceptsTextHtmlIntro.prompt(description, section);
+      let prompt = conceptsTextHtmlIntro.prompt(section);
 
       let html = await this.query({ system, prompt, token: 2000, format: "text" });
       // remove starting "```html" and ending "```" if present
@@ -131,7 +130,7 @@ export default class ServicePrototype {
 
       for (let i = 0; i < section.items.length; i++) {
         system = conceptsTextHtml.system(this.style, this.tone, this.audience);
-        prompt = conceptsTextHtml.prompt(description, section, i);
+        prompt = conceptsTextHtml.prompt(section, i);
         let html = await this.query({ system, prompt, token: 2000, format: "text" });
         // remove starting "```html" and ending "```" if present
         html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
@@ -143,7 +142,7 @@ export default class ServicePrototype {
       const system = conceptsText.system(this.style, this.tone, this.audience);
       const prompt = conceptsText.prompt(description, section);
 
-      return this.query({ system, prompt, token: 3000, model: "gpt-4o" });
+      return this.query({ system, prompt, token: 4000, model: "gpt-4o" });
     }
   }
 

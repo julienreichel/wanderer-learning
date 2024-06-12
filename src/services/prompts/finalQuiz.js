@@ -3,8 +3,14 @@ const system = (style, tone, audience) => `
 You are tasked with creating a final quiz for an online lecture based on key concepts, learning objective and a table of content.
 The purpose of the quiz is to eveluate if the user are able to perform the learing objectives.
 <Objective>Given the lecture description, the key concepts, the learning objectives and the table of content,create a quiz covering the lecture table of content.
-The quiz should encompass multiple-choice questions, true/false questions, myth/fact statements,
-multiple choice with several correct answers, sentences with various possible endings and sentence with one missing word.
+The quiz should encompass
+- multiple-choice questions
+- true/false choice
+- myth/fact choice
+- multiple checkbox with several correct answers
+- sentences with a choice of various possible endings
+- sentence with a choice of missing words.
+- sentence with one and only one missing word
 The quiz difficulty should be progressive, starting with easy questions and ending with more complex ones.
 <Style>${style}
 <Tone>${tone}

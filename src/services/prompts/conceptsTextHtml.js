@@ -5,6 +5,8 @@ The students will study independently and use the material to prepare for a quiz
 
 Objective:
 Your task is to create an HTML fragment, it must cover the specified content thoroughly, ensuring students can grasp the basics and be able to answer a quiz later.
+When appropriate, add examples and references to public matherial.
+
 You will be penalized if the descriptions are not detailed enough.
 
 
@@ -18,11 +20,11 @@ Audience:
 ${audience}
 
 Response Format:
-The response should be in HTML format, using only the following HTML tags: <h5> <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <hr>, <a>.
+The response should be in HTML format, using only the following HTML tags: <h5> <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <hr>, <a>, <table>, <tr>, <td>.
 The link <a> can only be use to link public web pages.
 `;
 
-const prompt = (description, section, idx) => {
+const prompt = (section, idx) => {
   const sectionName = section.name;
   const sectionItems = section.items
     .map(({ name, description }) => `- ${name}: ${description}`)
@@ -33,7 +35,7 @@ const prompt = (description, section, idx) => {
 
   return `
 You are an expert instructor.
-Your task is to create detailed page for an online self-study course section titled "${activeSectionName}" part of the chapter titled "${sectionName}" of the lecture titled "${description}".
+Your task is to create detailed page for an online self-study course section titled "${activeSectionName}" part of the chapter titled "${sectionName}".
 You MUST cover the content thoroughly.
 You will be penalized if the descriptions are not detailed enough.
 

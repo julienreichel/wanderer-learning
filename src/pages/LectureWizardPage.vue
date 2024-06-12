@@ -284,7 +284,7 @@ const props = defineProps({
 });
 
 const step = ref(1);
-const courseDescription = ref("Introduction to Agile Methodologies");
+const courseDescription = ref("Introduction to Agile");
 const advanced = ref(false);
 const style = ref("Richard Feynman Style: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.");
 const audience = ref("General readership.");
@@ -413,6 +413,7 @@ const createQuizParts = (quiz, nbQuestionPerQuiz) => {
         "fill-in-the-blank": "shorttext",
         "missing-word": "shorttext",
         sentence: "radio",
+        "sentence-ending": "radio",
       };
       if (mappingTypes[question.type]) {
         question.type = mappingTypes[question.type];
@@ -512,7 +513,6 @@ const generateLecture = async () => {
     progress.value += 0.25 / tableOfContent.value.length;
 
     const conceptText = await aiService.getConceptContent(
-        courseDescription.value,
         step,
         extendedQueryForConcept.value
       );
@@ -527,7 +527,6 @@ const generateLecture = async () => {
     progress.value += 0.25 / tableOfContent.value.length;
 
     const conceptQuiz = await aiService.getConceptQuiz(
-      courseDescription.value,
       step,
       nbQuiz * nbQuestionPerQuiz,
     );

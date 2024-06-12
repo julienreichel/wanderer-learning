@@ -24,7 +24,6 @@ const prompt = (description, conceptsList, nbQuestions) => `
 Your task is to create a quiz and to ensure that the quiz adheres to the specified types ("radio", "checkbox") and that explanations provide additional information without repeating the question.
 You will be penalized for creating new types or providing too short explanations.
 The quiz MUST have ${nbQuestions} questions and cover the lecture description and key concepts bellow.
-The questions must include multiple-choice questions, true/false questions, myth/fact, multiple choice with multiple valid answers, and sentence with mulitple possible endings.
 It must be possible to answer the questions only based on general knowledge.
 Think step by step and consider all necessary information.
 
