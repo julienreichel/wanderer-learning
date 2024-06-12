@@ -215,9 +215,9 @@ const add = (type) => {
     questions,
     options: [],
   };
-
-  parts.value.splice(step.value + 1, 0, newStep);
-  step.value = step.value + 1;
+  const newStepPos = Math.min(Number(step.value) + 1, parts.value.length);
+  parts.value.splice(newStepPos, 0, newStep);
+  step.value = newStepPos;
 };
 
 const finish = (success = true) => {
