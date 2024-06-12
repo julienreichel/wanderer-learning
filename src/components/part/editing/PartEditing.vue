@@ -103,7 +103,7 @@ const uploaded = async (files) => {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .iframe-16-9 {
   position: relative;
   width: 100%;

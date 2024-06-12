@@ -31,8 +31,9 @@
         <q-icon name="play_circle" size="xl" />
       </q-card-section>
       <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
-        <div class="aspect-ratio-16-9">
+        <div class="aspect-ratio-16-9" style="position: relative;">
           <iframe :title="part.text" :src="part.src"></iframe>
+          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
         </div>
       </q-card-section>
       <q-card-actions v-if="editing" class="q-pa-xs">
