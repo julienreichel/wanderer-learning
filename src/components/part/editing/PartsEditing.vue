@@ -60,6 +60,7 @@
         icon="data_object"
         @click="editJsonPart()"
       />
+      <q-btn size="sm" icon="file_upload" @click="openFileUpload = true" />
       <q-btn size="sm" icon="check" @click="finish()" />
     </q-card-actions>
   </q-card>
@@ -73,6 +74,11 @@
     :data="jsonToEdit"
     @save="updateFromJson"
   />
+  <q-dialog v-model="openFileUpload">
+    <q-card>
+      <file-uploader @uploaded="uploaded" :multiple="true" style="min-height: 300px" :title="$t('step.form.file_upload')"/>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -81,6 +87,7 @@ import PartCard from "../common/PartCard.vue";
 import PartEditing from "./PartEditing.vue";
 import QuestionsEditing from "./QuestionsEditing.vue";
 import JsonEditDialog from "../common/JsonEditDialog.vue";
+import FileUploader from "../common/FileUploader.vue";
 
 import { ref, computed, watch, nextTick, inject } from "vue";
 
@@ -220,6 +227,17 @@ const add = (type) => {
   step.value = newStepPos;
 };
 
+const openFileUpload = ref(false);
+const uploaded = (files) => {
+  const newParts = files.map((file) => ({
+    type: "img",
+    src: file.path,
+    url: file.url,
+  }));
+  const newStepPos = Math.min(Number(step.value) + 1, parts.value.length);
+  parts.value.splice(newStepPos, 0, ...newParts);
+  openFileUpload.value = false;
+};
 const finish = (success = true) => {
   emit("finished", { success });
 };

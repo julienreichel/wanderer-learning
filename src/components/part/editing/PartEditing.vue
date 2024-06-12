@@ -28,7 +28,7 @@
       <file-uploader v-else @uploaded="uploaded" />
     </q-card-section>
     <div class="row" v-if="part.type === 'img'">
-      <file-uploader class="col-6" @uploaded="uploaded" />
+      <file-uploader class="col-6" @uploaded="uploaded"/>
       <q-img class="col" :ratio="16 / 9" fit="scale-down" :src="part.url" />
     </div>
     <div class="row q-pa-md" v-if="part.type === 'video'">
@@ -95,6 +95,7 @@ const removeImage = () => {
 };
 
 const uploaded = async (files) => {
+  console.log(files);
   const file = files[0];
   removeImage();
 
