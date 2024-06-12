@@ -96,6 +96,7 @@ export default class LectureStepService extends ServicePrototype {
     }
 
     const step = this.lastSaved;
+    if (!step) return;
     // inject the url of the image
     if (params.resolveImg && step.parts) {
       for (const part of step.parts) {
