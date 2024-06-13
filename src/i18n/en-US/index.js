@@ -115,6 +115,7 @@ export default {
       add: "New lecture",
       title: "Lecture Title",
       confirm_delete_lecture: "Do you really want to delete this lecture ?",
+      confirm_delete_step: "Do you really want to delete this step ?",
     },
     step: {
       not_completed: "Lecture step not completed, no result recorded",
