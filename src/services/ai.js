@@ -9,6 +9,8 @@ import conceptsTextHtml from "./prompts/conceptsTextHtml.js";
 import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import practiceQuiz from "./prompts/finalQuiz.js";
 
+import { post } from 'aws-amplify/api';
+
 export default class ServicePrototype {
   constructor() {
     /**
@@ -36,14 +38,21 @@ export default class ServicePrototype {
 
     query.model = query.model || this.model;
     try {
-      const { data, errors } = await this.client.queries.AIQuery(query, {
-        authMode: "userPool",
+      const restOperation = post({
+        apiName: 'aiHttpApi',
+        path: 'ai-query',
+        options: {
+          body: query
+        }
       });
-      if (errors) {
-        console.error(errors);
-        return {};
-      }
+
+      const { body } = await restOperation.response;
+      const response = await body.json();
+      console.log(response.model, response.usage);
+
+      const data = response.choices[0].message.content.trim();
       console.log(data);
+
       if (query.format === "text") {
         return data;
       }

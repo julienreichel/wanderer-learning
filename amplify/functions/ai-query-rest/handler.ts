@@ -1,28 +1,28 @@
-import type { Schema } from "../resource";
+import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { env } from "$amplify/env/ai-query";
 
 //const fetch = require("node-fetch");
 
-export const handler: Schema["AIQuery"]["functionHandler"] = async (
-  event,
-  context,
-) => {
+export const handler: APIGatewayProxyHandlerV2 = async (event) => {
+  console.log("event", event);
+
+  const payload = JSON.parse(event.body || "{}");
+
   const apiKey = env.OPENAI_API_KEY;
   const temperature = Number(env.OPENAI_TEMPERATURE) || 0.7;
 
   console.log(event);
 
-  const max_tokens =
-    event.arguments.token || Number(env.OPENAI_MAX_TOKEN) || 50;
+  const max_tokens = payload.token || Number(env.OPENAI_MAX_TOKEN) || 50;
 
-  const system = event.arguments.system;
-  const prompt = event.arguments.prompt;
-  const format = event.arguments.format || "json";
-  const model = event.arguments.model || env.OPENAI_MODEL || "gpt-3.5-turbo";
+  const system = payload.system;
+  const prompt = payload.prompt;
+  const format = payload.format || "json";
+  const model = payload.model || env.OPENAI_MODEL || "gpt-3.5-turbo";
 
   let messages;
-  if (event.arguments.messages) {
-    messages = event.arguments.messages;
+  if (payload.messages) {
+    messages = payload.messages;
   } else {
     messages = [];
     if (system) {
@@ -61,6 +61,16 @@ export const handler: Schema["AIQuery"]["functionHandler"] = async (
   const data = await response.json();
 
   console.log(data);
-  return JSON.stringify(data);
 
+  if (data.error) {
+    return data.error.message;
+  }
+
+  return {
+    statusCode: 200,
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    body: JSON.stringify(data),
+  };
 };
