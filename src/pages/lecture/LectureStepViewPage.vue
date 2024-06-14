@@ -44,7 +44,6 @@ onMounted(async () => {
 
   const edit = canEdit(data) ? "LectureStepEdit" : null;
   updateBreadcrumbs([
-    { label: t("course.list"), to: { name: "CourseList" } },
     {
       label: data.lecture.course.title,
       to: { name: "CourseView", params: { id: data.lecture.course.id } },

@@ -77,7 +77,6 @@ onMounted(async () => {
   lecture.value = data;
 
   updateBreadcrumbs([
-    { label: t("course.list"), to: { name: "CourseList" } },
     {
       label: data.course.title,
       to: { name: "CourseView", params: { id: data.course.id } },

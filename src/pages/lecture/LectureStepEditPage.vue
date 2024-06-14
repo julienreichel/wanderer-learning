@@ -101,7 +101,6 @@ onMounted(async () => {
     lectureStep.value = data;
 
     updateBreadcrumbs([
-      { label: t("course.list"), to: { name: "CourseList" } },
       {
         label: data.lecture.course.title,
         to: { name: "CourseEdit", params: { id: data.lecture.course.id } },

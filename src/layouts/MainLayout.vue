@@ -113,3 +113,13 @@ const logOut = async () => {
   router.push({ name: "SignIn" });
 };
 </script>
+
+<style>
+.q-breadcrumbs__el.flex.inline {
+  display: inline-block; /* Ensure the element is treated as inline-block */
+  max-width: 120px; /* Set the maximum width of the breadcrumb item */
+  white-space: nowrap; /* Prevent the text from wrapping to a new line */
+  overflow: hidden; /* Hide the overflowed text */
+  text-overflow: ellipsis; /* Add ellipsis (...) to the overflowed text */
+}
+</style>
