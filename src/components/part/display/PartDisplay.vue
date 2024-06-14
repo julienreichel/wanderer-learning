@@ -33,7 +33,7 @@
 <script setup>
 import QuestionsDisplay from "./QuestionsDisplay.vue";
 
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, watch } from "vue";
 const { lectureStep: lectureStepService } = inject("services");
 
 const props = defineProps({
@@ -51,6 +51,14 @@ const textSizeClass = computed(() =>
 );
 const imageSizeClass = computed(() =>
   props.part.url ? "col-" + imageSize.value : "col-0",
+);
+watch(
+  () => props.part.options,
+  () => {
+    imageSize.value = Number(
+      lectureStepService.getOption(props.part, "imageSize") || 4,
+    );
+  },
 );
 
 const submitResults = (results) => {

@@ -86,6 +86,15 @@ watch(imageSize, (value) => {
   lectureStepService.setOption(part.value, "imageSize", value);
 });
 
+watch(
+  () => part.value.options,
+  () => {
+    imageSize.value = Number(
+      lectureStepService.getOption(part.value, "imageSize") || 4,
+    );
+  },
+);
+
 const removeImage = () => {
   if (part.value.url && !part.value.url.startsWith("http")) {
     storageService.removeImg(part.value.url);
