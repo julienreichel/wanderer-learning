@@ -8,34 +8,45 @@
       flat
       bordered
     >
-      <q-card-section v-if="part.type === 'text'">
-        <q-item-label>{{ textPreview }}</q-item-label>
-        <q-item-label v-for="idx in 2" :key="idx">
+      <q-card-section v-if="part.type === 'text'" class="gt-sm q-pa-sm" >
+        <q-item-label class="gt-md">{{ textPreview }}</q-item-label>
+        <q-item-label v-for="idx in 3" :key="idx">
           <q-skeleton type="text" animation="none" />
         </q-item-label>
       </q-card-section>
+      <q-card-section v-if="part.type === 'text'" class="lt-md q-pa-none row justify-center items-center" >
+        <q-icon name="format_list_bulleted" size="sm"/>
+      </q-card-section>
+
       <q-card-section v-if="part.type === 'img'" class="q-pa-none">
         <q-img :ratio="16 / 9" fit="scale-down" :src="part.url" />
       </q-card-section>
+
       <q-card-section
         v-if="part.type === 'quiz'"
-        class="row justify-center items-center"
+        class="q-pa-none row justify-center items-center"
       >
-        <q-icon v-if="!hasQuizAnswer" name="assignment" size="xl" />
-        <q-icon v-else name="assignment_turned_in" size="xl" />
+        <q-icon v-if="!hasQuizAnswer" name="assignment" size="xl" class="gt-sm"/>
+        <q-icon v-else name="assignment_turned_in" size="xl" class="gt-sm"/>
+        <q-icon v-if="!hasQuizAnswer" name="assignment" size="sm" class="lt-md"/>
+        <q-icon v-else name="assignment_turned_in" size="sm" class="lt-md"/>
       </q-card-section>
+
       <q-card-section
         v-if="part.type === 'video'"
-        class="row justify-center items-center"
+        class="q-pa-none row justify-center items-center"
       >
-        <q-icon name="play_circle" size="xl" />
+        <q-icon name="play_circle" size="xl" class="gt-sm"/>
+        <q-icon name="play_circle" size="sm" class="lt-md"/>
       </q-card-section>
+
       <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
         <div class="aspect-ratio-16-9" style="position: relative;">
           <iframe :title="part.text" :src="part.src"></iframe>
           <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
         </div>
       </q-card-section>
+
       <q-card-actions v-if="editing" class="q-pa-xs">
         <q-btn
           v-if="step > 0"
@@ -102,13 +113,16 @@ const stepChange = (newStep) => {
 
 const textPreview = computed(() => {
   // find the first <h3> or <h5> block and return it
-  const text = props.part.text || "";
+  let text = props.part.text || "";
   const h = text.match(/<h\d>(.*?)<\/h\d>/);
   if (h) {
     // remove all html, keep only the text
-    return h[1].replace(/<[^>]*>?/gm, "");
+    text = h[1].replace(/<[^>]*>?/gm, "");
   }
-  return text.substring(0, 20) + "[...]";
+  if ( text.length < 25 ) {
+    return text;
+  }
+  return text.substring(0, 21) + " ...";
 });
 </script>
 

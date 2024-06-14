@@ -1,6 +1,6 @@
 <template>
   <q-page v-if="lectureStep.id" class="q-pa-md q-gutter-sm">
-    <q-card>
+    <q-card class="gt-sm">
       <q-card-section>
         <div class="text-h5">{{ lectureStep.title }}</div>
       </q-card-section>
