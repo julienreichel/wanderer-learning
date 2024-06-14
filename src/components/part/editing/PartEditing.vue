@@ -95,6 +95,23 @@ watch(
   },
 );
 
+watch(
+  () => part.value.src,
+  () => {
+    // if the src is "<iframe..." we extract the url part and drop the rest
+    if (part.value.src && part.value.src.startsWith("<iframe")) {
+      const src = part.value.src.match(/src="([^"]*)"/);
+      part.value.src = src ? src[1] : "";
+    }
+    // for youtube videos we extract the video id and build the embed url
+    if (part.value.src && part.value.src.includes("youtube.com") && !part.value.src.includes("embed")) {
+      const videoId = part.value.src.match(/v=([^&]*)/);
+      part.value.src = videoId
+        ? `https://www.youtube.com/embed/${videoId[1]}`
+        : "";
+    }
+  },
+);
 const removeImage = () => {
   if (part.value.url && !part.value.url.startsWith("http")) {
     storageService.removeImg(part.value.url);
