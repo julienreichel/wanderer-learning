@@ -7,8 +7,9 @@
           'bg-secondary': userAttributes.isTeacher && !userAttributes.isAdmin,
         }"
       >
-        <q-btn flat :label="$t('generic.app_name')" to="/" />
-        <q-tabs inline-label shrink>
+        <q-btn flat :label="$t('generic.app_name')" to="/" class="gt-md" />
+        <q-btn flat icon="home" to="/" class="lt-lg gt-xs" />
+        <q-tabs inline-label shrink class="gt-xs">
           <q-route-tab
             icon="school"
             :label="t('course.list')"
@@ -25,16 +26,24 @@
             :to="{ name: 'ReportingList' }"
           />
         </q-tabs>
+        <q-tabs inline-label shrink class="lt-sm">
+          <q-route-tab
+            icon="school"
+            :to="{ name: 'CourseList' }"
+          />
+          <q-route-tab
+            icon="square_foot"
+            :to="{ name: 'ConceptList' }"
+          />
+          <q-route-tab
+            icon="query_stats"
+            :to="{ name: 'ReportingList' }"
+          />
+        </q-tabs>
         <q-space />
 
-        <q-toggle
-          v-if="enableEditing"
-          v-model="editMode"
-          color="purple"
-          checked-icon="edit"
-          unchecked-icon="visibility"
-        />
-        <q-breadcrumbs active-color="white">
+
+        <q-breadcrumbs active-color="white" class="gt-sm">
           <q-breadcrumbs-el
             v-for="breadcrumb in breadcrumbs"
             :key="breadcrumb.label"
@@ -43,6 +52,13 @@
             :icon="breadcrumb.icon"
           />
         </q-breadcrumbs>
+        <q-toggle
+          v-if="enableEditing"
+          v-model="editMode"
+          color="purple"
+          checked-icon="edit"
+          unchecked-icon="visibility"
+        />
         <q-btn-dropdown stretch flat icon="person">
           <q-list>
             <q-item>
@@ -53,6 +69,22 @@
             </q-item>
           </q-list>
         </q-btn-dropdown>
+      </q-toolbar>
+      <q-toolbar :class="{
+          'lt-md': true,
+          'bg-accent': userAttributes.isAdmin,
+          'bg-secondary': userAttributes.isTeacher && !userAttributes.isAdmin,
+        }" >
+        <q-space />
+        <q-breadcrumbs active-color="white" >
+          <q-breadcrumbs-el
+            v-for="breadcrumb in breadcrumbs"
+            :key="breadcrumb.label"
+            :label="breadcrumb.label"
+            :to="breadcrumb.to"
+            :icon="breadcrumb.icon"
+          />
+        </q-breadcrumbs>
       </q-toolbar>
     </q-header>
     <q-page-container :style="{ maxWidth: '1280px', margin: '0 auto' }">
@@ -117,9 +149,15 @@ const logOut = async () => {
 <style>
 .q-breadcrumbs__el.flex.inline {
   display: inline-block; /* Ensure the element is treated as inline-block */
-  max-width: 120px; /* Set the maximum width of the breadcrumb item */
+
+  max-width: 100px; /* Set the maximum width of the breadcrumb item */
   white-space: nowrap; /* Prevent the text from wrapping to a new line */
   overflow: hidden; /* Hide the overflowed text */
   text-overflow: ellipsis; /* Add ellipsis (...) to the overflowed text */
+}
+@media (min-width: 600px) {
+  .q-breadcrumbs__el.flex.inline {
+    max-width: 150px; /* Increase maximum width for larger screens */
+  }
 }
 </style>
