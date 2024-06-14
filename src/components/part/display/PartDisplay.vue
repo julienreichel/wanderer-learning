@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-section horizontal class="q-pa-md" v-if="part.type === 'text'">
-      <div class="row">
+      <div class="row full-width">
       <q-img
         v-if="part.url"
         class="lt-md col-12"
