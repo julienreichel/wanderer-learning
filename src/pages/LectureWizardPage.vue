@@ -403,21 +403,22 @@ const createQuizParts = (quiz, nbQuestionPerQuiz) => {
 
       // Open Ai has the tendancy to invent new types of questions
       const mappingTypes = {
-        "multiple-choice": "radio",
-        "true-false": "radio",
-        truefalse: "radio",
-        "true/false": "radio",
-        "myth-fact": "radio",
-        mythfact: "radio",
-        "myth/fact": "radio",
         "fill-in-the-blank": "shorttext",
         "missing-word": "shorttext",
-        sentence: "radio",
-        "sentence-ending": "radio",
+        "missing_word": "shorttext",
       };
-      if (mappingTypes[question.type]) {
-        question.type = mappingTypes[question.type];
+      if(["radio", "checkbox", "shorttext"].includes(question.type) === false) {
+        if (mappingTypes[question.type]) {
+          question.type = mappingTypes[question.type];
+        } else if (question.answers.length === 1) {
+          question.type = "shorttext";
+        } else if (question.answers.filter((a) => a.correct).length > 1) {
+          question.type = "checkbox";
+        } else {
+          question.type = "radio";
+        }
       }
+
 
       //sometimes it changes explanations to explanation
       if (question.explanation) {
