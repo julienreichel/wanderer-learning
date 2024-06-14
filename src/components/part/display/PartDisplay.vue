@@ -1,13 +1,23 @@
 <template>
   <q-card>
     <q-card-section horizontal class="q-pa-md" v-if="part.type === 'text'">
-      <div :class="textSizeClass" v-html="part.text"></div>
+      <div class="row">
       <q-img
         v-if="part.url"
+        class="lt-md col-12"
+        fit="scale-down"
+        :src="part.url"
+      />
+      <div class="lt-md" v-html="part.text"></div>
+      <div class="gt-sm" :class="textSizeClass" v-html="part.text"></div>
+      <q-img
+        v-if="part.url"
+        class="gt-sm"
         :class="imageSizeClass"
         fit="scale-down"
         :src="part.url"
       />
+    </div>
     </q-card-section>
     <q-img
       v-if="part.type === 'img'"
