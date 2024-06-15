@@ -37,6 +37,14 @@
         <iframe :title="part.text" :src="part.src" class="full-width"></iframe>
       </div>
     </q-card-section>
+    <q-card-actions v-if="hasNext">
+      <q-space />
+      <q-btn size="sm" icon="east" @click="$emit('nextStep')" />
+    </q-card-actions>
+    <q-card-actions v-else-if="hasAnsweredAllQuizzes">
+      <q-space />
+      <q-btn size="sm" icon="east" @click="$emit('finished')" />
+    </q-card-actions>
   </q-card>
 </template>
 
@@ -49,9 +57,11 @@ const { lectureStep: lectureStepService } = inject("services");
 const props = defineProps({
   part: { type: Object, required: true },
   responses: { type: Array, default: () => [] },
+  hasNext: { type: Boolean, default: false },
+  hasAnsweredAllQuizzes: { type: Boolean, default: false },
 });
 
-const emit = defineEmits(["results"]);
+const emit = defineEmits(["results", "nextStep", "finish"]);
 
 const imageSize = ref(
   Number(lectureStepService.getOption(props.part, "imageSize")) || 4,

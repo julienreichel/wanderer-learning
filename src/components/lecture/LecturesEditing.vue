@@ -47,6 +47,10 @@
       />
       <q-btn size="sm" icon="delete" @click.stop="deleteLecture(lecture)" />
     </q-card-actions>
+    <q-card-actions v-else>
+      <q-space />
+      <q-btn size="sm" icon="east" @click="viewLecture(lecture)" />
+    </q-card-actions>
   </q-card>
 </template>
 

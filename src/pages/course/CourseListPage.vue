@@ -5,6 +5,10 @@
         <q-card-section>
           <div class="text-h5">{{ course.title }}</div>
         </q-card-section>
+        <q-card-actions>
+          <q-space />
+          <q-btn size="sm" icon="east" @click="viewCourse(course)" />
+        </q-card-actions>
       </q-card>
     </div>
     <div class="col-12">

@@ -50,6 +50,10 @@
           </q-card-section>
         </q-card-section>
       </q-card-section>
+      <q-card-actions>
+        <q-space />
+        <q-btn size="sm" icon="east" @click="viewStep(step)" />
+      </q-card-actions>
     </q-card>
   </q-page>
 </template>
