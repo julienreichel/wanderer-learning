@@ -51,11 +51,12 @@ export default class CourseService extends ServicePrototype {
     let course = await super.get(id);
     if (!course) return;
 
-    course.lectures = course.lectures.sort(
+    course.lectures = course.lectures?.sort(
       (a, b) => Number(a.order) - Number(b.order),
     );
 
-    course.lectures.forEach((lecture) => {
+    course.lectures?.forEach((lecture) => {
+      if (!lecture?.steps) return;
       lecture.steps = lecture.steps?.sort(
         (a, b) => Number(a.order) - Number(b.order),
       );

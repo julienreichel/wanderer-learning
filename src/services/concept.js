@@ -42,7 +42,7 @@ export default class ConceptService extends ServicePrototype {
     if (!concept) return;
 
     concept.lectures?.forEach(({ lecture }) => {
-      console.log(lecture);
+      if (!lecture?.steps) return;
       lecture.steps = lecture.steps?.sort(
         (a, b) => Number(a.order) - Number(b.order),
       );
