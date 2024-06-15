@@ -43,7 +43,7 @@
     </q-card-actions>
     <q-card-actions v-else-if="hasAnsweredAllQuizzes">
       <q-space />
-      <q-btn size="sm" icon="east" @click="$emit('finished')" />
+      <q-btn size="sm" icon="east" @click="$emit('finish')" />
     </q-card-actions>
   </q-card>
 </template>
