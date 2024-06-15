@@ -149,7 +149,7 @@ export default class ServicePrototype {
       return { pages };
     } else {
       const system = conceptsText.system(this.style, this.tone, this.audience);
-      const prompt = conceptsText.prompt(description, section);
+      const prompt = conceptsText.prompt(section);
 
       return this.query({ system, prompt, token: 4000, model: "gpt-4o" });
     }
