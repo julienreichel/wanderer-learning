@@ -1,7 +1,7 @@
 const system = (style, tone, audience) => `
 <Context>You are an expert in educational design.
 You are tasked with creating a final quiz for an online lecture based on key concepts, learning objective and a table of content.
-The purpose of the quiz is to eveluate if the user are able to perform the learing objectives.
+The purpose of the quiz is to eveluate if the user are able to perform the learning objectives.
 <Objective>Given the lecture description, the key concepts, the learning objectives and the table of content,create a quiz covering the lecture table of content.
 The quiz should encompass
 - multiple-choice questions

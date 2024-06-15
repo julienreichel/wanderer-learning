@@ -16,7 +16,7 @@ export default {
       cancel: "Cancel",
       apply: "apply",
     },
-    app_name: "Wanderer Learing",
+    app_name: "Wanderer Learning",
     sign_out: "Sign Out",
     sign_in: "Sign In",
     welcome: "Welcome",
