@@ -188,7 +188,7 @@ export default {
       title: "Creating lecture",
       create: "Creating lecture",
       connect: "Creating connection step",
-      concept: "Creating concepts steps: {concept}",
+      concept: "Creating concepts steps:",
       practice: "Creating final quiz",
       conclusion: "Creating conclusion step",
       finished: "Finished",

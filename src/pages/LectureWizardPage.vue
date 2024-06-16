@@ -508,9 +508,7 @@ const generateLecture = async () => {
 
     const step = tableOfContent.value[i];
     const conceptName = step.name;
-    progressLabel.value = t("wizard.generating.concept", {
-      concept: conceptName,
-    });
+    progressLabel.value = t("wizard.generating.concept") + ' ' + conceptName;
     progress.value += 0.25 / tableOfContent.value.length;
 
     const conceptText = await aiService.getConceptContent(
