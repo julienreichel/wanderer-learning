@@ -10,6 +10,21 @@ ${prerequisites.length ? "<Prerequisites>I have already completed the following 
 { "sections": ["name": "...", "items": [{"name": "...", "description": "..."}]}] }
 `;
 
+const systemWithToc = (style, tone, audience, prerequisites, tocList) => `
+<Context>You are an expert in educational design. You are tasked with designing the table of contents for an online lecture.
+<Objective>Given the lecture description, the key concepts and the learning objectives, create a table of contents for the lecture.
+There should be between 3 to 5 sections, and each section should contain 3 to 5 items.
+<Style>${style}
+<Tone>${tone}
+<Audience>${audience}
+${prerequisites.length ? "<Prerequisites>I have already completed the following prerequisite lecture: " + prerequisites.join(", ") : ""}
+<Response Format>JSON format following this example:
+{ "sections": ["name": "...", "items": [{"name": "...", "description": "..."}]}] }
+
+The following sections have already be generated, do not include them in the response:
+${tocList}
+`;
+
 const prompt = (description, conceptsList, objectivesList) => `
 Your task is to create the table of contents for an online lecture.
 The sections MUST be derived from the lecture description, the key concepts and learning outcomes provided.
@@ -28,4 +43,4 @@ Learning outcomes:
 ${objectivesList}
 `;
 
-export default { system, prompt };
+export default { system, systemWithToc, prompt };

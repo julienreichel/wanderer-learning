@@ -167,6 +167,7 @@ export default {
       objectives: "Learning Objectives",
       lectureTitle: "Lecture Title",
       keyConcepts: "Key Concepts",
+      addAIConcepts: "Add AI Generated Concepts",
       conceptName: "Concept Name",
       conceptDescription: "Concept Description",
       addConcept: "Add Concept",
@@ -183,6 +184,7 @@ export default {
       partDescription: "Description",
       addPart: "Add Part",
       addStep: "Add Step",
+      addAIStep: "Add AI Generated Steps",
     },
     generating: {
       title: "Creating lecture",

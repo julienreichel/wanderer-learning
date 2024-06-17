@@ -65,20 +65,40 @@ export default class ServicePrototype {
     }
   }
 
-  async getConcepts(description) {
-    const system = concepts.system(this.style, this.tone, this.audience, this.prerequisites);
+  async getConcepts(description, previousConcepts) {
+    let system;
+    if (previousConcepts && previousConcepts.length > 0) {
+      const conceptsStr = previousConcepts.map(({ name }) => name).join(", ");
+      console.log(previousConcepts, previousConcepts.map((name) => name), conceptsStr);
+      system = concepts.systemWithConcepts(this.style, this.tone, this.audience, this.prerequisites, conceptsStr);
+    } else {
+      system = concepts.system(this.style, this.tone, this.audience, this.prerequisites);
+    }
+
     const prompt = concepts.prompt(description);
 
     return this.query({ system, prompt, token: 500 });
   }
 
-  async getTableOfContent(description, concepts, objectives) {
+  async getTableOfContent(description, concepts, objectives, previousToc) {
     const conceptsList = concepts
       .map(({ name, description }) => `${name}: ${description}`)
       .join("\n");
+
+
     const objectivesList = objectives.join("\n");
 
-    const system = toc.system(this.style, this.tone, this.audience, this.prerequisites);
+    let system;
+    if (previousToc && previousToc.length > 0) {
+      const tocList = previousToc
+        .map(
+          ({ name, items }) => name + "\n" + items.map(({ name, description }) => `- ${name}: ${description}`).join("\n"))
+        .join("\n");
+      system = toc.systemWithToc(this.style, this.tone, this.audience, this.prerequisites, tocList);
+    } else {
+      system = toc.system(this.style, this.tone, this.audience, this.prerequisites);
+    }
+
     const prompt = toc.prompt(description, conceptsList, objectivesList);
 
     return this.query({ system, prompt, token: 1000 });

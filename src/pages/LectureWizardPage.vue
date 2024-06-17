@@ -11,10 +11,7 @@
           type="textarea"
           rows="5"
         />
-        <q-toggle
-          v-model="advanced"
-          :label="$t('wizard.lecture.advanced')"
-        />
+        <q-toggle v-model="advanced" :label="$t('wizard.lecture.advanced')" />
         <div v-if="advanced" class="q-pa-md q-col-gutter-sm">
           <q-select
             outlined
@@ -54,7 +51,7 @@
             :loading="loading"
             color="primary"
             :label="$t('wizard.common.next')"
-            @click="generateTitleAndObjectives"
+            @click="generateTitleAndObjectives()"
           />
         </q-stepper-navigation>
       </q-step>
@@ -96,17 +93,21 @@
                 <q-btn flat icon="close" @click="removeKeyConcept(index)" />
               </q-item-section>
             </q-item>
-            <q-item>
-              <q-item-section>
-                <q-btn
-                  v-if="keyConcepts.length < 7"
-                  flat
-                  :label="$t('wizard.titleKeyConceptsObjectives.addConcept')"
-                  @click="addKeyConcept"
-                />
-              </q-item-section>
-            </q-item>
           </q-list>
+          <div class="row" v-if="keyConcepts.length < 7">
+            <q-btn
+              class="col"
+              flat
+              :label="$t('wizard.titleKeyConceptsObjectives.addConcept')"
+              @click="addKeyConcept"
+            />
+            <q-btn
+              class="col"
+              flat
+              :label="$t('wizard.titleKeyConceptsObjectives.addAIConcepts')"
+              @click="generateTitleAndObjectives(keyConcepts, learningObjectives)"
+            />
+          </div>
           <div class="text-h6">
             {{ $t("wizard.titleKeyConceptsObjectives.objectives") }}
           </div>
@@ -220,16 +221,21 @@
                 <q-btn flat icon="close" @click="removeStep(stepIndex)" />
               </q-item-section>
             </q-item>
-            <q-item>
-              <q-item-section>
-                <q-btn
-                  flat
-                  :label="$t('wizard.tableOfContent.addStep')"
-                  @click="addStep"
-                />
-              </q-item-section>
-            </q-item>
           </q-list>
+          <div class="row">
+            <q-btn
+              class="col"
+              flat
+              :label="$t('wizard.tableOfContent.addStep')"
+              @click="addStep"
+            />
+            <q-btn
+              class="col"
+              flat
+              :label="$t('wizard.tableOfContent.addAIStep')"
+              @click="generateTableOfContent(tableOfContent)"
+            />
+          </div>
         </div>
         <q-stepper-navigation>
           <q-space />
@@ -238,7 +244,7 @@
             :loading="loading"
             color="primary"
             :label="$t('wizard.common.finish')"
-            @click="generateLecture"
+            @click="generateLecture()"
           />
         </q-stepper-navigation>
       </q-step>
@@ -299,20 +305,23 @@ onMounted(async () => {
 
 const options = {
   prompt: "",
-  style: "Richard Feynman: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.",
-  audience: "University Students: More detailed and analytical, assuming a basic level of knowledge in the subject, with a focus on deeper understanding and critical thinking.",
+  style:
+    "Richard Feynman: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.",
+  audience:
+    "University Students: More detailed and analytical, assuming a basic level of knowledge in the subject, with a focus on deeper understanding and critical thinking.",
   tone: "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.",
   model: "gpt-3.5-turbo",
   extendedQueryForConcept: false,
- ... $q.localStorage.getItem("aiOptions")};
+  ...$q.localStorage.getItem("aiOptions"),
+};
 
- const formatOption = (text) => {
+const formatOption = (text) => {
   return {
     value: text,
     label: "<b>" + text.split(": ")[0] + "</b><br/>" + text.split(": ")[1],
-    html: true
+    html: true,
   };
- }
+};
 const step = ref(1);
 const courseDescription = ref(options.prompt);
 const advanced = ref(false);
@@ -326,7 +335,7 @@ const styleOptions = [
   "Michael Sandel: Interactive, Socratic, and analytical, using real-life dilemmas and moral questions to engage students in philosophical discourse.",
   "Neil deGrasse Tyson: Charismatic, engaging, and entertaining, using analogies, humor, and real-world examples to make science accessible.",
   "Richard Feynman: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.",
-  "Sir Ken Robinson: Inspirational, thought-provoking, and innovative, challenging traditional education paradigms and emphasizing creativity."
+  "Sir Ken Robinson: Inspirational, thought-provoking, and innovative, challenging traditional education paradigms and emphasizing creativity.",
 ].map(formatOption);
 const audience = ref(options.audience);
 const audienceOptions = [
@@ -336,7 +345,7 @@ const audienceOptions = [
   "University Students: More detailed and analytical, assuming a basic level of knowledge in the subject, with a focus on deeper understanding and critical thinking.",
   "Professional Adults: Formal and concise, focused on practical application, efficiency, and relevance to their professional context.",
   "Expert: Advanced and specialized language, assuming in-depth knowledge of the subject, focusing on complex concepts and detailed analysis.",
-  "General Public: Accessible and clear language, covering a broad range of topics, aiming to be informative and engaging for a wide audience without assuming prior specialized knowledge."
+  "General Public: Accessible and clear language, covering a broad range of topics, aiming to be informative and engaging for a wide audience without assuming prior specialized knowledge.",
 ].map(formatOption);
 const tone = ref(options.tone);
 const toneOptions = [
@@ -349,7 +358,7 @@ const toneOptions = [
   "Formal: Polite, professional, and precise, with a focus on clarity and correctness.",
   "Humorous: Light-hearted, witty, and playful, incorporating jokes and amusing remarks.",
   "Inspirational: Motivational, uplifting, and encouraging, often using positive affirmations and quotes.",
-  "Technical: Precise, jargon-heavy, and detail-oriented, suitable for explaining complex concepts and specialized information."
+  "Technical: Precise, jargon-heavy, and detail-oriented, suitable for explaining complex concepts and specialized information.",
 ].map(formatOption);
 const model = ref(options.model);
 const extendedQueryForConcept = ref(options.extendedQueryForConcept);
@@ -394,7 +403,7 @@ const removePart = (stepIndex, itemIndex) => {
   tableOfContent.value[stepIndex].items.splice(itemIndex, 1);
 };
 
-const generateTitleAndObjectives = async () => {
+const generateTitleAndObjectives = async (concepts, objectives) => {
   loading.value = true;
 
   const options = {
@@ -410,29 +419,34 @@ const generateTitleAndObjectives = async () => {
   options.prerequisites = prerequisites;
   aiService.setOptions(options);
 
-  const response = await aiService.getConcepts(courseDescription.value, prerequisites);
+  console.log("Generating title and objectives", concepts);
+  const response = await aiService.getConcepts(
+    courseDescription.value,
+    concepts
+  );
 
   title.value = response.title || "";
-  keyConcepts.value = response.keyConcepts || [];
-  learningObjectives.value = response.expectedLearningOutcomes || [];
+  keyConcepts.value = concepts ? concepts.concat(response.keyConcepts) : response.keyConcepts;;
+  learningObjectives.value = objectives ? objectives.concat(response.expectedLearningOutcomes) : response.expectedLearningOutcomes;
 
   loading.value = false;
-  step.value++;
+  step.value = 2;
 };
 
-const generateTableOfContent = async () => {
+const generateTableOfContent = async (toc = []) => {
   loading.value = true;
 
   const response = await aiService.getTableOfContent(
     courseDescription.value,
     keyConcepts.value,
-    learningObjectives.value
+    learningObjectives.value,
+    toc
   );
 
-  tableOfContent.value = response.sections || [];
+  tableOfContent.value = [...toc, ...response.sections];
 
   loading.value = false;
-  step.value++;
+  step.value = 3;
 };
 
 let lectureId;
@@ -474,9 +488,11 @@ const createQuizParts = (quiz, nbQuestionPerQuiz) => {
       const mappingTypes = {
         "fill-in-the-blank": "shorttext",
         "missing-word": "shorttext",
-        "missing_word": "shorttext",
+        missing_word: "shorttext",
       };
-      if(["radio", "checkbox", "shorttext"].includes(question.type) === false) {
+      if (
+        ["radio", "checkbox", "shorttext"].includes(question.type) === false
+      ) {
         if (mappingTypes[question.type]) {
           question.type = mappingTypes[question.type];
         } else if (question.answers.length === 1) {
@@ -487,7 +503,6 @@ const createQuizParts = (quiz, nbQuestionPerQuiz) => {
           question.type = "radio";
         }
       }
-
 
       //sometimes it changes explanations to explanation
       if (question.explanation) {
@@ -577,13 +592,13 @@ const generateLecture = async () => {
 
     const step = tableOfContent.value[i];
     const conceptName = step.name;
-    progressLabel.value = t("wizard.generating.concept") + ' ' + conceptName;
+    progressLabel.value = t("wizard.generating.concept") + " " + conceptName;
     progress.value += 0.25 / tableOfContent.value.length;
 
     const conceptText = await aiService.getConceptContent(
-        step,
-        extendedQueryForConcept.value
-      );
+      step,
+      extendedQueryForConcept.value,
+    );
 
     conceptText.pages.forEach((text) => {
       parts.push({
