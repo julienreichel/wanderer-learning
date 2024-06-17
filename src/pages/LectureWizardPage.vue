@@ -21,18 +21,21 @@
             v-model="style"
             :label="$t('wizard.lecture.style')"
             :options="styleOptions"
+            emit-value
           />
           <q-select
             outlined
             v-model="tone"
             :label="$t('wizard.lecture.tone')"
             :options="toneOptions"
+            emit-value
           />
           <q-select
             outlined
             v-model="audience"
             :label="$t('wizard.lecture.audience')"
             :options="audienceOptions"
+            emit-value
           />
           <q-select
             outlined
@@ -295,6 +298,13 @@ const options = {
   extendedQueryForConcept: false,
  ... $q.localStorage.getItem("aiOptions")};
 
+ const formatOption = (text) => {
+  return {
+    value: text,
+    label: "<b>" + text.split(": ")[0] + "</b><br/>" + text.split(": ")[1],
+    html: true
+  };
+ }
 const step = ref(1);
 const courseDescription = ref(options.prompt);
 const advanced = ref(false);
@@ -309,7 +319,7 @@ const styleOptions = [
   "Neil deGrasse Tyson: Charismatic, engaging, and entertaining, using analogies, humor, and real-world examples to make science accessible.",
   "Richard Feynman: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.",
   "Sir Ken Robinson: Inspirational, thought-provoking, and innovative, challenging traditional education paradigms and emphasizing creativity."
-];
+].map(formatOption);
 const audience = ref(options.audience);
 const audienceOptions = [
   "Children: Simple language, engaging, and often includes fun elements like stories or games to maintain interest.",
@@ -317,7 +327,7 @@ const audienceOptions = [
   "University Students: More detailed and analytical, assuming a basic level of knowledge in the subject, with a focus on deeper understanding and critical thinking.",
   "Professional Adults: Formal and concise, focused on practical application, efficiency, and relevance to their professional context.",
   "General Public: Accessible and clear language, covering a broad range of topics, aiming to be informative and engaging for a wide audience without assuming prior specialized knowledge."
-];
+].map(formatOption);
 const tone = ref(options.tone);
 const toneOptions = [
   "Authoritative: Confident, knowledgeable, and assertive, conveying expertise and reliability.",
@@ -330,7 +340,7 @@ const toneOptions = [
   "Humorous: Light-hearted, witty, and playful, incorporating jokes and amusing remarks.",
   "Inspirational: Motivational, uplifting, and encouraging, often using positive affirmations and quotes.",
   "Technical: Precise, jargon-heavy, and detail-oriented, suitable for explaining complex concepts and specialized information."
-];
+].map(formatOption);
 const model = ref(options.model);
 const extendedQueryForConcept = ref(options.extendedQueryForConcept);
 
