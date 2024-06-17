@@ -283,14 +283,23 @@ const props = defineProps({
   id: String,
 });
 
+const options = {
+  prompt: "",
+  style: "Richard Feynman Style: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.",
+  audience: "General readership.",
+  tone: "Accessible, Engaging, Entertaining, Challenging",
+  model: "gpt-3.5-turbo",
+  extendedQueryForConcept: false,
+ ... $q.localStorage.getItem("aiOptions")};
+
 const step = ref(1);
-const courseDescription = ref("Introduction to Agile");
+const courseDescription = ref(options.prompt);
 const advanced = ref(false);
-const style = ref("Richard Feynman Style: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.");
-const audience = ref("General readership.");
-const tone = ref("Accessible, Engaging, Entertaining, Challenging");
-const model = ref("gpt-3.5-turbo");
-const extendedQueryForConcept = ref(false);
+const style = ref(options.style);
+const audience = ref(options.audience);
+const tone = ref(options.tone);
+const model = ref(options.model);
+const extendedQueryForConcept = ref(options.extendedQueryForConcept);
 
 const title = ref("");
 const keyConcepts = ref([]);
@@ -333,13 +342,18 @@ const removePart = (stepIndex, itemIndex) => {
 };
 
 const generateTitleAndObjectives = async () => {
-  loading.value = true;
-  aiService.setOptions({
+  const options = {
+    prompt: courseDescription.value,
     style: style.value,
     tone: tone.value,
     audience: audience.value,
     model: model.value,
-  });
+    extendedQueryForConcept: extendedQueryForConcept.value,
+  };
+  $q.localStorage.set("aiOptions", options);
+
+  loading.value = true;
+  aiService.setOptions(options);
 
   const response = await aiService.getConcepts(courseDescription.value);
 
