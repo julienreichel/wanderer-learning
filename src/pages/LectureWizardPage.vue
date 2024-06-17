@@ -16,20 +16,23 @@
           :label="$t('wizard.lecture.advanced')"
         />
         <div v-if="advanced" class="q-pa-md q-col-gutter-sm">
-          <q-input
+          <q-select
             outlined
             v-model="style"
             :label="$t('wizard.lecture.style')"
+            :options="styleOptions"
           />
-          <q-input
+          <q-select
             outlined
             v-model="tone"
             :label="$t('wizard.lecture.tone')"
+            :options="toneOptions"
           />
-          <q-input
+          <q-select
             outlined
             v-model="audience"
             :label="$t('wizard.lecture.audience')"
+            :options="audienceOptions"
           />
           <q-select
             outlined
@@ -285,9 +288,9 @@ const props = defineProps({
 
 const options = {
   prompt: "",
-  style: "Richard Feynman Style: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.",
-  audience: "General readership.",
-  tone: "Accessible, Engaging, Entertaining, Challenging",
+  style: "Richard Feynman: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.",
+  audience: "University Students: More detailed and analytical, assuming a basic level of knowledge in the subject, with a focus on deeper understanding and critical thinking.",
+  tone: "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.",
   model: "gpt-3.5-turbo",
   extendedQueryForConcept: false,
  ... $q.localStorage.getItem("aiOptions")};
@@ -296,8 +299,38 @@ const step = ref(1);
 const courseDescription = ref(options.prompt);
 const advanced = ref(false);
 const style = ref(options.style);
+const styleOptions = [
+  "Angela Duckworth: Motivational, research-driven, focusing on grit and perseverance, combining storytelling with evidence-based strategies.",
+  "Carl Sagan: Poetic, insightful, and passionate, using storytelling and clear explanations to convey the wonder and importance of science.",
+  "Howard Zinn: Engaging, critical, and thought-provoking, encouraging students to question traditional narratives and explore history from multiple perspectives.",
+  "Jo Boaler: Innovative, student-centered, and research-based, promoting growth mindset and conceptual understanding in mathematics.",
+  "Marie Kondo: Practical, methodical, and empathetic, encouraging personal reflection and hands-on practice to achieve a tidy and organized life.",
+  "Michael Sandel: Interactive, Socratic, and analytical, using real-life dilemmas and moral questions to engage students in philosophical discourse.",
+  "Neil deGrasse Tyson: Charismatic, engaging, and entertaining, using analogies, humor, and real-world examples to make science accessible.",
+  "Richard Feynman: Simplicity, clarity, passion and enthusiasm, using storytelling with focus on fundamentals, keeping humor and wit.",
+  "Sir Ken Robinson: Inspirational, thought-provoking, and innovative, challenging traditional education paradigms and emphasizing creativity."
+];
 const audience = ref(options.audience);
+const audienceOptions = [
+  "Children: Simple language, engaging, and often includes fun elements like stories or games to maintain interest.",
+  "Teenagers: Casual and relatable language, addressing their specific interests and challenges, often using examples relevant to their age group.",
+  "University Students: More detailed and analytical, assuming a basic level of knowledge in the subject, with a focus on deeper understanding and critical thinking.",
+  "Professional Adults: Formal and concise, focused on practical application, efficiency, and relevance to their professional context.",
+  "General Public: Accessible and clear language, covering a broad range of topics, aiming to be informative and engaging for a wide audience without assuming prior specialized knowledge."
+];
 const tone = ref(options.tone);
+const toneOptions = [
+  "Authoritative: Confident, knowledgeable, and assertive, conveying expertise and reliability.",
+  "Casual: Relaxed, friendly, and conversational, using informal language and contractions.",
+  "Concise: Brief, to the point, and efficient, focusing on delivering information quickly and clearly.",
+  "Descriptive: Vivid, detailed, and illustrative, using rich language to paint a picture and create an immersive experience.",
+  "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.",
+  "Empathetic: Compassionate, understanding, and supportive, showing sensitivity to the user's emotions and concerns.",
+  "Formal: Polite, professional, and precise, with a focus on clarity and correctness.",
+  "Humorous: Light-hearted, witty, and playful, incorporating jokes and amusing remarks.",
+  "Inspirational: Motivational, uplifting, and encouraging, often using positive affirmations and quotes.",
+  "Technical: Precise, jargon-heavy, and detail-oriented, suitable for explaining complex concepts and specialized information."
+];
 const model = ref(options.model);
 const extendedQueryForConcept = ref(options.extendedQueryForConcept);
 
@@ -514,7 +547,7 @@ const generateLecture = async () => {
 
   // Creating the concept steps
   nbQuiz = 3;
-  nbQuestionPerQuiz = 2;
+  nbQuestionPerQuiz = 3;
 
   progress.value = 20 / 100;
   for (let i = 0; i < tableOfContent.value.length; i++) {
