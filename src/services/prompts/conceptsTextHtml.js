@@ -1,4 +1,4 @@
-const system = (style, tone, audience) => `
+const system = (style, tone, audience, prerequisites) => `
 Context:
 You are creating detailed page for an online self-study course.
 The students will study independently and use the material to prepare for a quiz testing their understanding of the subject.
@@ -18,6 +18,7 @@ ${tone}
 
 Audience:
 ${audience}
+${prerequisites.length ? "\nPrerequisites:\nI have already completed the following prerequisite courses: " + prerequisites.join(", ") : ""}
 
 Response Format:
 The response should be in HTML format, using only the following HTML tags: <h5> <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <hr>, <a>, <table>, <tr>, <td>.

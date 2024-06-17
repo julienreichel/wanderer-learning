@@ -1,4 +1,4 @@
-const system = (style, tone, audience) => `
+const system = (style, tone, audience, prerequisites) => `
 Context:
 You are creating detailed pages for an online self-study course.
 The students will study independently and use the material to prepare for a quiz testing their understanding of the subject.
@@ -17,6 +17,7 @@ ${tone}
 
 Audience:
 ${audience}
+${prerequisites.length ? "\nPrerequisites:\nI have already completed the following prerequisite courses: " + prerequisites.join(", ") : ""}
 
 Response Format:
 The response should be in JSON format following this structure:
@@ -33,7 +34,7 @@ const prompt = (section) => {
 
   return `
 You are an expert instructor.
-Your task is to create detailed pages for an online self-study course section titled "${sectionName}" part of the lecture called "${description}".
+Your task is to create detailed pages for an online self-study course section titled "${sectionName}".
 You MUST cover the content thoroughly and provide at least four pages.
 Each page must include at least three sentences or a bullet list to ensure sufficient detail.
 You will be penalized if the descriptions are not detailed enough.
@@ -49,7 +50,7 @@ Section content:
 ${sectionItems}
 
 Example of output:
-{ "pages": [ "<h5>${sectionName}</h5><div>...</div>", ${section.items.map(({ name }) => `"<h5>${name}</h5><div>...</div>"`).join(", ")} ] }
+{ "pages": [ "<h5>${sectionName}</h5><div>...</div>", ${section.items.map(({ name }) => `"<h5>${name}</h5><div>...</div>"`).join(", ")}, "..." ] }
 `;
 };
 

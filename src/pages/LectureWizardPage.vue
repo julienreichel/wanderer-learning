@@ -273,7 +273,7 @@
 </template>
 
 <script setup>
-import { ref, inject } from "vue";
+import { ref, inject, onMounted } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router } = useIris();
@@ -281,12 +281,20 @@ const {
   ai: aiService,
   lecture: lectureService,
   concept: conceptService,
+  course: courseService,
   lectureConcept: lectureConceptService,
   lectureStep: lectureStepService,
 } = inject("services");
 
 const props = defineProps({
   id: String,
+});
+
+let prerequisites = [];
+onMounted(async () => {
+  const course = await courseService.get(props.id);
+  // if they are other lecture int he course, add them as prerequisites
+  prerequisites = course.lectures.map((lecture) => lecture.title);
 });
 
 const options = {
@@ -324,8 +332,10 @@ const audience = ref(options.audience);
 const audienceOptions = [
   "Children: Simple language, engaging, and often includes fun elements like stories or games to maintain interest.",
   "Teenagers: Casual and relatable language, addressing their specific interests and challenges, often using examples relevant to their age group.",
+  "Beginner: Basic and introductory language, ensuring concepts are explained clearly and step-by-step to build foundational understanding.",
   "University Students: More detailed and analytical, assuming a basic level of knowledge in the subject, with a focus on deeper understanding and critical thinking.",
   "Professional Adults: Formal and concise, focused on practical application, efficiency, and relevance to their professional context.",
+  "Expert: Advanced and specialized language, assuming in-depth knowledge of the subject, focusing on complex concepts and detailed analysis.",
   "General Public: Accessible and clear language, covering a broad range of topics, aiming to be informative and engaging for a wide audience without assuming prior specialized knowledge."
 ].map(formatOption);
 const tone = ref(options.tone);
@@ -385,6 +395,8 @@ const removePart = (stepIndex, itemIndex) => {
 };
 
 const generateTitleAndObjectives = async () => {
+  loading.value = true;
+
   const options = {
     prompt: courseDescription.value,
     style: style.value,
@@ -395,10 +407,10 @@ const generateTitleAndObjectives = async () => {
   };
   $q.localStorage.set("aiOptions", options);
 
-  loading.value = true;
+  options.prerequisites = prerequisites;
   aiService.setOptions(options);
 
-  const response = await aiService.getConcepts(courseDescription.value);
+  const response = await aiService.getConcepts(courseDescription.value, prerequisites);
 
   title.value = response.title || "";
   keyConcepts.value = response.keyConcepts || [];
@@ -414,7 +426,7 @@ const generateTableOfContent = async () => {
   const response = await aiService.getTableOfContent(
     courseDescription.value,
     keyConcepts.value,
-    learningObjectives.value,
+    learningObjectives.value
   );
 
   tableOfContent.value = response.sections || [];
@@ -515,7 +527,7 @@ const generateLecture = async () => {
         description: keyConcept.description,
       });
     }
-    const item = await lectureConceptService.create({
+    await lectureConceptService.create({
       lectureId,
       conceptId: concept.id,
     });

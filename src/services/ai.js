@@ -23,6 +23,7 @@ export default class ServicePrototype {
     this.audience = `General readership.`;
     this.tone = `Enthusiastic and engaging with a touch of humour.`;
     this.model = "gpt-3.5-turbo";
+    this.prerequisites = [];
   }
 
   setOptions(options = {}) {
@@ -30,6 +31,7 @@ export default class ServicePrototype {
     if (options.model && options.model !== "") this.model = options.model;
     if (options.audience && options.audience !== "") this.audience = options.audience;
     if (options.tone) this.tone = options.tone;
+    if (options.prerequisites) this.prerequisites = options.prerequisites;
   }
 
   async query(query) {
@@ -64,7 +66,7 @@ export default class ServicePrototype {
   }
 
   async getConcepts(description) {
-    const system = concepts.system(this.style, this.tone, this.audience);
+    const system = concepts.system(this.style, this.tone, this.audience, this.prerequisites);
     const prompt = concepts.prompt(description);
 
     return this.query({ system, prompt, token: 500 });
@@ -76,7 +78,7 @@ export default class ServicePrototype {
       .join("\n");
     const objectivesList = objectives.join("\n");
 
-    const system = toc.system(this.style, this.tone, this.audience);
+    const system = toc.system(this.style, this.tone, this.audience, this.prerequisites);
     const prompt = toc.prompt(description, conceptsList, objectivesList);
 
     return this.query({ system, prompt, token: 1000 });
@@ -87,7 +89,7 @@ export default class ServicePrototype {
       .map(({ name, description }) => `${name}: ${description}`)
       .join("\n");
 
-    const system = connectQuiz.system(this.style, this.tone, this.audience);
+    const system = connectQuiz.system(this.style, this.tone, this.audience, this.prerequisites);
     const prompt = connectQuiz.prompt(description, conceptsList, nbQuestions);
 
     return this.query({ system, prompt, token: nbQuestions * 200 });
@@ -129,7 +131,7 @@ export default class ServicePrototype {
 
     if (useHtmlQuery) {
       let pages = [];
-      let system = conceptsTextHtmlIntro.system(this.style, this.tone, this.audience);
+      let system = conceptsTextHtmlIntro.system(this.style, this.tone, this.audience, this.prerequisites);
       let prompt = conceptsTextHtmlIntro.prompt(section);
 
       let html = await this.query({ system, prompt, token: 2000, format: "text" });
@@ -138,7 +140,7 @@ export default class ServicePrototype {
       pages.push(html);
 
       for (let i = 0; i < section.items.length; i++) {
-        system = conceptsTextHtml.system(this.style, this.tone, this.audience);
+        system = conceptsTextHtml.system(this.style, this.tone, this.audience, this.prerequisites);
         prompt = conceptsTextHtml.prompt(section, i);
         let html = await this.query({ system, prompt, token: 2000, format: "text" });
         // remove starting "```html" and ending "```" if present
@@ -148,7 +150,7 @@ export default class ServicePrototype {
 
       return { pages };
     } else {
-      const system = conceptsText.system(this.style, this.tone, this.audience);
+      const system = conceptsText.system(this.style, this.tone, this.audience, this.prerequisites);
       const prompt = conceptsText.prompt(section);
 
       return this.query({ system, prompt, token: 4000, model: "gpt-4o" });
