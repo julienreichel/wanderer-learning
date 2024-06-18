@@ -57,6 +57,7 @@ export default class LectureService extends ServicePrototype {
    */
   async get(id) {
     let lecture = await super.get(id);
+    if (!lecture) return;
 
     lecture.steps = this.sort(lecture.steps);
     return this.removeDeletedContent(lecture);

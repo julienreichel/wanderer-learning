@@ -10,57 +10,14 @@
         <q-btn square size="sm" icon="straight" @click="finished()" />
       </q-card-actions>
     </q-card>
-    <q-card v-for="(step, index) in lecture.steps" :key="index">
-      <q-card-section horizontal clickable @click="viewStep(step)">
-        <q-card-section class="col">
-          <q-card-section class="q-pa-sm q-pb-md">
-            <div class="text-h5">{{ step.title }}</div>
-          </q-card-section>
-          <q-card-section class="q-pa-sm">
-            <q-icon
-              v-for="(part, index) in step.parts"
-              :key="index"
-              :name="
-                {
-                  text: 'article',
-                  img: 'image',
-                  video: 'smart_display',
-                  quiz: 'help_center',
-                  iframe: 'open_in_browser',
-                }[part.type]
-              "
-              color="primary"
-              clickable
-              @click="viewStep(step, index)"
-            />
-          </q-card-section>
-        </q-card-section>
-        <q-card-section class="col-1">
-          <q-card-section class="q-pa-sm">
-            <q-icon
-              v-if="step.reporting"
-              name="check_box"
-              color="positive"
-              size="lg"
-              right
-            />
-          </q-card-section>
-          <q-card-section class="q-pa-sm">
-            <q-badge v-if="step.reporting" :label="step.reporting.totalTime" />
-          </q-card-section>
-        </q-card-section>
-      </q-card-section>
-      <q-card-actions>
-        <q-space />
-        <q-btn size="sm" icon="east" @click="viewStep(step)" />
-      </q-card-actions>
-    </q-card>
+    <step-display v-for="(step, index) in lecture.steps" :key="index" :step="step" />
   </q-page>
 </template>
 
 <script setup>
 import { ref, onMounted, inject } from "vue";
 import ConceptDisplay from "src/components/concept/ConceptDisplay.vue";
+import StepDisplay from "src/components/step/StepDisplay.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
@@ -118,12 +75,6 @@ onMounted(async () => {
   });
 });
 
-const viewStep = (step, index) => {
-  router.push({
-    name: "LectureStepView",
-    params: { id: step.id, stepIdx: index || 0 },
-  });
-};
 
 const finished = () => {
   router.push({ name: "CourseView", params: { id: lecture.value.course.id } });

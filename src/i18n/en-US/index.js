@@ -20,6 +20,12 @@ export default {
     sign_out: "Sign Out",
     sign_in: "Sign In",
     welcome: "Welcome",
+    getting_started: "To get started, you can either pick a course that interests you or begin with a specific concept you want to explore. If you have a clear idea of a topic you want to dive into, starting with that concept provides focused and immediate learning experience. Alternatively, choosing a structured course gives a comprehensive understanding of a broader subject area.",
+    lectures_in_progress: "Lectures in progress",
+    next_steps: "Next steps",
+    related_lectures: "Related lectures",
+    related_concepts: "Related concepts",
+    new_user: "New user",
     edit: {
       json: "Edit JSON",
       text: "Edit Text",
