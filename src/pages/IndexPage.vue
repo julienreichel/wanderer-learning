@@ -78,6 +78,18 @@ onMounted(async () => {
       }
     });
 
+    // load stats for the user for each lecture
+    lecturesInProgress.value.forEach(async (lecture) => {
+      const reports = await reportingService.list({
+        lectureId: lecture.id,
+        username,
+        userId,
+      });
+      if (reports.length) {
+        lecture.stepsSummary = reportingService.getLastReports(reports);
+      }
+    });
+
     // check the concept covered by the lecture, and get similar lectures
     lecture.concepts.forEach(async ({concept}) => {
       const fullConcept = await conceptService.get(concept.id);
