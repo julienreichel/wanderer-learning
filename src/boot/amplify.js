@@ -66,9 +66,9 @@ export default boot(({ app, router }) => {
               REST: {
                 headers: async () => {
                   return { Authorization: authToken };
-                }
-              }
-            }
+                },
+              },
+            },
           });
 
           userIdSet = true;

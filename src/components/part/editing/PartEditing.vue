@@ -28,7 +28,7 @@
       <file-uploader v-else @uploaded="uploaded" />
     </q-card-section>
     <div class="row" v-if="part.type === 'img'">
-      <file-uploader class="col-6" @uploaded="uploaded"/>
+      <file-uploader class="col-6" @uploaded="uploaded" />
       <q-img class="col" :ratio="16 / 9" fit="scale-down" :src="part.url" />
     </div>
     <div class="row q-pa-md" v-if="part.type === 'video'">
@@ -104,7 +104,11 @@ watch(
       part.value.src = src ? src[1] : "";
     }
     // for youtube videos we extract the video id and build the embed url
-    if (part.value.src && part.value.src.includes("youtube.com") && !part.value.src.includes("embed")) {
+    if (
+      part.value.src &&
+      part.value.src.includes("youtube.com") &&
+      !part.value.src.includes("embed")
+    ) {
       const videoId = part.value.src.match(/v=([^&]*)/);
       part.value.src = videoId
         ? `https://www.youtube.com/embed/${videoId[1]}`

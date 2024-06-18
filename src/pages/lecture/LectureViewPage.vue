@@ -10,7 +10,11 @@
         <q-btn square size="sm" icon="straight" @click="finished()" />
       </q-card-actions>
     </q-card>
-    <step-display v-for="(step, index) in lecture.steps" :key="index" :step="step" />
+    <step-display
+      v-for="(step, index) in lecture.steps"
+      :key="index"
+      :step="step"
+    />
   </q-page>
 </template>
 
@@ -74,7 +78,6 @@ onMounted(async () => {
     }
   });
 });
-
 
 const finished = () => {
   router.push({ name: "CourseView", params: { id: lecture.value.course.id } });

@@ -9,7 +9,13 @@ ${prerequisites.length ? "<Prerequisites>I have already completed the following 
 <Response Format>JSON format following this example:{ "title": "", "keyConcepts": [{"name": "...", "description": "..."}], "expectedLearningOutcomes": [""] }
 `;
 
-const systemWithConcepts = (style, tone, audience, prerequisites, conceptsStr) => `
+const systemWithConcepts = (
+  style,
+  tone,
+  audience,
+  prerequisites,
+  conceptsStr,
+) => `
 <Context>You are an expert in educational design. You are tasked with designing the first step of an online lecture.
 <Objective>Given the lecture description, create the lecture title, a list of key concepts covered by the lecture (1 to 3-word name, and a brief description),
 and a list of Expected Learning Outcomes (each an action the student should be able to perform after completing the course).

@@ -49,7 +49,7 @@ const { uid } = useIris();
 
 const props = defineProps({
   multiple: { type: Boolean, default: false },
-  title:{ type: String }
+  title: { type: String },
 });
 const emit = defineEmits(["uploaded"]);
 
@@ -76,7 +76,7 @@ const start = async (msg) => {
   uploadedFiles = [];
 };
 const finish = async (msg) => {
-  uploadedFiles = uploadedFiles.filter((file) => Boolean(file));;
+  uploadedFiles = uploadedFiles.filter((file) => Boolean(file));
 
   emit("uploaded", uploadedFiles);
 };

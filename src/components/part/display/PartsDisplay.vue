@@ -96,7 +96,11 @@ const previewParts = computed(() => {
 
 const hasNext = computed(() => step.value < props.parts.length - 1);
 const hasAnsweredAllQuizzes = computed(() => quizLeft.value === 0);
-const hasAnsweredCurrentQuizz = computed(() => props.parts[step.value].type !== "quiz" || Boolean(reportings.value[step.value].responses));
+const hasAnsweredCurrentQuizz = computed(
+  () =>
+    props.parts[step.value].type !== "quiz" ||
+    Boolean(reportings.value[step.value].responses),
+);
 
 const hasQuizAnswer = (part) => {
   const idx = props.parts.indexOf(part);

@@ -9,7 +9,7 @@ import conceptsTextHtml from "./prompts/conceptsTextHtml.js";
 import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import practiceQuiz from "./prompts/finalQuiz.js";
 
-import { post } from 'aws-amplify/api';
+import { post } from "aws-amplify/api";
 
 export default class ServicePrototype {
   constructor() {
@@ -29,7 +29,8 @@ export default class ServicePrototype {
   setOptions(options = {}) {
     if (options.style && options.style !== "") this.style = options.style;
     if (options.model && options.model !== "") this.model = options.model;
-    if (options.audience && options.audience !== "") this.audience = options.audience;
+    if (options.audience && options.audience !== "")
+      this.audience = options.audience;
     if (options.tone) this.tone = options.tone;
     if (options.prerequisites) this.prerequisites = options.prerequisites;
   }
@@ -41,11 +42,11 @@ export default class ServicePrototype {
     query.model = query.model || this.model;
     try {
       const restOperation = post({
-        apiName: 'aiHttpApi',
-        path: 'ai-query',
+        apiName: "aiHttpApi",
+        path: "ai-query",
         options: {
-          body: query
-        }
+          body: query,
+        },
       });
 
       const { body } = await restOperation.response;
@@ -69,10 +70,25 @@ export default class ServicePrototype {
     let system;
     if (previousConcepts && previousConcepts.length > 0) {
       const conceptsStr = previousConcepts.map(({ name }) => name).join(", ");
-      console.log(previousConcepts, previousConcepts.map((name) => name), conceptsStr);
-      system = concepts.systemWithConcepts(this.style, this.tone, this.audience, this.prerequisites, conceptsStr);
+      console.log(
+        previousConcepts,
+        previousConcepts.map((name) => name),
+        conceptsStr,
+      );
+      system = concepts.systemWithConcepts(
+        this.style,
+        this.tone,
+        this.audience,
+        this.prerequisites,
+        conceptsStr,
+      );
     } else {
-      system = concepts.system(this.style, this.tone, this.audience, this.prerequisites);
+      system = concepts.system(
+        this.style,
+        this.tone,
+        this.audience,
+        this.prerequisites,
+      );
     }
 
     const prompt = concepts.prompt(description);
@@ -85,18 +101,34 @@ export default class ServicePrototype {
       .map(({ name, description }) => `${name}: ${description}`)
       .join("\n");
 
-
     const objectivesList = objectives.join("\n");
 
     let system;
     if (previousToc && previousToc.length > 0) {
       const tocList = previousToc
         .map(
-          ({ name, items }) => name + "\n" + items.map(({ name, description }) => `- ${name}: ${description}`).join("\n"))
+          ({ name, items }) =>
+            name +
+            "\n" +
+            items
+              .map(({ name, description }) => `- ${name}: ${description}`)
+              .join("\n"),
+        )
         .join("\n");
-      system = toc.systemWithToc(this.style, this.tone, this.audience, this.prerequisites, tocList);
+      system = toc.systemWithToc(
+        this.style,
+        this.tone,
+        this.audience,
+        this.prerequisites,
+        tocList,
+      );
     } else {
-      system = toc.system(this.style, this.tone, this.audience, this.prerequisites);
+      system = toc.system(
+        this.style,
+        this.tone,
+        this.audience,
+        this.prerequisites,
+      );
     }
 
     const prompt = toc.prompt(description, conceptsList, objectivesList);
@@ -109,7 +141,12 @@ export default class ServicePrototype {
       .map(({ name, description }) => `${name}: ${description}`)
       .join("\n");
 
-    const system = connectQuiz.system(this.style, this.tone, this.audience, this.prerequisites);
+    const system = connectQuiz.system(
+      this.style,
+      this.tone,
+      this.audience,
+      this.prerequisites,
+    );
     const prompt = connectQuiz.prompt(description, conceptsList, nbQuestions);
 
     return this.query({ system, prompt, token: nbQuestions * 200 });
@@ -138,31 +175,46 @@ export default class ServicePrototype {
       .join("\n");
 
     const system = conceptsQuiz.system(this.style, this.tone, this.audience);
-    const prompt = conceptsQuiz.prompt(
-      sectionName,
-      sectionItems,
-      nbQuestions,
-    );
+    const prompt = conceptsQuiz.prompt(sectionName, sectionItems, nbQuestions);
 
     return this.query({ system, prompt, token: nbQuestions * 200 });
   }
 
   async getConceptContent(section, useHtmlQuery = false) {
-
     if (useHtmlQuery) {
       let pages = [];
-      let system = conceptsTextHtmlIntro.system(this.style, this.tone, this.audience, this.prerequisites);
+      let system = conceptsTextHtmlIntro.system(
+        this.style,
+        this.tone,
+        this.audience,
+        this.prerequisites,
+      );
       let prompt = conceptsTextHtmlIntro.prompt(section);
 
-      let html = await this.query({ system, prompt, token: 2000, format: "text" });
+      let html = await this.query({
+        system,
+        prompt,
+        token: 2000,
+        format: "text",
+      });
       // remove starting "```html" and ending "```" if present
       html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
       pages.push(html);
 
       for (let i = 0; i < section.items.length; i++) {
-        system = conceptsTextHtml.system(this.style, this.tone, this.audience, this.prerequisites);
+        system = conceptsTextHtml.system(
+          this.style,
+          this.tone,
+          this.audience,
+          this.prerequisites,
+        );
         prompt = conceptsTextHtml.prompt(section, i);
-        let html = await this.query({ system, prompt, token: 2000, format: "text" });
+        let html = await this.query({
+          system,
+          prompt,
+          token: 2000,
+          format: "text",
+        });
         // remove starting "```html" and ending "```" if present
         html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
         pages.push(html);
@@ -170,7 +222,12 @@ export default class ServicePrototype {
 
       return { pages };
     } else {
-      const system = conceptsText.system(this.style, this.tone, this.audience, this.prerequisites);
+      const system = conceptsText.system(
+        this.style,
+        this.tone,
+        this.audience,
+        this.prerequisites,
+      );
       const prompt = conceptsText.prompt(section);
 
       return this.query({ system, prompt, token: 4000, model: "gpt-4o" });
@@ -185,7 +242,13 @@ export default class ServicePrototype {
 
     const tocList = toc
       .map(
-        ({ name, items }) => name + "\n" + items.map(({ name, description }) => `- ${name}: ${description}`).join("\n"))
+        ({ name, items }) =>
+          name +
+          "\n" +
+          items
+            .map(({ name, description }) => `- ${name}: ${description}`)
+            .join("\n"),
+      )
       .join("\n");
 
     const system = practiceQuiz.system(this.style, this.tone, this.audience);

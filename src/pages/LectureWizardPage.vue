@@ -105,7 +105,9 @@
               class="col"
               flat
               :label="$t('wizard.titleKeyConceptsObjectives.addAIConcepts')"
-              @click="generateTitleAndObjectives(keyConcepts, learningObjectives)"
+              @click="
+                generateTitleAndObjectives(keyConcepts, learningObjectives)
+              "
             />
           </div>
           <div class="text-h6">
@@ -422,12 +424,16 @@ const generateTitleAndObjectives = async (concepts, objectives) => {
   console.log("Generating title and objectives", concepts);
   const response = await aiService.getConcepts(
     courseDescription.value,
-    concepts
+    concepts,
   );
 
   title.value = response.title || "";
-  keyConcepts.value = concepts ? concepts.concat(response.keyConcepts) : response.keyConcepts;;
-  learningObjectives.value = objectives ? objectives.concat(response.expectedLearningOutcomes) : response.expectedLearningOutcomes;
+  keyConcepts.value = concepts
+    ? concepts.concat(response.keyConcepts)
+    : response.keyConcepts;
+  learningObjectives.value = objectives
+    ? objectives.concat(response.expectedLearningOutcomes)
+    : response.expectedLearningOutcomes;
 
   loading.value = false;
   step.value = 2;
@@ -440,7 +446,7 @@ const generateTableOfContent = async (toc = []) => {
     courseDescription.value,
     keyConcepts.value,
     learningObjectives.value,
-    toc
+    toc,
   );
 
   tableOfContent.value = [...toc, ...response.sections];

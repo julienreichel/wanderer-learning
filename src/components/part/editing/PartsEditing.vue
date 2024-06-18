@@ -76,7 +76,12 @@
   />
   <q-dialog v-model="openFileUpload">
     <q-card>
-      <file-uploader @uploaded="uploaded" :multiple="true" style="min-height: 300px" :title="$t('step.form.file_upload')"/>
+      <file-uploader
+        @uploaded="uploaded"
+        :multiple="true"
+        style="min-height: 300px"
+        :title="$t('step.form.file_upload')"
+      />
     </q-card>
   </q-dialog>
 </template>

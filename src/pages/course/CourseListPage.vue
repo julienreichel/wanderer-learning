@@ -1,6 +1,12 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
-    <q-card class="full-height" v-for="course in courses" :key="course.id" clickable @click="viewCourse(course)">
+    <q-card
+      class="full-height"
+      v-for="course in courses"
+      :key="course.id"
+      clickable
+      @click="viewCourse(course)"
+    >
       <q-card-section>
         <div class="text-h5">{{ course.title }}</div>
       </q-card-section>
@@ -24,7 +30,6 @@
         <q-btn size="sm" icon="add" @click="addCourse()" />
       </q-card-actions>
     </q-card>
-
   </q-page>
 </template>
 

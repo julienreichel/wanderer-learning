@@ -43,7 +43,11 @@
       v-if="feedbackType === 'roti' || feedbackType === 'difficulty'"
     >
       <q-item v-for="index in 5" :key="index">
-        <q-input v-if="question.answers[index - 1]" v-model="question.answers[index - 1].text" class="full-width">
+        <q-input
+          v-if="question.answers[index - 1]"
+          v-model="question.answers[index - 1].text"
+          class="full-width"
+        >
           <template v-slot:prepend>
             <q-icon
               :name="

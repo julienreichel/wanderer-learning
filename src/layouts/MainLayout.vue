@@ -27,21 +27,11 @@
           />
         </q-tabs>
         <q-tabs inline-label shrink class="lt-sm">
-          <q-route-tab
-            icon="school"
-            :to="{ name: 'CourseList' }"
-          />
-          <q-route-tab
-            icon="square_foot"
-            :to="{ name: 'ConceptList' }"
-          />
-          <q-route-tab
-            icon="query_stats"
-            :to="{ name: 'ReportingList' }"
-          />
+          <q-route-tab icon="school" :to="{ name: 'CourseList' }" />
+          <q-route-tab icon="square_foot" :to="{ name: 'ConceptList' }" />
+          <q-route-tab icon="query_stats" :to="{ name: 'ReportingList' }" />
         </q-tabs>
         <q-space />
-
 
         <q-breadcrumbs active-color="white" class="gt-sm">
           <q-breadcrumbs-el
@@ -70,13 +60,15 @@
           </q-list>
         </q-btn-dropdown>
       </q-toolbar>
-      <q-toolbar :class="{
+      <q-toolbar
+        :class="{
           'lt-md': true,
           'bg-accent': userAttributes.isAdmin,
           'bg-secondary': userAttributes.isTeacher && !userAttributes.isAdmin,
-        }" >
+        }"
+      >
         <q-space />
-        <q-breadcrumbs active-color="white" >
+        <q-breadcrumbs active-color="white">
           <q-breadcrumbs-el
             v-for="breadcrumb in breadcrumbs"
             :key="breadcrumb.label"

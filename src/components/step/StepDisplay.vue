@@ -61,5 +61,4 @@ const viewStep = (step, index) => {
     params: { id: step.id, stepIdx: index || 0 },
   });
 };
-
 </script>
