@@ -30,7 +30,10 @@
     v-if="validated && question.explanations && question.explanations !== ''"
     class="q-pa-md"
   >
-    <div v-html="question.explanations"></div>
+    <q-banner class="bg-primary text-white">
+      <div v-html="question.explanations"></div>
+    </q-banner>
+
   </q-card-section>
   <q-card-section
     v-else-if="validated && question.type === 'shorttext'"
