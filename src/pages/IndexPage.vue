@@ -71,9 +71,12 @@ onMounted(async () => {
   // Get the last 3 reports
   const data = await reportingService.list({ userId, username, limit: 3 });
 
+  let processedLectureIds = [];
   data.forEach(async (report) => {
-    // get the lecture
+    // get the lecture if not already processed
+    if (processedLectureIds.includes(report.lectureId)) return;
     const lecture = await lectureService.get(report.lectureId);
+    processedLectureIds.push(lecture.id);
     if (!lecture) return;
 
     // check if there in a next step in the lecture based report.lectureStepId
