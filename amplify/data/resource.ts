@@ -103,6 +103,7 @@ const schema = a.schema({
       id: a.id().required(),
       courseId: a.id().required(),
       title: a.string().required(),
+      learningOutcomes: a.string().array(),
       order: a.string(),
       owner: a.string(),
       course: a.belongsTo("Course", "courseId"),
@@ -118,11 +119,19 @@ const schema = a.schema({
       allow.group("admin"),
     ]),
 
+  Rating: a.customType({
+    value: a.string(),
+    reportingId: a.id(),
+  }),
+
   Course: a
     .model({
       id: a.id().required(),
       title: a.string().required(),
       owner: a.string(),
+      description: a.string(),
+      src: a.string(),
+      ratings: a.ref("Rating").array(),
       lectures: a.hasMany("Lecture", "courseId"),
     })
     .authorization((allow) => [
