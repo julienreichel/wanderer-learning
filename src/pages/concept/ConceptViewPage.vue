@@ -1,12 +1,33 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
     <q-card>
-      <q-card-section>
+      <q-card-section v-if="editing" class="q-gutter-sm">
+        <q-input
+          outlined
+          v-model="concept.title"
+          :label="$t('concept.form.title')"
+        />
+        <rich-text-editing
+          v-model="concept.description"
+          mode="simple"
+        ></rich-text-editing>
+      </q-card-section>
+      <q-card-section v-else clickable @click="viewConcept(concept)">
         <q-chip v-if="concept.title" square color="primary" text-color="white">
           {{ concept.title }}
         </q-chip>
         <div class="q-pa-sm" v-html="concept.description"></div>
       </q-card-section>
+      <q-card-actions v-if="editing">
+        <q-space />
+        <q-btn size="sm" icon="done" @click="updateConcept(concept)" />
+        <q-btn size="sm" icon="clear" @click="toogleEditing()" />
+      </q-card-actions>
+      <q-card-actions v-else-if="userAttributes.isTeacher || userAttributes.isAdmin">
+        <q-space />
+        <q-btn size="sm" icon="edit" @click="toogleEditing()" />
+        <q-btn size="sm" v-if="userAttributes.isAdmin" icon="delete" @click="deleteConcept(concept)" />
+      </q-card-actions>
     </q-card>
     <lectures-editing v-model="concept.lectures" />
   </q-page>
@@ -15,6 +36,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from "vue";
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
+import RichTextEditing from "src/components/part/common/RichTextEditing.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router } = useIris();
@@ -38,6 +60,8 @@ const loadConcept = async (id) => {
   if (!id) return;
 
   const data = await conceptService.get(id);
+  // for some reason there are empty lectures in the data
+  data.lectures = data.lectures?.filter(({lecture}) => Boolean(lecture));
   concept.value = data;
 
   updateBreadcrumbs([
@@ -68,4 +92,39 @@ watch(
     await loadConcept(id);
   },
 );
+
+const deleteConcept = async (concept) => {
+  $q.dialog({
+    title: t("generic.form.confirm_delete_title"),
+    message: t("concept.form.confirm_delete_concept"),
+    cancel: true,
+    persistent: true,
+  }).onOk(async () => {
+    await conceptService.delete(concept);
+    concepts.value = concepts.value.filter(({ id }) => id !== concept.id);
+  });
+};
+
+const editing = ref(false);
+let savedConcept = null;
+const toogleEditing = () => {
+  if ( editing.value ) {
+    concept.value.title = savedConcept.title;
+    concept.value.description = savedConcept.description;
+  } else {
+    savedConcept = { ...concept.value };
+  }
+  editing.value = !editing.value;
+};
+const updateConcept = async (concept) => {
+  editing.value = null;
+
+  await conceptService.update(concept);
+
+  $q.notify({
+    color: "info",
+    icon: "cloud_done",
+    message: t("generic.form.saved"),
+  });
+};
 </script>
