@@ -61,24 +61,6 @@
           </q-chip>
         </div>
       </template>
-
-      <template v-slot:body="props">
-        <q-tr :props="props" @click="viewConcept(props.row)">
-          <q-td key="title" :props="props">
-            <q-chip
-              v-if="props.row.title"
-              square
-              color="primary"
-              text-color="white"
-            >
-              {{ props.row.title }}
-            </q-chip>
-          </q-td>
-          <q-td key="description" :props="props">
-            {{ props.row.description }}
-          </q-td>
-        </q-tr>
-      </template>
     </q-table>
     <q-card v-if="userAttributes.isTeacher">
       <q-card-section>
