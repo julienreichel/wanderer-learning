@@ -95,6 +95,8 @@ export default {
   },
   concept: {
     list: "Concepts",
+    title: "Concepts",
+    description: "Description",
     form: {
       add: "New concept",
       title: "Concept Title",

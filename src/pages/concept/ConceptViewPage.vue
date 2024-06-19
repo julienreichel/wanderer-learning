@@ -12,7 +12,7 @@
           mode="simple"
         ></rich-text-editing>
       </q-card-section>
-      <q-card-section v-else clickable @click="viewConcept(concept)">
+      <q-card-section v-else>
         <q-chip v-if="concept.title" square color="primary" text-color="white">
           {{ concept.title }}
         </q-chip>
@@ -101,7 +101,7 @@ const deleteConcept = async (concept) => {
     persistent: true,
   }).onOk(async () => {
     await conceptService.delete(concept);
-    concepts.value = concepts.value.filter(({ id }) => id !== concept.id);
+    router.push({ name: "ConceptList", });
   });
 };
 
