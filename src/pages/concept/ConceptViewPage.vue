@@ -23,10 +23,17 @@
         <q-btn size="sm" icon="done" @click="updateConcept(concept)" />
         <q-btn size="sm" icon="clear" @click="toogleEditing()" />
       </q-card-actions>
-      <q-card-actions v-else-if="userAttributes.isTeacher || userAttributes.isAdmin">
+      <q-card-actions
+        v-else-if="userAttributes.isTeacher || userAttributes.isAdmin"
+      >
         <q-space />
         <q-btn size="sm" icon="edit" @click="toogleEditing()" />
-        <q-btn size="sm" v-if="userAttributes.isAdmin" icon="delete" @click="deleteConcept(concept)" />
+        <q-btn
+          size="sm"
+          v-if="userAttributes.isAdmin"
+          icon="delete"
+          @click="deleteConcept(concept)"
+        />
       </q-card-actions>
     </q-card>
     <lectures-editing v-model="concept.lectures" />
@@ -61,7 +68,7 @@ const loadConcept = async (id) => {
 
   const data = await conceptService.get(id);
   // for some reason there are empty lectures in the data
-  data.lectures = data.lectures?.filter(({lecture}) => Boolean(lecture));
+  data.lectures = data.lectures?.filter(({ lecture }) => Boolean(lecture));
   concept.value = data;
 
   updateBreadcrumbs([
@@ -101,14 +108,14 @@ const deleteConcept = async (concept) => {
     persistent: true,
   }).onOk(async () => {
     await conceptService.delete(concept);
-    router.push({ name: "ConceptList", });
+    router.push({ name: "ConceptList" });
   });
 };
 
 const editing = ref(false);
 let savedConcept = null;
 const toogleEditing = () => {
-  if ( editing.value ) {
+  if (editing.value) {
     concept.value.title = savedConcept.title;
     concept.value.description = savedConcept.description;
   } else {

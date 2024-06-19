@@ -72,7 +72,7 @@ onMounted(async () => {
   const data = await reportingService.list({ userId, username, limit: 3 });
 
   let processedLectureIds = [];
-  for(const report of data) {
+  for (const report of data) {
     // get the lecture if not already processed
     if (processedLectureIds.includes(report.lectureId)) return;
     const lecture = await lectureService.get(report.lectureId);
