@@ -31,8 +31,9 @@
           class="q-pa-xs col-xs-12 col-sm-6 col-md-4"
         >
           <q-card  @click="viewCourse(props.row)">
-            <q-card-section style="height: 90px">
-              <div class="text-h5">{{ props.row.title }}</div>
+            <q-card-section style="height: 150px">
+              <div class="text-h5" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ props.row.title }}</div>
+              <div class="q-pt-sm" style="overflow: hidden; height: 115px" v-html="props.row.description"></div>
             </q-card-section>
             <q-card-actions>
               <q-space />

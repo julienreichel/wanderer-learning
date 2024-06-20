@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
     <q-card horisontal>
-      <q-card-section>
+      <q-card-section class="q-gutter-sm">
         <q-input
           outlined
           v-model="course.title"
@@ -9,6 +9,10 @@
           @blur="saveCourse()"
           @keydown.enter="saveCourse()"
         />
+        <rich-text-editing
+          v-model="course.description"
+          mode="simple"
+        ></rich-text-editing>
       </q-card-section>
       <q-card-actions>
         <q-space />
@@ -44,8 +48,9 @@
 </template>
 
 <script setup>
-import { ref, inject, computed, onMounted } from "vue";
+import { ref, inject, computed, onMounted, onBeforeUnmount } from "vue";
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
+import RichTextEditing from "src/components/part/common/RichTextEditing.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
@@ -94,8 +99,12 @@ onMounted(async () => {
   });
 });
 
+onBeforeUnmount(async () => {
+  saveCourse();
+});
+
 const dirty = computed(() => {
-  return initalCourse.value.title !== course.value.title;
+  return initalCourse.value.title !== course.value.title || initalCourse.value.description !== course.value.description;
 });
 
 const saveCourse = async () => {

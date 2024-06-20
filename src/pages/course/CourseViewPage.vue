@@ -4,6 +4,7 @@
       <q-card>
         <q-card-section>
           <div class="text-h5">{{ course.title }}</div>
+          <div class="q-pt-sm" v-html="course.description"></div>
         </q-card-section>
         <q-card-actions>
           <q-space />
