@@ -20,7 +20,7 @@
         />
         <q-space />
         <q-input
-          borderless
+          outlined
           dense
           debounce="300"
           v-model="filter"

@@ -12,10 +12,10 @@
       row-key="id"
       :filter="filter"
     >
-      <template v-slot:top>
+      <template v-slot:top >
         <q-space />
         <q-input
-          borderless
+          outlined
           dense
           debounce="300"
           v-model="filter"
