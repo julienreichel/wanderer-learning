@@ -16,8 +16,6 @@ export default class LectureStepService extends ServicePrototype {
     this.model = this.client.models.LectureStep;
     this.storageService = new StorageService();
 
-    this.lastSaved = null;
-
     this.selectionSet = [
       "id",
       "title",
@@ -58,8 +56,7 @@ export default class LectureStepService extends ServicePrototype {
    */
   async create(input) {
     this.cleanParts(input.parts);
-    this.lastSaved = super.create(input);
-    return this.lastSaved;
+    return super.create(input);
   }
 
   /**
@@ -78,8 +75,7 @@ export default class LectureStepService extends ServicePrototype {
     delete payload.userTimeReportings;
     delete payload.ratings;
 
-    this.lastSaved = await super.update(payload);
-    return this.lastSaved;
+    return super.update(payload);
   }
 
   /**
@@ -91,11 +87,8 @@ export default class LectureStepService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async get(id, params = { resolveImg: true }) {
-    if (!this.lastSaved || this.lastSaved.id !== id) {
-      this.lastSaved = await super.get(id);
-    }
 
-    const step = this.lastSaved;
+    const step = await super.get(id);
     if (!step) return;
     // inject the url of the image
     if (params.resolveImg && step.parts) {

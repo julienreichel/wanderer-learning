@@ -12,6 +12,8 @@ export default class ServicePrototype {
 
     this.model = null;
     this.selectionSet = undefined;
+
+    this.lastSaved = null;
   }
 
   /**
@@ -26,6 +28,7 @@ export default class ServicePrototype {
     options.selectionSet = options.selectionSet || this.selectionSet;
     const { data } = await this.model.create(input, options);
 
+    this.lastSaved = data;
     return data;
   }
 
@@ -47,6 +50,7 @@ export default class ServicePrototype {
 
     const { data } = await this.model.update(payload, options);
 
+    this.lastSaved = data;
     return data;
   }
 
@@ -58,11 +62,16 @@ export default class ServicePrototype {
    * @returns {Promise<object>}
    */
   async get(id, options = {}) {
+
     options.authMode = "userPool";
     options.selectionSet = options.selectionSet || this.selectionSet;
 
-    const { data } = await this.model.get({ id }, options);
-    return data;
+    if (!this.lastSaved || this.lastSaved.id !== id) {
+      const { data } = await this.model.get({ id }, options);
+      this.lastSaved = data;
+    }
+
+    return this.lastSaved;
   }
 
   /**
