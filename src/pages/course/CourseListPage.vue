@@ -121,8 +121,8 @@ const columns = [
   },
 ];
 const getUrl = (course) => {
-  const idx = Math.floor(Math.random() * 8) + 1;
-  return course?.url || `/covers/Course${idx}.jpg`;
+  const idx = Math.floor(Math.random() * 7.9) + 1;
+  return course?.url || `/covers/ccourourse${idx}.jpg`;
 };
 
 const viewCourse = (course) => {
