@@ -30,6 +30,16 @@ export default class CourseService extends ServicePrototype {
     ];
   }
 
+  async resolveUrl(course) {
+    if (course.src && course.src !== "") {
+      if (course.src.startsWith("http")) {
+        course.url = course.src;
+      } else {
+        course.url = await this.storageService.resolveUrl(course.src);
+      }
+    }
+  }
+
   /**
    * Update a course
    *
@@ -42,6 +52,8 @@ export default class CourseService extends ServicePrototype {
     delete input.url;
 
     let course = await super.update(input, options);
+
+    await this.resolveUrl(course);
 
     return course;
   }
@@ -66,13 +78,8 @@ export default class CourseService extends ServicePrototype {
         (a, b) => Number(a.order) - Number(b.order),
       );
     });
-    if (course.src && course.src !== "") {
-      if (course.src.startsWith("http")) {
-        course.url = course.src;
-      } else {
-        course.url = await this.storageService.resolveUrl(course.src);
-      }
-    }
+
+    await this.resolveUrl(course);
 
     return course;
   }
@@ -90,13 +97,7 @@ export default class CourseService extends ServicePrototype {
     let courses = await super.list(params);
 
     for (let course of courses) {
-      if (course.src && course.src !== "") {
-        if (course.src.startsWith("http")) {
-          course.url = course.src;
-        } else {
-          course.url = await this.storageService.resolveUrl(course.src);
-        }
-      }
+      await this.resolveUrl(course);
     }
 
     return courses;
