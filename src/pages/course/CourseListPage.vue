@@ -122,7 +122,7 @@ const columns = [
 ];
 const getUrl = (course) => {
   const idx = Math.floor(Math.random() * 8) + 1;
-  return course?.url || `/public/covers/Course${idx}.jpg`;
+  return course?.url || `/covers/Course${idx}.jpg`;
 };
 
 const viewCourse = (course) => {
