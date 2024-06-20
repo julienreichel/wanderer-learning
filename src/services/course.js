@@ -1,5 +1,5 @@
 import ServicePrototype from "./service-prototype";
-
+import StorageService from "./storage";
 import LectureService from "./lecture";
 
 /**
@@ -16,6 +16,7 @@ export default class CourseService extends ServicePrototype {
 
     this.model = this.client.models.Course;
     this.lectureService = new LectureService();
+    this.storageService = new StorageService();
     this.selectionSet = [
       "id",
       "title",
@@ -38,6 +39,7 @@ export default class CourseService extends ServicePrototype {
   async update(payload, options = {}) {
     let input = { ...payload };
     delete input.lectures;
+    delete input.url;
 
     let course = await super.update(input, options);
 
@@ -64,6 +66,13 @@ export default class CourseService extends ServicePrototype {
         (a, b) => Number(a.order) - Number(b.order),
       );
     });
+    if (course.src && course.src !== "") {
+      if (course.src.startsWith("http")) {
+        course.url = course.src;
+      } else {
+        course.url = await this.storageService.resolveUrl(course.src);
+      }
+    }
 
     return course;
   }
@@ -79,6 +88,16 @@ export default class CourseService extends ServicePrototype {
       "src",
       "ratings.*"];
     let courses = await super.list(params);
+
+    for (let course of courses) {
+      if (course.src && course.src !== "") {
+        if (course.src.startsWith("http")) {
+          course.url = course.src;
+        } else {
+          course.url = await this.storageService.resolveUrl(course.src);
+        }
+      }
+    }
 
     return courses;
   }

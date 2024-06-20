@@ -43,7 +43,7 @@
 <script setup>
 import { ref, onMounted, watch, inject } from "vue";
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
-import RichTextEditing from "src/components/part/common/RichTextEditing.vue";
+import RichTextEditing from "src/components/common/RichTextEditing.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router } = useIris();

@@ -60,9 +60,9 @@
 <script setup>
 import { ref, inject, computed, watch } from "vue";
 
-import RichTextEditing from "../common/RichTextEditing.vue";
+import RichTextEditing from "../../common/RichTextEditing.vue";
 import QuestionEditing from "./QuestionEditing.vue";
-import FileUploader from "../common/FileUploader.vue";
+import FileUploader from "../../common/FileUploader.vue";
 
 const { storage: storageService, lectureStep: lectureStepService } =
   inject("services");
@@ -125,7 +125,6 @@ const removeImage = () => {
 };
 
 const uploaded = async (files) => {
-  console.log(files);
   const file = files[0];
   removeImage();
 

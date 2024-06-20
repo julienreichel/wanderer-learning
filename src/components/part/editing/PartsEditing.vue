@@ -92,7 +92,7 @@ import PartCard from "../common/PartCard.vue";
 import PartEditing from "./PartEditing.vue";
 import QuestionsEditing from "./QuestionsEditing.vue";
 import JsonEditDialog from "../common/JsonEditDialog.vue";
-import FileUploader from "../common/FileUploader.vue";
+import FileUploader from "../../common/FileUploader.vue";
 
 import { ref, computed, watch, nextTick, inject } from "vue";
 

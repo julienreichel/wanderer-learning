@@ -8,6 +8,11 @@
     @finish="finish"
     @added="addFile"
     :multiple="multiple"
+    :flat="flat"
+    :bordered="bordered"
+    :square="square"
+    :dark="dark"
+    :color="color"
   >
     <template v-slot:header="scope">
       <div class="row no-wrap items-center q-pa-xs q-gutter-none">
@@ -40,7 +45,7 @@
 </template>
 
 <script setup>
-import AmplifyUploader from "../../utils/AmplifyUploader.js";
+import AmplifyUploader from "../utils/AmplifyUploader.js";
 
 import { ref } from "vue";
 
@@ -50,6 +55,11 @@ const { uid } = useIris();
 const props = defineProps({
   multiple: { type: Boolean, default: false },
   title: { type: String },
+  flat: { type: Boolean, default: false },
+  bordered: { type: Boolean, default: false },
+  square: { type: Boolean, default: false },
+  dark: { type: Boolean, default: false },
+  color: { type: String, default: "primary" },
 });
 const emit = defineEmits(["uploaded"]);
 

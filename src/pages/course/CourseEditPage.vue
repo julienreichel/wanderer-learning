@@ -9,10 +9,25 @@
           @blur="saveCourse()"
           @keydown.enter="saveCourse()"
         />
-        <rich-text-editing
-          v-model="course.description"
-          mode="simple"
-        ></rich-text-editing>
+        <div class="row">
+          <rich-text-editing
+            class="col-8"
+            v-model="course.description"
+            mode="simple"
+          ></rich-text-editing>
+          <div
+            v-if="course.url && !uploadingFile"
+            class="q-pa-none col-4"
+          >
+            <q-img class="col" fit="cover" :ratio="16/9" :src="course.url" />
+
+            <q-card-actions>
+              <q-btn size="sm" icon="edit" @click="uploadingFile = true" />
+              <q-btn size="sm" icon="delete" @click="removeImage()" />
+            </q-card-actions>
+          </div>
+          <file-uploader class="col-4" flat bordered v-else @uploaded="uploaded" />
+        </div>
       </q-card-section>
       <q-card-actions>
         <q-space />
@@ -50,7 +65,8 @@
 <script setup>
 import { ref, inject, computed, onMounted, onBeforeUnmount } from "vue";
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
-import RichTextEditing from "src/components/part/common/RichTextEditing.vue";
+import RichTextEditing from "src/components/common/RichTextEditing.vue";
+import FileUploader from "src/components/common/FileUploader.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
@@ -58,6 +74,7 @@ const {
   course: courseService,
   lecture: lectureService,
   stepReporting: reportingService,
+  storage: storageService,
 } = inject("services");
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
@@ -69,12 +86,16 @@ const props = defineProps({
 const course = ref({
   title: null,
   lectures: [],
+  description: ""
 });
 const initalCourse = ref(null);
 
 onMounted(async () => {
   if (props.id) {
     const data = await courseService.get(props.id);
+    if (!data.description) {
+      data.description = "";
+    }
     course.value = data;
     initalCourse.value = { ...data };
 
@@ -103,9 +124,28 @@ onBeforeUnmount(async () => {
   saveCourse();
 });
 
-const dirty = computed(() => {
-  return initalCourse.value.title !== course.value.title || initalCourse.value.description !== course.value.description;
-});
+const dirty = computed(
+  () =>
+    initalCourse.value.title !== course.value.title ||
+    initalCourse.value.description !== course.value.description ||
+    initalCourse.value.src !== course.value.src,
+);
+
+const uploadingFile = ref(false);
+const removeImage = () => {
+  if (course.value.url && !course.value.url.startsWith("http")) {
+    storageService.removeImg(course.value.url);
+  }
+  course.value.url = null;
+  course.value.src = null;
+};
+const uploaded = async (files) => {
+  const file = files[0];
+  removeImage();
+
+  course.value.src = file?.path;
+  course.value.url = file?.url;
+};
 
 const saveCourse = async () => {
   if (!dirty.value) return;

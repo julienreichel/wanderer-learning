@@ -31,10 +31,13 @@
           class="q-pa-xs col-xs-12 col-sm-6 col-md-4"
         >
           <q-card  @click="viewCourse(props.row)">
-            <q-card-section style="height: 150px">
-              <div class="text-h5" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ props.row.title }}</div>
-              <div class="q-pt-sm" style="overflow: hidden; height: 115px" v-html="props.row.description"></div>
-            </q-card-section>
+            <q-img :src="getUrl(props.row)" :ratio="16/9">
+              <div class="absolute-bottom">
+                <div class="text-h6">{{ props.row.title }}</div>
+                <div class="text-subtitle2" style="overflow: hidden; height: 42px" v-html="props.row.description"></div>
+              </div>
+            </q-img>
+
             <q-card-actions>
               <q-space />
               <q-btn size="sm" icon="east" @click="viewCourse(props.row)" />
@@ -77,6 +80,7 @@ const courses = ref([]);
 onMounted(async () => {
   const data = await courseService.list();
   courses.value = data;
+  console.log(data);
 });
 
 let filter = ref("");
@@ -96,6 +100,10 @@ const columns = [
     field: "src",
   },
   {
+    name: "url",
+    field: "url",
+  },
+  {
     name: "ratings",
     field: "ratings",
   },
@@ -112,6 +120,10 @@ const columns = [
     field: "description",
   },
 ];
+const getUrl = (course) => {
+  const idx = Math.floor(Math.random() * 8) + 1;
+  return course?.url || `/src/assets/covers/Course${idx}.jpg`;
+};
 
 const viewCourse = (course) => {
   router.push({ name: "CourseView", params: { id: course.id } });

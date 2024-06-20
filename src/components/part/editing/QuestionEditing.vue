@@ -115,7 +115,7 @@
 </template>
 
 <script setup>
-import RichTextEditing from "../common/RichTextEditing.vue";
+import RichTextEditing from "../../common/RichTextEditing.vue";
 
 import { ref, watch } from "vue";
 import { useIris } from "src/composables/iris";
