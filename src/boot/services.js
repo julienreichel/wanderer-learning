@@ -10,13 +10,16 @@ import StorageService from "src/services/storage";
 import AIService from "src/services/ai";
 
 export default boot(({ app }) => {
-  const concept = new ConceptService();
-  const course = new CourseService();
-  const lecture = new LectureService();
-  const lectureConcept = new LectureConceptService();
-  const lectureStep = new LectureStepService();
-  const stepReporting = new StepReportingService();
-  const storage = new StorageService();
+  let cacheData = {
+    single: {}
+  };
+  const concept = new ConceptService(cacheData);
+  const course = new CourseService(cacheData);
+  const lecture = new LectureService(cacheData);
+  const lectureConcept = new LectureConceptService(cacheData);
+  const lectureStep = new LectureStepService(cacheData);
+  const stepReporting = new StepReportingService(cacheData);
+  const storage = new StorageService(cacheData);
   const ai = new AIService();
 
   app.provide("services", {

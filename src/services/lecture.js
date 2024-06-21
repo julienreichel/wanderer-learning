@@ -12,8 +12,8 @@ import LectureStepService from "./lecture-step";
  * const quizService = new LectureService();
  */
 export default class LectureService extends ServicePrototype {
-  constructor() {
-    super();
+  constructor(cacheData) {
+    super(cacheData);
 
     this.model = this.client.models.Lecture;
     this.lectureConceptService = new LectureConceptService();
@@ -85,6 +85,12 @@ export default class LectureService extends ServicePrototype {
    */
   async update(input) {
     let payload = { ...input };
+
+    // Update the cache
+    if (this.cacheData) {
+      this.cacheData.single = { ...input };
+    }
+
     delete payload.concepts;
     delete payload.steps;
     delete payload.course;

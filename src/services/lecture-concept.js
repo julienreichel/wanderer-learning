@@ -10,8 +10,8 @@ import { generateClient } from "aws-amplify/api";
  * const quizService = new ConceptService();
  */
 export default class ConceptService extends ServicePrototype {
-  constructor() {
-    super();
+  constructor(cacheData) {
+    super(cacheData);
 
     this.model = this.client.models.LectureConceptJoinTable;
 

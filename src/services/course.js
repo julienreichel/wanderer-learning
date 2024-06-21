@@ -11,8 +11,8 @@ import LectureService from "./lecture";
  * const quizService = new CourseService();
  */
 export default class CourseService extends ServicePrototype {
-  constructor() {
-    super();
+  constructor(cacheData) {
+    super(cacheData);
 
     this.model = this.client.models.Course;
     this.lectureService = new LectureService();
@@ -49,6 +49,12 @@ export default class CourseService extends ServicePrototype {
    */
   async update(payload, options = {}) {
     let input = { ...payload };
+
+    // Update the cache
+    if (this.cacheData) {
+      this.cacheData.single = { ...payload };
+    }
+
     delete input.lectures;
     delete input.url;
 

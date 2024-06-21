@@ -11,8 +11,8 @@ import LectureConceptService from "./lecture-concept";
  * const quizService = new ConceptService();
  */
 export default class ConceptService extends ServicePrototype {
-  constructor() {
-    super();
+  constructor(cacheData) {
+    super(cacheData);
 
     this.model = this.client.models.Concept;
     this.lectureConceptService = new LectureConceptService();

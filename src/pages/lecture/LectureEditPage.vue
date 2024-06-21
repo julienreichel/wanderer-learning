@@ -100,7 +100,7 @@ import TimeDistribution from "src/components/charts/TimeDistribution.vue";
 import StepReporting from "src/components/reporting/StepReporting.vue";
 import RichTextEditing from "src/components/common/RichTextEditing.vue";
 
-import { ref, inject, computed, onMounted } from "vue";
+import { ref, inject, computed, onMounted, onBeforeUnmount } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { t, locale, $q, router, canEdit } = useIris();
@@ -154,6 +154,9 @@ onMounted(async () => {
       step.ratings = reportingService.computeRatings(reports);
     }
   });
+});
+onBeforeUnmount(async () => {
+  saveLecture();
 });
 
 const dirty = computed(

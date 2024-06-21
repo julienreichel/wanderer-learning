@@ -4,7 +4,7 @@ import { generateClient } from "aws-amplify/data";
  * This is the prototype of any service using GraphQL
  */
 export default class ServicePrototype {
-  constructor() {
+  constructor(cacheData) {
     /**
      * @type {import('aws-amplify/data').Client<import('../amplify/data/resource').Schema>}
      */
@@ -13,7 +13,10 @@ export default class ServicePrototype {
     this.model = null;
     this.selectionSet = undefined;
 
-    this.lastSaved = null;
+    // we use a very simple model, were we cache only one item for all type,
+    // this makes sure that the cache is only use when switching editing/view for a model
+    // as soon as some other modela are saved, the cache is cleared
+    this.cacheData = cacheData || { single: {} };
   }
 
   /**
@@ -28,8 +31,8 @@ export default class ServicePrototype {
     options.selectionSet = options.selectionSet || this.selectionSet;
     const { data } = await this.model.create(input, options);
 
-    if (options.caching !== false) {
-      this.lastSaved = { ...data };
+    if (this.cacheData) {
+      this.cacheData.single = { ...data };
     }
     return data;
   }
@@ -52,7 +55,10 @@ export default class ServicePrototype {
 
     const { data } = await this.model.update(payload, options);
 
-    this.lastSaved = { ...data };
+    // In case something was modified on the server update the cache with the response
+    if (this.cacheData) {
+      this.cacheData.single = { ...data };
+    }
     return data;
   }
 
@@ -67,12 +73,15 @@ export default class ServicePrototype {
     options.authMode = "userPool";
     options.selectionSet = options.selectionSet || this.selectionSet;
 
-    if (!this.lastSaved || this.lastSaved.id !== id) {
+    const lastSaved = this.cacheData.single;
+    if (!lastSaved || lastSaved.id !== id) {
       const { data } = await this.model.get({ id }, options);
-      this.lastSaved = data;
+      this.cacheData.single = { ...data };
+      return data;
     }
 
-    return { ... this.lastSaved };
+    console.log("Getting data from cache", lastSaved);
+    return { ...lastSaved };
   }
 
   /**
@@ -91,6 +100,7 @@ export default class ServicePrototype {
     const payload = { id };
     const { data } = await this.model.delete(payload, options);
 
+    this.cacheData.single = {};
     return data;
   }
 

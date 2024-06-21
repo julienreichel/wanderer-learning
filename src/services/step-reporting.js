@@ -9,8 +9,8 @@ import ServicePrototype from "./service-prototype";
  * const stepReporting = new StepReportingService();
  */
 export default class StepReportingService extends ServicePrototype {
-  constructor() {
-    super();
+  constructor(cacheData) {
+    super(cacheData);
 
     this.model = this.client.models.StepReporting;
   }

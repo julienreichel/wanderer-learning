@@ -10,8 +10,8 @@ import StorageService from "./storage";
  * const lectureStepService = new LectureStepService();
  */
 export default class LectureStepService extends ServicePrototype {
-  constructor() {
-    super();
+  constructor(cacheData) {
+    super(cacheData);
 
     this.model = this.client.models.LectureStep;
     this.storageService = new StorageService();
@@ -67,6 +67,11 @@ export default class LectureStepService extends ServicePrototype {
    */
   async update(input) {
     let payload = { ...input };
+    // Update the cache
+    if (this.cacheData) {
+      this.cacheData.single = { ...input };
+    }
+
     // Cleanup fields that should not be updated
     this.cleanParts(payload.parts);
     delete payload.lecture;

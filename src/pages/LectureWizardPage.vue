@@ -545,7 +545,7 @@ const generateLecture = async () => {
     order: "" + Date.now(),
     description,
     locale: locale.value,
-  }, { caching: false });
+  });
   lectureId = lecture.id;
 
   // add the key concepts
