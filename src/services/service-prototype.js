@@ -28,7 +28,9 @@ export default class ServicePrototype {
     options.selectionSet = options.selectionSet || this.selectionSet;
     const { data } = await this.model.create(input, options);
 
-    this.lastSaved = { ...data };
+    if (options.caching !== false) {
+      this.lastSaved = { ...data };
+    }
     return data;
   }
 

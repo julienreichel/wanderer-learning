@@ -71,8 +71,8 @@ export default class LectureService extends ServicePrototype {
    * @param {object} input the lecture data
    * @returns {Promise<object>}
    */
-  async create(input) {
-    let lecture = await super.create(input);
+  async create(input, params) {
+    let lecture = await super.create(input, params);
 
     return this.removeDeletedContent(lecture);
   }
