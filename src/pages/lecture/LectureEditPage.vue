@@ -154,10 +154,6 @@ onMounted(async () => {
   });
 });
 
-const dirty = computed(() => {
-  return initalLecture.value.title !== lecture.value.title;
-});
-
 const dirty = computed(() => initalLecture.value.title !== lecture.value.title || initalLecture.value.description !== lecture.value.description);
 
 const saveLecture = async () => {
