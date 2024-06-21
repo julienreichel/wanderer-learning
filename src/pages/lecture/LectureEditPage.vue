@@ -236,14 +236,6 @@ const editStep = (step) => {
 };
 
 const newTitle = ref();
-const contentType = ref("step");
-const optionType = [
-  { value: "quiz", slot: "quiz" },
-  {
-    value: "step",
-    slot: "step",
-  },
-];
 const addStep = async () => {
   const step = await lectureStepService.create({
     title: newTitle.value,
@@ -268,6 +260,10 @@ const deleteLecture = async (lecture) => {
     await lectureService.delete(lecture);
     router.push({ name: "CourseEdit", params: { id: lecture.course.id } });
   });
+};
+
+const finished = () => {
+  router.push({ name: "CourseEdit", params: { id: lecture.value.course.id } });
 };
 </script>
 
