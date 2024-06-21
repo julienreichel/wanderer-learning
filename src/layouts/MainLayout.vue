@@ -54,6 +54,9 @@
             <q-item>
               <q-item-section>{{ userAttributes.name }}</q-item-section>
             </q-item>
+            <q-item>
+              <LanguageSwitcher />
+            </q-item>
             <q-item clickable @click="logOut">
               <q-item-section>{{ $t("generic.sign_out") }}</q-item-section>
             </q-item>
@@ -86,11 +89,18 @@
 </template>
 
 <script setup>
-import { ref, provide, inject, watch } from "vue";
+import LanguageSwitcher from "src/components/common/LanguageSwitcher.vue";
+
+import { ref, provide, inject, watch, onMounted } from "vue";
 
 import { signOut } from "aws-amplify/auth";
 import { useIris } from "src/composables/iris";
-const { t, router } = useIris();
+const { $q, t, locale, router } = useIris();
+
+onMounted(() => {
+  locale.value = $q.localStorage.getItem("locale") || "en-US";
+});
+
 
 const userAttributes = inject("userAttributes");
 watch(userAttributes, (value) => {

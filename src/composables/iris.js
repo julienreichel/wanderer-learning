@@ -5,7 +5,7 @@ import { inject } from "vue";
 
 export function useIris() {
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, locale } = useI18n({ useScope: "global" });
   const $q = useQuasar();
 
   const userAttributes = inject("userAttributes");
@@ -22,5 +22,5 @@ export function useIris() {
       feedback: "rate_review",
     })[type] || type;
 
-  return { router, t, $q, uid, canEdit, getIconFromType };
+  return { router, t, locale, $q, uid, canEdit, getIconFromType };
 }
