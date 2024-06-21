@@ -16,18 +16,21 @@
             :placeholder="$t('course.form.description')"
             mode="simple"
           ></rich-text-editing>
-          <div
-            v-if="course.url && !uploadingFile"
-            class="q-pa-none col-4"
-          >
-            <q-img class="col" fit="cover" :ratio="16/9" :src="course.url" />
+          <div v-if="course.url && !uploadingFile" class="q-pa-none col-4">
+            <q-img class="col" fit="cover" :ratio="16 / 9" :src="course.url" />
 
             <q-card-actions>
               <q-btn size="sm" icon="edit" @click="uploadingFile = true" />
               <q-btn size="sm" icon="delete" @click="removeImage()" />
             </q-card-actions>
           </div>
-          <file-uploader class="col-4" flat bordered v-else @uploaded="uploaded" />
+          <file-uploader
+            class="col-4"
+            flat
+            bordered
+            v-else
+            @uploaded="uploaded"
+          />
         </div>
       </q-card-section>
       <q-card-actions>
@@ -87,7 +90,7 @@ const props = defineProps({
 const course = ref({
   title: null,
   lectures: [],
-  description: ""
+  description: "",
 });
 const initalCourse = ref(null);
 

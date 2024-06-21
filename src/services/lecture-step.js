@@ -87,7 +87,6 @@ export default class LectureStepService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async get(id, params = { resolveImg: true }) {
-
     const step = await super.get(id);
     if (!step) return;
     // inject the url of the image

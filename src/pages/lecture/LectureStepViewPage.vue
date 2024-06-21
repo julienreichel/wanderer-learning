@@ -24,8 +24,11 @@ import { ref, onMounted, inject } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
-const { lectureStep: lectureStepService, stepReporting: stepReportingService, course: courseService } =
-  inject("services");
+const {
+  lectureStep: lectureStepService,
+  stepReporting: stepReportingService,
+  course: courseService,
+} = inject("services");
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
 
@@ -73,19 +76,23 @@ const finished = async ({ finished, reportings } = {}) => {
 
     // if there is a stars count, update the course stars
     let starValues = [];
-    reportings.forEach(partReport => {
-      const response = partReport.responses?.find(response => response.feedbackType === 'stars');
-      if ( response ) {
+    reportings.forEach((partReport) => {
+      const response = partReport.responses?.find(
+        (response) => response.feedbackType === "stars",
+      );
+      if (response) {
         starValues.push(Number(response.response));
       }
     });
     if (starValues.length > 0) {
       let course = lectureStep.value.lecture.course;
-      const stars = Math.round(starValues.reduce((a, b) => a + b) / starValues.length);
-      if (!lectureStep.value.lecture.course.ratings){
-        course.ratings = [{ value: stars, reportingId: report.id}];
+      const stars = Math.round(
+        starValues.reduce((a, b) => a + b) / starValues.length,
+      );
+      if (!lectureStep.value.lecture.course.ratings) {
+        course.ratings = [{ value: stars, reportingId: report.id }];
       } else {
-        course.ratings.push({ value: stars, reportingId: report.id});
+        course.ratings.push({ value: stars, reportingId: report.id });
       }
       courseService.update(course);
     }

@@ -13,11 +13,11 @@
       <concept-editing v-model="lecture" />
       <q-card-section>
         <rich-text-editing
-            v-model="lecture.description"
-            :placeholder="$t('lecture.form.description')"
-            mode="simple"
-          />
-        </q-card-section>
+          v-model="lecture.description"
+          :placeholder="$t('lecture.form.description')"
+          mode="simple"
+        />
+      </q-card-section>
       <q-card-actions>
         <q-space />
         <q-btn square size="sm" icon="straight" @click="finished()" />
@@ -119,7 +119,7 @@ const props = defineProps({
 const lecture = ref({
   title: null,
   steps: [],
-  description: ""
+  description: "",
 });
 const initalLecture = ref(null);
 
@@ -154,7 +154,11 @@ onMounted(async () => {
   });
 });
 
-const dirty = computed(() => initalLecture.value.title !== lecture.value.title || initalLecture.value.description !== lecture.value.description);
+const dirty = computed(
+  () =>
+    initalLecture.value.title !== lecture.value.title ||
+    initalLecture.value.description !== lecture.value.description,
+);
 
 const saveLecture = async () => {
   if (!dirty.value) return;

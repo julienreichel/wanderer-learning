@@ -62,7 +62,6 @@ export default class ServicePrototype {
    * @returns {Promise<object>}
    */
   async get(id, options = {}) {
-
     options.authMode = "userPool";
     options.selectionSet = options.selectionSet || this.selectionSet;
 

@@ -12,7 +12,7 @@
       row-key="id"
       :filter="filter"
     >
-      <template v-slot:top >
+      <template v-slot:top>
         <q-space />
         <q-input
           outlined
@@ -27,14 +27,16 @@
         </q-input>
       </template>
       <template v-slot:item="props">
-        <div
-          class="q-pa-xs col-xs-12 col-sm-6 col-md-4"
-        >
-          <q-card  @click="viewCourse(props.row)">
-            <q-img :src="getUrl(props.row)" :ratio="16/9">
+        <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
+          <q-card @click="viewCourse(props.row)">
+            <q-img :src="getUrl(props.row)" :ratio="16 / 9">
               <div class="absolute-bottom">
                 <div class="text-h6">{{ props.row.title }}</div>
-                <div class="text-subtitle2" style="overflow: hidden; height: 42px" v-html="props.row.description"></div>
+                <div
+                  class="text-subtitle2"
+                  style="overflow: hidden; height: 42px"
+                  v-html="props.row.description"
+                ></div>
               </div>
             </q-img>
 

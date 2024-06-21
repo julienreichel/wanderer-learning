@@ -91,9 +91,14 @@ export default class CourseService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async list(params = {}) {
-    params.selectionSet = ["id", "title", "owner", "description",
+    params.selectionSet = [
+      "id",
+      "title",
+      "owner",
+      "description",
       "src",
-      "ratings.*"];
+      "ratings.*",
+    ];
     let courses = await super.list(params);
 
     for (let course of courses) {
