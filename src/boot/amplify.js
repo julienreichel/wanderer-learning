@@ -39,7 +39,6 @@ export default boot(({ app, router }) => {
       if (!userIdSet) {
         try {
           const authSession = await fetchAuthSession();
-          const authToken = authSession.tokens?.idToken;
           let { identities, ...userAttributes } = await fetchUserAttributes();
           console.log(currentUser, authSession, identities, userAttributes);
           const groups =
@@ -59,18 +58,6 @@ export default boot(({ app, router }) => {
             isAdmin,
             isTeacher,
           };
-
-          const existingConfig = Amplify.getConfig();
-          Amplify.configure(existingConfig, {
-            API: {
-              REST: {
-                headers: async () => {
-                  return { Authorization: authToken };
-                },
-              },
-            },
-          });
-
           userIdSet = true;
         } catch (err) {
           console.log(err);

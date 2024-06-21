@@ -1,4 +1,4 @@
-const system = (style, tone, audience, prerequisites) => `
+const system = (style, tone, audience, prerequisites, language) => `
 Context:
 You are creating detailed pages for an online self-study course.
 The students will study independently and use the material to prepare for a quiz testing their understanding of the subject.
@@ -18,6 +18,9 @@ ${tone}
 Audience:
 ${audience}
 ${prerequisites.length ? "\nPrerequisites:\nI have already completed the following prerequisite courses: " + prerequisites.join(", ") : ""}
+
+Response Language:
+${language}
 
 Response Format:
 The response should be in JSON format following this structure:

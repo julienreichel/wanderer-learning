@@ -1,4 +1,4 @@
-const system = (style, tone, audience) => `
+const system = (style, tone, audience, language) => `
 <Context>
 You are an expert in educational design. You are tasked with creating an quiz for an section of an online lecture based on the section description.
 The purpose of the quiz is help the user understanding the concepts explained in the section.
@@ -20,6 +20,8 @@ ${style}
 ${tone}
 <Audience>
 ${audience}
+<Response Language>
+${language}
 <Response Format>
 JSON format following this structure:
 { "questions": [ { "type": "radio" | "shorttext" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ], "explanations":  "..."} ] }

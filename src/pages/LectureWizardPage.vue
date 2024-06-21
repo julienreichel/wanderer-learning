@@ -284,7 +284,7 @@
 import { ref, inject, onMounted } from "vue";
 
 import { useIris } from "src/composables/iris";
-const { t, $q, router } = useIris();
+const { t, locale, $q, router } = useIris();
 const {
   ai: aiService,
   lecture: lectureService,
@@ -314,7 +314,7 @@ const options = {
   tone: "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.",
   model: "gpt-3.5-turbo",
   extendedQueryForConcept: false,
-  ...$q.localStorage.getItem("aiOptions"),
+  ...$q.localStorage.getItem("aiOptions")
 };
 
 const formatOption = (text) => {
@@ -419,6 +419,7 @@ const generateTitleAndObjectives = async (concepts = [], objectives = []) => {
   $q.localStorage.set("aiOptions", options);
 
   options.prerequisites = prerequisites;
+  options.locale = locale.value;
   aiService.setOptions(options);
 
   console.log("Generating title and objectives", concepts);
@@ -543,6 +544,7 @@ const generateLecture = async () => {
     courseId: props.id,
     order: "" + Date.now(),
     description,
+    locale: locale.value,
   });
   lectureId = lecture.id;
 

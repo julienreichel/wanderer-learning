@@ -1,4 +1,4 @@
-const system = (style, tone, audience, prerequisites) => `
+const system = (style, tone, audience, prerequisites, language) => `
 <Context>You are an expert in educational design.
 You are tasked with creating an initial quiz for an online lecture based on key concepts.
 The purpose of the quiz is to connect the user with what they already know.
@@ -16,6 +16,8 @@ Ensure the explanation does not reiterate the question but rather offers supplem
 <Audience>${audience}</Audience>
 
 ${prerequisites.length ? "\nPrerequisites:\nI have already completed the following prerequisite lecture: " + prerequisites.join(", ") + "<nPrerequisites>" : ""}
+
+<Response Language>${language}
 
 <Response Format>JSON format following this structure:
 { "questions": [ { "type": "radio" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ], "explanations":  "..."} ] }

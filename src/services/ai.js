@@ -10,6 +10,8 @@ import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import practiceQuiz from "./prompts/finalQuiz.js";
 
 import { post } from "aws-amplify/api";
+import { Amplify } from "aws-amplify";
+import { fetchAuthSession } from "aws-amplify/auth";
 
 export default class ServicePrototype {
   constructor() {
@@ -24,6 +26,7 @@ export default class ServicePrototype {
     this.tone = `Enthusiastic and engaging with a touch of humour.`;
     this.model = "gpt-3.5-turbo";
     this.prerequisites = [];
+    this.language = "English";
   }
 
   setOptions(options = {}) {
@@ -33,19 +36,28 @@ export default class ServicePrototype {
       this.audience = options.audience;
     if (options.tone) this.tone = options.tone;
     if (options.prerequisites) this.prerequisites = options.prerequisites;
+    if (options.locale) {
+      this.language = { 'en-US': 'English', 'fr-FR': 'French' }[options.locale] || "English";
+    }
   }
 
-  async query(query) {
+  async query(query, retryCount = 0) {
     console.log(query.system);
     console.log(query.prompt);
 
     query.model = query.model || this.model;
     try {
+      const authSession = await fetchAuthSession();
+      const authToken = authSession.tokens?.idToken;
+
       const restOperation = post({
         apiName: "aiHttpApi",
         path: "ai-query",
         options: {
           body: query,
+          headers: {
+            Authorization: authToken
+          }
         },
       });
 
@@ -60,8 +72,12 @@ export default class ServicePrototype {
         return data;
       }
       return JSON.parse(data);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.log(error);
+      if (retryCount === 0) {
+        // let's try again, maybe it was a temporary issue
+        return this.query(query, retryCount + 1);
+      }
       return {};
     }
   }
@@ -76,6 +92,7 @@ export default class ServicePrototype {
         this.audience,
         this.prerequisites,
         conceptsStr,
+        this.language
       );
     } else {
       system = concepts.system(
@@ -83,6 +100,7 @@ export default class ServicePrototype {
         this.tone,
         this.audience,
         this.prerequisites,
+        this.language
       );
     }
 
@@ -116,6 +134,7 @@ export default class ServicePrototype {
         this.audience,
         this.prerequisites,
         tocList,
+        this.language
       );
     } else {
       system = toc.system(
@@ -123,6 +142,7 @@ export default class ServicePrototype {
         this.tone,
         this.audience,
         this.prerequisites,
+        this.language
       );
     }
 
@@ -141,6 +161,7 @@ export default class ServicePrototype {
       this.tone,
       this.audience,
       this.prerequisites,
+      this.language
     );
     const prompt = connectQuiz.prompt(description, conceptsList, nbQuestions);
 
@@ -153,7 +174,7 @@ export default class ServicePrototype {
       .join("\n");
     const objectivesList = objectives.join("\n");
 
-    const system = connectText.system(this.style, this.tone, this.audience);
+    const system = connectText.system(this.style, this.tone, this.audience, this.language);
     const prompt = connectText.prompt(
       description,
       conceptsList,
@@ -169,8 +190,8 @@ export default class ServicePrototype {
       .map(({ name, description }) => `${name}: ${description}`)
       .join("\n");
 
-    const system = conceptsQuiz.system(this.style, this.tone, this.audience);
-    const prompt = conceptsQuiz.prompt(sectionName, sectionItems, nbQuestions);
+    const system = conceptsQuiz.system(this.style, this.tone, this.audience, this.language);
+    const prompt = conceptsQuiz.prompt(sectionName, sectionItems, nbQuestions, this.language);
 
     return this.query({ system, prompt, token: nbQuestions * 200 });
   }
@@ -183,6 +204,7 @@ export default class ServicePrototype {
         this.tone,
         this.audience,
         this.prerequisites,
+        this.language
       );
       let prompt = conceptsTextHtmlIntro.prompt(section);
 
@@ -222,6 +244,7 @@ export default class ServicePrototype {
         this.tone,
         this.audience,
         this.prerequisites,
+        this.language
       );
       const prompt = conceptsText.prompt(section);
 
@@ -246,7 +269,7 @@ export default class ServicePrototype {
       )
       .join("\n");
 
-    const system = practiceQuiz.system(this.style, this.tone, this.audience);
+    const system = practiceQuiz.system(this.style, this.tone, this.audience, this.language);
     const prompt = practiceQuiz.prompt(
       description,
       conceptsList,

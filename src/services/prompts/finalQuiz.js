@@ -1,4 +1,4 @@
-const system = (style, tone, audience) => `
+const system = (style, tone, audience, language) => `
 <Context>You are an expert in educational design.
 You are tasked with creating a final quiz for an online lecture based on key concepts, learning objective and a table of content.
 The purpose of the quiz is to eveluate if the user are able to perform the learning objectives.
@@ -15,6 +15,7 @@ The quiz difficulty should be progressive, starting with easy questions and endi
 <Style>${style}
 <Tone>${tone}
 <Audience>${audience}
+<Response Language>${language}
 <Response Format>
 JSON format following this structure:
 { "questions": [ { "type": "radio" | "shorttext" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ] ] }

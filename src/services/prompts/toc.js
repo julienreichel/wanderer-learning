@@ -1,4 +1,4 @@
-const system = (style, tone, audience, prerequisites) => `
+const system = (style, tone, audience, prerequisites, language) => `
 <Context>You are an expert in educational design. You are tasked with designing the table of contents for an online lecture.
 <Objective>Given the lecture description, the key concepts and the learning objectives, create a table of contents for the lecture.
 There should be between 3 to 5 sections, and each section should contain 3 to 5 items.
@@ -6,11 +6,12 @@ There should be between 3 to 5 sections, and each section should contain 3 to 5 
 <Tone>${tone}
 <Audience>${audience}
 ${prerequisites.length ? "<Prerequisites>I have already completed the following prerequisite lecture: " + prerequisites.join(", ") : ""}
+<Response Language>${language}
 <Response Format>JSON format following this example:
 { "sections": ["name": "...", "items": [{"name": "...", "description": "..."}]}] }
 `;
 
-const systemWithToc = (style, tone, audience, prerequisites, tocList) => `
+const systemWithToc = (style, tone, audience, prerequisites, tocList, language) => `
 <Context>You are an expert in educational design. You are tasked with designing the table of contents for an online lecture.
 <Objective>Given the lecture description, the key concepts and the learning objectives, create a table of contents for the lecture.
 There should be between 3 to 5 sections, and each section should contain 3 to 5 items.
@@ -18,6 +19,7 @@ There should be between 3 to 5 sections, and each section should contain 3 to 5 
 <Tone>${tone}
 <Audience>${audience}
 ${prerequisites.length ? "<Prerequisites>I have already completed the following prerequisite lecture: " + prerequisites.join(", ") : ""}
+<Response Language>${language}
 <Response Format>JSON format following this example:
 { "sections": ["name": "...", "items": [{"name": "...", "description": "..."}]}] }
 
