@@ -111,7 +111,9 @@ export default class CourseService extends ServicePrototype {
 
     // for now, we do a client side filtering
     if (params.locale) {
-      courses = courses.filter(course => !course.locale || course.locale === params.locale);
+      courses = courses.filter(
+        (course) => !course.locale || course.locale === params.locale,
+      );
     }
 
     for (let course of courses) {

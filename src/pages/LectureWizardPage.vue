@@ -314,7 +314,7 @@ const options = {
   tone: "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.",
   model: "gpt-3.5-turbo",
   extendedQueryForConcept: false,
-  ...$q.localStorage.getItem("aiOptions")
+  ...$q.localStorage.getItem("aiOptions"),
 };
 
 const formatOption = (text) => {

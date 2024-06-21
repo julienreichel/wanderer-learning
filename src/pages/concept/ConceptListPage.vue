@@ -93,7 +93,7 @@ const userAttributes = inject("userAttributes");
 
 const concepts = ref([]);
 onMounted(async () => {
-  const data = await conceptService.list({locale: locale.value});
+  const data = await conceptService.list({ locale: locale.value });
   concepts.value = data;
 });
 let filter = ref("");

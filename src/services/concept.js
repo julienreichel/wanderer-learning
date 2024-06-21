@@ -43,11 +43,15 @@ export default class ConceptService extends ServicePrototype {
     if (!concept) return;
 
     // remove empty lectures
-    concept.lectures = concept.lectures.filter(({ lecture }) => Boolean(lecture));
+    concept.lectures = concept.lectures.filter(({ lecture }) =>
+      Boolean(lecture),
+    );
 
     // for now, we do a client side filtering
     if (params.locale) {
-      concept.lectures = concept.lectures.filter(({ lecture }) => !lecture.locale || lecture.locale === params.locale);
+      concept.lectures = concept.lectures.filter(
+        ({ lecture }) => !lecture.locale || lecture.locale === params.locale,
+      );
     }
 
     concept.lectures?.forEach(({ lecture }) => {

@@ -16,7 +16,7 @@ const systemWithConcepts = (
   audience,
   prerequisites,
   conceptsStr,
-  language
+  language,
 ) => `
 <Context>You are an expert in educational design. You are tasked with designing the first step of an online lecture.
 <Objective>Given the lecture description, create the lecture title, a list of key concepts covered by the lecture (1 to 3-word name, and a brief description),

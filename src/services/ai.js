@@ -37,7 +37,8 @@ export default class ServicePrototype {
     if (options.tone) this.tone = options.tone;
     if (options.prerequisites) this.prerequisites = options.prerequisites;
     if (options.locale) {
-      this.language = { 'en-US': 'English', 'fr-FR': 'French' }[options.locale] || "English";
+      this.language =
+        { "en-US": "English", "fr-FR": "French" }[options.locale] || "English";
     }
   }
 
@@ -56,8 +57,8 @@ export default class ServicePrototype {
         options: {
           body: query,
           headers: {
-            Authorization: authToken
-          }
+            Authorization: authToken,
+          },
         },
       });
 
@@ -92,7 +93,7 @@ export default class ServicePrototype {
         this.audience,
         this.prerequisites,
         conceptsStr,
-        this.language
+        this.language,
       );
     } else {
       system = concepts.system(
@@ -100,7 +101,7 @@ export default class ServicePrototype {
         this.tone,
         this.audience,
         this.prerequisites,
-        this.language
+        this.language,
       );
     }
 
@@ -134,7 +135,7 @@ export default class ServicePrototype {
         this.audience,
         this.prerequisites,
         tocList,
-        this.language
+        this.language,
       );
     } else {
       system = toc.system(
@@ -142,7 +143,7 @@ export default class ServicePrototype {
         this.tone,
         this.audience,
         this.prerequisites,
-        this.language
+        this.language,
       );
     }
 
@@ -161,7 +162,7 @@ export default class ServicePrototype {
       this.tone,
       this.audience,
       this.prerequisites,
-      this.language
+      this.language,
     );
     const prompt = connectQuiz.prompt(description, conceptsList, nbQuestions);
 
@@ -174,7 +175,12 @@ export default class ServicePrototype {
       .join("\n");
     const objectivesList = objectives.join("\n");
 
-    const system = connectText.system(this.style, this.tone, this.audience, this.language);
+    const system = connectText.system(
+      this.style,
+      this.tone,
+      this.audience,
+      this.language,
+    );
     const prompt = connectText.prompt(
       description,
       conceptsList,
@@ -190,8 +196,18 @@ export default class ServicePrototype {
       .map(({ name, description }) => `${name}: ${description}`)
       .join("\n");
 
-    const system = conceptsQuiz.system(this.style, this.tone, this.audience, this.language);
-    const prompt = conceptsQuiz.prompt(sectionName, sectionItems, nbQuestions, this.language);
+    const system = conceptsQuiz.system(
+      this.style,
+      this.tone,
+      this.audience,
+      this.language,
+    );
+    const prompt = conceptsQuiz.prompt(
+      sectionName,
+      sectionItems,
+      nbQuestions,
+      this.language,
+    );
 
     return this.query({ system, prompt, token: nbQuestions * 200 });
   }
@@ -204,7 +220,7 @@ export default class ServicePrototype {
         this.tone,
         this.audience,
         this.prerequisites,
-        this.language
+        this.language,
       );
       let prompt = conceptsTextHtmlIntro.prompt(section);
 
@@ -244,7 +260,7 @@ export default class ServicePrototype {
         this.tone,
         this.audience,
         this.prerequisites,
-        this.language
+        this.language,
       );
       const prompt = conceptsText.prompt(section);
 
@@ -269,7 +285,12 @@ export default class ServicePrototype {
       )
       .join("\n");
 
-    const system = practiceQuiz.system(this.style, this.tone, this.audience, this.language);
+    const system = practiceQuiz.system(
+      this.style,
+      this.tone,
+      this.audience,
+      this.language,
+    );
     const prompt = practiceQuiz.prompt(
       description,
       conceptsList,

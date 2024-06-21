@@ -90,7 +90,7 @@ const loadCourses = async () => {
   courses.value = data;
 };
 onMounted(async () => {
-  loadCourses()
+  loadCourses();
 });
 watch(locale, loadCourses);
 watch(showAllLocaleContent, loadCourses);

@@ -106,7 +106,8 @@ const { $q, t, locale, router } = useIris();
 
 onMounted(() => {
   locale.value = $q.localStorage.getItem("locale") || "en-US";
-  showAllLocaleContent.value = $q.localStorage.getItem("options")?.showAllLocaleContent || false;
+  showAllLocaleContent.value =
+    $q.localStorage.getItem("options")?.showAllLocaleContent || false;
 });
 let showAllLocaleContent = ref(false);
 watch(showAllLocaleContent, (value) => {
@@ -116,14 +117,12 @@ watch(showAllLocaleContent, (value) => {
 });
 provide("showAllLocaleContent", showAllLocaleContent);
 
-
 const userAttributes = inject("userAttributes");
 watch(userAttributes, (value) => {
   if (!value.userId) {
     router.push({ name: "SignIn" });
   }
 });
-
 
 const breadcrumbs = ref([]);
 const enableEditing = ref(false);
@@ -140,7 +139,6 @@ function updateBreadcrumbs(data) {
   stepIdx = routeInfo.stepIdx;
   beforeNavigateAction = routeInfo.beforeNavigate;
 }
-
 
 provide("breadcrumbs", {
   breadcrumbs,

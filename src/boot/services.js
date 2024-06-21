@@ -11,7 +11,7 @@ import AIService from "src/services/ai";
 
 export default boot(({ app }) => {
   let cacheData = {
-    single: {}
+    single: {},
   };
   const concept = new ConceptService(cacheData);
   const course = new CourseService(cacheData);
