@@ -87,6 +87,8 @@ export default class LectureService extends ServicePrototype {
     delete payload.concepts;
     delete payload.steps;
     delete payload.course;
+    delete payload.userTimeReportings;
+    delete payload.ratings;
 
     let lecture = await super.update(payload);
 

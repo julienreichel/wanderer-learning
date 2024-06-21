@@ -1,21 +1,29 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
-    <q-card>
-      <q-card-section v-if="lecturesInProgress.length">
+    <q-card v-if="lecturesInProgress.length">
+      <q-card-section>
         <div class="text-h5">{{ $t("generic.lectures_in_progress") }}</div>
       </q-card-section>
       <q-card-section class="q-pa-sm q-gutter-sm">
         <lectures-editing v-model="lecturesInProgress" />
       </q-card-section>
     </q-card>
-    <q-card>
+    <q-card v-if="lecturesNext.length">
+      <q-card-section>
+        <div class="text-h5">{{ $t("generic.lectures_next") }}</div>
+      </q-card-section>
+      <q-card-section class="q-pa-sm q-gutter-sm">
+        <lectures-editing v-model="lecturesNext" />
+      </q-card-section>
+    </q-card>
+    <q-card v-if="connectedConcepts.length">
       <q-card-section>
         <div class="text-h5">{{ $t("generic.related_concepts") }}</div>
       </q-card-section>
       <concept-display :concepts="connectedConcepts" />
     </q-card>
-    <q-card>
-      <q-card-section v-if="similarLectures.length">
+    <q-card v-if="similarLectures.length">
+      <q-card-section>
         <div class="text-h5">{{ $t("generic.related_lectures") }}</div>
       </q-card-section>
       <q-card-section class="q-pa-sm q-gutter-sm">
@@ -51,6 +59,7 @@ const {
   stepReporting: reportingService,
   lecture: lectureService,
   concept: conceptService,
+  course: courseService,
 } = inject("services");
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
@@ -58,9 +67,10 @@ updateBreadcrumbs([{}]);
 const userAttributes = inject("userAttributes");
 
 const { username, userId } = userAttributes.value;
-const lecturesInProgress = ref([]);
-const similarLectures = ref([]);
-const connectedConcepts = ref([]);
+let lecturesInProgress = ref([]);
+let lecturesNext = ref([]);
+let similarLectures = ref([]);
+let connectedConcepts = ref([]);
 const newuser = computed(
   () =>
     lecturesInProgress.value.length === 0 &&
@@ -80,26 +90,27 @@ onMounted(async () => {
     if (!lecture) return;
 
     // check if there in a next step in the lecture based report.lectureStepId
-    lecture.steps.forEach((step, index) => {
-      if (step.id === report.lectureStepId) {
-        if (index + 1 < lecture.steps.length) {
-          lecture.nextStep = lecture.steps[index + 1];
-          lecturesInProgress.value.push(lecture);
-        }
-      }
-    });
+    const lectureIsOver = true;
+    const stepIndex = lecture.steps.findIndex(
+      ({ id }) => id === report.lectureStepId,
+    );
+    if (stepIndex + 1 < lecture.steps.length) {
+      lecture.nextStep = lecture.steps[stepIndex + 1];
+      lecturesInProgress.value.push(lecture);
+      lectureIsOver = false;
+    }
 
-    // load stats for the user for each lecture
-    lecturesInProgress.value.forEach(async (lecture) => {
-      const reports = await reportingService.list({
-        lectureId: lecture.id,
-        username,
-        userId,
-      });
-      if (reports.length) {
-        lecture.stepsSummary = reportingService.getLastReports(reports);
+    // check if there is any next lecture in the course
+    if (lectureIsOver) {
+      const course = await courseService.get(lecture.course.id);
+      const lectureIndex = course.lectures.findIndex(
+        ({ id }) => id === lecture.id,
+      );
+      if (lectureIndex + 1 < course.lectures.length) {
+        const nextLecture = course.lectures[lectureIndex + 1];
+        lecturesNext.value.push(nextLecture);
       }
-    });
+    }
 
     // check the concept covered by the lecture, and get similar lectures
     lecture.concepts.forEach(async ({ concept }) => {
@@ -120,5 +131,17 @@ onMounted(async () => {
       });
     });
   }
+
+  // load stats for the user for each lecture in progress
+  lecturesInProgress.value.forEach(async (lecture) => {
+    const reports = await reportingService.list({
+      lectureId: lecture.id,
+      username,
+      userId,
+    });
+    if (reports.length) {
+      lecture.stepsSummary = reportingService.getLastReports(reports);
+    }
+  });
 });
 </script>

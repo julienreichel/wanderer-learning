@@ -58,7 +58,7 @@ onMounted(async () => {
 
 const finished = async ({ finished, reportings } = {}) => {
   const time = reportings?.reduce((acc, val) => acc + val.time, 0) || 0;
-  if (!finished || time < 10) {
+  if (!finished || time < 5) {
     console.log("[Lecture] Step not completed", reportings);
     $q.notify({
       message: t("lecture.step.not_completed"),
