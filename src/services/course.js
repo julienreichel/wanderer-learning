@@ -41,6 +41,21 @@ export default class CourseService extends ServicePrototype {
     }
   }
 
+  sort(lectures) {
+    lectures = lectures?.sort(
+      (a, b) => Number(a.order) - Number(b.order),
+    );
+
+    lectures?.forEach((lecture) => {
+      if (!lecture?.steps) return;
+      lecture.steps = lecture.steps?.sort(
+        (a, b) => Number(a.order) - Number(b.order),
+      );
+    });
+
+    return lectures;
+  }
+
   /**
    * Update a course
    *
@@ -60,8 +75,14 @@ export default class CourseService extends ServicePrototype {
 
     let course = await super.update(input, options);
 
+    course.lectures = this.sort(course.lectures);
     await this.resolveUrl(course);
 
+    course.lectures = course.lectures.map((lecture) => {
+      // find the step in the input, and merge the data
+      const lectureInput = input.lectures.find((item) => item.id === lecture.id);
+      return { ...lectureInput, ...lecture };
+    });
     return course;
   }
 
@@ -75,17 +96,7 @@ export default class CourseService extends ServicePrototype {
     let course = await super.get(id);
     if (!course) return;
 
-    course.lectures = course.lectures?.sort(
-      (a, b) => Number(a.order) - Number(b.order),
-    );
-
-    course.lectures?.forEach((lecture) => {
-      if (!lecture?.steps) return;
-      lecture.steps = lecture.steps?.sort(
-        (a, b) => Number(a.order) - Number(b.order),
-      );
-    });
-
+    course.lectures = this.sort(course.lectures);
     await this.resolveUrl(course);
 
     return course;

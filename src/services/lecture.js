@@ -33,25 +33,11 @@ export default class LectureService extends ServicePrototype {
     ];
   }
 
-  sort(lectures) {
-    return lectures.sort((a, b) => Number(a.order) - Number(b.order));
+  sort(steps) {
+    return steps.sort((a, b) => Number(a.order) - Number(b.order));
   }
 
-  /**
-   * Remove deleted content
-   * @param {object} lecture the lecture data
-   * @returns {object}
-   */
-  removeDeletedContent(lecture) {
-    if (!lecture) return;
-    /*
-    lecture.steps = lecture.steps?.filter(step => !step._deleted);
-    lecture.concepts = lecture.concepts?.filter(concept => !concept._deleted);
-    */
-    return lecture;
-  }
-
-  /**
+    /**
    * Get a lecture
    *
    * @param {string} id the lectureSegment id
@@ -62,7 +48,7 @@ export default class LectureService extends ServicePrototype {
     if (!lecture) return;
 
     lecture.steps = this.sort(lecture.steps);
-    return this.removeDeletedContent(lecture);
+    return lecture;
   }
 
   /**
@@ -74,7 +60,7 @@ export default class LectureService extends ServicePrototype {
   async create(input, params) {
     let lecture = await super.create(input, params);
 
-    return this.removeDeletedContent(lecture);
+    return lecture;
   }
 
   /**
@@ -98,8 +84,15 @@ export default class LectureService extends ServicePrototype {
     delete payload.ratings;
 
     let lecture = await super.update(payload);
+    lecture.steps = this.sort(lecture.steps);
 
-    return this.removeDeletedContent(lecture);
+    lecture.steps = lecture.steps.map((step) => {
+      // find the step in the input, and merge the data
+      const stepInput = input.steps.find((item) => item.id === step.id);
+      return { ...stepInput, ...step };
+    });
+
+    return lecture;
   }
 
   /**

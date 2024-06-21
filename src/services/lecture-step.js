@@ -30,10 +30,6 @@ export default class LectureStepService extends ServicePrototype {
     ];
   }
 
-  sort(steps) {
-    return steps.sort((a, b) => Number(a.order) - Number(b.order));
-  }
-
   /**
    * Cleanup data from parts before sending the payload
    *
@@ -46,6 +42,22 @@ export default class LectureStepService extends ServicePrototype {
     parts.forEach((part) => {
       delete part.url;
     });
+  }
+
+  async resolveUrl(parts) {
+    for (const part of parts) {
+      if (
+        (part.type === "img" || part.type === "text") &&
+        part.src &&
+        part.src !== ""
+      ) {
+        if (part.src.startsWith("http")) {
+          part.url = part.src;
+          continue;
+        }
+        part.url = await this.storageService.resolveUrl(part.src);
+      }
+    }
   }
 
   /**
@@ -65,7 +77,7 @@ export default class LectureStepService extends ServicePrototype {
    * @param {object} input the lectureStep data
    * @returns {Promise<object>}
    */
-  async update(input) {
+  async update(input, params = { resolveImg: true }) {
     let payload = { ...input };
     // Update the cache
     if (this.cacheData) {
@@ -80,7 +92,12 @@ export default class LectureStepService extends ServicePrototype {
     delete payload.userTimeReportings;
     delete payload.ratings;
 
-    return super.update(payload);
+    const step = super.update(payload, params);
+    if (params.resolveImg && step.parts) {
+      await this.resolveUrl(step.parts);
+    }
+
+    return step;
   }
 
   /**
@@ -96,19 +113,7 @@ export default class LectureStepService extends ServicePrototype {
     if (!step) return;
     // inject the url of the image
     if (params.resolveImg && step.parts) {
-      for (const part of step.parts) {
-        if (
-          (part.type === "img" || part.type === "text") &&
-          part.src &&
-          part.src !== ""
-        ) {
-          if (part.src.startsWith("http")) {
-            part.url = part.src;
-            continue;
-          }
-          part.url = await this.storageService.resolveUrl(part.src);
-        }
-      }
+      await this.resolveUrl(step.parts);
     }
 
     return step;
