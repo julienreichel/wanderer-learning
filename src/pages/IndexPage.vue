@@ -99,7 +99,7 @@ onMounted(async () => {
     if (!lecture) return;
 
     // check if there in a next step in the lecture based report.lectureStepId
-    const lectureIsOver = true;
+    let lectureIsOver = true;
     const stepIndex = lecture.steps.findIndex(
       ({ id }) => id === report.lectureStepId,
     );
