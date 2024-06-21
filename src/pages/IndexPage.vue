@@ -55,6 +55,9 @@ import ConceptDisplay from "src/components/concept/ConceptDisplay.vue";
 
 import { ref, inject, onMounted, computed } from "vue";
 
+import { useIris } from "src/composables/iris";
+const { locale } = useIris();
+
 const {
   stepReporting: reportingService,
   lecture: lectureService,
@@ -65,6 +68,7 @@ const {
 const { updateBreadcrumbs } = inject("breadcrumbs");
 updateBreadcrumbs([{}]);
 const userAttributes = inject("userAttributes");
+const showAllLocaleContent = inject("showAllLocaleContent");
 
 const { username, userId } = userAttributes.value;
 let lecturesInProgress = ref([]);
@@ -80,6 +84,11 @@ const newuser = computed(
 onMounted(async () => {
   // Get the last 3 reports
   const data = await reportingService.list({ userId, username, limit: 3 });
+
+  let options = {};
+  if (!showAllLocaleContent.value) {
+    options.locale = locale.value;
+  }
 
   let processedLectureIds = [];
   for (const report of data) {
@@ -114,7 +123,7 @@ onMounted(async () => {
 
     // check the concept covered by the lecture, and get similar lectures
     lecture.concepts.forEach(async ({ concept }) => {
-      const fullConcept = await conceptService.get(concept.id);
+      const fullConcept = await conceptService.get(concept.id, options);
       fullConcept.lectures.forEach(({ lecture }) => {
         if (!lecture) return;
         if (

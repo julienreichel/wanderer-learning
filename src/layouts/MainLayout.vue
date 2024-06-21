@@ -57,6 +57,13 @@
             <q-item>
               <LanguageSwitcher />
             </q-item>
+            <q-item>
+              <q-checkbox
+                v-model="showAllLocaleContent"
+                dense
+                :label="$t('generic.show_all_locale_content')"
+              />
+            </q-item>
             <q-item clickable @click="logOut">
               <q-item-section>{{ $t("generic.sign_out") }}</q-item-section>
             </q-item>
@@ -99,16 +106,24 @@ const { $q, t, locale, router } = useIris();
 
 onMounted(() => {
   locale.value = $q.localStorage.getItem("locale") || "en-US";
+  showAllLocaleContent.value = $q.localStorage.getItem("options")?.showAllLocaleContent || false;
 });
+let showAllLocaleContent = ref(false);
+watch(showAllLocaleContent, (value) => {
+  let options = $q.localStorage.getItem("options") || {};
+  options.showAllLocaleContent = value;
+  $q.localStorage.set("options", options);
+});
+provide("showAllLocaleContent", showAllLocaleContent);
 
 
 const userAttributes = inject("userAttributes");
 watch(userAttributes, (value) => {
-  console.log("userAttributes", value);
   if (!value.userId) {
     router.push({ name: "SignIn" });
   }
 });
+
 
 const breadcrumbs = ref([]);
 const enableEditing = ref(false);
@@ -125,6 +140,8 @@ function updateBreadcrumbs(data) {
   stepIdx = routeInfo.stepIdx;
   beforeNavigateAction = routeInfo.beforeNavigate;
 }
+
+
 provide("breadcrumbs", {
   breadcrumbs,
   updateBreadcrumbs,

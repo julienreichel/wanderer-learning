@@ -24,6 +24,7 @@ export default {
     "related_lectures": "Cours associés",
     "related_concepts": "Concepts associés",
     "new_user": "Nouvel utilisateur",
+    show_all_locale_content: "Afficher toute les langues",
     "edit": {
       "json": "Modifier JSON",
       "text": "Modifier le texte",

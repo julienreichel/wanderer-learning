@@ -103,7 +103,7 @@ import RichTextEditing from "src/components/common/RichTextEditing.vue";
 import { ref, inject, computed, onMounted } from "vue";
 
 import { useIris } from "src/composables/iris";
-const { t, $q, router, canEdit } = useIris();
+const { t, locale, $q, router, canEdit } = useIris();
 const {
   lecture: lectureService,
   lectureStep: lectureStepService,
@@ -128,6 +128,8 @@ onMounted(async () => {
 
   const data = await lectureService.get(props.id);
   data.description = data.description || "";
+  // for backward compatibility
+  data.locale = data.locale || locale.value;
   lecture.value = data;
   initalLecture.value = { ...data };
 

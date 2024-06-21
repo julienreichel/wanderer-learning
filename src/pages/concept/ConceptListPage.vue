@@ -84,7 +84,7 @@
 import { ref, onMounted, inject } from "vue";
 
 import { useIris } from "src/composables/iris";
-const { t, $q, router } = useIris();
+const { t, locale, $q, router } = useIris();
 const { concept: conceptService } = inject("services");
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
@@ -93,7 +93,7 @@ const userAttributes = inject("userAttributes");
 
 const concepts = ref([]);
 onMounted(async () => {
-  const data = await conceptService.list();
+  const data = await conceptService.list({locale: locale.value});
   concepts.value = data;
 });
 let filter = ref("");

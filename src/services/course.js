@@ -22,6 +22,7 @@ export default class CourseService extends ServicePrototype {
       "title",
       "owner",
       "description",
+      "locale",
       "src",
       "ratings.*",
       "lectures.*",
@@ -96,10 +97,16 @@ export default class CourseService extends ServicePrototype {
       "title",
       "owner",
       "description",
+      "locale",
       "src",
       "ratings.*",
     ];
     let courses = await super.list(params);
+
+    // for now, we do a client side filtering
+    if (params.locale) {
+      courses = courses.filter(course => !course.locale || course.locale === params.locale);
+    }
 
     for (let course of courses) {
       await this.resolveUrl(course);

@@ -34,12 +34,21 @@ export default class ConceptService extends ServicePrototype {
   /**
    * Get a concept
    *
-   * @param {string} id the lectureSegment id
+   * @param {string} id the concept id
+   * @param {object} params the options
    * @returns {Promise<object>}
    */
-  async get(id) {
+  async get(id, params) {
     let concept = await super.get(id);
     if (!concept) return;
+
+    // remove empty lectures
+    concept.lectures = concept.lectures.filter(({ lecture }) => Boolean(lecture));
+
+    // for now, we do a client side filtering
+    if (params.locale) {
+      concept.lectures = concept.lectures.filter(({ lecture }) => !lecture.locale || lecture.locale === params.locale);
+    }
 
     concept.lectures?.forEach(({ lecture }) => {
       if (!lecture?.steps) return;

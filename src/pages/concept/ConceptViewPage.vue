@@ -46,7 +46,7 @@ import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
 import RichTextEditing from "src/components/common/RichTextEditing.vue";
 
 import { useIris } from "src/composables/iris";
-const { t, $q, router } = useIris();
+const { t, locale, $q, router } = useIris();
 const { concept: conceptService, stepReporting: reportingService } =
   inject("services");
 
@@ -58,6 +58,8 @@ const props = defineProps({
   id: String,
 });
 
+const showAllLocaleContent = inject("showAllLocaleContent");
+
 const concept = ref({
   title: null,
   lectures: [],
@@ -65,8 +67,11 @@ const concept = ref({
 
 const loadConcept = async (id) => {
   if (!id) return;
-
-  const data = await conceptService.get(id);
+  let options = {};
+  if (!showAllLocaleContent.value) {
+    options.locale = locale.value;
+  }
+  const data = await conceptService.get(id, options);
   // for some reason there are empty lectures in the data
   data.lectures = data.lectures?.filter(({ lecture }) => Boolean(lecture));
   concept.value = data;
@@ -94,9 +99,9 @@ onMounted(async () => {
 });
 
 watch(
-  () => props.id,
-  async (id) => {
-    await loadConcept(id);
+  () => props.id + showAllLocaleContent.value + locale.value,
+  async () => {
+    await loadConcept(props.id);
   },
 );
 

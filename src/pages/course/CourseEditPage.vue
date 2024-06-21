@@ -73,7 +73,7 @@ import RichTextEditing from "src/components/common/RichTextEditing.vue";
 import FileUploader from "src/components/common/FileUploader.vue";
 
 import { useIris } from "src/composables/iris";
-const { t, $q, router, canEdit } = useIris();
+const { t, locale, $q, router, canEdit } = useIris();
 const {
   course: courseService,
   lecture: lectureService,
@@ -98,6 +98,9 @@ onMounted(async () => {
   if (props.id) {
     const data = await courseService.get(props.id);
     data.description = data.description || "";
+    // for backward compatibility
+    data.locale = data.locale || locale.value;
+
     course.value = data;
     initalCourse.value = { ...data };
 
@@ -187,6 +190,7 @@ const addLecture = async () => {
     title: newTitle.value,
     courseId: course.value.id,
     order: "" + Date.now(),
+    locale: course.value.locale || locale.value,
   });
   course.value.lectures.push(lecture);
 

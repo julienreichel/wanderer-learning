@@ -75,10 +75,6 @@ const props = defineProps({
 });
 
 const graphSection = ref([]);
-const graphWidth = computed(() => {
-  if (!graphSection.value || !graphSection.value[0]) return 300;
-  return graphSection.value[0].$el.getBoundingClientRect().width - 32;
-});
 
 const lecturesArray = computed(() => {
   if (!lectures.value) return [];

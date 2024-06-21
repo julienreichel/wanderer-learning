@@ -4,11 +4,11 @@
       <q-item
         v-for="report in reports"
         :key="report.id"
-        :to="{ name: 'LectureView', params: { id: report.step?.lecture.id } }"
+        :to="{ name: 'LectureView', params: { id: report.step?.lecture?.id } }"
       >
         <q-item-section>
           <q-item-label v-if="report.step"
-            >{{ report.step?.lecture.title }} /
+            >{{ report.step?.lecture?.title }} /
             {{ report.step?.title }}</q-item-label
           >
           <q-item-label v-else>{{

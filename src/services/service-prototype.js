@@ -28,7 +28,7 @@ export default class ServicePrototype {
     options.selectionSet = options.selectionSet || this.selectionSet;
     const { data } = await this.model.create(input, options);
 
-    this.lastSaved = data;
+    this.lastSaved = { ...data };
     return data;
   }
 
@@ -50,7 +50,7 @@ export default class ServicePrototype {
 
     const { data } = await this.model.update(payload, options);
 
-    this.lastSaved = data;
+    this.lastSaved = { ...data };
     return data;
   }
 
@@ -70,7 +70,7 @@ export default class ServicePrototype {
       this.lastSaved = data;
     }
 
-    return this.lastSaved;
+    return { ... this.lastSaved };
   }
 
   /**

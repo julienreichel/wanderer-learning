@@ -111,7 +111,6 @@ const createConcept = async (val, done) => {
 };
 
 const removeConcept = async (item) => {
-  console.log(item, lecture.value.concepts);
   lecture.value.concepts = lecture.value.concepts.filter(
     ({ id }) => id !== item.id,
   );

@@ -106,6 +106,7 @@ const schema = a.schema({
       description: a.string(),
       order: a.string(),
       owner: a.string(),
+      locale: a.string(),
       course: a.belongsTo("Course", "courseId"),
       steps: a.hasMany("LectureStep", "lectureId"),
       concepts: a.hasMany("LectureConceptJoinTable", "lectureId"),
@@ -130,6 +131,7 @@ const schema = a.schema({
       title: a.string().required(),
       owner: a.string(),
       description: a.string(),
+      locale: a.string(),
       src: a.string(),
       ratings: a.ref("Rating").array(),
       lectures: a.hasMany("Lecture", "courseId"),
@@ -140,11 +142,18 @@ const schema = a.schema({
       allow.group("admin"),
     ]),
 
+  LocalizedName: a.customType({
+    title: a.string(),
+    description: a.string(),
+    lcoale: a.string(),
+  }),
+
   Concept: a
     .model({
       id: a.id().required(),
       title: a.string().required(),
       description: a.string(),
+      localizedNames: a.ref("LocalizedName").array(),
       lectures: a.hasMany("LectureConceptJoinTable", "conceptId"),
       steps: a.hasMany("LectureStep", "conceptId"),
     })

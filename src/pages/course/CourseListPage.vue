@@ -67,11 +67,13 @@
 </template>
 
 <script setup>
-import { ref, inject, onMounted } from "vue";
+import { ref, inject, onMounted, watch } from "vue";
 
 import { useIris } from "src/composables/iris";
-const { t, $q, router } = useIris();
+const { t, locale, router } = useIris();
 const { course: courseService } = inject("services");
+
+const showAllLocaleContent = inject("showAllLocaleContent");
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
 updateBreadcrumbs([{ label: t("course.list") }]);
@@ -79,11 +81,19 @@ updateBreadcrumbs([{ label: t("course.list") }]);
 const userAttributes = inject("userAttributes");
 
 const courses = ref([]);
-onMounted(async () => {
-  const data = await courseService.list();
+const loadCourses = async () => {
+  let options = {};
+  if (!showAllLocaleContent.value) {
+    options.locale = locale.value;
+  }
+  const data = await courseService.list(options);
   courses.value = data;
-  console.log(data);
+};
+onMounted(async () => {
+  loadCourses()
 });
+watch(locale, loadCourses);
+watch(showAllLocaleContent, loadCourses);
 
 let filter = ref("");
 let visibleColumns = ref(["title", "description"]);
@@ -135,6 +145,7 @@ const newTitle = ref();
 const addCourse = async () => {
   const course = await courseService.create({
     title: newTitle.value,
+    locale: locale.value,
   });
 
   router.push({ name: "CourseEdit", params: { id: course.id } });

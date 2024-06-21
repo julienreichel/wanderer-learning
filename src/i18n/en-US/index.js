@@ -25,6 +25,7 @@ export default {
     related_lectures: "Related lectures",
     related_concepts: "Related concepts",
     new_user: "New user",
+    show_all_locale_content: "Show all languages",
     edit: {
       json: "Edit JSON",
       text: "Edit Text",
