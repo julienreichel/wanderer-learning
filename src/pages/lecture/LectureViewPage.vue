@@ -5,6 +5,9 @@
         <div class="text-h5">{{ lecture.title }}</div>
       </q-card-section>
       <concept-display :concepts="lecture.concepts" />
+      <q-card-section>
+        <div class="q-pt-sm" v-html="lecture.description"></div>
+      </q-card-section>
       <q-card-actions>
         <q-space />
         <q-btn square size="sm" icon="straight" @click="finished()" />

@@ -13,6 +13,7 @@
           <rich-text-editing
             class="col-8"
             v-model="course.description"
+            :placeholder="$t('course.form.description')"
             mode="simple"
           ></rich-text-editing>
           <div
@@ -93,9 +94,7 @@ const initalCourse = ref(null);
 onMounted(async () => {
   if (props.id) {
     const data = await courseService.get(props.id);
-    if (!data.description) {
-      data.description = "";
-    }
+    data.description = data.description || "";
     course.value = data;
     initalCourse.value = { ...data };
 

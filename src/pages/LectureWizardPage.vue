@@ -405,7 +405,7 @@ const removePart = (stepIndex, itemIndex) => {
   tableOfContent.value[stepIndex].items.splice(itemIndex, 1);
 };
 
-const generateTitleAndObjectives = async (concepts, objectives) => {
+const generateTitleAndObjectives = async (concepts = [], objectives = []) => {
   loading.value = true;
 
   const options = {
@@ -428,12 +428,11 @@ const generateTitleAndObjectives = async (concepts, objectives) => {
   );
 
   title.value = response.title || "";
-  keyConcepts.value = concepts
-    ? concepts.concat(response.keyConcepts)
-    : response.keyConcepts;
-  learningObjectives.value = objectives
-    ? objectives.concat(response.expectedLearningOutcomes)
-    : response.expectedLearningOutcomes;
+  response.expectedLearningOutcomes = response.expectedLearningOutcomes || [];
+  response.keyConcepts = response.keyConcepts || [];
+
+  keyConcepts.value = [...concepts, ...response.keyConcepts];
+  learningObjectives.value = [...objectives, ...response.expectedLearningOutcomes];
 
   loading.value = false;
   step.value = 2;
@@ -530,10 +529,12 @@ const generateLecture = async () => {
   progress.value = 0;
   progressLabel.value = t("wizard.generating.create");
 
+  const description = "<b>"+ t("wizard.titleKeyConceptsObjectives.objectives") + ":</b><br/><ul><li>" + learningObjectives.value.join("</li><li>") + "</li></ul>";
   const lecture = await lectureService.create({
     title: title.value,
     courseId: props.id,
     order: "" + Date.now(),
+    description
   });
   lectureId = lecture.id;
 

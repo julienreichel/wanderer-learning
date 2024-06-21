@@ -103,7 +103,7 @@ const schema = a.schema({
       id: a.id().required(),
       courseId: a.id().required(),
       title: a.string().required(),
-      learningOutcomes: a.string().array(),
+      description: a.string(),
       order: a.string(),
       owner: a.string(),
       course: a.belongsTo("Course", "courseId"),

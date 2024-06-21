@@ -5,6 +5,7 @@
     v-model="editor"
     :toolbar="toolbar"
     :fonts="fonts"
+    :placeholder="placeholder"
   />
 </template>
 
@@ -19,6 +20,9 @@ const props = defineProps({
   mode: {
     type: String,
     default: "full",
+  },
+  placeholder: {
+    type: String,
   },
 });
 

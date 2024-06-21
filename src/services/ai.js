@@ -70,11 +70,6 @@ export default class ServicePrototype {
     let system;
     if (previousConcepts && previousConcepts.length > 0) {
       const conceptsStr = previousConcepts.map(({ name }) => name).join(", ");
-      console.log(
-        previousConcepts,
-        previousConcepts.map((name) => name),
-        conceptsStr,
-      );
       system = concepts.systemWithConcepts(
         this.style,
         this.tone,

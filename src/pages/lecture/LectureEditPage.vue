@@ -11,6 +11,13 @@
         />
       </q-card-section>
       <concept-editing v-model="lecture" />
+      <q-card-section>
+        <rich-text-editing
+            v-model="lecture.description"
+            :placeholder="$t('lecture.form.description')"
+            mode="simple"
+          />
+        </q-card-section>
       <q-card-actions>
         <q-space />
         <q-btn square size="sm" icon="straight" @click="finished()" />
@@ -91,6 +98,7 @@ import ConceptEditing from "src/components/concept/ConceptEditing.vue";
 import UsageHistogram from "src/components/charts/UsageHistogram.vue";
 import TimeDistribution from "src/components/charts/TimeDistribution.vue";
 import StepReporting from "src/components/reporting/StepReporting.vue";
+import RichTextEditing from "src/components/common/RichTextEditing.vue";
 
 import { ref, inject, computed, onMounted } from "vue";
 
@@ -111,6 +119,7 @@ const props = defineProps({
 const lecture = ref({
   title: null,
   steps: [],
+  description: ""
 });
 const initalLecture = ref(null);
 
@@ -118,6 +127,7 @@ onMounted(async () => {
   if (!props.id) return;
 
   const data = await lectureService.get(props.id);
+  data.description = data.description || "";
   lecture.value = data;
   initalLecture.value = { ...data };
 
@@ -147,6 +157,8 @@ onMounted(async () => {
 const dirty = computed(() => {
   return initalLecture.value.title !== lecture.value.title;
 });
+
+const dirty = computed(() => initalLecture.value.title !== lecture.value.title || initalLecture.value.description !== lecture.value.description);
 
 const saveLecture = async () => {
   if (!dirty.value) return;

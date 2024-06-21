@@ -24,6 +24,7 @@ export default class LectureService extends ServicePrototype {
       "title",
       "order",
       "owner",
+      "description",
       "course.*",
       "steps.*",
       "concepts.id",

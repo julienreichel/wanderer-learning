@@ -11,6 +11,9 @@
           <div class="text-h5">{{ lecture.title }}</div>
         </q-card-section>
         <concept-display class="q-pa-sm" :concepts="lecture.concepts" />
+        <q-card-section>
+          <div class="q-pt-sm" v-html="lecture.description"></div>
+        </q-card-section>
       </q-card-section>
       <q-card-section class="q-pa-sm">
         <user-lecture-reporting
