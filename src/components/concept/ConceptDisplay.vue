@@ -11,10 +11,6 @@
     >
       <div class="ellipsis">
         {{ getConcept(item).title }}
-        <q-tooltip>
-          <div class="text-weight-bold">{{ getConcept(item).title }}</div>
-          <div v-html="getConcept(item).description"></div>
-        </q-tooltip>
       </div>
     </q-chip>
   </q-card-section>
