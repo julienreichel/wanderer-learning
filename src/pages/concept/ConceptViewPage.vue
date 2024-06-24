@@ -65,7 +65,10 @@ const concept = ref({
   lectures: [],
 });
 
+let lastCall = null;
 const loadConcept = async (id) => {
+  lastCall = new Date();
+  const thisCall = lastCall;
   if (!id) return;
   let options = {};
   if (!showAllLocaleContent.value) {
@@ -73,8 +76,10 @@ const loadConcept = async (id) => {
   }
   const data = await conceptService.get(id, options);
   // for some reason there are empty lectures in the data
-  data.lectures = data.lectures?.filter(({ lecture }) => Boolean(lecture));
+  data.lectures = data.lectures?.filter(({ lecture }) => Boolean(lecture?.id));
+  if (thisCall !== lastCall) return;
   concept.value = data;
+
 
   updateBreadcrumbs([
     { label: t("concept.list"), to: { name: "ConceptList" } },
