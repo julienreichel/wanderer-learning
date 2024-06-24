@@ -1,5 +1,10 @@
 <template>
-  <q-card v-for="(question, index) in quiz" :key="index" @click="activeQuestion = index" :class="{'q-card-hover': activeQuestion !== index}">
+  <q-card
+    v-for="(question, index) in quiz"
+    :key="index"
+    @click="activeQuestion = index"
+    :class="{ 'q-card-hover': activeQuestion !== index }"
+  >
     <question-editing v-if="activeQuestion === index" v-model="quiz[index]" />
     <q-card-actions>
       <question-editing-preview

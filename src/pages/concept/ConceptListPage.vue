@@ -36,7 +36,11 @@
           class="q-pa-xs col-xs-12 col-sm-6 col-md-4"
           v-if="visibleColumns.includes('description')"
         >
-          <q-card style="height: 120px" @click="viewConcept(props.row)" class="q-card-hover">
+          <q-card
+            style="height: 120px"
+            @click="viewConcept(props.row)"
+            class="q-card-hover"
+          >
             <q-card-section>
               <q-chip square color="primary" text-color="white">
                 {{ props.row.title }}

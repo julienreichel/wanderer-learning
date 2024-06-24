@@ -37,7 +37,7 @@ export default class LectureService extends ServicePrototype {
     return steps.sort((a, b) => Number(a.order) - Number(b.order));
   }
 
-    /**
+  /**
    * Get a lecture
    *
    * @param {string} id the lectureSegment id

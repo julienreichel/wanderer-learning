@@ -80,7 +80,6 @@ const loadConcept = async (id) => {
   if (thisCall !== lastCall) return;
   concept.value = data;
 
-
   updateBreadcrumbs([
     { label: t("concept.list"), to: { name: "ConceptList" } },
     { label: data.title, id: data.id },

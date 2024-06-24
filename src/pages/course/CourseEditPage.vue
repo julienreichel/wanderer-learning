@@ -11,11 +11,15 @@
             @blur="saveCourse()"
             @keydown.enter="saveCourse()"
           />
-          <q-space/>
+          <q-space />
           <q-toggle
             v-model="course.private"
             color="negative"
-            :label="course.private ? $t('course.form.private') : $t('course.form.public')"
+            :label="
+              course.private
+                ? $t('course.form.private')
+                : $t('course.form.public')
+            "
           />
         </div>
         <div class="row">
@@ -25,11 +29,32 @@
             :placeholder="$t('course.form.description')"
             mode="simple"
           ></rich-text-editing>
-          <q-card flat v-if="course.url && !uploadingFile" class="q-pa-none col-4">
+          <q-card
+            flat
+            v-if="course.url && !uploadingFile"
+            class="q-pa-none col-4"
+          >
             <q-img class="col" fit="cover" :ratio="16 / 9" :src="course.url">
-              <div class="absolute-bottom text-subtitle2 text-right q-gutter-sm" style="background: none; padding: 8px !important">
-                <q-btn size="sm" padding="xs sm" color="white" text-color="black" icon="edit" @click="uploadingFile = true" />
-                <q-btn size="sm" padding="xs sm" color="white" text-color="black" icon="delete" @click="removeImage()" />
+              <div
+                class="absolute-bottom text-subtitle2 text-right q-gutter-sm"
+                style="background: none; padding: 8px !important"
+              >
+                <q-btn
+                  size="sm"
+                  padding="xs sm"
+                  color="white"
+                  text-color="black"
+                  icon="edit"
+                  @click="uploadingFile = true"
+                />
+                <q-btn
+                  size="sm"
+                  padding="xs sm"
+                  color="white"
+                  text-color="black"
+                  icon="delete"
+                  @click="removeImage()"
+                />
               </div>
             </q-img>
           </q-card>
@@ -144,7 +169,7 @@ const dirty = computed(
     initalCourse.value.title !== course.value.title ||
     initalCourse.value.description !== course.value.description ||
     initalCourse.value.src !== course.value.src ||
-    initalCourse.value.private !== course.value.private
+    initalCourse.value.private !== course.value.private,
 );
 
 const uploadingFile = ref(false);

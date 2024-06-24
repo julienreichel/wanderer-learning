@@ -43,9 +43,7 @@ export default class CourseService extends ServicePrototype {
   }
 
   sort(lectures) {
-    lectures = lectures?.sort(
-      (a, b) => Number(a.order) - Number(b.order),
-    );
+    lectures = lectures?.sort((a, b) => Number(a.order) - Number(b.order));
 
     lectures?.forEach((lecture) => {
       if (!lecture?.steps) return;
@@ -81,7 +79,9 @@ export default class CourseService extends ServicePrototype {
 
     course.lectures = course.lectures.map((lecture) => {
       // find the step in the input, and merge the data
-      const lectureInput = payload.lectures.find((item) => item.id === lecture.id);
+      const lectureInput = payload.lectures.find(
+        (item) => item.id === lecture.id,
+      );
       return { ...lectureInput, ...lecture };
     });
     return course;
@@ -134,7 +134,6 @@ export default class CourseService extends ServicePrototype {
         (course) => !course.locale || course.locale === params.locale,
       );
     }
-
 
     for (let course of courses) {
       await this.resolveUrl(course);
