@@ -1,14 +1,23 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
-    <q-card horisontal>
+    <q-card>
       <q-card-section class="q-gutter-sm">
-        <q-input
-          outlined
-          v-model="course.title"
-          :label="$t('course.form.title')"
-          @blur="saveCourse()"
-          @keydown.enter="saveCourse()"
-        />
+        <div class="row">
+          <q-input
+            class="col-8"
+            outlined
+            v-model="course.title"
+            :label="$t('course.form.title')"
+            @blur="saveCourse()"
+            @keydown.enter="saveCourse()"
+          />
+          <q-space/>
+          <q-toggle
+            v-model="course.private"
+            color="negative"
+            :label="course.private ? $t('course.form.private') : $t('course.form.public')"
+          />
+        </div>
         <div class="row">
           <rich-text-editing
             class="col-8"
@@ -16,14 +25,14 @@
             :placeholder="$t('course.form.description')"
             mode="simple"
           ></rich-text-editing>
-          <div v-if="course.url && !uploadingFile" class="q-pa-none col-4">
-            <q-img class="col" fit="cover" :ratio="16 / 9" :src="course.url" />
-
-            <q-card-actions>
-              <q-btn size="sm" icon="edit" @click="uploadingFile = true" />
-              <q-btn size="sm" icon="delete" @click="removeImage()" />
-            </q-card-actions>
-          </div>
+          <q-card flat v-if="course.url && !uploadingFile" class="q-pa-none col-4">
+            <q-img class="col" fit="cover" :ratio="16 / 9" :src="course.url">
+              <div class="absolute-bottom text-subtitle2 text-right q-gutter-sm" style="background: none; padding: 8px !important">
+                <q-btn size="sm" padding="xs sm" color="white" text-color="black" icon="edit" @click="uploadingFile = true" />
+                <q-btn size="sm" padding="xs sm" color="white" text-color="black" icon="delete" @click="removeImage()" />
+              </div>
+            </q-img>
+          </q-card>
           <file-uploader
             class="col-4"
             flat
@@ -100,6 +109,7 @@ onMounted(async () => {
     data.description = data.description || "";
     // for backward compatibility
     data.locale = data.locale || locale.value;
+    data.private = data.private || false;
 
     course.value = data;
     initalCourse.value = { ...data };
@@ -133,7 +143,8 @@ const dirty = computed(
   () =>
     initalCourse.value.title !== course.value.title ||
     initalCourse.value.description !== course.value.description ||
-    initalCourse.value.src !== course.value.src,
+    initalCourse.value.src !== course.value.src ||
+    initalCourse.value.private !== course.value.private
 );
 
 const uploadingFile = ref(false);

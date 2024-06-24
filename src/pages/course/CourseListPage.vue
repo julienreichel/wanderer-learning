@@ -30,6 +30,7 @@
         <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
           <q-card @click="viewCourse(props.row)" class="q-card-hover">
             <q-img :src="getUrl(props.row)" :ratio="16 / 9">
+              <q-icon v-if="props.row.private" class="absolute-top-right q-pa-sm" name="lock" color="negative" size="lg"/>
               <div class="absolute-bottom">
                 <div class="text-h6">{{ props.row.title }}</div>
                 <div
@@ -79,10 +80,11 @@ const { updateBreadcrumbs } = inject("breadcrumbs");
 updateBreadcrumbs([{ label: t("course.list") }]);
 
 const userAttributes = inject("userAttributes");
+const { username, userId, isAdmin } = userAttributes.value;
 
 const courses = ref([]);
 const loadCourses = async () => {
-  let options = {};
+  let options = { userId, username, isAdmin };
   if (!showAllLocaleContent.value) {
     options.locale = locale.value;
   }
@@ -110,6 +112,10 @@ const columns = [
   {
     name: "src",
     field: "src",
+  },
+  {
+    name: "private",
+    field: "private",
   },
   {
     name: "url",

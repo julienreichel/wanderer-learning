@@ -45,7 +45,7 @@
         <q-toggle
           v-if="enableEditing"
           v-model="editMode"
-          color="purple"
+          color="warning"
           checked-icon="edit"
           unchecked-icon="visibility"
         />

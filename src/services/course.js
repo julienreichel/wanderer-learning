@@ -24,6 +24,7 @@ export default class CourseService extends ServicePrototype {
       "description",
       "locale",
       "src",
+      "private",
       "ratings.*",
       "lectures.*",
       "lectures.steps.*",
@@ -80,7 +81,7 @@ export default class CourseService extends ServicePrototype {
 
     course.lectures = course.lectures.map((lecture) => {
       // find the step in the input, and merge the data
-      const lectureInput = input.lectures.find((item) => item.id === lecture.id);
+      const lectureInput = payload.lectures.find((item) => item.id === lecture.id);
       return { ...lectureInput, ...lecture };
     });
     return course;
@@ -116,16 +117,24 @@ export default class CourseService extends ServicePrototype {
       "description",
       "locale",
       "src",
+      "private",
       "ratings.*",
     ];
     let courses = await super.list(params);
 
-    // for now, we do a client side filtering
+    // for now, we do a client side filtering, we can probably does this in the query
+    if (!params.isAdmin) {
+      const owner = `${params.userId}::${params.username}`;
+      courses = courses.filter(
+        (course) => !course.private || course.owner === owner,
+      );
+    }
     if (params.locale) {
       courses = courses.filter(
         (course) => !course.locale || course.locale === params.locale,
       );
     }
+
 
     for (let course of courses) {
       await this.resolveUrl(course);

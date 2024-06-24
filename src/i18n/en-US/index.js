@@ -91,6 +91,8 @@ export default {
       title: "Course Title",
       description: "Course Description",
       confirm_delete_course: "Do you really want to delete this course ?",
+      private: "Private",
+      public: "Public",
     },
   },
   concept: {

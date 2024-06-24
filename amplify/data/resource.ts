@@ -133,6 +133,7 @@ const schema = a.schema({
       description: a.string(),
       locale: a.string(),
       src: a.string(),
+      private: a.boolean(),
       ratings: a.ref("Rating").array(),
       lectures: a.hasMany("Lecture", "courseId"),
     })

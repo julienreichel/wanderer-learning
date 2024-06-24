@@ -11,7 +11,7 @@
             v-if="course.src"
             :src="course.url"
             :ratio="16 / 9"
-            class="q-ma-sm col-3"
+            class="q-ma-sm col-4"
           >
           </q-img>
         </q-card-section>
