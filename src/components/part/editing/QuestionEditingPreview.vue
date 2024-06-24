@@ -1,13 +1,13 @@
 <template>
-  <q-item clickable @click="$emit('selected')">
+  <q-item dense class="q-pa-none">
     <q-item-section avatar>
       <q-avatar>
-        <q-icon size="md" :name="icon" />
+        <q-icon size="sm" :name="icon" />
       </q-avatar>
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="text-h5">{{ question.text }}</q-item-label>
+      <q-item-label class="text">{{ question.text }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
