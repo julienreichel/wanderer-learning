@@ -1,7 +1,7 @@
 <template>
   <div class="col-2">
     <q-card
-      class="aspect-ratio-16-9"
+      class="aspect-ratio-16-9 q-card-hover"
       clickable
       @click="stepChange(step)"
       :class="{ 'custom-highlight': active }"

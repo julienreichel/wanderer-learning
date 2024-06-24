@@ -28,7 +28,7 @@
       </template>
       <template v-slot:item="props">
         <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
-          <q-card @click="viewCourse(props.row)">
+          <q-card @click="viewCourse(props.row)" class="q-card-hover">
             <q-img :src="getUrl(props.row)" :ratio="16 / 9">
               <div class="absolute-bottom">
                 <div class="text-h6">{{ props.row.title }}</div>
@@ -151,3 +151,5 @@ const addCourse = async () => {
   router.push({ name: "CourseEdit", params: { id: course.id } });
 };
 </script>
+
+

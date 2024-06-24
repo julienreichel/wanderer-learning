@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card class="q-card-hover">
     <q-card-section horizontal clickable @click="viewStep(step)">
       <q-card-section class="col">
         <q-card-section class="q-pa-sm q-pb-md">

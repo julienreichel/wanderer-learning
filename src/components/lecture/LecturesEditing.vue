@@ -1,5 +1,6 @@
 <template>
   <q-card
+    class="q-card-hover"
     v-for="(lecture, index) in lecturesArray"
     :key="index"
     clickable

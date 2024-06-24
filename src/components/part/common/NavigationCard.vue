@@ -7,7 +7,7 @@
       @click="stepChange(step - 1)"
       flat
     >
-      <q-icon name="chevron_left" size="xl" />
+      <q-btn flat round icon="chevron_left" size="lg" />
     </q-card>
     <q-card
       v-else-if="hasNext"
@@ -16,7 +16,7 @@
       @click="stepChange(step + 1)"
       flat
     >
-      <q-icon name="chevron_right" size="xl" />
+      <q-btn flat round icon="chevron_right" size="lg" />
     </q-card>
     <q-card
       v-else-if="hasAnsweredAllQuizzes"
@@ -25,7 +25,7 @@
       @click="finish()"
       flat
     >
-      <q-icon name="check" size="xl" />
+      <q-btn flat round icon="check" size="lg" />
     </q-card>
   </div>
 </template>
