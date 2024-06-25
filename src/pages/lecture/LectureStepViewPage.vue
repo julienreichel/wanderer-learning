@@ -40,9 +40,33 @@ const props = defineProps({
   },
 });
 
+let partMapping = {};
 const lectureStep = ref({});
 onMounted(async () => {
   const data = await lectureStepService.get(props.id);
+
+  // Create virtual parts for the quiz, based on the options
+  let parts = [];
+  data.parts.forEach((part, idx) => {
+    if (part.type !== "quiz") {
+      parts.push({...part, idx});
+      return;
+    }
+
+    const nbQuizzes = part.options.nbQuizzes || 1;
+    const nbQuestions = part.options.nbQuestions || 5;
+    // randomize the questions, and create more quizes
+    const questions = part.questions.sort(() => Math.random() - 0.5);
+    for (let i = 0; i < nbQuizzes; i++) {
+      parts.push({
+        ...part,
+        idx,
+        questions: questions.slice(i * nbQuestions, (i + 1) * nbQuestions),
+      });
+    }
+  });
+  data.parts = parts;
+
   lectureStep.value = data;
 
   const edit = canEdit(data) ? "LectureStepEdit" : null;
@@ -68,10 +92,24 @@ const finished = async ({ finished, reportings } = {}) => {
       color: "warning",
     });
   } else {
+    // need to map the reporting back to the original parts
+    const parts = lectureStep.value.parts;
+    let finalReportings = [];
+    reportings.forEach((report, idx) => {
+      const origialIdx = parts[report.idx].idx;
+      if (!finalReportings[origialIdx]) {
+        finalReportings[origialIdx] = { time: 0, responses: [] };
+      }
+      finalReportings[origialIdx].time += report.time;
+      if(report.responses){
+        finalReportings[origialIdx].responses.push(...report.responses);
+      }
+    });
+
     const report = await stepReportingService.create({
       lectureStepId: lectureStep.value.id,
       lectureId: lectureStep.value.lecture.id,
-      reportings,
+      reportings: finalReportings,
     });
 
     // if there is a stars count, update the course stars

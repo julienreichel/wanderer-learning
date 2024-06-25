@@ -684,12 +684,9 @@ const generateLecture = async () => {
             : [1, 2, 3, 4, 5].map((index) => ({
                 text: t("quiz.feedback.tooltips." + type + "." + index),
               })),
-        options: [
-          {
-            name: "feedbackType",
-            value: type,
-          },
-        ],
+        options: {
+          feedbackType: type,
+        },
       },
     ],
   }));

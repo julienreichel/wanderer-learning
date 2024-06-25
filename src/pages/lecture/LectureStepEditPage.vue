@@ -49,16 +49,8 @@ const toJSON = ({ title, type, parts }) => {
   parts = parts.map(({ type, text, src, questions, options }) => {
     questions = questions?.map(({ id, type, text, answers, options }) => {
       answers = answers.map(({ text, valid }) => ({ text, valid }));
-      if (options) {
-        delete options.__typename;
-        options = options.map(({ name, value }) => ({ name, value }));
-      }
       return { id, type, text, answers, options };
     });
-    if (options) {
-      delete options.__typename;
-      options = options.map(({ name, value }) => ({ name, value }));
-    }
     return { type, text, src, questions, options };
   });
 

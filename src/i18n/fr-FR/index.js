@@ -48,6 +48,8 @@ export default {
       },
       explanation: "Fournir une explication",
       valid_answers: "Réponse(s) valide(s) : ",
+      nb_quizzes: "Questionaire | Questionaires",
+      nb_questions: "Question | Questions",
     },
     json: {
       no_questions: "Un quiz doit avoir au moins une question",

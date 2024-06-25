@@ -44,6 +44,52 @@ export default class LectureStepService extends ServicePrototype {
     });
   }
 
+  convertOptionsToObj(parts) {
+    parts.forEach((part) => {
+      if (!part.options) {
+        part.options = {};
+        return;
+      }
+      if (!Array.isArray(part.options)) return; // already converted
+      part.options = part.options.reduce((acc, option) => {
+        acc[option.name] = option.value;
+        return acc;
+      }, {});
+      part.questions.forEach((question) => {
+        if (!question.options) {
+          question.options = {};
+          return;
+        }
+        question.options = question.options.reduce((acc, option) => {
+          acc[option.name] = option.value;
+          return acc;
+        }, {});
+      });
+    });
+  }
+
+  convertOptionsToArr(parts) {
+    parts.forEach((part) => {
+      if (!part.options) {
+        part.options = [];
+        return;
+      }
+      if (Array.isArray(part.options)) return; // already converted
+      part.options = Object.keys(part.options).map((key) => {
+        return { name: key, value: part.options[key] };
+      });
+      part.questions.forEach((question) => {
+        if (!question.options) {
+          question.options = [];
+          return;
+        }
+        question.options = Object.keys(question.options).map((key) => {
+          return { name: key, value: question.options[key] };
+        });
+      });
+    });
+  }
+
   async resolveUrl(parts) {
     for (const part of parts) {
       if (
@@ -68,6 +114,7 @@ export default class LectureStepService extends ServicePrototype {
    */
   async create(input) {
     this.cleanParts(input.parts);
+    if (input.parts) this.convertOptionsToArr(input.parts);
     return super.create(input);
   }
 
@@ -92,10 +139,14 @@ export default class LectureStepService extends ServicePrototype {
     delete payload.userTimeReportings;
     delete payload.ratings;
 
+    if (payload.parts) this.convertOptionsToArr(payload.parts);
+
     const step = super.update(payload, params);
     if (params.resolveImg && step.parts) {
       await this.resolveUrl(step.parts);
     }
+
+    if (step.parts) this.convertOptionsToObj(step.parts);
 
     return step;
   }
@@ -115,6 +166,8 @@ export default class LectureStepService extends ServicePrototype {
     if (params.resolveImg && step.parts) {
       await this.resolveUrl(step.parts);
     }
+
+    if (step.parts) this.convertOptionsToObj(step.parts);
 
     return step;
   }
@@ -147,34 +200,5 @@ export default class LectureStepService extends ServicePrototype {
       }
     }
     return super.delete(content);
-  }
-
-  /**
-   *
-   * @param {object} part
-   * @param {string} name
-   * @param {any} value
-   */
-  setOption(part, name, value) {
-    if (!part.options) {
-      part.options = [];
-    }
-    let old = part.options.find((option) => option.name === name);
-    if (old) {
-      old.value = value;
-    } else {
-      part.options.push({ name, value });
-    }
-  }
-
-  /**
-   *
-   * @param {string} name
-   */
-  getOption(part, name) {
-    if (!part.options) {
-      part.options = [];
-    }
-    return part.options.find((option) => option.name === name)?.value;
   }
 }

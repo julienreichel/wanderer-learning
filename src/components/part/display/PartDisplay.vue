@@ -64,7 +64,7 @@ const props = defineProps({
 const emit = defineEmits(["results", "nextStep", "finish"]);
 
 const imageSize = ref(
-  Number(lectureStepService.getOption(props.part, "imageSize")) || 4,
+  Number(props.part.options.imageSize) || 4
 );
 const textSizeClass = computed(() =>
   props.part.url ? "col-" + (12 - imageSize.value) : "col-12",
@@ -75,9 +75,7 @@ const imageSizeClass = computed(() =>
 watch(
   () => props.part.options,
   () => {
-    imageSize.value = Number(
-      lectureStepService.getOption(props.part, "imageSize") || 4,
-    );
+    imageSize.value = Number(props.part.options.imageSize || 4);
   },
 );
 

@@ -125,33 +125,17 @@ if (!question.value.explanations) {
   question.value.explanations = "";
 }
 
-const setOption = (name, value) => {
-  if (!question.value.options) {
-    question.value.options = [];
-  }
-  let option = question.value.options.find((option) => option.name === name);
-  if (!option) {
-    question.value.options.push({ name, value });
-  } else {
-    option.value = value;
-  }
-};
-
-const getOption = (name) => {
-  return question.value.options?.find((option) => option.name === name)?.value;
-};
-
 watch(
   () => question.value.options,
   (options) => {
     if (!options) {
       return;
     }
-    feedbackType.value = getOption("feedbackType") || "roti";
+    feedbackType.value = question.value.options.feedbackType || "roti";
   },
 );
 
-const feedbackType = ref(getOption("feedbackType") || "roti");
+const feedbackType = ref(question.value.options.feedbackType || "roti");
 watch(
   [feedbackType, () => question.value.type],
   () => {
@@ -176,7 +160,7 @@ watch(
     if (feedbackType.value === "text") {
       question.value.text = t("quiz.feedback.question.text");
     }
-    setOption("feedbackType", feedbackType.value);
+    part.value.options.feedbackType = feedbackType.value;
   },
   { immediate: true },
 );

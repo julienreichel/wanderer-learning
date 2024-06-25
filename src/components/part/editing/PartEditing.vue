@@ -12,13 +12,13 @@
 
         <q-card-actions>
           <q-btn-toggle
-            v-model="imageSize"
+            v-model="part.options.imageSize"
             size="sm"
             toggle-color="primary"
             :options="[
-              { label: '2|4', value: 8 },
-              { label: '3|3', value: 6 },
-              { label: '4|2', value: 4 },
+              { label: '2|4', value: '8' },
+              { label: '3|3', value: '6' },
+              { label: '4|2', value: '4' },
             ]"
           />
           <q-btn size="sm" icon="edit" @click="uploadingFile = true" />
@@ -69,31 +69,17 @@ const { storage: storageService, lectureStep: lectureStepService } =
 
 const part = defineModel();
 
-const imageSize = ref(
-  Number(lectureStepService.getOption(part.value, "imageSize")) || 4,
-);
+part.value.options.imageSize = part.value.options.imageSize || '4';
+
 const textSizeClass = computed(() =>
   part.value.url && !uploadingFile.value
-    ? "col-" + (12 - imageSize.value)
+    ? "col-" + (12 - Number(part.value.options.imageSize))
     : "col-10",
 );
 const imageSizeClass = computed(() =>
-  part.value.url && !uploadingFile.value ? "col-" + imageSize.value : "col-2",
+  part.value.url && !uploadingFile.value ? "col-" + part.value.options.imageSize : "col-2",
 );
 const uploadingFile = ref(false);
-
-watch(imageSize, (value) => {
-  lectureStepService.setOption(part.value, "imageSize", value);
-});
-
-watch(
-  () => part.value.options,
-  () => {
-    imageSize.value = Number(
-      lectureStepService.getOption(part.value, "imageSize") || 4,
-    );
-  },
-);
 
 watch(
   () => part.value.src,

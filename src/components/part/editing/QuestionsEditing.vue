@@ -1,11 +1,14 @@
 <template>
   <q-card
-    v-for="(question, index) in quiz"
+    v-for="(question, index) in quiz.questions"
     :key="index"
     @click="activeQuestion = index"
     :class="{ 'q-card-hover': activeQuestion !== index }"
   >
-    <question-editing v-if="activeQuestion === index" v-model="quiz[index]" />
+    <question-editing
+      v-if="activeQuestion === index"
+      v-model="quiz.questions[index]"
+    />
     <q-card-actions>
       <question-editing-preview
         v-if="activeQuestion !== index"
@@ -20,7 +23,7 @@
         @click="moveUpQuestion({ index, question })"
       />
       <q-btn
-        v-if="index < quiz.length - 1"
+        v-if="index < quiz.questions.length - 1"
         size="sm"
         icon="arrow_downward"
         @click="moveDownQuestion({ index, question })"
@@ -38,6 +41,44 @@
     </q-card-actions>
   </q-card>
   <q-card>
+    <q-card-section>
+      <div class="row q-gutter-sm">
+        <q-item class="col col-md-3">
+          <q-item-section avatar>
+            <q-icon name="assignment" />
+          </q-item-section>
+          <q-item-section>
+            <q-slider
+              snap
+              label
+              switch-label-side
+              v-model="nbQuizzes"
+              :label-value="nbQuizzes + ' ' + $t('quiz.question.nb_quizzes', nbQuizzes)"
+              :min="1"
+              :inner-max="nbMaxQuizzes"
+              :max="6"
+            />
+          </q-item-section>
+        </q-item>
+        <q-item class="col col-md-3">
+          <q-item-section avatar>
+            <q-icon name="help_center" />
+          </q-item-section>
+          <q-item-section>
+            <q-slider
+              snap
+              label
+              switch-label-side
+              v-model="nbQuestions"
+              :label-value="nbQuestions + ' ' + $t('quiz.question.nb_questions', nbQuestions)"
+              :min="1"
+              :inner-max="nbMaxQuestions"
+              :max="5"
+            />
+          </q-item-section>
+        </q-item>
+      </div>
+    </q-card-section>
     <q-card-actions>
       <q-space />
       <q-btn
@@ -72,36 +113,62 @@
 import QuestionEditing from "src/components/part/editing/QuestionEditing.vue";
 import QuestionEditingPreview from "src/components/part/editing/QuestionEditingPreview.vue";
 
-import { ref, watch } from "vue";
+import { computed, ref, watch, inject } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { uid } = useIris();
 
-const quiz = defineModel();
+const { lectureStep: stepService } = inject("services");
+
+let quiz = defineModel();
 if (!quiz.value) {
-  quiz.value = [];
+  quiz.value = {
+    questions: [],
+  };
 }
 
-const activeQuestion = ref(0);
-watch(quiz, (value) => {
-  activeQuestion.value = Math.min(activeQuestion.value, value.length - 1);
+let activeQuestion = ref(0);
+watch(
+  () => quiz.value.questions,
+  (value) => {
+    activeQuestion.value = Math.min(activeQuestion.value, value.length - 1);
+  },
+);
+
+let nbQuizzes = ref(
+  Number(quiz.value.options.nbQuizzes) || Math.ceil(quiz.value.questions.length / 5),
+);
+watch(nbQuizzes, (value) => {
+  quiz.value.options.nbQuizzes = value;
+  if (value * nbQuestions.value > quiz.value.questions.length) {
+    nbQuestions.value = Math.floor(quiz.value.questions.length / value);
+  }
 });
+let nbMaxQuizzes = computed(() => Math.min(quiz.value.questions.length, 6));
+
+let nbQuestions = ref(Number(quiz.value.options.nbQuestions) || 5);
+watch(nbQuestions, (value) => {
+  quiz.value.options.nbQuestions = value;
+});
+let nbMaxQuestions = computed(() =>
+  Math.min(Math.floor(quiz.value.questions.length / nbQuizzes.value), 5),
+);
 
 const removeQuestion = ({ index }) => {
-  return quiz.value.splice(index, 1)[0];
+  return quiz.value.questions.splice(index, 1)[0];
 };
 
 const copyQuestion = ({ index }) => {
-  const src = quiz.value[index];
+  const src = quiz.value.questions[index];
   const copy = JSON.parse(JSON.stringify(src));
   copy.id = uid();
-  quiz.value.splice(index, 0, copy);
+  quiz.value.questions.splice(index, 0, copy);
   activeQuestion.value = index;
 };
 
 const moveUpQuestion = ({ index }) => {
   const question = removeQuestion({ index });
-  quiz.value.splice(index - 1, 0, question);
+  quiz.value.questions.splice(index - 1, 0, question);
 
   if (activeQuestion.value === index) {
     console.log("move up");
@@ -113,7 +180,7 @@ const moveUpQuestion = ({ index }) => {
 
 const moveDownQuestion = ({ index }) => {
   const question = removeQuestion({ index });
-  quiz.value.splice(index + 1, 0, question);
+  quiz.value.questions.splice(index + 1, 0, question);
 
   if (activeQuestion.value === index) {
     activeQuestion.value = activeQuestion.value + 1;
@@ -123,7 +190,7 @@ const moveDownQuestion = ({ index }) => {
 };
 
 const addQuestion = (type) => {
-  quiz.value.push({
+  quiz.value.questions.push({
     id: uid(),
     type,
     text: "",
