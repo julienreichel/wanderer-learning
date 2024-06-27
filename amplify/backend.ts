@@ -9,10 +9,7 @@ import {
   HttpApi,
   HttpMethod,
 } from "aws-cdk-lib/aws-apigatewayv2";
-import {
-  HttpIamAuthorizer,
-  HttpUserPoolAuthorizer,
-} from "aws-cdk-lib/aws-apigatewayv2-authorizers";
+import { HttpUserPoolAuthorizer } from "aws-cdk-lib/aws-apigatewayv2-authorizers";
 import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import { Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { AIQueryRest } from "./functions/ai-query-rest/resource";
@@ -27,14 +24,17 @@ const backend = defineBackend({
   AIQueryRest,
 });
 
-const { cfnIdentityPool } = backend.auth.resources.cfnResources;
+const { cfnIdentityPool, cfnUserPool } = backend.auth.resources.cfnResources;
 cfnIdentityPool.allowUnauthenticatedIdentities = false;
+
+// modify cfnUserPool
+cfnUserPool.autoVerifiedAttributes = ["email"];
+cfnUserPool.userAttributeUpdateSettings = {
+  attributesRequireVerificationBeforeUpdate: ["email"],
+};
 
 // create a new API stack
 const apiStack = backend.createStack("api-stack");
-
-// create a IAM authorizer
-const iamAuthorizer = new HttpIamAuthorizer();
 
 // create a User Pool authorizer
 const userPoolAuthorizer = new HttpUserPoolAuthorizer(
