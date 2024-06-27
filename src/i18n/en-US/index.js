@@ -163,6 +163,31 @@ export default {
     step_not_found: "<deleted>",
   },
   wizard: {
+    questions: {
+      description: "Base to use to create questions",
+      step1: "Data",
+      step2: "Options",
+      step3: "Creation",
+      number: "Question | Questions",
+      type: "Question type",
+      difficulty: "Difficulty",
+      explanation: "Provide explanations",
+      types: {
+        truefalse: "True/False",
+        choice: "Multiple choices",
+        checkbox: "Checkboxes",
+        mythfact: "Myth/Fact",
+        missingword: "Missing word",
+        finishsentence: "Finish the sentence",
+      },
+      difficulties: {
+        1: "Very easy",
+        2: "Easy",
+        3: "Average",
+        4: "Hard",
+        5: "Very hard",
+      },
+    },
     lecture: {
       title: "Lecture Description",
       description: "Describe the content of the lecture",

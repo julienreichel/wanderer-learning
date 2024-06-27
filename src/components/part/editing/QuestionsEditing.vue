@@ -111,18 +111,34 @@
         icon-right="rate_review"
         @click="addQuestion('feedback')"
       />
+      <q-btn
+        size="sm"
+        icon="switch_access_shortcut_add"
+        @click="wizardVisible = true"
+      />
     </q-card-actions>
   </q-card>
+  <question-generation-dialog
+    v-model="wizardVisible"
+    :parts="parts"
+    @questions="applyQuestions"
+    />
 </template>
 
 <script setup>
 import QuestionEditing from "src/components/part/editing/QuestionEditing.vue";
 import QuestionEditingPreview from "src/components/part/editing/QuestionEditingPreview.vue";
+import QuestionGenerationDialog from "src/components/part/editing/QuestionGenerationDialog.vue";
 
 import { computed, ref, watch, inject } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { uid } = useIris();
+
+
+const props = defineProps({
+  parts: { type: Array },
+});
 
 let quiz = defineModel();
 if (!quiz.value) {
@@ -201,5 +217,14 @@ const addQuestion = (type) => {
     answers: [],
     options: [],
   });
+};
+
+let wizardVisible = ref(false);
+const applyQuestions = async ({questions}) => {
+  if (quiz.value.questions.length == 1 && !quiz.value.questions[0].answers.length) {
+    quiz.value.questions = questions;
+  } else {
+    quiz.value.questions.push(...questions);
+  }
 };
 </script>

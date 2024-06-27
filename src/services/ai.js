@@ -8,9 +8,9 @@ import conceptsText from "./prompts/conceptsText.js";
 import conceptsTextHtml from "./prompts/conceptsTextHtml.js";
 import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import practiceQuiz from "./prompts/finalQuiz.js";
+import simpleQuiz from "./prompts/quiz.js";
 
 import { post } from "aws-amplify/api";
-import { Amplify } from "aws-amplify";
 import { fetchAuthSession } from "aws-amplify/auth";
 
 export default class ServicePrototype {
@@ -301,4 +301,29 @@ export default class ServicePrototype {
 
     return this.query({ system, prompt, token: nbQuestions * 200 });
   }
+
+  async getQuiz(descritpion, difficulty, nbQuestions, type, explanation) {
+
+    difficulty = ["Very easy", "Easy", "Regular", "Difficult", "Very difficult"][difficulty - 1];
+    type = {
+      truefalse: "True or False",
+      choice: "Multiple choices answers, with one valid answer",
+      checkbox: "Checkboxes wiht 5 answers, with at least two valid answers",
+      mythfact: "Myth or Fact",
+      missingword: "Sentence with one and only one missing word",
+      finishsentence: "Sentences with a choice of various possible endings"
+    }[type];
+
+    const system = simpleQuiz.system(
+      difficulty, nbQuestions, type, explanation,
+      this.language,
+    );
+    const prompt = simpleQuiz.prompt(
+      descritpion,
+      nbQuestions
+    );
+
+    return this.query({ system, prompt, token: nbQuestions * 200 });
+  }
+
 }
