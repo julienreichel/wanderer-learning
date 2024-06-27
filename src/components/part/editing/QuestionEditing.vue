@@ -81,6 +81,7 @@
             <q-toggle
               checked-icon="check"
               color="green"
+              :name="'valid'+ answerIdx"
               unchecked-icon="clear"
               v-model="answer.valid"
             />
@@ -100,6 +101,7 @@
   <q-card-section v-if="question.type !== 'feedback'">
     <q-toggle
       v-model="provideExplanation"
+      name="explanation"
       :label="$t('quiz.question.explanation')"
     />
     <rich-text-editing

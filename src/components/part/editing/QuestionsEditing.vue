@@ -17,26 +17,32 @@
       />
       <q-space />
       <q-btn
+        v-if="activeQuestion === index"
+        size="sm"
+        icon="unfold_less"
+        @click.stop="activeQuestion = undefined"
+      />
+      <q-btn
         v-if="index > 0"
         size="sm"
         icon="arrow_upward"
-        @click="moveUpQuestion({ index, question })"
+        @click.stop="moveUpQuestion({ index, question })"
       />
       <q-btn
         v-if="index < quiz.questions.length - 1"
         size="sm"
         icon="arrow_downward"
-        @click="moveDownQuestion({ index, question })"
+        @click.stop="moveDownQuestion({ index, question })"
       />
       <q-btn
         size="sm"
         icon="content_copy"
-        @click="copyQuestion({ index, question })"
+        @click.stop="copyQuestion({ index, question })"
       />
       <q-btn
         size="sm"
         icon="delete"
-        @click="removeQuestion({ index, question })"
+        @click.stop="removeQuestion({ index, question })"
       />
     </q-card-actions>
   </q-card>
@@ -118,8 +124,6 @@ import { computed, ref, watch, inject } from "vue";
 import { useIris } from "src/composables/iris";
 const { uid } = useIris();
 
-const { lectureStep: stepService } = inject("services");
-
 let quiz = defineModel();
 if (!quiz.value) {
   quiz.value = {
@@ -131,7 +135,7 @@ let activeQuestion = ref(0);
 watch(
   () => quiz.value.questions,
   (value) => {
-    activeQuestion.value = Math.min(activeQuestion.value, value.length - 1);
+    activeQuestion.value = value.length > 1 ? undefined : 0;
   },
 );
 
