@@ -164,6 +164,24 @@ const logOut = async () => {
 </script>
 
 <style>
+
+h1 {
+  font-size: 4rem;
+  line-height: 4rem;
+}
+h2 {
+  font-size: 2.75rem;
+  line-height: 2.75rem;
+}
+h3 {
+  font-size: 2.25rem;
+  line-height: 2.25rem;
+}
+h4 {
+  font-size: 2.0rem;
+  margin: 0;
+}
+
 .q-breadcrumbs__el.flex.inline {
   display: inline-block; /* Ensure the element is treated as inline-block */
 

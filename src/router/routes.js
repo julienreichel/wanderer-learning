@@ -10,6 +10,17 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/privacy-policy",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [
+      {
+        name: "PrivacyPolicy",
+        path: "",
+        component: () => import("pages/PrivacyPolicyPage.vue"),
+      },
+    ],
+  },
 
   {
     path: "/login",
