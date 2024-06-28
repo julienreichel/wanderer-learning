@@ -96,7 +96,7 @@ const finished = async ({ finished, reportings } = {}) => {
     const parts = lectureStep.value.parts;
     let finalReportings = [];
     reportings.forEach((report, idx) => {
-      const origialIdx = parts[report.idx].idx;
+      const origialIdx = parts[idx].idx;
       if (!finalReportings[origialIdx]) {
         finalReportings[origialIdx] = { time: 0, responses: [] };
       }
