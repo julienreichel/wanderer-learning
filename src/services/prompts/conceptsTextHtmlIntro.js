@@ -21,8 +21,8 @@ ${prerequisites.length ? "\nPrerequisites:\nI have already completed the followi
 Response Language:
 ${language}
 
-Response Format:
-The response should be in HTML format, using only the following HTML tags: <h5> <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <hr>, <a>.
+HTML Response Format:
+The response should be in HTML format, using only the following HTML tags: <h5> <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <a>.
 The link <a> can only be use to link public web pages.
 `;
 

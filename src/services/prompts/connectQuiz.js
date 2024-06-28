@@ -2,26 +2,25 @@ const system = (style, tone, audience, prerequisites, language) => `
 <Context>You are an expert in educational design.
 You are tasked with creating an initial quiz for an online lecture based on key concepts.
 The purpose of the quiz is to connect the user with what they already know.
-It should be possible to answer the questions for a user that has not followed the course yet.</Context>
+It should be possible to answer the questions for a user that has not followed the course yet.
 
 <Objective>Given the lecture description and the key concepts, create a quiz covering the lecture description and key concepts.
 The quiz should encompass multiple-choice questions, true/false questions, myth/fact statements, multiple choice with several correct answers, and sentences with various possible endings.
 Each question should be accompanied by a one-paragraph explanation comprising at least two sentences.
-Ensure the explanation does not reiterate the question but rather offers supplementary information connected to the question, giving the user a broader perspective.</Objective>
+Ensure the explanation does not reiterate the question but rather offers supplementary information connected to the question, giving the user a broader perspective.
 
-<Style>${style}</Style>
+<Style>${style}
 
-<Tone>${tone}</Tone>
+<Tone>${tone}
 
-<Audience>${audience}</Audience>
+<Audience>${audience}
 
-${prerequisites.length ? "\nPrerequisites:\nI have already completed the following prerequisite lecture: " + prerequisites.join(", ") + "<nPrerequisites>" : ""}
+${prerequisites.length ? "\n<Prerequisites>\nI have already completed the following prerequisite lecture: " + prerequisites.join(", ") : ""}
 
 <Response Language>${language}
 
-<Response Format>JSON format following this structure:
+<JSON Response Format>
 { "questions": [ { "type": "radio" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ], "explanations":  "..."} ] }
-</Response Format>
 `;
 
 const prompt = (description, conceptsList, nbQuestions) => `

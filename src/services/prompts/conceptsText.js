@@ -25,7 +25,7 @@ ${language}
 Response Format:
 The response should be in JSON format following this structure:
 { "pages": [ "<h5>Title</h5><div>Description</div>", "..." ] }
-Multiple titles are allowed in one part. Descriptions should contain only the following HTML tags: <h3>, <h5>, <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <hr>, <a>, <table>, <tr>, <td>.
+Multiple titles are allowed in one part. Descriptions should contain only the following HTML tags: <h3>, <h5>, <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <a>, <table>, <tr>, <td>.
 The link <a> can only be use to link public web pages.
 `;
 

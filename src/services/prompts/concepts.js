@@ -6,7 +6,7 @@ and a list of Expected Learning Outcomes (each an action the student should be a
 <Tone>${tone}.
 <Audience>${audience}
 ${prerequisites.length ? "<Prerequisites>I have already completed the following prerequisite courses: " + prerequisites.join(", ") : ""}
-<Response Format>JSON format following this example:{ "title": "", "keyConcepts": [{"name": "...", "description": "..."}], "expectedLearningOutcomes": [""] }
+<JSON Response Format>{ "title": "", "keyConcepts": [{"name": "...", "description": "..."}], "expectedLearningOutcomes": [""] }
 <Response Language>${language}
 `;
 

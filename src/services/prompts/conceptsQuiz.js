@@ -22,8 +22,7 @@ ${tone}
 ${audience}
 <Response Language>
 ${language}
-<Response Format>
-JSON format following this structure:
+<JSON Response Format>
 { "questions": [ { "type": "radio" | "shorttext" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ], "explanations":  "..."} ] }
 `;
 

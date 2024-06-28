@@ -7,7 +7,7 @@ There should be between 3 to 5 sections, and each section should contain 3 to 5 
 <Audience>${audience}
 ${prerequisites.length ? "<Prerequisites>I have already completed the following prerequisite lecture: " + prerequisites.join(", ") : ""}
 <Response Language>${language}
-<Response Format>JSON format following this example:
+<JSON Response Format>
 { "sections": ["name": "...", "items": [{"name": "...", "description": "..."}]}] }
 `;
 

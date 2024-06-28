@@ -59,7 +59,9 @@
               label
               switch-label-side
               v-model="nbQuizzes"
-              :label-value="nbQuizzes + ' ' + $t('quiz.question.nb_quizzes', nbQuizzes)"
+              :label-value="
+                nbQuizzes + ' ' + $t('quiz.question.nb_quizzes', nbQuizzes)
+              "
               :min="1"
               :inner-max="nbMaxQuizzes"
               :max="6"
@@ -76,7 +78,11 @@
               label
               switch-label-side
               v-model="nbQuestions"
-              :label-value="nbQuestions + ' ' + $t('quiz.question.nb_questions', nbQuestions)"
+              :label-value="
+                nbQuestions +
+                ' ' +
+                $t('quiz.question.nb_questions', nbQuestions)
+              "
               :min="1"
               :inner-max="nbMaxQuestions"
               :max="5"
@@ -122,7 +128,7 @@
     v-model="wizardVisible"
     :parts="parts"
     @questions="applyQuestions"
-    />
+  />
 </template>
 
 <script setup>
@@ -134,7 +140,6 @@ import { computed, ref, watch, inject } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { uid } = useIris();
-
 
 const props = defineProps({
   parts: { type: Array },
@@ -155,9 +160,7 @@ watch(
   },
 );
 
-let nbQuizzes = ref(
-  Number(quiz.value.options.nbQuizzes) || Math.ceil(quiz.value.questions.length / 5),
-);
+let nbQuizzes = ref(Number(quiz.value.options.nbQuizzes) || 1);
 watch(nbQuizzes, (value) => {
   quiz.value.options.nbQuizzes = value;
   if (value * nbQuestions.value > quiz.value.questions.length) {
@@ -220,8 +223,11 @@ const addQuestion = (type) => {
 };
 
 let wizardVisible = ref(false);
-const applyQuestions = async ({questions}) => {
-  if (quiz.value.questions.length == 1 && !quiz.value.questions[0].answers.length) {
+const applyQuestions = async ({ questions }) => {
+  if (
+    quiz.value.questions.length == 1 &&
+    !quiz.value.questions[0].answers.length
+  ) {
     quiz.value.questions = questions;
   } else {
     quiz.value.questions.push(...questions);

@@ -121,9 +121,10 @@ const emit = defineEmits(["questions"]);
 
 // build the inital description based on the parts content
 // Get the text from the parts, and concateante it
-const lectureContent = props.parts.filter((part) => part.text).map((part) =>
-  htmlToMarkdown(part.text.substring(0, 500) + "<br/>[...]<br/>")
-).join("\n");
+const lectureContent = props.parts
+  .filter((part) => part.text)
+  .map((part) => htmlToMarkdown(part.text))
+  .join("\n");
 
 let activeStep = ref("step1");
 let subject = ref(lectureContent);
