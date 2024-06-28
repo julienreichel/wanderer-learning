@@ -52,9 +52,7 @@ watch(
 const processResult = ({ question, response, valid, points }) => {
   const index = props.questions.indexOf(question);
 
-  const feedbackType = question.options?.find(
-    (option) => option.name === "feedbackType",
-  )?.value;
+  const feedbackType = question.options?.feedbackType || "roti";
   const type = question.type;
   responsesStats[index] = {
     questionId: question.id,
