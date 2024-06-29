@@ -13,16 +13,17 @@
       :disable="validated"
     />
   </q-card-section>
-  <q-card-section v-if="question.type === 'shorttext'" class="q-gutter-sm">
+  <q-card-section v-if="question.type === 'shorttext'" class="q-gutter-sm q-pl-lg">
     <q-input
       clearable
+      dense
       v-model="newResponse"
       :label="validated ? '' : 'The answer'"
       :readonly="validated"
       :color="options.color"
     >
-      <template v-slot:append v-if="validated">
-        <q-icon :name="options.icon" :color="options.color" />
+      <template v-slot:before v-if="validated">
+        <q-icon :name="options.icon" :color="options.color" class="q-px-sm"/>
       </template>
     </q-input>
   </q-card-section>
