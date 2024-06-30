@@ -144,12 +144,13 @@ export default {
       add: {
         text: "Nouveau texte",
         img: "Nouvelle image",
-        video: "Nouvelle vidéo",
-        iframe: "Nouvelle iframe",
+        video: "Vidéo link",
+        iframe: "Intégrer un lien",
       },
       text: "Texte",
       img: "Image",
       video: "Vidéo",
+      description: "Description",
     },
   },
   reporting: {

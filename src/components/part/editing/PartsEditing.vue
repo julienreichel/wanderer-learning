@@ -237,6 +237,7 @@ const openFileUpload = ref(false);
 const uploaded = (files) => {
   const newParts = files.map((file) => ({
     type: "img",
+    text: file.name.replace(/\.[^\.]+$/, ""),
     src: file.path,
     url: file.url,
   }));

@@ -27,32 +27,45 @@
       </q-card-section>
       <file-uploader v-else @uploaded="uploaded" />
     </q-card-section>
-    <div class="row" v-if="part.type === 'img'">
-      <file-uploader class="col-6" @uploaded="uploaded" />
+    <q-card-section class="row" v-if="part.type === 'img'">
+      <div class="col-6 q-gutter-sm">
+        <q-input outlined v-model="part.text" :label="$t('parts.form.description')" />
+        <div class="col-12">
+          <file-uploader class="full-width full-height" @uploaded="uploaded" />
+        </div>
+      </div>
       <q-img class="col" :ratio="16 / 9" fit="scale-down" :src="part.url" />
-    </div>
-    <div class="row q-pa-md" v-if="part.type === 'video'">
-      <q-input
-        class="col-8"
-        v-model="part.src"
-        :label="$t('parts.form.add.video')"
-      />
+    </q-card-section>
+    <q-card-section class="row q-pa-md q-col-gutter-sm" v-if="part.type === 'video'">
+      <div class="col-8 q-gutter-sm">
+        <q-input outlined v-model="part.text" :label="$t('parts.form.description')" />
+        <q-input
+          outlined
+          class="col-8"
+          v-model="part.src"
+          :label="$t('parts.form.add.video')"
+        />
+      </div>
       <div class="col-4">
         <q-video :ratio="16 / 9" :src="part.src" />
       </div>
-    </div>
-    <div class="row q-pa-md" v-if="part.type === 'iframe'">
-      <q-input
-        class="col-8"
-        v-model="part.src"
-        :label="$t('parts.form.add.iframe')"
-      />
+    </q-card-section>
+    <q-card-section class="row q-pa-md q-col-gutter-sm" v-if="part.type === 'iframe'">
+      <div class="col-8 q-gutter-sm">
+        <q-input outlined v-model="part.text" :label="$t('parts.form.description')" />
+        <q-input
+          outlined
+          class="col-8"
+          v-model="part.src"
+          :label="$t('parts.form.add.iframe')"
+        />
+      </div>
       <div class="col-4">
         <div class="iframe-16-9">
           <iframe :title="part.text" :src="part.src"></iframe>
         </div>
       </div>
-    </div>
+    </q-card-section>
     <question-editing v-if="part.type === 'quiz'" v-model="part.questions[0]" />
   </q-card>
 </template>
@@ -115,7 +128,9 @@ const removeImage = () => {
 const uploaded = async (files) => {
   const file = files[0];
   removeImage();
-
+  // remove the extension from the name
+  const name = file.name.replace(/\.[^\.]+$/, "");
+  part.value.text = Boolean(part.value.text) ? part.value.text : name;
   part.value.src = file?.path;
   part.value.url = file?.url;
 };

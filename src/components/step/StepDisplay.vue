@@ -73,11 +73,11 @@ const getTitle = (part) => {
     div.innerHTML = part.text;
     const h3 = div.querySelector("h3");
     const h5 = div.querySelector("h5");
-    return h3 ? h3.textContent : h5 ? h5.textContent : "";
+    return h3 ? h3.textContent : h5 ? h5.textContent : div.textContent.substring(0, 30) + "...";
   } else if (part.type === "quiz") {
     return t("quiz.name");
   } else {
-    return "";
+    return part.text;
   }
 };
 

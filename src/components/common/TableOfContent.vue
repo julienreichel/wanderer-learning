@@ -33,7 +33,7 @@ const extractTitle = (html) => {
   div.innerHTML = html;
   const h3 = div.querySelector("h3");
   const h5 = div.querySelector("h5");
-  return h3 ? h3.textContent : h5 ? h5.textContent : null;
+  return h3 ? h3.textContent : h5 ? h5.textContent : div.textContent.substring(0, 30) + "...";
 };
 
 // Function to build the TOC structure
@@ -42,29 +42,25 @@ const buildToc = (steps) => {
     let previousIsQuiz = false;
     const children = step.parts
       .map((part, idx) => {
+        let label = part.text;
         if (part.type === "text") {
-          let label = extractTitle(part.text);
+          label = extractTitle(part.text);
           if (label === step.title) {
             label = t("step.introduction");
           }
           previousIsQuiz = false;
-          return {
+
+        } else if (part.type === "quiz") {
+          if (previousIsQuiz) {
+            label = null;
+          }
+          previousIsQuiz = true;
+        }
+        return {
             id: stepIdx + "." + idx,
             label,
             type: part.type,
           };
-        } else if (part.type === "quiz") {
-          if (previousIsQuiz) {
-            return {};
-          }
-          previousIsQuiz = true;
-          return {
-            id: stepIdx + "." + idx,
-            label: t("quiz.name"),
-            type: part.type,
-          };
-        }
-        return {};
       })
       .filter((child) => Boolean(child.label));
 
