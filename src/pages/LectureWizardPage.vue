@@ -603,7 +603,7 @@ const generateLecture = async () => {
   );
   parts.unshift({
     type: "text",
-    text: connectIntro.content.pop(),
+    text: connectIntro.content.shift(),
   });
   connectIntro.content.forEach((text) => {
     parts.push({
