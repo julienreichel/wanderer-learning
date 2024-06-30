@@ -14,8 +14,7 @@ Ensure the explanation does not reiterate the question but rather offers supplem
 <Tone>${tone}
 
 <Audience>${audience}
-
-${prerequisites.length ? "\n<Prerequisites>\nI have already completed the following prerequisite lecture: " + prerequisites.join(", ") : ""}
+${prerequisites.length ? "\n<Prerequisites>I have already completed the following prerequisite lecture: " + prerequisites.join(", ") : ""}
 
 <Response Language>${language}
 
