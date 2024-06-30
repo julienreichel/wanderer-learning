@@ -1,12 +1,10 @@
 <template>
   <q-card
-    class="q-card-hover"
     v-for="(lecture, index) in lecturesArray"
     :key="index"
     clickable
-    @click="editMode ? editLecture(lecture) : viewLecture(lecture)"
   >
-    <q-card-section horizontal>
+    <q-card-section horizontal class="q-card-hover" @click="editMode ? editLecture(lecture) : viewLecture(lecture)">
       <q-card-section class="col q-pa-sm">
         <q-card-section class="q-pa-sm">
           <div class="text-h5">{{ lecture.title }}</div>
@@ -53,9 +51,11 @@
     </q-card-actions>
     <q-card-actions v-else>
       <q-space />
-      <q-btn size="sm" icon="east" @click="viewLecture(lecture)" />
+      <q-btn size="sm" icon="toc" @click.stop="showToc(lecture)" />
+      <q-btn size="sm" icon="east" @click.stop="viewLecture(lecture)" />
     </q-card-actions>
   </q-card>
+  <table-of-content-dialog :lecture="selectedLecture" v-model="showTocDialog"/>
 </template>
 
 <script setup>
@@ -64,6 +64,7 @@ import ConceptDisplay from "src/components/concept/ConceptDisplay.vue";
 import UserLectureReporting from "src/components/reporting/UserLectureReporting.vue";
 import UsageHistogram from "src/components/charts/UsageHistogram.vue";
 import StepReporting from "src/components/reporting/StepReporting.vue";
+import TableOfContentDialog from "src/components/common/TableOfContentDialog.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
@@ -123,5 +124,12 @@ const editLecture = (lecture) => {
 
 const viewLecture = (lecture) => {
   router.push({ name: "LectureView", params: { id: lecture.id } });
+};
+
+let selectedLecture = ref({});
+let showTocDialog = ref(false);
+const showToc = (lecture) => {
+  selectedLecture.value = lecture;
+  showTocDialog.value = true;
 };
 </script>

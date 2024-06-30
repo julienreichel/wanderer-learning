@@ -1,0 +1,1305 @@
+{
+  "id": "a1ec6ad5-dc27-4080-81bc-ddc0ba31b124",
+  "courseId": "bf222372-2156-4644-aeb8-e84ca6bfb3d9",
+  "title": "Decoding Emotions",
+  "description": "<b>Learning Objectives:</b><br/><ul><li>Identify and classify various types of emotions.</li><li>Apply strategies for regulating and managing emotions.</li><li>Enhance emotional intelligence by recognizing and responding to emotions effectively.</li></ul>",
+  "order": "1719567970665",
+  "owner": "google_102836436417047106235",
+  "locale": "en-US",
+  "createdAt": "2024-06-28T09:46:10.804Z",
+  "updatedAt": "2024-06-28T09:46:10.804Z",
+  "steps": {
+    "items": [
+      {
+        "id": "aeb53db4-2ccf-4e10-8b31-d29bf3feda7d",
+        "type": "step",
+        "lectureId": "a1ec6ad5-dc27-4080-81bc-ddc0ba31b124",
+        "order": "1719568049546",
+        "title": "Managing Emotions",
+        "owner": "google_102836436417047106235",
+        "identityId": null,
+        "conceptId": null,
+        "parts": [
+          {
+            "type": "text",
+            "text": "<h5>Managing Emotions</h5><div><p>Emotions are the vibrant colors that paint the canvas of our lives. They can be as uplifting as the dawn of a new day or as challenging as a stormy night. Managing emotions is an essential skill that allows us to navigate life's ups and downs with grace and resilience. In this section, we will explore various techniques and strategies to manage emotions, ensuring that we can maintain our mental well-being and foster healthy relationships.</p></div>",
+            "src": null,
+            "questions": null,
+            "options": []
+          },
+          {
+            "type": "text",
+            "text": "<h5>Emotion Regulation Techniques</h5><div><p>Emotion regulation is the process of influencing which emotions we have, when we have them, and how we experience and express them. Effective regulation techniques can transform our emotional experiences and responses. Here are some techniques:</p><ul><li><b>Cognitive Reappraisal:</b> This involves changing the way we think about a situation in order to alter its emotional impact. For example, viewing a challenging task as an opportunity for growth instead of a threat.</li><li><b>Expressive Suppression:</b> This technique involves consciously inhibiting the outward signs of emotion, such as facial expressions or verbal responses, to maintain composure in a given situation.</li><li><b>Problem-Solving:</b> Actively addressing the source of stress or discomfort can mitigate negative emotions. This involves identifying the problem, generating possible solutions, and implementing the best course of action.</li></ul></div>",
+            "src": null,
+            "questions": null,
+            "options": []
+          },
+          {
+            "type": "text",
+            "text": "<h5>Coping Strategies</h5><div><p>Coping strategies are the methods we use to handle stress and difficult emotions. They can be adaptive, promoting long-term well-being, or maladaptive, potentially leading to more significant issues. Here are some adaptive coping strategies:</p><ul><li><b>Seeking Support:</b> Talking to friends, family, or a mental health professional can provide comfort and new perspectives on a challenging situation.</li><li><b>Physical Activity:</b> Exercise is a powerful tool for reducing stress and improving mood. Activities like walking, running, or yoga can help regulate emotions and boost overall well-being.</li><li><b>Hobbies and Creative Outlets:</b> Engaging in activities you enjoy, such as painting, playing music, or gardening, can be a therapeutic way to manage emotions and reduce stress.</li></ul></div>",
+            "src": null,
+            "questions": null,
+            "options": []
+          },
+          {
+            "type": "text",
+            "text": "<h5>Mindfulness Practices</h5><div><p>Mindfulness is the practice of being present and fully engaged in the moment, without judgment. It has been shown to significantly improve emotion regulation and overall well-being. Here are some mindfulness practices:</p><ul><li><b>Mindful Breathing:</b> Focus on your breath, observing each inhale and exhale. This simple practice can help center your mind and calm your emotions.</li><li><b>Body Scan Meditation:</b> Slowly scan your body from head to toe, noticing any areas of tension or discomfort. This practice can help you become more aware of your physical and emotional state.</li><li><b>Mindful Observation:</b> Take a moment to observe your surroundings with all your senses. Notice the colors, sounds, and smells around you. This practice can help anchor you in the present moment and reduce emotional distress.</li></ul></div>",
+            "src": null,
+            "questions": null,
+            "options": []
+          },
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-0",
+                "type": "radio",
+                "text": "Which of the following best describes the focus of emotion regulation techniques?",
+                "explanations": "Emotion regulation techniques aim to provide practical methods for individuals to effectively manage and control their emotions, leading to improved emotional well-being.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Exploring practical methods to effectively manage and control emotions.",
+                    "valid": true
+                  },
+                  {
+                    "text": "Understanding the history of emotions.",
+                    "valid": false
+                  },
+                  {
+                    "text": "Ignoring emotions altogether.",
+                    "valid": false
+                  },
+                  {
+                    "text": "Creating chaos in emotional responses.",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-1",
+                "type": "radio",
+                "text": "Coping strategies help individuals deal with challenging emotions and situations.",
+                "explanations": "Coping strategies are essential for individuals to navigate and cope with challenging emotions and situations, offering adaptive ways to manage stress and maintain emotional balance.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "True",
+                    "valid": true
+                  },
+                  {
+                    "text": "False",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-2",
+                "type": "checkbox",
+                "text": "Which of the following are components of mindfulness practices in regulating emotions? (Select all that apply)",
+                "explanations": "Mindfulness practices involve being present in the moment, developing awareness of thoughts and emotions without judgment, and cultivating a sense of acceptance towards one's experiences, all of which are beneficial in regulating emotions and promoting overall well-being.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Being present in the moment",
+                    "valid": true
+                  },
+                  {
+                    "text": "Engaging in self-criticism",
+                    "valid": false
+                  },
+                  {
+                    "text": "Developing awareness of thoughts and emotions",
+                    "valid": true
+                  },
+                  {
+                    "text": "Escaping from reality",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              }
+            ],
+            "options": []
+          },
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-3",
+                "type": "shorttext",
+                "text": "Coping strategies help individuals...",
+                "explanations": "Coping strategies assist individuals in effectively managing and navigating challenging emotions and situations, providing valuable tools for maintaining emotional resilience and well-being.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "deal with challenging emotions and situations",
+                    "valid": true
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-4",
+                "type": "radio",
+                "text": "What is the role of mindfulness in regulating emotions and promoting well-being?",
+                "explanations": "Mindfulness practices play a crucial role in regulating emotions by encouraging individuals to be present in the moment, develop awareness of their thoughts and emotions, and foster a sense of acceptance, leading to improved emotional well-being and mental clarity.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Creating chaos in emotional responses.",
+                    "valid": false
+                  },
+                  {
+                    "text": "Escaping from reality.",
+                    "valid": false
+                  },
+                  {
+                    "text": "Understanding the present moment and developing awareness.",
+                    "valid": true
+                  },
+                  {
+                    "text": "Avoiding emotions altogether.",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-5",
+                "type": "checkbox",
+                "text": "Which of the following are considered coping strategies for managing emotions? (Select all that apply)",
+                "explanations": "Coping strategies such as deep breathing exercises and seeking social support are effective ways to manage emotions by promoting relaxation, emotional expression, and building a supportive network, which are essential for emotional well-being.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Deep breathing exercises",
+                    "valid": true
+                  },
+                  {
+                    "text": "Engaging in negative self-talk",
+                    "valid": false
+                  },
+                  {
+                    "text": "Seeking social support",
+                    "valid": true
+                  },
+                  {
+                    "text": "Avoiding emotions completely",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              }
+            ],
+            "options": []
+          },
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-6",
+                "type": "shorttext",
+                "text": "One key aspect of mindfulness practices is...",
+                "explanations": "Being present in the moment is a fundamental aspect of mindfulness practices, emphasizing the importance of focusing on the present experience without judgment, which is beneficial for regulating emotions and enhancing overall well-being.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "being present in the moment",
+                    "valid": true
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-7",
+                "type": "radio",
+                "text": "Which statement accurately describes coping strategies?",
+                "explanations": "Coping strategies provide individuals with adaptive and constructive ways to handle challenging emotions and situations, empowering them to effectively manage stress, enhance resilience, and maintain emotional well-being.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Coping strategies offer adaptive ways to deal with challenging emotions and situations.",
+                    "valid": true
+                  },
+                  {
+                    "text": "Coping strategies encourage avoiding emotions altogether.",
+                    "valid": false
+                  },
+                  {
+                    "text": "Coping strategies lead to increased stress levels.",
+                    "valid": false
+                  },
+                  {
+                    "text": "Coping strategies have no impact on emotional well-being.",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-8",
+                "type": "shorttext",
+                "text": "Emotion regulation techniques focus on...",
+                "explanations": "Emotion regulation techniques center on providing individuals with practical methods to effectively manage and control their emotions, leading to improved emotional well-being and enhanced self-regulation.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "effectively managing and controlling emotions",
+                    "valid": true
+                  }
+                ],
+                "options": null
+              }
+            ],
+            "options": []
+          }
+        ],
+        "createdAt": "2024-06-28T09:47:29.638Z",
+        "updatedAt": "2024-06-28T09:47:29.638Z"
+      },
+      {
+        "id": "945d503e-c539-422e-ba20-a6e027f5d7f2",
+        "type": "step",
+        "lectureId": "a1ec6ad5-dc27-4080-81bc-ddc0ba31b124",
+        "order": "1719568022524",
+        "title": "Understanding Emotions",
+        "owner": "google_102836436417047106235",
+        "identityId": null,
+        "conceptId": null,
+        "parts": [
+          {
+            "type": "text",
+            "text": "<h5>Understanding Emotions</h5><div><p>Emotions are the colorful threads that weave through the tapestry of our lives, influencing our experiences, decisions, and interactions. They are complex psychological states that involve three distinct components: a subjective experience, a physiological response, and a behavioral or expressive response. Understanding emotions is crucial as they play a central role in human behavior and mental health.</p><p>In this section, we will explore the nature of emotions, how they can be classified, and the vast spectrum they encompass. By the end of this journey, you will gain a deeper appreciation for the richness of human emotional experience and be better equipped to navigate your own emotional landscape.</p></div>",
+            "src": null,
+            "questions": null,
+            "options": [
+              {
+                "name": null,
+                "value": null
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "<h5>Introduction to Emotion Types</h5><div><p>Emotions can be broadly categorized into primary and secondary types. Primary emotions, such as joy, sadness, anger, fear, surprise, and disgust, are universal and innate. These foundational emotions are experienced similarly across different cultures and are thought to have evolved for their survival value.</p><p>Secondary emotions, on the other hand, are more complex and often arise from combinations of primary emotions. Examples include jealousy, guilt, pride, and embarrassment. These emotions are influenced by social and cultural contexts and can vary widely between individuals.</p><p>Understanding these categories helps us appreciate the diversity and depth of our emotional experiences, providing a framework for recognizing and reflecting on our own feelings.</p></div>",
+            "src": null,
+            "questions": null,
+            "options": [
+              {
+                "name": null,
+                "value": null
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "<h5>Classifying Emotions</h5><div><p>Classifying emotions involves identifying and categorizing the myriad feelings we experience. One widely used model is Robert Plutchik's Wheel of Emotions, which organizes emotions into eight primary categories: joy, trust, fear, surprise, sadness, disgust, anger, and anticipation. These primary emotions can blend to form more complex emotions, much like colors mix to create new hues.</p><p>Another approach is the dimensional model, which classifies emotions along two axes: valence (positive or negative) and arousal (high or low). For example, excitement is high arousal and positive valence, while calmness is low arousal and positive valence. This model helps in understanding the intensity and nature of emotions.</p><p>By learning to classify emotions, we can better understand the nuances of our own emotional states and those of others, leading to improved emotional intelligence and communication skills.</p></div>",
+            "src": null,
+            "questions": null,
+            "options": [
+              {
+                "name": null,
+                "value": null
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "<h5>Emotional Spectrum</h5><div><p>The emotional spectrum is as vast and varied as the cosmos itself. It encompasses the full range of human emotions, from the most intense joys to the deepest sorrows. Each emotion we experience is a unique point on this spectrum, influenced by our personality, experiences, and circumstances.</p><p>Understanding the emotional spectrum involves recognizing that emotions are not binary but exist on a continuum. For instance, sadness can range from a fleeting sense of disappointment to profound grief. Similarly, happiness can vary from a mild sense of contentment to overwhelming elation. This spectrum reflects the complexity and richness of human emotional life.</p><p>By acknowledging the full breadth of the emotional spectrum, we can develop greater empathy for ourselves and others, fostering a more compassionate and understanding world.</p></div>",
+            "src": null,
+            "questions": null,
+            "options": [
+              {
+                "name": null,
+                "value": null
+              }
+            ]
+          },
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-0",
+                "type": "radio",
+                "text": "Which of the following best describes the purpose of exploring different categories of emotions?",
+                "explanations": "Exploring different categories of emotions helps us understand the significance and diversity of emotions individuals experience, providing insights into human behavior and mental well-being.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "To understand the impact of emotions on behavior.",
+                    "valid": false
+                  },
+                  {
+                    "text": "To identify and categorize different types of emotions.",
+                    "valid": false
+                  },
+                  {
+                    "text": "To explore the significance of various emotions.",
+                    "valid": true
+                  },
+                  {
+                    "text": "To eliminate emotions altogether.",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "question-1",
+                "type": "radio",
+                "text": "Classifying emotions is essential in understanding the emotional world of individuals.",
+                "explanations": "Classifying emotions is indeed crucial as it allows individuals to recognize, label, and make sense of the wide array of emotions they experience, facilitating emotional intelligence and self-awareness.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "True",
+                    "valid": true
+                  },
+                  {
+                    "text": "False",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "question-2",
+                "type": "checkbox",
+                "text": "Which of the following statements are true about the emotional spectrum?",
+                "explanations": "The emotional spectrum is incredibly vast and intricate, with emotions being uniquely experienced by each individual, showcasing the richness and diversity of human emotional experiences.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Emotions are experienced differently by each person.",
+                    "valid": true
+                  },
+                  {
+                    "text": "Emotions have a limited range of expression.",
+                    "valid": false
+                  },
+                  {
+                    "text": "The emotional spectrum is vast and complex.",
+                    "valid": true
+                  },
+                  {
+                    "text": "Individuals experience emotions in only one way.",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              }
+            ],
+            "options": [
+              {
+                "name": null,
+                "value": null
+              }
+            ]
+          },
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-3",
+                "type": "shorttext",
+                "text": "The emotional spectrum highlights the ________ and ________ of emotions individuals can experience.",
+                "explanations": "The emotional spectrum illustrates the extensive variety and intricate complexity of emotions that individuals can encounter, showcasing the depth of human emotional experiences.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "variety, complexity",
+                    "valid": true
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "question-4",
+                "type": "radio",
+                "text": "What is the primary benefit of learning to identify and categorize different types of emotions?",
+                "explanations": "Learning to identify and categorize different types of emotions is fundamental in boosting emotional intelligence and self-awareness, enabling individuals to navigate and understand their emotions effectively, leading to improved mental well-being.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "To ignore emotions entirely.",
+                    "valid": false
+                  },
+                  {
+                    "text": "To simplify emotional experiences.",
+                    "valid": false
+                  },
+                  {
+                    "text": "To enhance emotional intelligence and self-awareness.",
+                    "valid": true
+                  },
+                  {
+                    "text": "To suppress emotions.",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "question-5",
+                "type": "shorttext",
+                "text": "Classifying emotions helps individuals in recognizing, labeling, and making sense of their ________ ________.",
+                "explanations": "By classifying emotions, individuals can effectively recognize, label, and make sense of their emotional world, fostering emotional intelligence and aiding in emotional regulation and understanding.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "emotional world",
+                    "valid": true
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              }
+            ],
+            "options": [
+              {
+                "name": null,
+                "value": null
+              }
+            ]
+          },
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-6",
+                "type": "radio",
+                "text": "Why is understanding the range and complexity of emotions important?",
+                "explanations": "Understanding the range and complexity of emotions is crucial as it allows individuals to acknowledge and appreciate the diverse and multifaceted nature of human emotions, fostering empathy, connection, and emotional intelligence.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "To limit emotional experiences.",
+                    "valid": false
+                  },
+                  {
+                    "text": "To acknowledge the diversity of human emotions.",
+                    "valid": true
+                  },
+                  {
+                    "text": "To avoid experiencing emotions.",
+                    "valid": false
+                  },
+                  {
+                    "text": "To overlook emotional complexities.",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "question-7",
+                "type": "checkbox",
+                "text": "Which of the following are benefits of understanding the emotional spectrum?",
+                "explanations": "Understanding the emotional spectrum leads to enhanced empathy towards others, improved emotional regulation, and a deeper self-awareness, enabling individuals to navigate their emotions effectively and build stronger interpersonal relationships.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Enhanced empathy towards others",
+                    "valid": true
+                  },
+                  {
+                    "text": "Improved emotional regulation",
+                    "valid": true
+                  },
+                  {
+                    "text": "Limited emotional experiences",
+                    "valid": false
+                  },
+                  {
+                    "text": "Decreased self-awareness",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "question-8",
+                "type": "radio",
+                "text": "What does classifying emotions help individuals with?",
+                "explanations": "Classifying emotions assists individuals in recognizing, labeling, and making sense of their emotional experiences, contributing to emotional intelligence development and fostering a deeper understanding of oneself and others.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Ignoring emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Recognizing, labeling, and making sense of emotions.",
+                    "valid": true
+                  },
+                  {
+                    "text": "Suppressing emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Avoiding emotions",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              }
+            ],
+            "options": [
+              {
+                "name": null,
+                "value": null
+              }
+            ]
+          },
+          {
+            "type": "quiz",
+            "text": "",
+            "src": null,
+            "questions": [
+              {
+                "id": "1719745653014_1",
+                "type": "radio",
+                "text": "Which type of emotions are considered universal and innate?",
+                "explanations": "Primary emotions such as joy, sadness, anger, fear, surprise, and disgust are considered universal and innate. These emotions are believed to have evolutionary significance and are experienced similarly across different cultures.",
+                "level": "advanced",
+                "answers": [
+                  {
+                    "text": "Primary emotions",
+                    "valid": true
+                  },
+                  {
+                    "text": "Secondary emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Tertiary emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Complex emotions",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "1719745653014_0",
+                "type": "radio",
+                "text": "What are the three distinct components that make up emotions?",
+                "explanations": "Emotions consist of a subjective experience (how we feel), a physiological response (how our body reacts), and a behavioral or expressive response (how we act in response to the emotion). Understanding these components is essential for comprehensively grasping the complexity of emotions.",
+                "level": "advanced",
+                "answers": [
+                  {
+                    "text": "Subjective experience, physiological response, and behavioral response",
+                    "valid": true
+                  },
+                  {
+                    "text": "Cognitive response, social response, and environmental response",
+                    "valid": false
+                  },
+                  {
+                    "text": "Physical response, emotional response, and rational response",
+                    "valid": false
+                  },
+                  {
+                    "text": "Perceptual response, instinctual response, and conscious response",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "1719745653014_2",
+                "type": "radio",
+                "text": "Which model organizes emotions into eight primary categories like joy, trust, fear, and anger?",
+                "explanations": "Robert Plutchik's Wheel of Emotions is a model that categorizes emotions into eight primary categories: joy, trust, fear, surprise, sadness, disgust, anger, and anticipation. This model helps in understanding how different emotions relate to each other and can blend to form more complex emotional states.",
+                "level": "advanced",
+                "answers": [
+                  {
+                    "text": "Robert Plutchik's Wheel of Emotions",
+                    "valid": true
+                  },
+                  {
+                    "text": "Dimensional model",
+                    "valid": false
+                  },
+                  {
+                    "text": "Cognitive model of emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Social learning theory model",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "1719745653014_4",
+                "type": "radio",
+                "text": "How does understanding the emotional spectrum contribute to developing empathy?",
+                "explanations": "Understanding the emotional spectrum involves recognizing the vast range of human emotions and the nuances within each emotional state. By acknowledging this complexity and richness, individuals can develop greater empathy for themselves and others, understanding that emotions exist on a continuum and vary in intensity and expression.",
+                "level": "advanced",
+                "answers": [
+                  {
+                    "text": "By acknowledging the complexity and richness of human emotional experiences",
+                    "valid": true
+                  },
+                  {
+                    "text": "By simplifying emotions into binary categories",
+                    "valid": false
+                  },
+                  {
+                    "text": "By ignoring individual differences in emotional responses",
+                    "valid": false
+                  },
+                  {
+                    "text": "By focusing solely on primary emotions",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "1719745653014_3",
+                "type": "radio",
+                "text": "How does the dimensional model classify emotions?",
+                "explanations": "The dimensional model classifies emotions along two axes: valence (positive or negative) and arousal (high or low). This classification helps in understanding the emotional intensity and nature of various emotions. For example, emotions like excitement and calmness can be placed on this model based on their valence and arousal levels.",
+                "level": "advanced",
+                "answers": [
+                  {
+                    "text": "Along valence (positive or negative) and arousal (high or low)",
+                    "valid": true
+                  },
+                  {
+                    "text": "Based on cultural contexts and social norms",
+                    "valid": false
+                  },
+                  {
+                    "text": "According to the intensity of the emotional response",
+                    "valid": false
+                  },
+                  {
+                    "text": "By separating emotions into rational and irrational categories",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              },
+              {
+                "id": "1719745653014_5",
+                "type": "radio",
+                "text": "What distinguishes secondary emotions from primary emotions?",
+                "explanations": "One key distinction between secondary and primary emotions is that secondary emotions typically arise from combinations of primary emotions. While primary emotions like joy or fear are considered foundational and universal, secondary emotions such as jealousy or pride are more complex and can differ based on individual experiences and social influences.",
+                "level": "advanced",
+                "answers": [
+                  {
+                    "text": "Secondary emotions often arise from combinations of primary emotions",
+                    "valid": true
+                  },
+                  {
+                    "text": "Primary emotions are more intense than secondary emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Secondary emotions are universal across cultures",
+                    "valid": false
+                  },
+                  {
+                    "text": "Primary emotions are influenced by social contexts",
+                    "valid": false
+                  }
+                ],
+                "options": [
+                  {
+                    "name": null,
+                    "value": null
+                  }
+                ]
+              }
+            ],
+            "options": [
+              {
+                "name": null,
+                "value": null
+              }
+            ]
+          }
+        ],
+        "createdAt": "2024-06-28T09:47:02.670Z",
+        "updatedAt": "2024-06-30T11:08:13.993Z"
+      },
+      {
+        "id": "036c22ed-cc07-4c7c-bb5e-88dbc2ce7699",
+        "type": "step",
+        "lectureId": "a1ec6ad5-dc27-4080-81bc-ddc0ba31b124",
+        "order": "1719568061130",
+        "title": "Quiz",
+        "owner": "google_102836436417047106235",
+        "identityId": null,
+        "conceptId": null,
+        "parts": [
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-0",
+                "type": "radio",
+                "text": "What is the first step in understanding emotions according to the lecture?",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Introduction to Emotion Types",
+                    "valid": true
+                  },
+                  {
+                    "text": "Classifying Emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Emotional Spectrum",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-1",
+                "type": "checkbox",
+                "text": "Which of the following are methods for managing emotions discussed in the lecture? (Select all that apply)",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Emotion Regulation Techniques",
+                    "valid": true
+                  },
+                  {
+                    "text": "Coping Strategies",
+                    "valid": true
+                  },
+                  {
+                    "text": "Mindfulness Practices",
+                    "valid": true
+                  },
+                  {
+                    "text": "Classifying Emotions",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-2",
+                "type": "radio",
+                "text": "Emotional Spectrum refers to the limited range of emotions individuals experience.",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "False",
+                    "valid": true
+                  },
+                  {
+                    "text": "True",
+                    "valid": null
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-3",
+                "type": "radio",
+                "text": "What is the key focus of Emotional Intelligence as discussed in the lecture?",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Developing awareness and handling emotions in oneself and others",
+                    "valid": true
+                  },
+                  {
+                    "text": "Managing Emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Understanding Emotion Types",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-4",
+                "type": "checkbox",
+                "text": "Which of the following are part of enhancing emotional intelligence as per the lecture? (Select all that apply)",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Recognizing and responding to emotions effectively",
+                    "valid": true
+                  },
+                  {
+                    "text": "Avoiding emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Ignoring others' emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Suppressing emotions",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              }
+            ],
+            "options": []
+          },
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-5",
+                "type": "shorttext",
+                "text": "What is the purpose of Coping Strategies in managing emotions?",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "To learn adaptive ways to deal with challenging emotions and situations",
+                    "valid": true
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-6",
+                "type": "radio",
+                "text": "Which section of the lecture focuses on practical methods to manage and control emotions?",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Emotion Regulation Techniques",
+                    "valid": true
+                  },
+                  {
+                    "text": "Coping Strategies",
+                    "valid": false
+                  },
+                  {
+                    "text": "Mindfulness Practices",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-7",
+                "type": "radio",
+                "text": "What does the term 'Emotion Regulation' refer to in the lecture?",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Methods to manage and control emotions effectively",
+                    "valid": true
+                  },
+                  {
+                    "text": "Classifying Emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Emotional Spectrum",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-8",
+                "type": "checkbox",
+                "text": "Which of the following are components of Emotional Intelligence mentioned in the lecture? (Select all that apply)",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Developing awareness",
+                    "valid": true
+                  },
+                  {
+                    "text": "Handling emotions in oneself and others",
+                    "valid": true
+                  },
+                  {
+                    "text": "Avoiding emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Suppressing emotions",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-9",
+                "type": "radio",
+                "text": "Mindfulness Practices play a role in regulating emotions and promoting well-being.",
+                "explanations": null,
+                "level": null,
+                "answers": [
+                  {
+                    "text": "True",
+                    "valid": true
+                  },
+                  {
+                    "text": "False",
+                    "valid": null
+                  }
+                ],
+                "options": null
+              }
+            ],
+            "options": []
+          }
+        ],
+        "createdAt": "2024-06-28T09:47:41.269Z",
+        "updatedAt": "2024-06-28T09:47:41.269Z"
+      },
+      {
+        "id": "bbe97564-1687-4ae4-a246-02dd8ee82e8e",
+        "type": "step",
+        "lectureId": "a1ec6ad5-dc27-4080-81bc-ddc0ba31b124",
+        "order": "1719567988713",
+        "title": "Connection",
+        "owner": "google_102836436417047106235",
+        "identityId": null,
+        "conceptId": null,
+        "parts": [
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-0",
+                "type": "radio",
+                "text": "Which of the following is NOT a category of emotions?",
+                "explanations": "Emotions are typically categorized into groups like joy, anger, and sadness based on common characteristics and expressions. 'Numbers' do not fall under the classification of emotions.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Joy",
+                    "valid": false
+                  },
+                  {
+                    "text": "Anger",
+                    "valid": false
+                  },
+                  {
+                    "text": "Numbers",
+                    "valid": true
+                  },
+                  {
+                    "text": "Sadness",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-1",
+                "type": "checkbox",
+                "text": "Select the methods commonly used for emotion regulation:",
+                "explanations": "Emotion regulation involves strategies like deep breathing exercises and seeking social support to effectively manage and control emotions. Ignoring emotions is generally not a recommended method, and unhealthy habits like eating unhealthy foods do not contribute positively to emotional regulation.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Deep breathing exercises",
+                    "valid": true
+                  },
+                  {
+                    "text": "Ignoring emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Seeking social support",
+                    "valid": true
+                  },
+                  {
+                    "text": "Eating unhealthy foods",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              }
+            ],
+            "options": []
+          },
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-2",
+                "type": "radio",
+                "text": "What does Emotional Intelligence primarily focus on?",
+                "explanations": "Emotional Intelligence emphasizes the importance of developing self-awareness and effectively managing emotions not only in oneself but also in others. It involves recognizing, understanding, and appropriately responding to emotions.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Calculating emotions accurately",
+                    "valid": false
+                  },
+                  {
+                    "text": "Ignoring emotions",
+                    "valid": false
+                  },
+                  {
+                    "text": "Developing awareness and handling emotions",
+                    "valid": true
+                  },
+                  {
+                    "text": "Suppressing emotions in oneself",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-3",
+                "type": "checkbox",
+                "text": "Which are considered important aspects of Emotional Intelligence?",
+                "explanations": "Key aspects of Emotional Intelligence include self-awareness, the ability to understand and share others' feelings (empathy), and emotional regulation. Being emotionally reactive and inflexible in emotions are not desired traits when it comes to Emotional Intelligence.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Self-awareness",
+                    "valid": true
+                  },
+                  {
+                    "text": "Empathy",
+                    "valid": true
+                  },
+                  {
+                    "text": "Being emotionally reactive",
+                    "valid": false
+                  },
+                  {
+                    "text": "Inflexibility in emotions",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              }
+            ],
+            "options": []
+          },
+          {
+            "type": "quiz",
+            "text": null,
+            "src": null,
+            "questions": [
+              {
+                "id": "question-4",
+                "type": "radio",
+                "text": "Emotion Regulation involves managing and controlling emotions effectively.",
+                "explanations": "Emotion Regulation indeed focuses on managing and controlling emotions effectively by using various techniques and strategies to cope with and express emotions in a healthy way.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "True",
+                    "valid": true
+                  },
+                  {
+                    "text": "False",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              },
+              {
+                "id": "question-5",
+                "type": "radio",
+                "text": "Which of the following is NOT a type of emotion regulation method?",
+                "explanations": "Emotion regulation methods like mindfulness practices, engaging in physical activity, and expressing emotions through art are common and beneficial. However, suppressing emotions is not a recommended method as it can lead to emotional distress and long-term negative effects.",
+                "level": null,
+                "answers": [
+                  {
+                    "text": "Mindfulness practices",
+                    "valid": false
+                  },
+                  {
+                    "text": "Suppressing emotions",
+                    "valid": true
+                  },
+                  {
+                    "text": "Engaging in physical activity",
+                    "valid": false
+                  },
+                  {
+                    "text": "Expressing emotions through art",
+                    "valid": false
+                  }
+                ],
+                "options": null
+              }
+            ],
+            "options": []
+          },
+          {
+            "type": "text",
+            "text": "<h5>Introduction to Explaining Emotions</h5><p>Emotions play a crucial role in our lives, shaping our experiences and interactions. In this lecture, we will delve into the realm of emotions, exploring the different facets that contribute to our emotional well-being.</p>",
+            "src": null,
+            "questions": null,
+            "options": []
+          },
+          {
+            "type": "text",
+            "text": "<h5>Key Concepts</h5><ul><li><b>Emotion Types:</b> Emotions are complex and diverse, encompassing a wide range of feelings. Understanding the various categories of emotions is essential to navigate our emotional landscape effectively.</li><li><b>Emotion Regulation:</b> Managing and controlling emotions is a vital skill for maintaining emotional balance. We will explore methods and techniques to regulate emotions in a healthy and constructive manner.</li><li><b>Emotional Intelligence:</b> Developing emotional intelligence involves recognizing and managing emotions, both in ourselves and in others. This skill is key to fostering healthy relationships and effective communication.</li></ul>",
+            "src": null,
+            "questions": null,
+            "options": []
+          },
+          {
+            "type": "text",
+            "text": "<h5>Learning Outcomes</h5><ol><li>Identify and classify various types of emotions to gain a deeper understanding of one's emotional experiences.</li><li>Apply strategies for regulating and managing emotions to promote emotional well-being and resilience.</li><li>Enhance emotional intelligence by recognizing and responding to emotions effectively, leading to improved interpersonal relationships and communication.</li></ol>",
+            "src": null,
+            "questions": null,
+            "options": []
+          }
+        ],
+        "createdAt": "2024-06-28T09:46:28.834Z",
+        "updatedAt": "2024-06-28T09:46:28.834Z"
+      }
+    ]
+  },
+  "concepts": {
+    "items": [
+      {
+        "concept": {
+          "id": "15b322b4-6d93-4a2c-82b6-af9ff012dc1e",
+          "title": "Emotional Intelligence",
+          "description": "Understanding and managing emotions effectively for personal growth and social interactions.",
+          "localizedNames": null,
+          "createdAt": "2024-06-28T09:40:41.879Z",
+          "updatedAt": "2024-06-28T09:40:41.879Z"
+        }
+      },
+      {
+        "concept": {
+          "id": "7934a0f2-449e-449f-9fd7-e7961aa7a15a",
+          "title": "Emotion Types",
+          "description": "Understanding different categories of emotions.",
+          "localizedNames": null,
+          "createdAt": "2024-06-28T09:46:11.200Z",
+          "updatedAt": "2024-06-28T09:46:11.200Z"
+        }
+      },
+      {
+        "concept": {
+          "id": "bc80ff5b-8737-4534-9a64-82a1055ae575",
+          "title": "Emotion Regulation",
+          "description": "Methods to manage and control emotions effectively.",
+          "localizedNames": null,
+          "createdAt": "2024-06-28T09:46:11.787Z",
+          "updatedAt": "2024-06-28T09:46:11.787Z"
+        }
+      }
+    ]
+  }
+}

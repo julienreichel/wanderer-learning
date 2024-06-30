@@ -33,6 +33,7 @@ export default {
     },
   },
   quiz: {
+    name: "Quiz",
     form: {
       title: "Titre du quiz",
       confirm_delete_question:
@@ -124,6 +125,7 @@ export default {
       file_upload: "Glissez-déposez des fichiers pour créer des diapositives",
       confirm_delete_step: "Voulez-vous vraiment supprimer cette section ?",
     },
+    introduction: "Introduction",
   },
   lecture: {
     form: {
@@ -135,7 +137,7 @@ export default {
     },
     step: {
       not_completed: "Section de leçon non terminée, aucun résultat enregistré",
-    },
+    }
   },
   parts: {
     form: {

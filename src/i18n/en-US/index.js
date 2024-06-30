@@ -33,6 +33,7 @@ export default {
     },
   },
   quiz: {
+    name: "Quiz",
     form: {
       title: "Quiz Title",
       confirm_delete_question: "Do you really want to delete this question ?",
@@ -121,6 +122,7 @@ export default {
       file_upload: "Drag and drop file(s) to create slides",
       confirm_delete_step: "Do you really want to delete this step ?",
     },
+    introduction: "Introduction",
   },
 
   lecture: {
@@ -133,7 +135,7 @@ export default {
     },
     step: {
       not_completed: "Lecture step not completed, no result recorded",
-    },
+    }
   },
   parts: {
     form: {
