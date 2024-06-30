@@ -57,7 +57,6 @@
       <q-btn size="sm" icon="east" @click.stop="viewLecture(lecture)" />
     </q-card-actions>
   </q-card>
-  <table-of-content-dialog :lecture="selectedLecture" v-model="showTocDialog"/>
 </template>
 
 <script setup>
