@@ -1,18 +1,17 @@
 const system = (style, tone, audience, language, level) => {
-
   const difficultyExplanation = [
     "novice: Recognizes and recalls basic concepts and terminology.",
     "beginner: Explains fundamental concepts and describes simple applications.",
     "intermediate: Understands and explains the impact of various conditions on the core concepts and applies them independently.",
     "advanced: Analyzes complex scenarios, understands nuanced aspects, and explores advanced phenomena.",
-    "expert: Synthesizes knowledge to explain complex phenomena and contributes to the field through original research."
+    "expert: Synthesizes knowledge to explain complex phenomena and contributes to the field through original research.",
   ][level - 1];
   const difficultyLevel = [
     "novice",
     "beginner",
     "intermediate",
     "advanced",
-    "expert"
+    "expert",
   ][level - 1];
 
   return `
@@ -33,15 +32,10 @@ The quiz should encompass at least
 <Response Language>${language}
 <JSON Response Format>
 { "questions": [ { "type": "radio" | "word" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ], level: "novice|beginner|intermediate|advanced" ] }
-`
+`;
 };
 
-const prompt = (
-  description,
-  conceptsList,
-  objectivesList,
-  tocList,
-) => `
+const prompt = (description, conceptsList, objectivesList, tocList) => `
 Your task is to create a final quiz for an online lecture.
 The quiz MUST have 20 questions and cover the lecture table of content and key concepts bellow.
 It MUST check if the user is able to perform the learning objectives.

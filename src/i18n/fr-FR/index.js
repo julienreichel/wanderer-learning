@@ -189,7 +189,8 @@ export default {
         4: "Avancé",
         5: "Expert",
       },
-      intro_text: "Avant de commencer la leçon, nous allons faire un quiz de connexion pour voir ce que vous savez déjà sur le sujet."
+      intro_text:
+        "Avant de commencer la leçon, nous allons faire un quiz de connexion pour voir ce que vous savez déjà sur le sujet.",
     },
     lecture: {
       title: "Description de la leçon",

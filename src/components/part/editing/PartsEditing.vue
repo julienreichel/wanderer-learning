@@ -64,7 +64,11 @@
       <q-btn size="sm" icon="check" @click="finish()" />
     </q-card-actions>
   </q-card>
-  <questions-editing v-if="part && part.type === 'quiz'" v-model="part" :parts="parts"/>
+  <questions-editing
+    v-if="part && part.type === 'quiz'"
+    v-model="part"
+    :parts="parts"
+  />
   <part-editing v-else-if="part" v-model="part" />
   <json-edit-dialog
     v-model="jsonDialog"

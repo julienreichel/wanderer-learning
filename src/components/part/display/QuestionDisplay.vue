@@ -13,7 +13,10 @@
       :disable="validated"
     />
   </q-card-section>
-  <q-card-section v-if="question.type === 'shorttext'" class="q-gutter-sm q-pl-lg">
+  <q-card-section
+    v-if="question.type === 'shorttext'"
+    class="q-gutter-sm q-pl-lg"
+  >
     <q-input
       clearable
       dense
@@ -23,7 +26,7 @@
       :color="options.color"
     >
       <template v-slot:before v-if="validated">
-        <q-icon :name="options.icon" :color="options.color" class="q-px-sm"/>
+        <q-icon :name="options.icon" :color="options.color" class="q-px-sm" />
       </template>
     </q-input>
   </q-card-section>

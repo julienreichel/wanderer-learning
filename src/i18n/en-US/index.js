@@ -187,7 +187,8 @@ export default {
         4: "Advanced",
         5: "Expert",
       },
-      intro_text: "Before starting the lecture, we are going to do a connection quiz to see what you already know about the subject."
+      intro_text:
+        "Before starting the lecture, we are going to do a connection quiz to see what you already know about the subject.",
     },
     lecture: {
       title: "Lecture Description",

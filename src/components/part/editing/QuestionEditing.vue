@@ -81,7 +81,7 @@
             <q-toggle
               checked-icon="check"
               color="green"
-              :name="'valid'+ answerIdx"
+              :name="'valid' + answerIdx"
               unchecked-icon="clear"
               v-model="answer.valid"
             />

@@ -69,7 +69,7 @@ const { storage: storageService, lectureStep: lectureStepService } =
 
 const part = defineModel();
 
-part.value.options.imageSize = part.value.options.imageSize || '4';
+part.value.options.imageSize = part.value.options.imageSize || "4";
 
 const textSizeClass = computed(() =>
   part.value.url && !uploadingFile.value
@@ -77,7 +77,9 @@ const textSizeClass = computed(() =>
     : "col-10",
 );
 const imageSizeClass = computed(() =>
-  part.value.url && !uploadingFile.value ? "col-" + part.value.options.imageSize : "col-2",
+  part.value.url && !uploadingFile.value
+    ? "col-" + part.value.options.imageSize
+    : "col-2",
 );
 const uploadingFile = ref(false);
 

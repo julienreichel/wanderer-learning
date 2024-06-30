@@ -49,7 +49,7 @@ onMounted(async () => {
   let parts = [];
   data.parts.forEach((part, idx) => {
     if (part.type !== "quiz") {
-      parts.push({...part, idx});
+      parts.push({ ...part, idx });
       return;
     }
 
@@ -101,7 +101,7 @@ const finished = async ({ finished, reportings } = {}) => {
         finalReportings[origialIdx] = { time: 0, responses: [] };
       }
       finalReportings[origialIdx].time += report.time;
-      if(report.responses){
+      if (report.responses) {
         finalReportings[origialIdx].responses.push(...report.responses);
       }
     });

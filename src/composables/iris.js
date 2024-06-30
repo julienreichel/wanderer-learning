@@ -2,8 +2,7 @@ import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useQuasar, uid } from "quasar";
 import { inject } from "vue";
-import { convert } from 'html-to-text';
-
+import { convert } from "html-to-text";
 
 export function useIris() {
   const router = useRouter();
@@ -24,7 +23,6 @@ export function useIris() {
       feedback: "rate_review",
     })[type] || type;
 
-
   return { router, t, locale, $q, uid, canEdit, getIconFromType };
 }
 
@@ -34,30 +32,31 @@ export function useFormatter() {
     formatters: {
       headingFormatter: function (elem, walk, builder, formatOptions) {
         const level = Math.max(1, parseInt(elem.tagName[1], 10) - 0); // Get the heading level (e.g., 1 for <h1>, 2 for <h2>)
-        const hashes = '#'.repeat(level); // Create the appropriate number of hashes
+        const hashes = "#".repeat(level); // Create the appropriate number of hashes
         builder.openBlock(elem);
         builder.addInline(`\n\n${hashes} `);
         walk(elem.children, builder);
         builder.addInline("\n");
         builder.closeBlock(elem);
-      }
+      },
     },
     selectors: [
-      { selector: 'h1', format: 'headingFormatter' },
-      { selector: 'h2', format: 'headingFormatter' },
-      { selector: 'h3', format: 'headingFormatter' },
-      { selector: 'h4', format: 'headingFormatter' },
-      { selector: 'h5', format: 'headingFormatter' },
-      { selector: 'h6', format: 'headingFormatter' },
-    ]
+      { selector: "h1", format: "headingFormatter" },
+      { selector: "h2", format: "headingFormatter" },
+      { selector: "h3", format: "headingFormatter" },
+      { selector: "h4", format: "headingFormatter" },
+      { selector: "h5", format: "headingFormatter" },
+      { selector: "h6", format: "headingFormatter" },
+    ],
   };
 
   const formatService = {
-    htmlToMarkdown: (htmlContent, options = defaultOptions) => convert(htmlContent, options).replace(/\n\n/g, '\n'),
+    htmlToMarkdown: (htmlContent, options = defaultOptions) =>
+      convert(htmlContent, options).replace(/\n\n/g, "\n"),
     setDefaultOptions: (options) => {
       Object.assign(defaultOptions, options);
     },
-    getDefaultOptions: () => defaultOptions
+    getDefaultOptions: () => defaultOptions,
   };
 
   return formatService;

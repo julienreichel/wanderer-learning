@@ -290,7 +290,7 @@ export default class ServicePrototype {
       this.tone,
       this.audience,
       this.language,
-      level
+      level,
     );
     const prompt = practiceQuiz.prompt(
       description,
@@ -303,17 +303,15 @@ export default class ServicePrototype {
   }
 
   async getQuiz(descritpion, difficulty, nbQuestions, type, explanation) {
-
     const system = simpleQuiz.system(
-      difficulty, nbQuestions, type, explanation,
+      difficulty,
+      nbQuestions,
+      type,
+      explanation,
       this.language,
     );
-    const prompt = simpleQuiz.prompt(
-      descritpion,
-      nbQuestions
-    );
+    const prompt = simpleQuiz.prompt(descritpion, nbQuestions);
 
     return this.query({ system, prompt, token: nbQuestions * 200 });
   }
-
 }

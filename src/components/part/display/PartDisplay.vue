@@ -63,9 +63,7 @@ const props = defineProps({
 
 const emit = defineEmits(["results", "nextStep", "finish"]);
 
-const imageSize = ref(
-  Number(props.part.options.imageSize) || 4
-);
+const imageSize = ref(Number(props.part.options.imageSize) || 4);
 const textSizeClass = computed(() =>
   props.part.url ? "col-" + (12 - imageSize.value) : "col-12",
 );

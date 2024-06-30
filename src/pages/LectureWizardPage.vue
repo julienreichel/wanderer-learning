@@ -464,9 +464,12 @@ const createQuizParts = (questions, nbQuizzes, nbQuestions) => {
 
   // remove response that are not valid
   questions.forEach((question) => {
-    question.answers = question.answers?.filter((answer) => Boolean(answer.text)) || [];
+    question.answers =
+      question.answers?.filter((answer) => Boolean(answer.text)) || [];
   });
-  questions = questions.filter((question) => Boolean(question.text) && question.answers.length > 0);
+  questions = questions.filter(
+    (question) => Boolean(question.text) && question.answers.length > 0,
+  );
 
   // need to clean potential issue created by the AI
   questions.forEach((question) => {
@@ -589,7 +592,7 @@ const generateLecture = async () => {
   parts = createQuizParts(connectQuiz.questions, nbQuiz, nbQuestionPerQuiz);
   parts.unshift({
     type: "text",
-    text: t("wizard.questions.intro_text")
+    text: t("wizard.questions.intro_text"),
   });
 
   progress.value = 15 / 100;
@@ -600,7 +603,7 @@ const generateLecture = async () => {
   );
   parts.unshift({
     type: "text",
-    text: connectIntro.content.pop()
+    text: connectIntro.content.pop(),
   });
   connectIntro.content.forEach((text) => {
     parts.push({

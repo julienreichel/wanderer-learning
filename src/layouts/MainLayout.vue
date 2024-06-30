@@ -164,7 +164,6 @@ const logOut = async () => {
 </script>
 
 <style>
-
 h1 {
   font-size: 4rem;
   line-height: 4rem;
@@ -184,7 +183,7 @@ h3 {
   margin-block-end: 0.5em;
 }
 h4 {
-  font-size: 2.0rem;
+  font-size: 2rem;
   margin: 0;
   margin-block-start: 0.5em;
   margin-block-end: 0.5em;
