@@ -1,11 +1,11 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
     <div class="privacy-policy">
-      <h1>Privacy Policy for Wanderer Learning</h1>
+      <h3>Privacy Policy for Wanderer Learning</h3>
       <p><strong>Effective Date:</strong> 20 June 2024</p>
 
       <section>
-        <h2>1. Introduction</h2>
+        <h5>1. Introduction</h5>
         <p>
           Welcome to Wanderer Learning, an innovative platform for online
           self-study designed with the student at its heart. Our unique features
@@ -18,7 +18,7 @@
       </section>
 
       <section>
-        <h2>2. Information We Collect</h2>
+        <h5>2. Information We Collect</h5>
         <p>
           We collect various types of information to enhance your experience and
           improve our services:
@@ -71,7 +71,7 @@
       </section>
 
       <section>
-        <h2>3. How We Use Your Information</h2>
+        <h5>3. How We Use Your Information</h5>
         <ul>
           <li>
             <strong>Service Delivery:</strong>
@@ -103,7 +103,7 @@
       </section>
 
       <section>
-        <h2>4. Information Sharing and Disclosure</h2>
+        <h5>4. Information Sharing and Disclosure</h5>
         <p>
           We do not sell, trade, or otherwise transfer your personal information
           to outside parties except as described below:
@@ -123,7 +123,7 @@
       </section>
 
       <section>
-        <h2>5. Data Security</h2>
+        <h5>5. Data Security</h5>
         <p>
           We employ robust security measures to protect your personal
           information:
@@ -146,7 +146,7 @@
       </section>
 
       <section>
-        <h2>6. Your Data Protection Rights</h2>
+        <h5>6. Your Data Protection Rights</h5>
         <p>
           You have the following rights regarding your personal information:
         </p>
@@ -173,7 +173,7 @@
       </section>
 
       <section>
-        <h2>7. Cookies and Tracking Technologies</h2>
+        <h5>7. Cookies and Tracking Technologies</h5>
         <p>
           We use cookies and similar tracking technologies for the following
           purposes:
@@ -192,7 +192,7 @@
       </section>
 
       <section>
-        <h2>8. Children's Privacy</h2>
+        <h5>8. Children's Privacy</h5>
         <p>
           We are committed to protecting the privacy of children. Our services
           are not intended for children under the age of 13, and we do not
@@ -204,7 +204,7 @@
       </section>
 
       <section>
-        <h2>9. Changes to This Privacy Policy</h2>
+        <h5>9. Changes to This Privacy Policy</h5>
         <p>
           This Privacy Policy is available online, and we may update it
           periodically to reflect changes in our practices or for other
@@ -216,7 +216,7 @@
       </section>
 
       <section>
-        <h2>10. Contact Us</h2>
+        <h5>10. Contact Us</h5>
         <p>
           If you have any questions or concerns regarding this Privacy Policy,
           please contact us at info@wandererlearning.com. We are committed to
@@ -225,7 +225,7 @@
       </section>
 
       <section>
-        <h2>11. International Data Transfers</h2>
+        <h5>11. International Data Transfers</h5>
         <p>
           All data is stored in the European Union, specifically in Frankfurt,
           Germany. This ensures compliance with EU data protection regulations
@@ -234,7 +234,7 @@
       </section>
 
       <section>
-        <h2>12. Legal Bases for Processing</h2>
+        <h5>12. Legal Bases for Processing</h5>
         <p>
           The legal bases for processing personal data are in accordance with
           the laws of Switzerland. We process personal data only where we have a
@@ -250,7 +250,7 @@
 
 <style scoped>
 .privacy-policy {
-  max-width: 1280px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   line-height: 1.6;
