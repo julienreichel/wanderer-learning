@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
     <div class="terms-container">
-      <h3>Terms of Use for WandererLearning.com</h3>
+      <h3>Terms of Use for Wanderer Learning</h3>
       <p><strong>Effective Date:</strong> 20 June 2024</p>
       <p>
         Welcome to WandererLearning.com (the "Site"). These Terms of Use
