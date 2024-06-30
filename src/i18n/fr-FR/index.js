@@ -191,8 +191,6 @@ export default {
         4: "Avancé",
         5: "Expert",
       },
-      intro_text:
-        "Avant de commencer la leçon, nous allons faire un quiz de connexion pour voir ce que vous savez déjà sur le sujet.",
     },
     lecture: {
       title: "Description de la leçon",
@@ -241,6 +239,13 @@ export default {
       finished: "Terminé",
       theory: "Théorie",
       quiz: "Quiz",
+    },
+    content: {
+      connection_title: "Connection",
+      practice_title: "Quiz Final",
+      intro_title: "Quiz de connection",
+      intro_text:
+        "Avant de commencer la leçon, nous allons faire un quiz de connexion pour voir ce que vous savez déjà sur le sujet.",
     },
     common: {
       next: "Suivant",

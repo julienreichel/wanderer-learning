@@ -3,7 +3,7 @@
     <q-splitter v-model="splitterModel" style="height: 400px">
       <template v-slot:before>
         <div class="q-pa-md">
-          <q-tree no-connectors :nodes="toc" node-key="id" v-model:selected="selected" />
+          <q-tree ref="tree" no-connectors accordion selected-color="primary" :nodes="toc" node-key="id" v-model:selected="selected" />
         </div>
       </template>
       <template v-slot:after>
@@ -117,6 +117,15 @@ const preview = computed(() => {
   return step.text;
 });
 
+const tree = ref(null);
+watch(selected, (newVal) => {
+  if (newVal) {
+    const idx = newVal.split(".");
+    if (idx.length === 1) {
+      tree.value.setExpanded(newVal, true);
+    }
+  }
+});
 </script>
 
 <style>

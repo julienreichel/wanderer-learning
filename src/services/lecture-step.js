@@ -50,11 +50,12 @@ export default class LectureStepService extends ServicePrototype {
         part.options = {};
         return;
       }
-      if (!Array.isArray(part.options)) return; // already converted
-      part.options = part.options.reduce((acc, option) => {
-        acc[option.name] = option.value;
-        return acc;
-      }, {});
+      if (Array.isArray(part.options)) {
+        part.options = part.options.reduce((acc, option) => {
+          acc[option.name] = option.value;
+          return acc;
+        }, {});
+      }
       part.questions?.forEach((question) => {
         if (!question.options) {
           question.options = {};
@@ -75,10 +76,11 @@ export default class LectureStepService extends ServicePrototype {
         part.options = [];
         return;
       }
-      if (Array.isArray(part.options)) return; // already converted
-      part.options = Object.keys(part.options).map((key) => {
-        return { name: key, value: part.options[key] };
-      });
+      if (!Array.isArray(part.options)) {
+        part.options = Object.keys(part.options).map((key) => {
+          return { name: key, value: part.options[key] };
+        });
+      }
       part.questions?.forEach((question) => {
         if (!question.options) {
           question.options = [];

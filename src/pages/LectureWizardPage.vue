@@ -592,7 +592,7 @@ const generateLecture = async () => {
   parts = createQuizParts(connectQuiz.questions, nbQuiz, nbQuestionPerQuiz);
   parts.unshift({
     type: "text",
-    text: t("wizard.questions.intro_text"),
+    text: "<h5>" + t("wizard.questions.intro_title") + "</h5>" + t("wizard.questions.intro_text"),
   });
 
   progress.value = 15 / 100;
@@ -612,7 +612,7 @@ const generateLecture = async () => {
     });
   });
   await lectureStepService.create({
-    title: "Connection",
+    title: t("wizard.content.connection_title"),
     type: "step",
     lectureId,
     order: "" + Date.now(),
@@ -686,7 +686,7 @@ const generateLecture = async () => {
   }
 
   await lectureStepService.create({
-    title: "Quiz",
+    title: t("wizard.content.practice_title"),
     type: "step",
     lectureId,
     order: "" + Date.now(),
