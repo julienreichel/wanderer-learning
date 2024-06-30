@@ -33,6 +33,7 @@
         :height="150"
       />
     </q-card-section>
+    <table-of-content v-if="selectedLecture === lecture" :lecture="lecture" class="q-pa-sm"/>
     <q-card-actions v-if="canEdit(lecture) && allowDelete">
       <q-space />
       <q-btn
@@ -51,7 +52,8 @@
     </q-card-actions>
     <q-card-actions v-else>
       <q-space />
-      <q-btn size="sm" icon="toc" @click.stop="showToc(lecture)" />
+      <q-btn size="sm" v-if="selectedLecture !== lecture" icon="expand_more" @click.stop="selectedLecture = lecture" />
+      <q-btn size="sm" v-if="selectedLecture === lecture" icon="expand_less" @click.stop="selectedLecture = null" />
       <q-btn size="sm" icon="east" @click.stop="viewLecture(lecture)" />
     </q-card-actions>
   </q-card>
@@ -64,7 +66,7 @@ import ConceptDisplay from "src/components/concept/ConceptDisplay.vue";
 import UserLectureReporting from "src/components/reporting/UserLectureReporting.vue";
 import UsageHistogram from "src/components/charts/UsageHistogram.vue";
 import StepReporting from "src/components/reporting/StepReporting.vue";
-import TableOfContentDialog from "src/components/common/TableOfContentDialog.vue";
+import TableOfContent from "src/components/common/TableOfContent.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
@@ -127,9 +129,4 @@ const viewLecture = (lecture) => {
 };
 
 let selectedLecture = ref({});
-let showTocDialog = ref(false);
-const showToc = (lecture) => {
-  selectedLecture.value = lecture;
-  showTocDialog.value = true;
-};
 </script>
