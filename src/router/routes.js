@@ -8,16 +8,15 @@ const routes = [
         path: "",
         component: () => import("pages/IndexPage.vue"),
       },
-    ],
-  },
-  {
-    path: "/privacy-policy",
-    component: () => import("layouts/MainLayout.vue"),
-    children: [
       {
         name: "PrivacyPolicy",
-        path: "",
+        path: "/privacy-policy",
         component: () => import("pages/PrivacyPolicyPage.vue"),
+      },
+      {
+        name: "TermOfUse",
+        path: "/term-of-use",
+        component: () => import("pages/TermOfUsePage.vue"),
       },
     ],
   },
