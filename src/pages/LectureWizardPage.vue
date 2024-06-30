@@ -284,7 +284,7 @@
 import { ref, inject, onMounted } from "vue";
 
 import { useIris } from "src/composables/iris";
-const { t, locale, $q, router } = useIris();
+const { t, locale, $q, router, uid } = useIris();
 const {
   ai: aiService,
   lecture: lectureService,
@@ -459,72 +459,81 @@ const generateTableOfContent = async (toc = []) => {
 };
 
 let lectureId;
-const createQuizParts = (quiz, nbQuestionPerQuiz) => {
+const createQuizParts = (questions, nbQuizzes, nbQuestions) => {
   let parts = [];
-  quiz.forEach((quiz, idx) => (quiz.id = `question-${idx}`));
-  for (let i = 0; i < quiz.length; i += nbQuestionPerQuiz) {
-    let questions = quiz.slice(i, i + nbQuestionPerQuiz);
 
-    // need to clean potential issue created by the AI
-    questions.forEach((question) => {
-      // remove the "Fill in the blank:", "Myth or Fact: ", "True or False: "
-      question.text = question.text.replace(
-        /\s*(Fill in the blank:|Myth or Fact:|Fact or Myth:|Is it a myth or a fact:|True or False:|Is this statement true or false?|Complete the sentence:|\(True\/False\))\s*/,
-        "",
-      );
-      question.answers.forEach((answer) => {
-        // remove starting A. or B. or C. or D. from the answer
-        answer.text = answer.text.replace(/^[A-Z0-9a-z][\.)]\s/, "");
-      });
+  // remove response that are not valid
+  questions.forEach((question) => {
+    question.answers = question.answers?.filter((answer) => Boolean(answer.text)) || [];
+  });
+  questions = questions.filter((question) => Boolean(question.text) && question.answers.length > 0);
 
-      // if there is only one answer, we add the missing one
-      if (question.answers.length === 1) {
-        if (question.answers[0].text === "True") {
-          question.answers.push({ text: "False" });
-        }
-        if (question.answers[0].text === "False") {
-          question.answers.push({ text: "True" });
-        }
-        if (question.answers[0].text === "Myth") {
-          question.answers.push({ text: "Fact" });
-        }
-        if (question.answers[0].text === "Fact") {
-          question.answers.push({ text: "Myth" });
-        }
-      }
-
-      // Open Ai has the tendancy to invent new types of questions
-      const mappingTypes = {
-        "fill-in-the-blank": "shorttext",
-        "missing-word": "shorttext",
-        missing_word: "shorttext",
-      };
-      if (
-        ["radio", "checkbox", "shorttext"].includes(question.type) === false
-      ) {
-        if (mappingTypes[question.type]) {
-          question.type = mappingTypes[question.type];
-        } else if (question.answers.length === 1) {
-          question.type = "shorttext";
-        } else if (question.answers.filter((a) => a.correct).length > 1) {
-          question.type = "checkbox";
-        } else {
-          question.type = "radio";
-        }
-      }
-
-      //sometimes it changes explanations to explanation
-      if (question.explanation) {
-        question.explanations = question.explanation;
-        delete question.explanation;
-      }
+  // need to clean potential issue created by the AI
+  questions.forEach((question) => {
+    question.id = uid();
+    // remove the "Fill in the blank:", "Myth or Fact: ", "True or False: "
+    question.text = question.text.replace(
+      /\s*(Fill in the blank:|Myth or Fact:|Fact or Myth:|Is it a myth or a fact:|True or False:|Is this statement true or false?|Complete the sentence:|\(True\/False\))\s*/,
+      "",
+    );
+    question.answers.forEach((answer) => {
+      // remove starting A. or B. or C. or D. from the answer
+      answer.text = answer.text.replace(/^[A-Z0-9a-z][\.)]\s/, "");
     });
-    parts.push({
-      type: "quiz",
-      questions,
-    });
-  }
+
+    // if there is only one answer, we add the missing one
+    if (question.answers.length === 1) {
+      if (question.answers[0].text === "True") {
+        question.answers.push({ text: "False", valid: false });
+      }
+      if (question.answers[0].text === "False") {
+        question.answers.push({ text: "True", valid: false });
+      }
+      if (question.answers[0].text === "Myth") {
+        question.answers.push({ text: "Fact", valid: false });
+      }
+      if (question.answers[0].text === "Fact") {
+        question.answers.push({ text: "Myth", valid: false });
+      }
+    }
+
+    // Open Ai has the tendancy to invent new types of questions
+    const mappingTypes = {
+      "fill-in-the-blank": "shorttext",
+      "missing-word": "shorttext",
+      missing_word: "shorttext",
+      word: "shorttext",
+      shorttext: "shorttext",
+      checkbox: "checkbox",
+    };
+    if (mappingTypes[question.type]) {
+      question.type = mappingTypes[question.type];
+    } else if (question.answers.length === 1) {
+      question.type = "shorttext";
+    } else if (question.answers.filter((a) => a.correct).length > 1) {
+      question.type = "checkbox";
+    } else {
+      question.type = "radio";
+    }
+
+    //sometimes it changes explanations to explanation
+    if (question.explanation) {
+      question.explanations = question.explanation;
+      delete question.explanation;
+    }
+  });
+  parts.push({
+    type: "quiz",
+    questions,
+    options: {
+      nbQuizzes,
+      nbQuestions,
+    },
+  });
   return parts;
+};
+const getNbQuestions = (nb) => {
+  return Math.max(nb, Math.min(nb * 2, 20));
 };
 const generateLecture = async () => {
   step.value++;
@@ -575,9 +584,13 @@ const generateLecture = async () => {
   const connectQuiz = await aiService.getInitialQuiz(
     courseDescription.value,
     keyConcepts.value,
-    nbQuiz * nbQuestionPerQuiz,
+    getNbQuestions(nbQuiz * nbQuestionPerQuiz),
   );
-  parts = createQuizParts(connectQuiz.questions, nbQuestionPerQuiz);
+  parts = createQuizParts(connectQuiz.questions, nbQuiz, nbQuestionPerQuiz);
+  parts.unshift({
+    type: "text",
+    text: t("wizard.questions.intro_text")
+  });
 
   progress.value = 15 / 100;
   const connectIntro = await aiService.getInitialContent(
@@ -585,6 +598,10 @@ const generateLecture = async () => {
     keyConcepts.value,
     learningObjectives.value,
   );
+  parts.unshift({
+    type: "text",
+    text: connectIntro.content.pop()
+  });
   connectIntro.content.forEach((text) => {
     parts.push({
       type: "text",
@@ -628,11 +645,11 @@ const generateLecture = async () => {
 
     const conceptQuiz = await aiService.getConceptQuiz(
       step,
-      nbQuiz * nbQuestionPerQuiz,
+      getNbQuestions(nbQuiz * nbQuestionPerQuiz),
     );
     parts = [
       ...parts,
-      ...createQuizParts(conceptQuiz.questions, nbQuestionPerQuiz),
+      ...createQuizParts(conceptQuiz.questions, nbQuiz, nbQuestionPerQuiz),
     ];
 
     await lectureStepService.create({
@@ -646,20 +663,25 @@ const generateLecture = async () => {
 
   // creating the practive quiz step
   progressLabel.value = t("wizard.generating.practice");
-  progress.value = 90 / 100;
 
-  // Generating the practice quiz
-  nbQuiz = 4;
   nbQuestionPerQuiz = 5;
+  // Generating the practice quiz
   parts = [];
-  const practiceQuiz = await aiService.getFinalQuiz(
-    courseDescription.value,
-    keyConcepts.value,
-    learningObjectives.value,
-    tableOfContent.value,
-    nbQuiz * nbQuestionPerQuiz,
-  );
-  parts = createQuizParts(practiceQuiz.questions, nbQuestionPerQuiz);
+  for (let level = 1; level <= 4; level++) {
+    progress.value += 0.05;
+
+    const practiceQuiz = await aiService.getFinalQuiz(
+      courseDescription.value,
+      keyConcepts.value,
+      learningObjectives.value,
+      tableOfContent.value,
+      level,
+    );
+    parts.push(
+      ...createQuizParts(practiceQuiz.questions, 1, nbQuestionPerQuiz),
+    );
+  }
+
   await lectureStepService.create({
     title: "Quiz",
     type: "step",

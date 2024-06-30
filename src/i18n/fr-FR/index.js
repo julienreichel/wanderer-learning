@@ -183,12 +183,13 @@ export default {
         finishsentence: "Finir la phrase",
       },
       difficulties: {
-        1: "Tres facile",
-        2: "Facile",
-        3: "Moyen",
-        4: "Difficile",
-        5: "Tres difficile",
+        1: "Novice",
+        2: "Débutant",
+        3: "Intermédiaire",
+        4: "Avancé",
+        5: "Expert",
       },
+      intro_text: "Avant de commencer la leçon, nous allons faire un quiz de connexion pour voir ce que vous savez déjà sur le sujet."
     },
     lecture: {
       title: "Description de la leçon",

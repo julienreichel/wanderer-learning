@@ -268,7 +268,7 @@ export default class ServicePrototype {
     }
   }
 
-  async getFinalQuiz(description, concepts, objectives, toc, nbQuestions = 10) {
+  async getFinalQuiz(description, concepts, objectives, toc, level = 3) {
     const conceptsList = concepts
       .map(({ name, description }) => `${name}: ${description}`)
       .join("\n");
@@ -290,43 +290,22 @@ export default class ServicePrototype {
       this.tone,
       this.audience,
       this.language,
+      level
     );
     const prompt = practiceQuiz.prompt(
       description,
       conceptsList,
       objectivesList,
       tocList,
-      nbQuestions,
     );
 
-    return this.query({ system, prompt, token: nbQuestions * 200 });
+    return this.query({ system, prompt, token: 20 * 200 });
   }
 
   async getQuiz(descritpion, difficulty, nbQuestions, type, explanation) {
 
-    difficulty = ["Very easy", "Easy", "Regular", "Difficult", "Very difficult"][difficulty - 1];
-    const sample = {
-      truefalse: "The sky is blue.",
-      choice: "What is the color of the sky?",
-      checkbox: "What color can the sky be? (select all that apply)",
-      mythfact: "The sky can be purple.",
-      missingword: "The ____ is blue.",
-      finishsentence: "The sky is ____."
-    }[type];
-
-    type = {
-      truefalse: "True or False",
-      choice: "Multiple choices answers, with one valid answer",
-      checkbox: "Checkboxes wiht 5 answers, with at least two valid answers",
-      mythfact: "Myth or Fact",
-      missingword: "Sentence with ONE missing word",
-      finishsentence: "Each question is structured such that it starts with a partial sentence, and then three different answer options are provided as possible endings to that sentence"
-    }[type];
-
-
-
     const system = simpleQuiz.system(
-      difficulty, nbQuestions, type, explanation, sample,
+      difficulty, nbQuestions, type, explanation,
       this.language,
     );
     const prompt = simpleQuiz.prompt(

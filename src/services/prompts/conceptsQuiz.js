@@ -12,18 +12,19 @@ The quiz should encompass
 - sentences with a choice of various possible endings
 - sentence with a choice of missing words.
 - sentence with one and only one missing word
-Each question should be accompanied by a one-paragraph explanation comprising at least two sentences.
-Ensure the explanation does not reiterate the question but rather offers supplementary information connected to the question, giving the user a broader perspective.
-<Style>
-${style}
+The quiz levels should encompass:
+- novice: Recognizes and recalls basic concepts and terminology.
+- beginner: Explains fundamental concepts and describes simple applications.
+- intermediate: Understands and explains the impact of various conditions on the core concepts and applies them independently.
+- advanced: Analyzes complex scenarios, understands nuanced aspects, and explores advanced phenomena.
+Each question should be accompanied by a one-paragraph explanation.
+The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective.
 <Tone>
 ${tone}
-<Audience>
-${audience}
 <Response Language>
 ${language}
 <JSON Response Format>
-{ "questions": [ { "type": "radio" | "shorttext" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ], "explanations":  "..."} ] }
+{ "questions": [ { "type": "radio" | "shorttext" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ], level: "novice|beginner|intermediate|advanced", "explanations":  "..."} ] }
 `;
 
 const prompt = (sectionName, sectionItems, nbQuestions) => `

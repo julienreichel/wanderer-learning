@@ -62,6 +62,7 @@ const schema = a.schema({
     type: a.string(),
     text: a.string(),
     explanations: a.string(),
+    level: a.string(),
     answers: a.ref("QuestionAnswer").array(),
     options: a.ref("Option").array(),
   }),

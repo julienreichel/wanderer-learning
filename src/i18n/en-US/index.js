@@ -181,12 +181,13 @@ export default {
         finishsentence: "Finish the sentence",
       },
       difficulties: {
-        1: "Very easy",
-        2: "Easy",
-        3: "Average",
-        4: "Hard",
-        5: "Very hard",
+        1: "Novice",
+        2: "Beginner",
+        3: "Intermediate",
+        4: "Advanced",
+        5: "Expert",
       },
+      intro_text: "Before starting the lecture, we are going to do a connection quiz to see what you already know about the subject."
     },
     lecture: {
       title: "Lecture Description",
