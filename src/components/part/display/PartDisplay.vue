@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card :flat="flat">
     <q-card-section horizontal class="q-pa-md" v-if="part.type === 'text'">
       <div class="row full-width">
         <q-img
@@ -59,6 +59,7 @@ const props = defineProps({
   responses: { type: Array, default: () => [] },
   hasNext: { type: Boolean, default: false },
   hasAnsweredAllQuizzes: { type: Boolean, default: false },
+  flat: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(["results", "nextStep", "finish"]);
@@ -76,7 +77,14 @@ watch(
     imageSize.value = Number(props.part.options.imageSize || 4);
   },
 );
-
+watch(
+  () => props.part.src,
+  () => {
+    if (!props.part.url) {
+      lectureStepService.resolveUrl([props.part]);
+    }
+  },
+);
 const submitResults = (results) => {
   //forward the results to the parent component
   emit("results", results);

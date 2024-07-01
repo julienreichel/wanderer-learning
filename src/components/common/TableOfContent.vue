@@ -1,19 +1,21 @@
 <template>
   <q-card-section>
-    <q-splitter v-model="splitterModel" style="height: 400px">
+    <q-splitter v-model="splitterModel" style="height: 410px">
       <template v-slot:before>
         <div class="q-pa-md">
           <q-tree ref="tree" no-connectors accordion selected-color="primary" :nodes="toc" node-key="id" v-model:selected="selected" />
         </div>
       </template>
       <template v-slot:after>
-        <div class="q-pa-md" v-html="preview"></div>
+        <part-display v-if="previewPart && previewPart.type !== 'quiz'" :part="previewPart" flat/>
+        <div v-else class="q-pa-md" v-html="preview"></div>
       </template>
     </q-splitter>
   </q-card-section>
 </template>
 
 <script setup>
+import PartDisplay from "src/components/part/display/PartDisplay.vue";
 import { ref, watch, defineProps, computed } from "vue";
 
 import { useIris } from "src/composables/iris";
@@ -53,8 +55,12 @@ const buildToc = (steps) => {
         } else if (part.type === "quiz") {
           if (previousIsQuiz) {
             label = null;
+          } else {
+            label = t("quiz.name");
           }
           previousIsQuiz = true;
+        } else {
+          previousIsQuiz = false;
         }
         return {
             id: stepIdx + "." + idx,
@@ -87,22 +93,25 @@ watch(
   { immediate: true },
 );
 
-const splitterModel = ref(30);
-const preview = computed(() => {
+const splitterModel = ref(40);
+const previewPart = computed(() => {
   const idx = selected.value?.split(".");
   if (!idx || idx.length !== 2) {
+    return null;
+  }
+  return props.lecture.steps[idx[0]]?.parts[idx[1]];
+});
+const preview = computed(() => {
+  const part = previewPart.value
+  if (!part) {
     return "";
   }
-  const step = props.lecture.steps[idx[0]]?.parts[idx[1]];
-  if (!step) {
-    return "";
-  }
-  if (step.type === "quiz") {
+  if (part.type === "quiz") {
     // get the questions and return them an html list
     return (
       "<h5>"+ t("quiz.name") + "</h5>" +
       "<ul>" +
-      step.questions
+      part.questions
         .map((question) => {
           return `<li>${question.text}</li>`;
         })
@@ -110,7 +119,7 @@ const preview = computed(() => {
       "</ul>"
     );
   }
-  return step.text;
+  return part.text;
 });
 
 const tree = ref(null);
