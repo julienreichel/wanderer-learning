@@ -77,12 +77,11 @@ const getTitle = (part) => {
   } else if (part.type === "quiz") {
     return t("quiz.name");
   } else {
-    return part.text;
+    return part.text?.split("\n")[0] || "";
   }
 };
 
 const viewStep = (step, index) => {
-  console.log("viewStep", step, index);
   router.push({
     name: "LectureStepView",
     params: { id: step.id, stepIdx: index || 0 },

@@ -80,6 +80,8 @@
       <file-uploader
         @uploaded="uploaded"
         :multiple="true"
+        convertPdfToImages
+        accept=".jpg, image/*, application/pdf"
         style="min-height: 300px"
         :title="$t('step.form.file_upload')"
       />
@@ -217,7 +219,7 @@ const add = (type) => {
         id: uid(),
         type: "radio",
         answers: [],
-        options: [],
+        options: {},
       },
     ];
   }
@@ -226,7 +228,7 @@ const add = (type) => {
     src,
     text,
     questions,
-    options: [],
+    options: {},
   };
   const newStepPos = Math.min(Number(step.value) + 1, parts.value.length);
   parts.value.splice(newStepPos, 0, newStep);
@@ -237,7 +239,7 @@ const openFileUpload = ref(false);
 const uploaded = (files) => {
   const newParts = files.map((file) => ({
     type: "img",
-    text: file.name.replace(/\.[^\.]+$/, ""),
+    text: file.description || file.name.replace(/\.[^\.]+$/, ""),
     src: file.path,
     url: file.url,
   }));

@@ -1,7 +1,7 @@
 <template>
   <amplify-uploader
     ref="uploaderRef"
-    accept=".jpg, image/*"
+    :accept="accept"
     :filename="(file) => uid() + '.' + file.name.split('.').pop()"
     @uploaded="uploaded"
     @start="start"
@@ -60,6 +60,7 @@ const props = defineProps({
   square: { type: Boolean, default: false },
   dark: { type: Boolean, default: false },
   color: { type: String, default: "primary" },
+  accept: { type: String, default: ".jpg, image/*" },
 });
 const emit = defineEmits(["uploaded"]);
 

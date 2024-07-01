@@ -194,7 +194,6 @@ const moveUpQuestion = ({ index }) => {
   quiz.value.questions.splice(index - 1, 0, question);
 
   if (activeQuestion.value === index) {
-    console.log("move up");
     activeQuestion.value = activeQuestion.value - 1;
   } else if (activeQuestion.value === index - 1) {
     activeQuestion.value = activeQuestion.value + 1;

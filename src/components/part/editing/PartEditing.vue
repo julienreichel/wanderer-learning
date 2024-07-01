@@ -29,7 +29,7 @@
     </q-card-section>
     <q-card-section class="row" v-if="part.type === 'img'">
       <div class="col-6 q-gutter-sm">
-        <q-input outlined v-model="part.text" :label="$t('parts.form.description')" />
+        <q-input outlined v-model="part.text" autogrow :label="$t('parts.form.description')" />
         <div class="col-12">
           <file-uploader class="full-width full-height" @uploaded="uploaded" />
         </div>
@@ -38,7 +38,7 @@
     </q-card-section>
     <q-card-section class="row q-pa-md q-col-gutter-sm" v-if="part.type === 'video'">
       <div class="col-8 q-gutter-sm">
-        <q-input outlined v-model="part.text" :label="$t('parts.form.description')" />
+        <q-input outlined v-model="part.text" autogrow :label="$t('parts.form.description')" />
         <q-input
           outlined
           class="col-8"
@@ -52,7 +52,7 @@
     </q-card-section>
     <q-card-section class="row q-pa-md q-col-gutter-sm" v-if="part.type === 'iframe'">
       <div class="col-8 q-gutter-sm">
-        <q-input outlined v-model="part.text" :label="$t('parts.form.description')" />
+        <q-input outlined v-model="part.text" autogrow :label="$t('parts.form.description')" />
         <q-input
           outlined
           class="col-8"
@@ -81,7 +81,7 @@ const { storage: storageService, lectureStep: lectureStepService } =
   inject("services");
 
 const part = defineModel();
-
+part.value.options = part.value.options || {};
 part.value.options.imageSize = part.value.options.imageSize || "4";
 
 const textSizeClass = computed(() =>

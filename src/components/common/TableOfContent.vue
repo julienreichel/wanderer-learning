@@ -44,7 +44,7 @@ const buildToc = (steps) => {
     let previousIsQuiz = false;
     const children = step.parts
       .map((part, idx) => {
-        let label = part.text;
+        let label = part.text?.split("\n")[0] || "";
         if (part.type === "text") {
           label = extractTitle(part.text);
           if (label === step.title) {
