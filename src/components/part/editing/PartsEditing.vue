@@ -69,7 +69,7 @@
     v-model="part"
     :parts="parts"
   />
-  <part-editing v-else-if="part" v-model="part" />
+  <part-editing v-else-if="part" v-model="part" :lectureId="lectureId"/>
   <json-edit-dialog
     v-model="jsonDialog"
     :data="jsonToEdit"
@@ -84,6 +84,7 @@
         accept=".jpg, image/*, application/pdf"
         style="min-height: 300px"
         :title="$t('step.form.file_upload')"
+        :prefix="lectureId"
       />
     </q-card>
   </q-dialog>
@@ -114,7 +115,9 @@ const { isAdmin } = userAttributes.value;
 const parts = defineModel();
 const props = defineProps({
   stepIdx: { type: String },
+  lectureId: { type: String, required: true },
 });
+
 const emit = defineEmits(["finished"]);
 
 const step = ref(Number(props.stepIdx) || 0);
@@ -140,12 +143,11 @@ const hasNext = computed(() => step.value < parts.value.length - 1);
 const remove = (index) => {
   const part = parts.value.splice(index, 1)[0];
   // need to delete image if any
-  console.log("remove", part);
   if (part.src && !part.src.startsWith("http")) {
     storageService.removeImg(part.src);
   }
-  //part.url = null;
-  //part.src = null;
+  part.url = null;
+  part.src = null;
   return
 };
 const moveUp = (index) => {

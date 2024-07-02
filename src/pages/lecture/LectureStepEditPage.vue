@@ -11,9 +11,11 @@
       />
     </q-card>
     <parts-editing
+      v-if="lectureStep.lecture"
       v-model="lectureStep.parts"
       :stepIdx="stepIdx"
       @finished="finish"
+      :lectureId="lectureStep.lecture.id"
     ></parts-editing>
   </q-page>
 </template>

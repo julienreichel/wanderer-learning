@@ -25,13 +25,13 @@
           <q-btn size="sm" icon="delete" @click="removeImage()" />
         </q-card-actions>
       </q-card-section>
-      <file-uploader v-else @uploaded="uploaded" />
+      <file-uploader v-else @uploaded="uploaded" :prefix="lectureId"/>
     </q-card-section>
     <q-card-section class="row" v-if="part.type === 'img'">
       <div class="col-6 q-gutter-sm">
         <q-input outlined v-model="part.text" autogrow :label="$t('parts.form.description')" />
         <div class="col-12">
-          <file-uploader class="full-width full-height" @uploaded="uploaded" />
+          <file-uploader class="full-width full-height" @uploaded="uploaded" :prefix="lectureId"/>
         </div>
       </div>
       <q-img class="col" :ratio="16 / 9" fit="scale-down" :src="part.url" />
@@ -80,9 +80,15 @@ import FileUploader from "../../common/FileUploader.vue";
 const { storage: storageService, lectureStep: lectureStepService } =
   inject("services");
 
+
 const part = defineModel();
 part.value.options = part.value.options || {};
 part.value.options.imageSize = part.value.options.imageSize || "4";
+
+const props = defineProps({
+  lectureId: { type: String, required: true },
+});
+
 
 const textSizeClass = computed(() =>
   part.value.url && !uploadingFile.value

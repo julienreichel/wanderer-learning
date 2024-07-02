@@ -2,7 +2,7 @@
   <amplify-uploader
     ref="uploaderRef"
     :accept="accept"
-    :filename="(file) => uid() + '.' + file.name.split('.').pop()"
+    :filename="(file) => prefix + '/' + uid() + '.' + file.name.split('.').pop()"
     @uploaded="uploaded"
     @start="start"
     @finish="finish"
@@ -61,6 +61,7 @@ const props = defineProps({
   dark: { type: Boolean, default: false },
   color: { type: String, default: "primary" },
   accept: { type: String, default: ".jpg, image/*" },
+  prefix: { type: String, default: "global" },
 });
 const emit = defineEmits(["uploaded"]);
 
