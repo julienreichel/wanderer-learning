@@ -2,13 +2,6 @@ import { createUploaderComponent } from "quasar";
 import { ref, computed } from "vue";
 import mime from "mime-types";
 import { getUrl, uploadData } from "aws-amplify/storage";
-//import * as pdfjsLib from 'pdfjs-dist/webpack.mjs';
-import * as pdfjsLib from 'pdfjs-dist/build/pdf';
-import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker';
-import "pdfjs-dist/web/pdf_viewer.css";
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
-//window.pdfjsWorker = pdfjsWorker;
 
 export default createUploaderComponent({
   name: "AmplifyUploader", // your component's name
@@ -35,10 +28,6 @@ export default createUploaderComponent({
       default: {},
     },
     batch: [Function, Boolean],
-    convertPdfToImages: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   emits: ["factoryFailed", "uploaded", "failed", "uploading"],
@@ -81,32 +70,11 @@ export default createUploaderComponent({
     async function upload() {
       const queue = helpers.queuedFiles.value.slice(0);
       helpers.queuedFiles.value = [];
-      let finalQueue = [];
 
-      // Convert PDFs to images if the option is enabled
-      if (props.convertPdfToImages) {
-        for (const file of queue) {
-          if (mime.lookup(file.name) === "application/pdf") {
-            try {
-              const files = await convertPdfToImages(file);
-              finalQueue.push(...files);
-              emit("added", files);
-            } catch (error) {
-              console.error("Failed to convert PDF to images", error);
-              helpers.updateFileStatus(file, "failed");
-            }
-          } else {
-            finalQueue.push(file);
-          }
-        }
+      if (storageProps.value.batch(queue)) {
+        runFactory(queue);
       } else {
-        finalQueue = queue;
-      }
-
-      if (storageProps.value.batch(finalQueue)) {
-        runFactory(finalQueue);
-      } else {
-        finalQueue.forEach((file) => {
+        queue.forEach((file) => {
           runFactory([file]);
         });
       }
@@ -230,43 +198,6 @@ export default createUploaderComponent({
         console.log("amplify-uploader: error : ", error);
         helpers.updateFileStatus(file, "failed");
       }
-    }
-
-    async function convertPdfToImages(pdfFile) {
-      const pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
-      const numPages = pdf.numPages;
-      const images = [];
-
-      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-        const page = await pdf.getPage(pageNum);
-        const viewport = page.getViewport({ scale: 2.0 });
-
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        await page.render({
-          canvasContext: context,
-          viewport: viewport,
-        }).promise;
-
-        const imageBlob = await new Promise((resolve) => {
-          canvas.toBlob(resolve, "image/png");
-        });
-
-
-        let title = `${pdfFile.name}-page-${pageNum}.png`;
-
-        let file = new File([imageBlob], title, { type: "image/png" });
-
-        // Extract the text content from the page
-        const textContent = await page.getTextContent();
-        file.description = textContent.items.filter(item => item.str.trim().length > 1).map(item => item.str).join('\n');
-        images.push(file);
-      }
-
-      return images;
     }
 
     return {
