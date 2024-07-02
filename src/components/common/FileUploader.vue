@@ -105,10 +105,20 @@ async function convertPdf(pdfFile) {
 
     // Extract the text content from the page
     const textContent = await page.getTextContent();
+    let lastPos = -1;
     file.description = textContent.items
-      .filter((item) => item.str.trim().length > 1)
-      .map((item) => item.str)
-      .join("\n");
+      .filter((item) => item.str.trim().length)
+      .map((item) => {
+        const pos = item.transform[5];
+        if (pos === lastPos) {
+          return " " + item.str;
+        } else {
+          lastPos = pos;
+          return "\n" + item.str;
+        }
+      })
+      .join("");
+    file.description = file.description.slice(1);
     images.push(file);
   }
 
