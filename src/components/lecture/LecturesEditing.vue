@@ -1,10 +1,10 @@
 <template>
-  <q-card
-    v-for="(lecture, index) in lecturesArray"
-    :key="index"
-    clickable
-  >
-    <q-card-section horizontal class="q-card-hover" @click="editMode ? editLecture(lecture) : viewLecture(lecture)">
+  <q-card v-for="(lecture, index) in lecturesArray" :key="index" clickable>
+    <q-card-section
+      horizontal
+      class="q-card-hover"
+      @click="editMode ? editLecture(lecture) : viewLecture(lecture)"
+    >
       <q-card-section class="col q-pa-sm">
         <q-card-section class="q-pa-sm">
           <div class="text-h5">{{ lecture.title }}</div>
@@ -33,7 +33,11 @@
         :height="150"
       />
     </q-card-section>
-    <table-of-content v-if="selectedLecture === lecture" :lecture="lecture" class="q-pa-sm"/>
+    <table-of-content
+      v-if="selectedLecture === lecture"
+      :lecture="lecture"
+      class="q-pa-sm"
+    />
     <q-card-actions v-if="canEdit(lecture) && allowDelete">
       <q-space />
       <q-btn
@@ -52,8 +56,18 @@
     </q-card-actions>
     <q-card-actions v-else>
       <q-space />
-      <q-btn size="sm" v-if="selectedLecture !== lecture" icon="expand_more" @click.stop="selectedLecture = lecture" />
-      <q-btn size="sm" v-if="selectedLecture === lecture" icon="expand_less" @click.stop="selectedLecture = null" />
+      <q-btn
+        size="sm"
+        v-if="selectedLecture !== lecture"
+        icon="expand_more"
+        @click.stop="selectedLecture = lecture"
+      />
+      <q-btn
+        size="sm"
+        v-if="selectedLecture === lecture"
+        icon="expand_less"
+        @click.stop="selectedLecture = null"
+      />
       <q-btn size="sm" icon="east" @click.stop="viewLecture(lecture)" />
     </q-card-actions>
   </q-card>

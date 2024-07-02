@@ -69,7 +69,7 @@
     v-model="part"
     :parts="parts"
   />
-  <part-editing v-else-if="part" v-model="part" :lectureId="lectureId"/>
+  <part-editing v-else-if="part" v-model="part" :lectureId="lectureId" />
   <json-edit-dialog
     v-model="jsonDialog"
     :data="jsonToEdit"
@@ -106,8 +106,7 @@ const { uid, router, $q, t } = useIris();
 import { useChecks } from "src/composables/checks";
 const { checkPart, preparePart } = useChecks();
 
-const { storage: storageService} =
-  inject("services");
+const { storage: storageService } = inject("services");
 
 const userAttributes = inject("userAttributes");
 const { isAdmin } = userAttributes.value;
@@ -148,7 +147,7 @@ const remove = (index) => {
   }
   part.url = null;
   part.src = null;
-  return
+  return;
 };
 const moveUp = (index) => {
   const part = parts.value.splice(index, 1)[0];

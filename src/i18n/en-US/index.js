@@ -135,7 +135,7 @@ export default {
     },
     step: {
       not_completed: "Lecture step not completed, no result recorded",
-    }
+    },
   },
   parts: {
     form: {

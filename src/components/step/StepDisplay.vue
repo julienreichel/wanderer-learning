@@ -1,10 +1,11 @@
 <template>
   <q-card>
-    <q-card-section
-      horizontal
-    >
-      <q-card-section class="col"  >
-        <q-card-section class="q-pa-sm q-pb-md q-card-hover" @click="viewStep(step)">
+    <q-card-section horizontal>
+      <q-card-section class="col">
+        <q-card-section
+          class="q-pa-sm q-pb-md q-card-hover"
+          @click="viewStep(step)"
+        >
           <div class="text-h5">{{ step.title }}</div>
         </q-card-section>
         <q-card-section class="q-pa-sm">
@@ -73,7 +74,11 @@ const getTitle = (part) => {
     div.innerHTML = part.text;
     const h3 = div.querySelector("h3");
     const h5 = div.querySelector("h5");
-    return h3 ? h3.textContent : h5 ? h5.textContent : div.textContent.substring(0, 30) + "...";
+    return h3
+      ? h3.textContent
+      : h5
+        ? h5.textContent
+        : div.textContent.substring(0, 30) + "...";
   } else if (part.type === "quiz") {
     return t("quiz.name");
   } else {

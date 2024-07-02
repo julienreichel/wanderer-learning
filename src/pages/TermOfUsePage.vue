@@ -58,9 +58,10 @@
       <h5>6. Privacy</h5>
       <p>
         Your use of the Site is also governed by our Privacy Policy, which can
-        be found at <a href="/privacy-policy">https://wandererlearning.com/privacy-policy</a>. Please review our Privacy Policy to
-        understand our practices regarding the collection and use of your
-        personal information.
+        be found at
+        <a href="/privacy-policy">https://wandererlearning.com/privacy-policy</a
+        >. Please review our Privacy Policy to understand our practices
+        regarding the collection and use of your personal information.
       </p>
 
       <h5>7. Disclaimers</h5>

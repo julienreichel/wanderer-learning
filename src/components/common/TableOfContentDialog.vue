@@ -44,7 +44,6 @@ watch(
 watch(showDialog, (newVal) => {
   emit("update:modelValue", newVal);
 });
-
 </script>
 
 <style>

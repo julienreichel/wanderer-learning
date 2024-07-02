@@ -592,7 +592,11 @@ const generateLecture = async () => {
   parts = createQuizParts(connectQuiz.questions, nbQuiz, nbQuestionPerQuiz);
   parts.unshift({
     type: "text",
-    text: "<h5>" + t("wizard.questions.intro_title") + "</h5>" + t("wizard.questions.intro_text"),
+    text:
+      "<h5>" +
+      t("wizard.questions.intro_title") +
+      "</h5>" +
+      t("wizard.questions.intro_text"),
   });
 
   progress.value = 15 / 100;

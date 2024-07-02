@@ -137,7 +137,7 @@ export default {
     },
     step: {
       not_completed: "Section de leçon non terminée, aucun résultat enregistré",
-    }
+    },
   },
   parts: {
     form: {

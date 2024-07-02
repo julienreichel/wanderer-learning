@@ -70,8 +70,8 @@ const props = defineProps({
   accept: { type: String, default: ".jpg, image/*" },
   prefix: { type: String, default: "global" },
   convertPdfToImages: {
-      type: Boolean,
-      default: false,
+    type: Boolean,
+    default: false,
   },
 });
 const emit = defineEmits(["uploaded"]);
@@ -120,7 +120,10 @@ let uploadedFiles = [];
 let idx = 0;
 const addFile = async (files) => {
   for (const file of files) {
-    if (props.convertPdfToImages && mime.lookup(file.name) === "application/pdf") {
+    if (
+      props.convertPdfToImages &&
+      mime.lookup(file.name) === "application/pdf"
+    ) {
       try {
         const images = await convertPdf(file);
         uploaderRef.value.addFiles(images);

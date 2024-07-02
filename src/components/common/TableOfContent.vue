@@ -3,11 +3,23 @@
     <q-splitter v-model="splitterModel" style="height: 410px">
       <template v-slot:before>
         <div class="q-pa-md">
-          <q-tree ref="tree" no-connectors accordion selected-color="primary" :nodes="toc" node-key="id" v-model:selected="selected" />
+          <q-tree
+            ref="tree"
+            no-connectors
+            accordion
+            selected-color="primary"
+            :nodes="toc"
+            node-key="id"
+            v-model:selected="selected"
+          />
         </div>
       </template>
       <template v-slot:after>
-        <part-display v-if="previewPart && previewPart.type !== 'quiz'" :part="previewPart" flat/>
+        <part-display
+          v-if="previewPart && previewPart.type !== 'quiz'"
+          :part="previewPart"
+          flat
+        />
         <div v-else class="q-pa-md" v-html="preview"></div>
       </template>
     </q-splitter>
@@ -25,7 +37,7 @@ const props = defineProps({
   lecture: {
     type: Object,
     required: true,
-  }
+  },
 });
 
 const toc = ref([]);
@@ -35,7 +47,11 @@ const extractTitle = (html) => {
   div.innerHTML = html;
   const h3 = div.querySelector("h3");
   const h5 = div.querySelector("h5");
-  return h3 ? h3.textContent : h5 ? h5.textContent : div.textContent.substring(0, 30) + "...";
+  return h3
+    ? h3.textContent
+    : h5
+      ? h5.textContent
+      : div.textContent.substring(0, 30) + "...";
 };
 
 // Function to build the TOC structure
@@ -51,7 +67,6 @@ const buildToc = (steps) => {
             label = t("step.introduction");
           }
           previousIsQuiz = false;
-
         } else if (part.type === "quiz") {
           if (previousIsQuiz) {
             label = null;
@@ -63,10 +78,10 @@ const buildToc = (steps) => {
           previousIsQuiz = false;
         }
         return {
-            id: stepIdx + "." + idx,
-            label,
-            type: part.type,
-          };
+          id: stepIdx + "." + idx,
+          label,
+          type: part.type,
+        };
       })
       .filter((child) => Boolean(child.label));
 
@@ -102,14 +117,16 @@ const previewPart = computed(() => {
   return props.lecture.steps[idx[0]]?.parts[idx[1]];
 });
 const preview = computed(() => {
-  const part = previewPart.value
+  const part = previewPart.value;
   if (!part) {
     return "";
   }
   if (part.type === "quiz") {
     // get the questions and return them an html list
     return (
-      "<h5>"+ t("quiz.name") + "</h5>" +
+      "<h5>" +
+      t("quiz.name") +
+      "</h5>" +
       "<ul>" +
       part.questions
         .map((question) => {
