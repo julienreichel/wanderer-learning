@@ -118,8 +118,8 @@ watch(
   },
 );
 const removeImage = () => {
-  if (part.value.url && !part.value.url.startsWith("http")) {
-    storageService.removeImg(part.value.url);
+  if (part.value.src && !part.value.src.startsWith("http")) {
+    storageService.removeImg(part.value.src);
   }
   part.value.url = null;
   part.value.src = null;

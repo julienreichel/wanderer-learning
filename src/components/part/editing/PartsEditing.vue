@@ -105,6 +105,9 @@ const { uid, router, $q, t } = useIris();
 import { useChecks } from "src/composables/checks";
 const { checkPart, preparePart } = useChecks();
 
+const { storage: storageService} =
+  inject("services");
+
 const userAttributes = inject("userAttributes");
 const { isAdmin } = userAttributes.value;
 
@@ -135,14 +138,22 @@ const hasPrevious = computed(() => step.value > 0);
 const hasNext = computed(() => step.value < parts.value.length - 1);
 
 const remove = (index) => {
-  return parts.value.splice(index, 1)[0];
+  const part = parts.value.splice(index, 1)[0];
+  // need to delete image if any
+  console.log("remove", part);
+  if (part.src && !part.src.startsWith("http")) {
+    storageService.removeImg(part.src);
+  }
+  //part.url = null;
+  //part.src = null;
+  return
 };
 const moveUp = (index) => {
-  const part = remove(index);
+  const part = parts.value.splice(index, 1)[0];
   parts.value.splice(index - 1, 0, part);
 };
 const moveRight = (index) => {
-  const part = remove(index);
+  const part = parts.value.splice(index, 1)[0];
   parts.value.splice(index + 1, 0, part);
 };
 

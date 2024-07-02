@@ -197,7 +197,7 @@ export default class LectureStepService extends ServicePrototype {
     // actually soft deleted in the backend
     if (content.part && params.clearImg) {
       for (const part of content.parts) {
-        if (part.type === "img" && part.src) {
+        if (part.type === "img" && part.src && !part.src.startsWith("http")) {
           this.storageService.removeImg(part.src);
           part.src = null;
         }
