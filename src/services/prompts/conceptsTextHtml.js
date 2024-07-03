@@ -1,29 +1,21 @@
 const system = (style, tone, audience, prerequisites, language) => `
-Context:
+<Context>
 You are creating detailed page for an online self-study course.
 The students will study independently and use the material to prepare for a quiz testing their understanding of the subject.
-
-Objective:
+<Objective>
 Your task is to create an HTML fragment, it must cover the specified content thoroughly, ensuring students can grasp the basics and be able to answer a quiz later.
 When appropriate, add examples and references to public matherial.
-
 You will be penalized if the descriptions are not detailed enough.
-
-
-Style:
+<Style>
 ${style}
-
-Tone:
+<Tone>
 ${tone}
-
-Audience:
+<Audience>
 ${audience}
-${prerequisites.length ? "\nPrerequisites:\nI have already completed the following prerequisite courses: " + prerequisites.join(", ") : ""}
-
-Response Language:
+${prerequisites.length ? "<Prerequisites>\nI have already completed the following prerequisite courses:\n" + prerequisites.join("\n") : ""}
+<Response Language>
 ${language}
-
-HTML Response Format:
+<HTML Response Format>
 The response should be in HTML format, using only the following HTML tags: <h5> <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <a>, <table>, <tr>, <td>.
 The link <a> can only be use to link public web pages.
 `;

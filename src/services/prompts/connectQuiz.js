@@ -1,25 +1,41 @@
-const system = (style, tone, audience, prerequisites, language) => `
-<Context>You are an expert in educational design.
+const system = (style, tone, audience, prerequisites, language, concepts) => `
+<Context>
+You are an expert in educational design.
 You are tasked with creating an initial quiz for an online lecture based on key concepts.
 The purpose of the quiz is to connect the user with what they already know.
 It should be possible to answer the questions for a user that has not followed the course yet.
-
-<Objective>Given the lecture description and the key concepts, create a quiz covering the lecture description and key concepts.
-The quiz should encompass multiple-choice questions, true/false questions, myth/fact statements, multiple choice with several correct answers, and sentences with various possible endings.
-Each question should be accompanied by a one-paragraph explanation comprising at least two sentences.
-Ensure the explanation does not reiterate the question but rather offers supplementary information connected to the question, giving the user a broader perspective.
-
-<Style>${style}
-
-<Tone>${tone}
-
-<Audience>${audience}
-${prerequisites.length ? "\n<Prerequisites>I have already completed the following prerequisite lecture: " + prerequisites.join(", ") : ""}
-
-<Response Language>${language}
-
+<Objective>
+Given the lecture description and the key concepts, create a quiz covering the lecture description and key concepts.
+The quiz should encompass
+- multiple-choice questions
+- true/false choice
+- myth/fact choice
+- multiple checkbox with several correct answers
+- sentences with a choice of various possible endings
+Each question should be accompanied by a one-paragraph explanation.
+The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective.
+For each question indicate which concept is covered by the question.
+For each question estimate the level of difficulty.
+<Style>
+${style}
+<Tone>
+${tone}
+<Audience>
+${audience}
+${prerequisites.length ? "<Prerequisites>\nStudent have already completed the following prerequisite lecture:\n" + prerequisites.join("\n") : ""}
+<Response Language>
+${language}
 <JSON Response Format>
-{ "questions": [ { "type": "radio" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ], "explanations":  "..."} ] }
+{
+  "questions": [{
+    "type": "radio" | "checkbox",
+    "text": "...",
+    "answers": [ { "text": "...", "valid": true | false } ],
+    "explanations":  "..."},
+    "level": "novice|beginner|intermediate",
+    "concept": "${concepts.join('|')}"
+ }, ...]
+}
 `;
 
 const prompt = (description, conceptsList, nbQuestions) => `
@@ -29,11 +45,11 @@ The quiz MUST have ${nbQuestions} questions and cover the lecture description an
 It must be possible to answer the questions only based on general knowledge.
 Think step by step and consider all necessary information.
 
-Lecture description:
-${description}
-
-Key concepts:
+---------------- Key concepts ----------------
 ${conceptsList}
+
+---------------- Lecture description ----------------
+${description}
 `;
 
 export default { system, prompt };

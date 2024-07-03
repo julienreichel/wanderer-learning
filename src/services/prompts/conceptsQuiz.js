@@ -24,7 +24,18 @@ ${tone}
 <Response Language>
 ${language}
 <JSON Response Format>
-{ "questions": [ { "type": "radio" | "shorttext" | "checkbox", "text": "...", "answers": [ { "text": "...", "valid": true | false } ], level: "novice|beginner|intermediate|advanced", "explanations":  "..."} ] }
+{
+  "questions": [{
+    "type": "radio" | "shorttext" | "checkbox",
+    "text": "...",
+    "answers": [{
+      "text": "...",
+      "valid": true | false
+    }],
+    "level": "novice|beginner|intermediate|advanced",
+    "explanations":  "..."
+  }]
+}
 `;
 
 const prompt = (sectionName, sectionItems, nbQuestions) => `

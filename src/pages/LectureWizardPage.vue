@@ -301,8 +301,15 @@ const props = defineProps({
 let prerequisites = [];
 onMounted(async () => {
   const course = await courseService.get(props.id);
-  // if they are other lecture int he course, add them as prerequisites
-  prerequisites = course.lectures.map((lecture) => lecture.title);
+  // if they are other lecture in the course, add them as prerequisites
+  prerequisites = course.lectures.map((lecture) => {
+    let text = lecture.title;
+    if (lecture.concepts.length) {
+      text += "\n- ";
+      text += lecture.concepts.map(({ concept }) => concept.title).join("\n- ");
+    }
+    return text;
+  });
 });
 
 const options = {
@@ -430,7 +437,7 @@ const generateTitleAndObjectives = async (concepts = [], objectives = []) => {
 
   title.value = response.title || "";
   response.expectedLearningOutcomes = response.expectedLearningOutcomes || [];
-  response.keyConcepts = response.keyConcepts || [];
+  response.keyConcepts = response.keyConcepts?.filter(item => Boolean(item.name)) || [];
 
   keyConcepts.value = [...concepts, ...response.keyConcepts];
   learningObjectives.value = [
@@ -451,16 +458,20 @@ const generateTableOfContent = async (toc = []) => {
     learningObjectives.value,
     toc,
   );
+  const sections = response.sections?.filter(item => Boolean(item.name)) || [];
 
-  tableOfContent.value = [...toc, ...response.sections];
+  tableOfContent.value = [...toc, ...sections];
 
   loading.value = false;
   step.value = 3;
 };
 
 let lectureId;
-const createQuizParts = (questions, nbQuizzes, nbQuestions) => {
+const createQuizParts = (questions, nbQuizzes, nbQuestions, conceptIdMap) => {
   let parts = [];
+  if (!questions) {
+    return parts;
+  }
 
   // remove response that are not valid
   questions.forEach((question) => {
@@ -473,10 +484,19 @@ const createQuizParts = (questions, nbQuizzes, nbQuestions) => {
 
   // need to clean potential issue created by the AI
   questions.forEach((question) => {
+    // map the concept to the conceptId
+    question.conceptId = conceptIdMap[question.concept] || conceptIdMap.default;
+    console.log("question.conceptId", question.concept, question.conceptId, conceptIdMap);
+    delete question.concept;
+
     question.id = uid();
     // remove the "Fill in the blank:", "Myth or Fact: ", "True or False: "
     question.text = question.text.replace(
-      /\s*(Fill in the blank:|Myth or Fact:|Fact or Myth:|Is it a myth or a fact:|True or False:|Is this statement true or false?|Complete the sentence:|\(True\/False\))\s*/,
+      /\s*(Fill in the blank:|Myth or Fact:|Fact or Myth:|Is it a myth or a fact:|True or False:|Is this statement true or false?|\(True\/False\))\s*/,
+      "",
+    );
+    question.text = question.text.replace(
+      /\s*(Complete the sentence:|Choose the correct ending:|Which of the following best completes the sentence:)\s*/,
       "",
     );
     question.answers.forEach((answer) => {
@@ -563,6 +583,7 @@ const generateLecture = async () => {
   // add the key concepts
   progress.value = 5 / 100;
   const conceptList = await conceptService.list();
+  let conceptIdMap = {};
   for (const keyConcept of keyConcepts.value) {
     let concept = conceptList.find(({ title }) => title === keyConcept.name);
     if (!concept) {
@@ -575,6 +596,8 @@ const generateLecture = async () => {
       lectureId,
       conceptId: concept.id,
     });
+    keyConcept.id = concept.id;
+    conceptIdMap[keyConcept.name] = concept.id;
   }
 
   // creating the connection step
@@ -589,14 +612,14 @@ const generateLecture = async () => {
     keyConcepts.value,
     getNbQuestions(nbQuiz * nbQuestionPerQuiz),
   );
-  parts = createQuizParts(connectQuiz.questions, nbQuiz, nbQuestionPerQuiz);
+  parts = createQuizParts(connectQuiz.questions, nbQuiz, nbQuestionPerQuiz, conceptIdMap);
   parts.unshift({
     type: "text",
     text:
       "<h5>" +
-      t("wizard.questions.intro_title") +
+      t("wizard.content.intro_title") +
       "</h5>" +
-      t("wizard.questions.intro_text"),
+      t("wizard.content.intro_text"),
   });
 
   progress.value = 15 / 100;
@@ -654,9 +677,10 @@ const generateLecture = async () => {
       step,
       getNbQuestions(nbQuiz * nbQuestionPerQuiz),
     );
+    conceptIdMap.default = conceptIdMap[step.concept];
     parts = [
       ...parts,
-      ...createQuizParts(conceptQuiz.questions, nbQuiz, nbQuestionPerQuiz),
+      ...createQuizParts(conceptQuiz.questions, nbQuiz, nbQuestionPerQuiz, conceptIdMap),
     ];
 
     await lectureStepService.create({
@@ -664,6 +688,8 @@ const generateLecture = async () => {
       type: "step",
       lectureId,
       order: "" + Date.now(),
+      conceptId: conceptIdMap[step.concept],
+      level: step.level,
       parts,
     });
   }
@@ -685,7 +711,7 @@ const generateLecture = async () => {
       level,
     );
     parts.push(
-      ...createQuizParts(practiceQuiz.questions, 1, nbQuestionPerQuiz),
+      ...createQuizParts(practiceQuiz.questions, 1, nbQuestionPerQuiz, conceptIdMap),
     );
   }
 

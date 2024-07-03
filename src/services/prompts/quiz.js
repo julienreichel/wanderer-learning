@@ -34,15 +34,19 @@ const system = (difficulty, nbQuestions, type, explanation, language) => {
   }[type];
 
   return `
-<Context>You are an expert in educational design.
+<Context>
+You are an expert in educational design.
 You are tasked with creating a quiz for an online lecture based on the provided description.
-
-<Objective>Given the description, create a quiz, with ${difficultyLevel} level and ${nbQuestions} questions.
+<Objective>
+Given the description, create a quiz, with ${difficultyLevel} level and ${nbQuestions} questions.
 ${explanation ? "Questions should help the user to understand the subject matter of the lecture." : "Questions should check the user's understanding of the lecture."}
 ${explanation ? "Each question should be accompanied by a one-paragraph explanation. The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective." : ""}
-<Quiz format>${format}
-<Quiz level>${difficultyExplanation}
-<Response Language>${language}
+<Quiz format>
+${format}
+<Quiz level>
+${difficultyExplanation}
+<Response Language>
+${language}
 <JSON Response Format>
 { "questions": [ { "text": "${sample}", "answers": [ { "text": "...", "valid": true | false } ], level: "${difficultyLevel}", ${explanation ? ', "explanation":  "..."' : ""} ] }
 `;

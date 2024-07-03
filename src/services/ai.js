@@ -84,27 +84,18 @@ export default class ServicePrototype {
   }
 
   async getConcepts(description, previousConcepts) {
-    let system;
+    let conceptsStr;
     if (previousConcepts && previousConcepts.length > 0) {
-      const conceptsStr = previousConcepts.map(({ name }) => name).join(", ");
-      system = concepts.systemWithConcepts(
-        this.style,
-        this.tone,
-        this.audience,
-        this.prerequisites,
-        conceptsStr,
-        this.language,
-      );
-    } else {
-      system = concepts.system(
-        this.style,
-        this.tone,
-        this.audience,
-        this.prerequisites,
-        this.language,
-      );
+      conceptsStr = previousConcepts.map(({ name }) => name).join(", ");
     }
-
+    const system = concepts.system(
+      this.style,
+      this.tone,
+      this.audience,
+      this.prerequisites,
+      conceptsStr,
+      this.language,
+    );
     const prompt = concepts.prompt(description);
 
     return this.query({ system, prompt, token: 500 });
@@ -112,14 +103,14 @@ export default class ServicePrototype {
 
   async getTableOfContent(description, concepts, objectives, previousToc) {
     const conceptsList = concepts
-      .map(({ name, description }) => `${name}: ${description}`)
+      .map(({ name, description, id }) => `${name}: ${description}`)
       .join("\n");
 
     const objectivesList = objectives.join("\n");
 
-    let system;
+    let tocList;
     if (previousToc && previousToc.length > 0) {
-      const tocList = previousToc
+      tocList = previousToc
         .map(
           ({ name, items }) =>
             name +
@@ -129,23 +120,16 @@ export default class ServicePrototype {
               .join("\n"),
         )
         .join("\n");
-      system = toc.systemWithToc(
-        this.style,
-        this.tone,
-        this.audience,
-        this.prerequisites,
-        tocList,
-        this.language,
-      );
-    } else {
-      system = toc.system(
-        this.style,
-        this.tone,
-        this.audience,
-        this.prerequisites,
-        this.language,
-      );
     }
+    const system = toc.system(
+      this.style,
+      this.tone,
+      this.audience,
+      this.prerequisites,
+      tocList,
+      this.language,
+      concepts.map(({ name }) => name),
+    );
 
     const prompt = toc.prompt(description, conceptsList, objectivesList);
 
@@ -163,6 +147,7 @@ export default class ServicePrototype {
       this.audience,
       this.prerequisites,
       this.language,
+      concepts.map(({ name }) => name),
     );
     const prompt = connectQuiz.prompt(description, conceptsList, nbQuestions);
 
@@ -240,6 +225,7 @@ export default class ServicePrototype {
           this.tone,
           this.audience,
           this.prerequisites,
+          this.language,
         );
         prompt = conceptsTextHtml.prompt(section, i);
         let html = await this.query({
@@ -291,6 +277,7 @@ export default class ServicePrototype {
       this.audience,
       this.language,
       level,
+      concepts.map(({ name }) => name),
     );
     const prompt = practiceQuiz.prompt(
       description,
