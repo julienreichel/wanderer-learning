@@ -32,6 +32,23 @@ export default class ConceptService extends ServicePrototype {
   }
 
   /**
+   * Create a concept
+   *
+   * @param {object} input the model data
+   * @param {object} options the options
+   * @returns {Promise<object>}
+   */
+  async create(input, options = {}) {
+
+    const concept = super.create(input, options);
+
+    // we could be smarter and update the cache with the new concept, but this is good enough for now
+    this.clearCachedData('concepts');
+
+    return concept;
+  }
+
+  /**
    * Get a concept
    *
    * @param {string} id the concept id
@@ -83,10 +100,15 @@ export default class ConceptService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async list(params = {}) {
+    let concepts = this.getCachedData('concepts');
+    if (Boolean(concepts)) {
+      return concepts;
+    }
     params.selectionSet = ["id", "title", "description"];
-    let concept = await super.list(params);
+    concepts = await super.list(params);
 
-    return concept;
+    this.setCacheData('concepts', concepts);
+    return concepts;
   }
 
   /**
@@ -111,6 +133,7 @@ export default class ConceptService extends ServicePrototype {
         }),
       );
     }
+    this.clearCachedData('concepts');
     return super.delete(input);
   }
 }

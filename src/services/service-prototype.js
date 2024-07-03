@@ -20,6 +20,32 @@ export default class ServicePrototype {
   }
 
   /**
+   * Get the cached data
+   * @param {string} name the name of the cache
+   * @returns {*}
+   */
+  getCachedData(name) {
+    return this.cacheData[name];
+  }
+
+  /**
+   * Store data in the cache
+   * @param {string} name
+   * @param {*} data
+   */
+  setCacheData(name, data) {
+    this.cacheData[name] = data;
+  }
+
+  /**
+   * Clear the cache for name
+   * @param {string} name
+   */
+  clearCachedData(name) {
+    this.cacheData[name] = undefined;
+  }
+
+  /**
    * Create a model
    *
    * @param {object} input the model data
