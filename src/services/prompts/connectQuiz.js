@@ -12,7 +12,7 @@ The quiz should encompass
 - myth/fact choice
 - multiple checkbox with several correct answers
 - sentences with a choice of various possible endings
-Each question should be accompanied by a one-paragraph explanation.
+Each question should be accompanied by a one-paragraph explanation with at least 3 sentences.
 The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective.
 For each question indicate which concept is covered by the question.
 For each question estimate the level of difficulty.

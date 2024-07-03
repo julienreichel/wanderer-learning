@@ -17,7 +17,7 @@ The quiz levels should encompass:
 - beginner: Explains fundamental concepts and describes simple applications.
 - intermediate: Understands and explains the impact of various conditions on the core concepts and applies them independently.
 - advanced: Analyzes complex scenarios, understands nuanced aspects, and explores advanced phenomena.
-Each question should be accompanied by a one-paragraph explanation.
+Each question should be accompanied by a one-paragraph explanation with at least 3 sentences.
 The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective.
 <Tone>
 ${tone}
