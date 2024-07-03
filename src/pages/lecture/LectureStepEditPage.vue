@@ -14,8 +14,13 @@
           class="col-8"
           v-model="lectureStep.conceptId"
           :placeholder="$t('concept.form.edit')"
-          outlined/>
-        <difficulty-slider class="col-4" :level="lectureStep.level" @level="(value) => lectureStep.level = value"/>
+          outlined
+        />
+        <difficulty-slider
+          class="col-4"
+          :level="lectureStep.level"
+          @level="(value) => (lectureStep.level = value)"
+        />
       </div>
     </q-card>
     <parts-editing
@@ -55,10 +60,12 @@ const lectureStep = ref();
 const toJSON = ({ title, type, parts, level, conceptId }) => {
   // keep only the necessary fields
   parts = parts.map(({ type, text, src, questions, options }) => {
-    questions = questions?.map(({ id, type, text, answers, options, level, conceptId }) => {
-      answers = answers.map(({ text, valid }) => ({ text, valid }));
-      return { id, type, text, answers, options, level, conceptId };
-    });
+    questions = questions?.map(
+      ({ id, type, text, answers, options, level, conceptId }) => {
+        answers = answers.map(({ text, valid }) => ({ text, valid }));
+        return { id, type, text, answers, options, level, conceptId };
+      },
+    );
     return { type, text, src, questions, options };
   });
 

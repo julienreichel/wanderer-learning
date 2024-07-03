@@ -28,14 +28,16 @@ const newConceptTitle = ref();
 const mapIdtoTitle = async () => {
   console.log("mapIdtoTitle", conceptId.value);
   if (!conceptList) {
-      conceptList = await conceptService.list();
-    }
+    conceptList = await conceptService.list();
+  }
   if (!conceptId.value) {
     newConceptTitle.value = null;
   } else {
-    newConceptTitle.value = conceptList?.find(({ id }) => id === conceptId.value)?.title;
+    newConceptTitle.value = conceptList?.find(
+      ({ id }) => id === conceptId.value,
+    )?.title;
   }
-}
+};
 watch(newConceptTitle, async (input) => {
   if (!input) {
     return;
@@ -43,7 +45,7 @@ watch(newConceptTitle, async (input) => {
   conceptId.value = input.value;
   emit("select", input.value);
   if (props.canCreate) {
-    await nextTick()
+    await nextTick();
     newConceptTitle.value = undefined;
   }
 });
@@ -64,7 +66,6 @@ const props = defineProps({
 
 const emit = defineEmits(["select", "create"]);
 
-
 const options = ref(null);
 let conceptList = null;
 const filterFn = async (val, update, abort) => {
@@ -75,8 +76,9 @@ const filterFn = async (val, update, abort) => {
     .filter(
       (item) =>
         item.title.toLowerCase().includes(val.toLowerCase()) &&
-        props.existingConcepts.find(({ id, concept }) => id === item.id || (concept?.id === item.id)) ===
-          undefined,
+        props.existingConcepts.find(
+          ({ id, concept }) => id === item.id || concept?.id === item.id,
+        ) === undefined,
     )
     .map((concept) => ({
       label: concept.title,
@@ -105,7 +107,7 @@ const createConcept = async (input, done) => {
     conceptId.value = val.value;
     done();
   }
-  await nextTick()
+  await nextTick();
   newConceptTitle.value = undefined;
 };
 </script>

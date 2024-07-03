@@ -24,7 +24,14 @@
     </q-chip>
   </q-card-section>
   <q-card-section>
-    <concept-selecting outlined :label="$t('concept.form.add')" v-model="newConceptId" can-create @create="createConcept" :existingConcepts="lecture.concepts"/>
+    <concept-selecting
+      outlined
+      :label="$t('concept.form.add')"
+      v-model="newConceptId"
+      can-create
+      @create="createConcept"
+      :existingConcepts="lecture.concepts"
+    />
   </q-card-section>
 </template>
 
@@ -40,9 +47,9 @@ const lecture = defineModel();
 
 const showRemove = ref([]);
 const newConceptId = ref();
-watch( newConceptId, (id) => {
+watch(newConceptId, (id) => {
   if (id) {
-    console.log("add concept", id)
+    console.log("add concept", id);
     addConcept({ id });
   }
 });
@@ -50,7 +57,7 @@ watch( newConceptId, (id) => {
 const addConcept = async (concept) => {
   newConceptId.value = null;
 
-  if (lecture.value.concepts.find(({ concept: {id} }) => id === concept.id)) {
+  if (lecture.value.concepts.find(({ concept: { id } }) => id === concept.id)) {
     return;
   }
 
@@ -59,8 +66,6 @@ const addConcept = async (concept) => {
     conceptId: concept.id,
   });
   lecture.value.concepts.push(item);
-
-
 };
 const createConcept = async (val) => {
   const concept = await conceptService.create({

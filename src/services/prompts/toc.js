@@ -5,7 +5,7 @@ const system = (
   prerequisites,
   tocList,
   language,
-  concepts
+  concepts,
 ) => `
 <Context>
 You are an expert in educational design. You are tasked with designing the table of contents for an online lecture.
@@ -30,7 +30,7 @@ ${language}
     "name": "...",
     "items": [{"name": "...", "description": "..."}],
     "level": "novice|beginner|intermediate|advanced|expert",
-    "concept": "${concepts.join('|')}"
+    "concept": "${concepts.join("|")}"
   }, ...]
 }
 `;

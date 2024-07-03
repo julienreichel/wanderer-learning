@@ -28,16 +28,24 @@ const props = defineProps({
 });
 
 const textvalues = ["novice", "beginner", "intermediate", "advanced", "expert"];
-const value = ref(props.difficulty || textvalues.indexOf(props.level) + 1 || undefined);
-watch(() => props.level, (newVal) => {
-  value.value = textvalues.indexOf(newVal) + 1;
-});
-watch(() => props.difficulty, (newVal) => {
-  value.value = newVal;
-});
+const value = ref(
+  props.difficulty || textvalues.indexOf(props.level) + 1 || undefined,
+);
+watch(
+  () => props.level,
+  (newVal) => {
+    value.value = textvalues.indexOf(newVal) + 1;
+  },
+);
+watch(
+  () => props.difficulty,
+  (newVal) => {
+    value.value = newVal;
+  },
+);
 
 watch(value, (newVal) => {
   emit("level", textvalues[newVal - 1]);
-  emit("difficulty",newVal);
+  emit("difficulty", newVal);
 });
 </script>

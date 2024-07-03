@@ -42,7 +42,7 @@ ${language}
     "text": "...",
     "answers": [ { "text": "...", "valid": true | false } ],
     "level": "novice|beginner|intermediate|advanced",
-    "concept": "${concepts.join('|')}"
+    "concept": "${concepts.join("|")}"
   }, ...]
 }
 `;

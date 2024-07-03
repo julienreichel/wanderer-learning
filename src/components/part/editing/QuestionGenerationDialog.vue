@@ -37,7 +37,10 @@
                   />
                 </q-item-section>
               </q-item>
-              <difficulty-slider :difficulty="difficulty" @difficulty="(value) => difficulty = value" />
+              <difficulty-slider
+                :difficulty="difficulty"
+                @difficulty="(value) => (difficulty = value)"
+              />
               <q-item>
                 <q-toggle
                   v-model="explanation"

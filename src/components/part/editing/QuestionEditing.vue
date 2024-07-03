@@ -110,8 +110,13 @@
         class="col"
         v-model="question.conceptId"
         :placeholder="$t('concept.form.edit')"
-        outlined/>
-      <difficulty-slider class="col" :level="level" @level="(value) => question.level = value"/>
+        outlined
+      />
+      <difficulty-slider
+        class="col"
+        :level="level"
+        @level="(value) => (question.level = value)"
+      />
     </div>
     <rich-text-editing
       v-if="provideExplanation"
@@ -148,8 +153,7 @@ watch(
   },
 );
 
-const level = ref(question.value.level || 'beginner');
-
+const level = ref(question.value.level || "beginner");
 
 const feedbackType = ref(question.value.options.feedbackType || "roti");
 watch(

@@ -33,7 +33,7 @@ ${language}
     "answers": [ { "text": "...", "valid": true | false } ],
     "explanations":  "..."},
     "level": "novice|beginner|intermediate",
-    "concept": "${concepts.join('|')}"
+    "concept": "${concepts.join("|")}"
  }, ...]
 }
 `;

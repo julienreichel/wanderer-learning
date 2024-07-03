@@ -437,7 +437,8 @@ const generateTitleAndObjectives = async (concepts = [], objectives = []) => {
 
   title.value = response.title || "";
   response.expectedLearningOutcomes = response.expectedLearningOutcomes || [];
-  response.keyConcepts = response.keyConcepts?.filter(item => Boolean(item.name)) || [];
+  response.keyConcepts =
+    response.keyConcepts?.filter((item) => Boolean(item.name)) || [];
 
   keyConcepts.value = [...concepts, ...response.keyConcepts];
   learningObjectives.value = [
@@ -458,7 +459,8 @@ const generateTableOfContent = async (toc = []) => {
     learningObjectives.value,
     toc,
   );
-  const sections = response.sections?.filter(item => Boolean(item.name)) || [];
+  const sections =
+    response.sections?.filter((item) => Boolean(item.name)) || [];
 
   tableOfContent.value = [...toc, ...sections];
 
@@ -486,7 +488,12 @@ const createQuizParts = (questions, nbQuizzes, nbQuestions, conceptIdMap) => {
   questions.forEach((question) => {
     // map the concept to the conceptId
     question.conceptId = conceptIdMap[question.concept] || conceptIdMap.default;
-    console.log("question.conceptId", question.concept, question.conceptId, conceptIdMap);
+    console.log(
+      "question.conceptId",
+      question.concept,
+      question.conceptId,
+      conceptIdMap,
+    );
     delete question.concept;
 
     question.id = uid();
@@ -612,7 +619,12 @@ const generateLecture = async () => {
     keyConcepts.value,
     getNbQuestions(nbQuiz * nbQuestionPerQuiz),
   );
-  parts = createQuizParts(connectQuiz.questions, nbQuiz, nbQuestionPerQuiz, conceptIdMap);
+  parts = createQuizParts(
+    connectQuiz.questions,
+    nbQuiz,
+    nbQuestionPerQuiz,
+    conceptIdMap,
+  );
   parts.unshift({
     type: "text",
     text:
@@ -680,7 +692,12 @@ const generateLecture = async () => {
     conceptIdMap.default = conceptIdMap[step.concept];
     parts = [
       ...parts,
-      ...createQuizParts(conceptQuiz.questions, nbQuiz, nbQuestionPerQuiz, conceptIdMap),
+      ...createQuizParts(
+        conceptQuiz.questions,
+        nbQuiz,
+        nbQuestionPerQuiz,
+        conceptIdMap,
+      ),
     ];
 
     await lectureStepService.create({
@@ -711,7 +728,12 @@ const generateLecture = async () => {
       level,
     );
     parts.push(
-      ...createQuizParts(practiceQuiz.questions, 1, nbQuestionPerQuiz, conceptIdMap),
+      ...createQuizParts(
+        practiceQuiz.questions,
+        1,
+        nbQuestionPerQuiz,
+        conceptIdMap,
+      ),
     );
   }
 
