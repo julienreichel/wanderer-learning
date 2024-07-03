@@ -49,9 +49,9 @@ const lectureStep = ref({
 const toJSON = ({ title, type, parts }) => {
   // keep only the necessary fields
   parts = parts.map(({ type, text, src, questions, options }) => {
-    questions = questions?.map(({ id, type, text, answers, options }) => {
+    questions = questions?.map(({ id, type, text, answers, options, level, conceptId }) => {
       answers = answers.map(({ text, valid }) => ({ text, valid }));
-      return { id, type, text, answers, options };
+      return { id, type, text, answers, options, level, conceptId };
     });
     return { type, text, src, questions, options };
   });

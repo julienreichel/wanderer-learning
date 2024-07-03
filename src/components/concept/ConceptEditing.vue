@@ -24,28 +24,14 @@
     </q-chip>
   </q-card-section>
   <q-card-section>
-    <q-select
-      outlined
-      dense
-      v-model="newConceptTitle"
-      use-input
-      hide-selected
-      fill-input
-      clearable
-      input-debounce="500"
-      :label="$t('concept.form.add')"
-      :options="options"
-      @filter="filterFn"
-      @filter-abort="abortFilterFn"
-      @new-value="createConcept"
-      @update:model-value="selectConcept"
-    >
-    </q-select>
+    <concept-selecting outlined :label="$t('concept.form.add')" v-model="newConceptId" can-create @create="createConcept" :existingConcepts="lecture.concepts"/>
   </q-card-section>
 </template>
 
 <script setup>
-import { ref, inject } from "vue";
+import ConceptSelecting from "src/components/concept/ConceptSelecting.vue";
+
+import { ref, inject, watch } from "vue";
 
 const { concept: conceptService, lectureConcept: lectureConceptService } =
   inject("services");
@@ -53,33 +39,18 @@ const { concept: conceptService, lectureConcept: lectureConceptService } =
 const lecture = defineModel();
 
 const showRemove = ref([]);
-const newConceptTitle = ref();
-const options = ref(null);
-let conceptList = null;
-const filterFn = async (val, update, abort) => {
-  if (!conceptList) {
-    conceptList = await conceptService.list();
+const newConceptId = ref();
+watch( newConceptId, (id) => {
+  if (id) {
+    console.log("add concept", id)
+    addConcept({ id });
   }
-  options.value = conceptList
-    .filter(
-      (concept) =>
-        concept.title.toLowerCase().includes(val.toLowerCase()) &&
-        lecture.value.concepts.find(({ id }) => id === concept.id) ===
-          undefined,
-    )
-    .map((concept) => ({
-      label: concept.title,
-      value: concept.id,
-    }))
-    .slice(0, 5);
-  update();
-};
-const abortFilterFn = () => {
-  // Nothing to do here
-};
+});
 
 const addConcept = async (concept) => {
-  if (lecture.value.concepts.find(({ id }) => id === concept.id)) {
+  newConceptId.value = null;
+
+  if (lecture.value.concepts.find(({ concept: {id} }) => id === concept.id)) {
     return;
   }
 
@@ -89,25 +60,13 @@ const addConcept = async (concept) => {
   });
   lecture.value.concepts.push(item);
 
-  newConceptTitle.value = null;
-};
 
-const selectConcept = (val) => {
-  addConcept({ id: val.value });
 };
-
-const createConcept = async (val, done) => {
-  let concept = null;
-  concept = conceptList.find(({ title }) => title === val);
-  if (!concept) {
-    concept = await conceptService.create({
-      title: val,
-    });
-    conceptList.push(concept);
-  }
+const createConcept = async (val) => {
+  const concept = await conceptService.create({
+    title: val,
+  });
   await addConcept(concept);
-
-  done();
 };
 
 const removeConcept = async (item) => {

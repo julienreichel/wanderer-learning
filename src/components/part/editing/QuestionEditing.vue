@@ -99,11 +99,20 @@
     <q-btn @click="addAnswer(question)" size="sm" icon="add" />
   </q-card-section>
   <q-card-section v-if="question.type !== 'feedback'">
-    <q-toggle
-      v-model="provideExplanation"
-      name="explanation"
-      :label="$t('quiz.question.explanation')"
-    />
+    <div class="row">
+      <q-toggle
+        class="col"
+        v-model="provideExplanation"
+        name="explanation"
+        :label="$t('quiz.question.explanation')"
+      />
+      <concept-selecting
+        class="col"
+        v-model="question.conceptId"
+        :placeholder="$t('concept.form.edit')"
+        outlined/>
+      <difficulty-slider class="col" :level="level" @level="(value) => question.level = value"/>
+    </div>
     <rich-text-editing
       v-if="provideExplanation"
       v-model="question.explanations"
@@ -118,15 +127,17 @@
 
 <script setup>
 import RichTextEditing from "../../common/RichTextEditing.vue";
+import DifficultySlider from "src/components/common/DifficultySlider.vue";
+import ConceptSelecting from "src/components/concept/ConceptSelecting.vue";
 
-import { ref, watch } from "vue";
+import { ref, watch, inject, onMounted } from "vue";
 import { useIris } from "src/composables/iris";
 const { t, getIconFromType } = useIris();
+
 const question = defineModel();
 if (!question.value.explanations) {
   question.value.explanations = "";
 }
-
 watch(
   () => question.value.options,
   (options) => {
@@ -136,6 +147,9 @@ watch(
     feedbackType.value = question.value.options.feedbackType || "roti";
   },
 );
+
+const level = ref(question.value.level || 'beginner');
+
 
 const feedbackType = ref(question.value.options.feedbackType || "roti");
 watch(

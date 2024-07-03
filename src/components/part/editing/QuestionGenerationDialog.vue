@@ -37,24 +37,7 @@
                   />
                 </q-item-section>
               </q-item>
-              <q-item>
-                <q-item-section avatar>
-                  <q-icon name="speed" />
-                </q-item-section>
-                <q-item-section>
-                  <q-slider
-                    snap
-                    label
-                    switch-label-side
-                    v-model="difficulty"
-                    :label-value="
-                      $t('wizard.questions.difficulties.' + difficulty)
-                    "
-                    :min="1"
-                    :max="5"
-                  />
-                </q-item-section>
-              </q-item>
+              <difficulty-slider :difficulty="difficulty" @difficulty="(value) => difficulty = value" />
               <q-item>
                 <q-toggle
                   v-model="explanation"
@@ -104,6 +87,8 @@
 </template>
 
 <script setup>
+import DifficultySlider from "src/components/common/DifficultySlider.vue";
+
 import { ref, inject } from "vue";
 
 import { useFormatter, useIris } from "src/composables/iris";

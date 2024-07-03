@@ -23,9 +23,7 @@ export default class ConceptService extends ServicePrototype {
       "description",
       "lectures.id",
       "lectures.lecture.*",
-      "lectures.lecture.steps.title",
-      "lectures.lecture.steps.id",
-      "lectures.lecture.steps.order",
+      "lectures.lecture.steps.*",
       "lectures.lecture.concepts.concept.*",
       "steps.*",
     ];

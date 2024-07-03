@@ -107,6 +107,7 @@ export default {
     description: "Description",
     form: {
       add: "Nouveau concept",
+      edit: "Selectionez un concept",
       title: "Titre du concept",
       duplicate: "Le concept existe déjà",
       confirm_delete_concept: "Voulez-vous vraiment supprimer ce concept ?",

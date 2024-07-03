@@ -3,8 +3,8 @@ const system = (difficulty, nbQuestions, type, explanation, language) => {
     "novice: Recognizes and recalls basic concepts and terminology.",
     "beginner: Explains fundamental concepts and describes simple applications.",
     "intermediate: Understands and explains the impact of various conditions on the core concepts and applies them independently.",
-    "advanced: Analyzes complex scenarios, understands nuanced aspects, and explores advanced phenomena.",
-    "expert: Synthesizes knowledge to explain complex phenomena and contributes to the field through original research.",
+    "advanced: Analyzes complex scenarios, understands nuanced aspects, and explores advanced scenario.",
+    "expert: Synthesizes knowledge to explain complex phenomena which have not been explicitly taught.",
   ][difficulty - 1];
   const difficultyLevel = [
     "novice",
@@ -17,7 +17,7 @@ const system = (difficulty, nbQuestions, type, explanation, language) => {
   const sample = {
     truefalse: "The sky is blue.",
     choice: "What is the color of the sky?",
-    checkbox: "What color can the sky be? (select all that apply)",
+    checkbox: "...? (select all that apply)",
     mythfact: "The sky can be purple.",
     missingword: "The ____ is blue.",
     finishsentence: "The sky is ____.",
@@ -26,7 +26,7 @@ const system = (difficulty, nbQuestions, type, explanation, language) => {
   const format = {
     truefalse: "True or False",
     choice: "Multiple choices answers, with one valid answer",
-    checkbox: "Checkboxes wiht 5 answers, with at least two valid answers",
+    checkbox: "Checkboxes wiht 5 answers, with multiple valid answers",
     mythfact: "Myth or Fact",
     missingword: "Sentence with ONE missing word",
     finishsentence:
