@@ -28,7 +28,7 @@ const props = defineProps({
 });
 
 const textvalues = ["novice", "beginner", "intermediate", "advanced", "expert"];
-const value = ref(props.difficulty || textvalues.indexOf(props.level) + 1 || 3);
+const value = ref(props.difficulty || textvalues.indexOf(props.level) + 1 || undefined);
 watch(() => props.level, (newVal) => {
   value.value = textvalues.indexOf(newVal) + 1;
 });

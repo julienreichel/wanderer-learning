@@ -23,6 +23,8 @@ export default class LectureStepService extends ServicePrototype {
       "order",
       "owner",
       "identityId",
+      "level",
+      "conceptId",
       "lecture.*",
       "lecture.course.*",
       "concept.*",
@@ -142,6 +144,8 @@ export default class LectureStepService extends ServicePrototype {
     delete payload.timestampDistribution;
     delete payload.userTimeReportings;
     delete payload.ratings;
+    // force to null to remove it from the DB
+    payload.conceptId = payload.conceptId || null;
 
     if (payload.parts) this.convertOptionsToArr(payload.parts);
 

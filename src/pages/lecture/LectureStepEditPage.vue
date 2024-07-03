@@ -1,6 +1,6 @@
 <template>
-  <q-page class="q-pa-md q-gutter-sm">
-    <q-card>
+  <q-page class="q-pa-md q-gutter-sm" v-if="lectureStep">
+    <q-card class="q-mb-md">
       <q-input
         class="q-pa-sm"
         outlined
@@ -9,6 +9,14 @@
         lazy-rules
         :rules="[(val) => (val && val.length > 0) || 'Please type something']"
       />
+      <div class="row q-pa-sm">
+        <concept-selecting
+          class="col-8"
+          v-model="lectureStep.conceptId"
+          :placeholder="$t('concept.form.edit')"
+          outlined/>
+        <difficulty-slider class="col-4" :level="lectureStep.level" @level="(value) => lectureStep.level = value"/>
+      </div>
     </q-card>
     <parts-editing
       v-if="lectureStep.lecture"
@@ -22,6 +30,8 @@
 
 <script setup>
 import PartsEditing from "src/components/part/editing/PartsEditing.vue";
+import DifficultySlider from "src/components/common/DifficultySlider.vue";
+import ConceptSelecting from "src/components/concept/ConceptSelecting.vue";
 
 import { ref, inject, onMounted, onBeforeUnmount } from "vue";
 
@@ -40,13 +50,9 @@ const props = defineProps({
   },
 });
 
-const lectureStep = ref({
-  title: null,
-  parts: [],
-  identityId,
-});
+const lectureStep = ref();
 
-const toJSON = ({ title, type, parts }) => {
+const toJSON = ({ title, type, parts, level, conceptId }) => {
   // keep only the necessary fields
   parts = parts.map(({ type, text, src, questions, options }) => {
     questions = questions?.map(({ id, type, text, answers, options, level, conceptId }) => {
@@ -56,7 +62,7 @@ const toJSON = ({ title, type, parts }) => {
     return { type, text, src, questions, options };
   });
 
-  let simplified = { title, type, parts };
+  let simplified = { title, type, parts, level, conceptId };
   return JSON.stringify(simplified);
 };
 
@@ -111,6 +117,8 @@ onMounted(async () => {
       },
     ]);
     lectureStepInitial = toJSON(data);
+
+    console.log("lectureStepInitial", data);
   }
 });
 

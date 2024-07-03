@@ -22,10 +22,11 @@ import { ref, inject, defineEmits, onMounted, watch, nextTick } from "vue";
 const { concept: conceptService } = inject("services");
 
 const conceptId = defineModel();
+
 const newConceptTitle = ref();
 
 const mapIdtoTitle = async () => {
-  console.log("mapping", conceptId.value);
+  console.log("mapIdtoTitle", conceptId.value);
   if (!conceptList) {
       conceptList = await conceptService.list();
     }
@@ -36,14 +37,12 @@ const mapIdtoTitle = async () => {
   }
 }
 watch(newConceptTitle, async (input) => {
-  console.log("newConceptTitle", input)
   if (!input) {
     return;
   }
   conceptId.value = input.value;
   emit("select", input.value);
   if (props.canCreate) {
-    console.log("resetting newConceptTitle");
     await nextTick()
     newConceptTitle.value = undefined;
   }
