@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
-    <q-card >
+    <q-card>
       <q-card-section>
         <div class="text-h5">{{ $t("generic.welcome") }}</div>
         <div>{{ $t("generic.getting_started") }}</div>
@@ -50,16 +50,16 @@
 
       <q-separator />
       <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="progress" v-if="lecturesInProgress.length">
+        <q-tab-panel name="progress" v-if="lecturesInProgress.length" class="q-pa-md q-gutter-sm">
           <lectures-editing v-model="lecturesInProgress" />
         </q-tab-panel>
-        <q-tab-panel name="next" v-if="lecturesNext.length">
+        <q-tab-panel name="next" v-if="lecturesNext.length" class="q-pa-md q-gutter-sm">
           <lectures-editing v-model="lecturesNext" />
         </q-tab-panel>
         <q-tab-panel name="concepts" v-if="connectedConcepts.length">
           <concept-list flat bordered :concepts="connectedConcepts"/>
         </q-tab-panel>
-        <q-tab-panel name="lectures" v-if="similarLectures.length">
+        <q-tab-panel name="lectures" v-if="similarLectures.length" class="q-pa-md q-gutter-sm">
           <lectures-editing v-model="similarLectures" />
         </q-tab-panel>
       </q-tab-panels>
