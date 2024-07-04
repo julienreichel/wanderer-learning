@@ -56,11 +56,13 @@
       <q-separator />
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="review" v-if="lastSteps.length" class="q-pa-md q-gutter-sm">
-          <step-display
-            v-for="(step, index) in lastSteps"
-            :key="index"
-            :step="step"
-          />
+          <q-list>
+            <q-item v-for="(step, index) in lastSteps" :key="index" clickable @click="startQuiz(step)">
+              <q-item-label>
+                {{ step.title }}
+              </q-item-label>
+            </q-item>
+          </q-list>
         </q-tab-panel>
         <q-tab-panel name="progress" v-if="lecturesInProgress.length" class="q-pa-md q-gutter-sm">
           <lectures-editing v-model="lecturesInProgress" />
@@ -76,12 +78,13 @@
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
+    <quiz-runner-dialog v-if="questions" v-model="quizDialog" :questions="questions"/>
   </q-page>
 </template>
 
 <script setup>
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
-import StepDisplay from "src/components/step/StepDisplay.vue";
+import QuizRunnerDialog from "src/components/part/display/QuizRunnerDialog.vue";
 import ConceptList from "src/components/concept/ConceptList.vue";
 
 import { ref, inject, onMounted, computed } from "vue";
@@ -115,6 +118,16 @@ const newuser = computed(
     similarLectures.value.length === 0 &&
     connectedConcepts.value.length === 0,
 );
+const addStep = (lecture, lectureStepId) => {
+  if (!lecture) return;
+  const step = lecture.steps.find(({id}) => id === lectureStepId);
+  if (!step) return;
+  // check if there are any quizzes in the step
+  if (step.parts.some(({type, questions}) => type === "quiz" && questions.filter(q => q.type !== "feedback").length)) {
+    lastSteps.value.push(step);
+  }
+};
+
 onMounted(async () => {
   // Get the last 3 reports
   const data = await reportingService.list({ userId, username, limit: 3 });
@@ -129,14 +142,14 @@ onMounted(async () => {
     // get the lecture if not already processed
     if (processedLectureIds[report.lectureId]) {
       const lecture = processedLectureIds[report.lectureId];
-      lastSteps.value.push(lecture.steps.find(({id}) => id === report.lectureStepId));
+      addStep(lecture, report.lectureStepId);
       continue;
     }
     const lecture = await lectureService.get(report.lectureId);
     processedLectureIds[lecture.id] = lecture;
     if (!lecture) continue;
 
-    lastSteps.value.push(lecture.steps.find(({id}) => id === report.lectureStepId));
+    addStep(lecture, report.lectureStepId);
     // check if there in a next step in the lecture based report.lectureStepId
     let lectureIsOver = true;
     const stepIndex = lecture.steps.findIndex(
@@ -190,7 +203,16 @@ onMounted(async () => {
       lecture.stepsSummary = reportingService.getLastReports(reports);
     }
   });
-
-
 });
+
+let questions = ref([]);
+let quizDialog = ref(false);
+const startQuiz = (step) => {
+  // find all the questions in all the parts
+  questions.value = step.parts
+    .filter(({ type }) => type === "quiz")
+    .map((part) => part.questions.filter((q) => q.type !== "feedback"))
+    .flat();
+  quizDialog.value = true;
+};
 </script>
