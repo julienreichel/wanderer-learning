@@ -1,36 +1,6 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
-    <q-card v-if="lecturesInProgress.length">
-      <q-card-section>
-        <div class="text-h5">{{ $t("generic.lectures_in_progress") }}</div>
-      </q-card-section>
-      <q-card-section class="q-pa-sm q-gutter-sm">
-        <lectures-editing v-model="lecturesInProgress" />
-      </q-card-section>
-    </q-card>
-    <q-card v-if="lecturesNext.length">
-      <q-card-section>
-        <div class="text-h5">{{ $t("generic.lectures_next") }}</div>
-      </q-card-section>
-      <q-card-section class="q-pa-sm q-gutter-sm">
-        <lectures-editing v-model="lecturesNext" />
-      </q-card-section>
-    </q-card>
-    <q-card v-if="connectedConcepts.length">
-      <q-card-section>
-        <div class="text-h5">{{ $t("generic.related_concepts") }}</div>
-      </q-card-section>
-      <concept-display :concepts="connectedConcepts" />
-    </q-card>
-    <q-card v-if="similarLectures.length">
-      <q-card-section>
-        <div class="text-h5">{{ $t("generic.related_lectures") }}</div>
-      </q-card-section>
-      <q-card-section class="q-pa-sm q-gutter-sm">
-        <lectures-editing v-model="similarLectures" />
-      </q-card-section>
-    </q-card>
-    <q-card v-if="newuser">
+    <q-card >
       <q-card-section>
         <div class="text-h5">{{ $t("generic.welcome") }}</div>
         <div>{{ $t("generic.getting_started") }}</div>
@@ -46,12 +16,60 @@
         />
       </q-card-section>
     </q-card>
+    <q-card v-if="!newuser">
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab
+          name="progress"
+          :label="$t('generic.lectures_in_progress')"
+          v-if="lecturesInProgress.length"
+        />
+        <q-tab
+          name="next"
+          :label="$t('generic.lectures_next')"
+          v-if="lecturesNext.length"
+        />
+        <q-tab
+          name="concepts"
+          :label="$t('generic.related_concepts')"
+          v-if="connectedConcepts.length"
+        />
+        <q-tab
+          name="lectures"
+          :label="$t('generic.related_lectures')"
+          v-if="similarLectures.length"
+        />
+      </q-tabs>
+
+      <q-separator />
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="progress" v-if="lecturesInProgress.length">
+          <lectures-editing v-model="lecturesInProgress" />
+        </q-tab-panel>
+        <q-tab-panel name="next" v-if="lecturesNext.length">
+          <lectures-editing v-model="lecturesNext" />
+        </q-tab-panel>
+        <q-tab-panel name="concepts" v-if="connectedConcepts.length">
+          <concept-list flat bordered :concepts="connectedConcepts"/>
+        </q-tab-panel>
+        <q-tab-panel name="lectures" v-if="similarLectures.length">
+          <lectures-editing v-model="similarLectures" />
+        </q-tab-panel>
+      </q-tab-panels>
+    </q-card>
   </q-page>
 </template>
 
 <script setup>
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
-import ConceptDisplay from "src/components/concept/ConceptDisplay.vue";
+import ConceptList from "src/components/concept/ConceptList.vue";
 
 import { ref, inject, onMounted, computed } from "vue";
 
@@ -71,6 +89,8 @@ const userAttributes = inject("userAttributes");
 const showAllLocaleContent = inject("showAllLocaleContent");
 
 const { username, userId } = userAttributes.value;
+let tab = ref("progress");
+
 let lecturesInProgress = ref([]);
 let lecturesNext = ref([]);
 let similarLectures = ref([]);
