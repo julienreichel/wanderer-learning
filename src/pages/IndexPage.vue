@@ -27,6 +27,11 @@
         narrow-indicator
       >
         <q-tab
+          name="review"
+          :label="$t('generic.review')"
+          v-if="lastSteps.length"
+        />
+        <q-tab
           name="progress"
           :label="$t('generic.lectures_in_progress')"
           v-if="lecturesInProgress.length"
@@ -50,6 +55,13 @@
 
       <q-separator />
       <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="review" v-if="lastSteps.length" class="q-pa-md q-gutter-sm">
+          <step-display
+            v-for="(step, index) in lastSteps"
+            :key="index"
+            :step="step"
+          />
+        </q-tab-panel>
         <q-tab-panel name="progress" v-if="lecturesInProgress.length" class="q-pa-md q-gutter-sm">
           <lectures-editing v-model="lecturesInProgress" />
         </q-tab-panel>
@@ -69,6 +81,7 @@
 
 <script setup>
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
+import StepDisplay from "src/components/step/StepDisplay.vue";
 import ConceptList from "src/components/concept/ConceptList.vue";
 
 import { ref, inject, onMounted, computed } from "vue";
@@ -95,6 +108,7 @@ let lecturesInProgress = ref([]);
 let lecturesNext = ref([]);
 let similarLectures = ref([]);
 let connectedConcepts = ref([]);
+let lastSteps = ref([]);
 const newuser = computed(
   () =>
     lecturesInProgress.value.length === 0 &&
@@ -110,14 +124,19 @@ onMounted(async () => {
     options.locale = locale.value;
   }
 
-  let processedLectureIds = [];
+  let processedLectureIds = {};
   for (const report of data) {
     // get the lecture if not already processed
-    if (processedLectureIds.includes(report.lectureId)) continue;
+    if (processedLectureIds[report.lectureId]) {
+      const lecture = processedLectureIds[report.lectureId];
+      lastSteps.value.push(lecture.steps.find(({id}) => id === report.lectureStepId));
+      continue;
+    }
     const lecture = await lectureService.get(report.lectureId);
-    processedLectureIds.push(lecture.id);
+    processedLectureIds[lecture.id] = lecture;
     if (!lecture) continue;
 
+    lastSteps.value.push(lecture.steps.find(({id}) => id === report.lectureStepId));
     // check if there in a next step in the lecture based report.lectureStepId
     let lectureIsOver = true;
     const stepIndex = lecture.steps.findIndex(
@@ -171,5 +190,7 @@ onMounted(async () => {
       lecture.stepsSummary = reportingService.getLastReports(reports);
     }
   });
+
+
 });
 </script>

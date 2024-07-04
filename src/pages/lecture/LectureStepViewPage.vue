@@ -12,6 +12,7 @@
     <parts-display
       :parts="lectureStep.parts"
       @finished="finished"
+      udpdate-route
       :stepIdx="stepIdx"
     />
   </q-page>

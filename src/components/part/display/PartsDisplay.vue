@@ -47,6 +47,7 @@ import { ref, computed, watch } from "vue";
 const props = defineProps({
   parts: { type: Array },
   stepIdx: { type: String },
+  udpdateRoute: { type: Boolean, default: false },
 });
 const emit = defineEmits(["finished"]);
 import { useIris } from "src/composables/iris";
@@ -66,7 +67,9 @@ const updateTimings = (index) => {
 
 watch(step, (newStep, oldStep) => {
   updateTimings(oldStep);
-  router.push({ params: { stepIdx: newStep.toString() } });
+  if (props.udpdateRoute){
+    router.push({ params: { stepIdx: newStep.toString() } });
+  }
 });
 
 const quizLeft = ref(props.parts.filter((part) => part.type === "quiz").length);

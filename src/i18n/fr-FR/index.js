@@ -19,7 +19,8 @@ export default {
     welcome: "Bienvenue",
     getting_started:
       "Pour commencer, vous pouvez soit choisir un cours, soit un concept spécifique que vous souhaitez explorer. Si vous avez une idée claire d'un sujet que vous voulez approfondir, commencer par ce concept offre une expérience d'apprentissage ciblée et immédiate. Alternativement, choisir un cours structuré donne une compréhension complète d'un domaine plus vaste.",
-    lectures_in_progress: "Leçon en cours",
+    review: "Révision",
+    rectures_in_progress: "Leçon en cours",
     lectures_next: "Prochaines leçons",
     next_steps: "Prochaines étapes",
     related_lectures: "Cours associés",

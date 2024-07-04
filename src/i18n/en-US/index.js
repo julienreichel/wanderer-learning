@@ -19,6 +19,7 @@ export default {
     welcome: "Welcome",
     getting_started:
       "To get started, you can either pick a course that interests you or begin with a specific concept you want to explore. If you have a clear idea of a topic you want to dive into, starting with that concept provides focused and immediate learning experience. Alternatively, choosing a structured course gives a comprehensive understanding of a broader subject area.",
+    review: "Review",
     lectures_in_progress: "Lectures in progress",
     lectures_next: "Next lectures",
     next_steps: "Next steps",
