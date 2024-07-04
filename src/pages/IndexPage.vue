@@ -113,10 +113,10 @@ onMounted(async () => {
   let processedLectureIds = [];
   for (const report of data) {
     // get the lecture if not already processed
-    if (processedLectureIds.includes(report.lectureId)) return;
+    if (processedLectureIds.includes(report.lectureId)) continue;
     const lecture = await lectureService.get(report.lectureId);
     processedLectureIds.push(lecture.id);
-    if (!lecture) return;
+    if (!lecture) continue;
 
     // check if there in a next step in the lecture based report.lectureStepId
     let lectureIsOver = true;
@@ -160,7 +160,6 @@ onMounted(async () => {
       });
     });
   }
-
   // load stats for the user for each lecture in progress
   lecturesInProgress.value.forEach(async (lecture) => {
     const reports = await reportingService.list({
