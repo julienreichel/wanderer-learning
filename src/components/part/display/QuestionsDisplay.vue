@@ -52,8 +52,9 @@ watch(
 const processResult = ({ question, response, valid, points }) => {
   const index = props.questions.indexOf(question);
 
-  const feedbackType = question.options?.feedbackType || "roti";
-  const type = question.type;
+  const feedbackType = question.options?.feedbackType;
+  const {type, level} = question;
+  response = Array.isArray(response) ? response.join(",") : response;
   responsesStats[index] = {
     questionId: question.id,
     response,
@@ -61,6 +62,7 @@ const processResult = ({ question, response, valid, points }) => {
     points,
     feedbackType,
     type,
+    level
   };
 
   resultCount++;

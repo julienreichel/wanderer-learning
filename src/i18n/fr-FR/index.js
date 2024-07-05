@@ -20,11 +20,11 @@ export default {
     getting_started:
       "Pour commencer, vous pouvez soit choisir un cours, soit un concept spécifique que vous souhaitez explorer. Si vous avez une idée claire d'un sujet que vous voulez approfondir, commencer par ce concept offre une expérience d'apprentissage ciblée et immédiate. Alternativement, choisir un cours structuré donne une compréhension complète d'un domaine plus vaste.",
     review: "Révision",
-    rectures_in_progress: "Leçon en cours",
-    lectures_next: "Prochaines leçons",
+    rectures_in_progress: "En cours",
+    lectures_next: "Suivantes",
     next_steps: "Prochaines étapes",
-    related_lectures: "Cours associés",
-    related_concepts: "Concepts associés",
+    related_lectures: "Cours",
+    related_concepts: "Concepts",
     new_user: "Nouvel utilisateur",
     show_all_locale_content: "Afficher toute les langues",
     edit: {

@@ -126,7 +126,7 @@ const finished = async ({ finished, reportings } = {}) => {
     if (starValues.length > 0) {
       let course = lectureStep.value.lecture.course;
       const stars = Math.round(
-        starValues.reduce((a, b) => a + b) / starValues.length,
+        starValues.reduce((a, b) => a + b, 0) / starValues.length
       );
       if (!lectureStep.value.lecture.course.ratings) {
         course.ratings = [{ value: stars, reportingId: report.id }];

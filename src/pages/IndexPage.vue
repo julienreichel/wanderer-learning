@@ -1,6 +1,6 @@
 <template>
-  <q-page class="q-pa-md q-gutter-sm">
-    <q-card>
+  <q-page class="q-pa-none q-gutter-sm">
+    <q-card v-if="newuser">
       <q-card-section>
         <div class="text-h5">{{ $t("generic.welcome") }}</div>
         <div>{{ $t("generic.getting_started") }}</div>
@@ -16,7 +16,7 @@
         />
       </q-card-section>
     </q-card>
-    <q-card v-if="!newuser">
+    <q-card v-else class="q-pa-sm">
       <q-tabs
         v-model="tab"
         dense
@@ -29,7 +29,7 @@
         <q-tab
           name="review"
           :label="$t('generic.review')"
-          v-if="lastSteps.length"
+          v-if="questions"
         />
         <q-tab
           name="progress"
@@ -55,14 +55,8 @@
 
       <q-separator />
       <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="review" v-if="lastSteps.length" class="q-pa-md q-gutter-sm">
-          <q-list>
-            <q-item v-for="(step, index) in lastSteps" :key="index" clickable @click="startQuiz(step)">
-              <q-item-label>
-                {{ step.title }}
-              </q-item-label>
-            </q-item>
-          </q-list>
+        <q-tab-panel name="review" v-if="questions" class="q-pa-md q-gutter-sm">
+          <quiz-runner  :questions="questions" @finished="finishQuiz" @results="processResult" :max="5"/>
         </q-tab-panel>
         <q-tab-panel name="progress" v-if="lecturesInProgress.length" class="q-pa-md q-gutter-sm">
           <lectures-editing v-model="lecturesInProgress" />
@@ -78,16 +72,15 @@
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
-    <quiz-runner-dialog v-if="questions" v-model="quizDialog" :questions="questions"/>
   </q-page>
 </template>
 
 <script setup>
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
-import QuizRunnerDialog from "src/components/part/display/QuizRunnerDialog.vue";
+import QuizRunner from "src/components/part/display/QuizRunner.vue";
 import ConceptList from "src/components/concept/ConceptList.vue";
 
-import { ref, inject, onMounted, computed } from "vue";
+import { ref, inject, onMounted, computed, watch } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { locale } = useIris();
@@ -105,23 +98,27 @@ const userAttributes = inject("userAttributes");
 const showAllLocaleContent = inject("showAllLocaleContent");
 
 const { username, userId } = userAttributes.value;
-let tab = ref("progress");
+let tab = ref("review");
 
 let lecturesInProgress = ref([]);
 let lecturesNext = ref([]);
 let similarLectures = ref([]);
 let connectedConcepts = ref([]);
 let lastSteps = ref([]);
+
 const newuser = computed(
   () =>
     lecturesInProgress.value.length === 0 &&
     similarLectures.value.length === 0 &&
     connectedConcepts.value.length === 0,
 );
-const addStep = (lecture, lectureStepId) => {
+const addStep = (lecture, report) => {
   if (!lecture) return;
-  const step = lecture.steps.find(({id}) => id === lectureStepId);
+  const lectureStepId = report.lectureStepId;
+  let step = lecture.steps.find(({id}) => id === lectureStepId);
   if (!step) return;
+  step.lecture = lecture;
+  step.points = reportingService.computePointsPerStep(step, [report]).averagePoints;
   // check if there are any quizzes in the step
   if (step.parts.some(({type, questions}) => type === "quiz" && questions.filter(q => q.type !== "feedback").length)) {
     lastSteps.value.push(step);
@@ -142,14 +139,14 @@ onMounted(async () => {
     // get the lecture if not already processed
     if (processedLectureIds[report.lectureId]) {
       const lecture = processedLectureIds[report.lectureId];
-      addStep(lecture, report.lectureStepId);
+      addStep(lecture, report);
       continue;
     }
     const lecture = await lectureService.get(report.lectureId);
     processedLectureIds[lecture.id] = lecture;
     if (!lecture) continue;
 
-    addStep(lecture, report.lectureStepId);
+    addStep(lecture, report);
     // check if there in a next step in the lecture based report.lectureStepId
     let lectureIsOver = true;
     const stepIndex = lecture.steps.findIndex(
@@ -205,14 +202,63 @@ onMounted(async () => {
   });
 });
 
-let questions = ref([]);
-let quizDialog = ref(false);
-const startQuiz = (step) => {
-  // find all the questions in all the parts
-  questions.value = step.parts
-    .filter(({ type }) => type === "quiz")
+const reviewStep = computed(() => {
+  if (!lastSteps.value.length) return;
+
+  const step = [...lastSteps.value].sort((a,b) => a.points - b.points)[0];
+
+  if (step.points === 100) return;
+  return step;
+
+});
+
+const questions = computed(() => {
+  if (!reviewStep.value) return;
+  const partWithQuiz = reviewStep.value.parts.filter(({ type }) => type === "quiz")
+  partWithQuiz.forEach(part => {
+    part.questions.forEach(q => {
+      q.partId = part.id;
+    });
+  });
+
+  const questions = partWithQuiz
     .map((part) => part.questions.filter((q) => q.type !== "feedback"))
     .flat();
-  quizDialog.value = true;
-};
+  return questions;
+});
+watch(questions, (questions) => {
+  if (!questions && tab.value === "review") {
+    tab.value = "progress";
+  }
+});
+
+const processResult = async (questions) => {
+  const step = reviewStep.value;
+  // store a new report
+  let reportings = step.parts.map(() => ({ time: 0, responses: [] }));
+  questions.forEach((question) => {
+    // find the index of the part holding the question in the step
+    const partIndex = step.parts.findIndex(({ id }) => id === question.partId);
+    reportings[partIndex].time += question.time;
+    const response = {
+      questionId: question.id,
+      valid: question.valid,
+      points: question.points,
+      type: question.type,
+      level: question.level,
+      response: Array.isArray(question.response) ? question.response.join(",") : question.response,
+    };
+    reportings[partIndex].responses.push(response);
+  });
+  await reportingService.create({
+    lectureStepId: step.id,
+    lectureId: step.lecture.id,
+    reportings: reportings,
+  });
+}
+const finishQuiz = async (questions) => {
+  const step = reviewStep.value;
+  // make sure this one is no longer shown to the user
+  step.points = 100;
+}
 </script>

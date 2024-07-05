@@ -150,11 +150,9 @@ watch(
 const validateAnswers = () => {
   validated.value = true;
   let valid = false;
-  let responseAsString;
 
   if (props.question.type === "radio") {
     valid = props.question.answers[newResponse.value]?.valid;
-    responseAsString = newResponse.value;
   }
   if (props.question.type === "checkbox") {
     valid = true;
@@ -164,7 +162,6 @@ const validateAnswers = () => {
       if (found && !answer.valid) valid = false;
       if (!found && answer.valid) valid = false;
     });
-    responseAsString = newResponse.value.join(",");
   }
   if (props.question.type === "shorttext") {
     valid = false;
@@ -173,16 +170,14 @@ const validateAnswers = () => {
         valid = answer.valid;
       }
     });
-    responseAsString = newResponse.value;
   }
   if (props.question.type === "feedback") {
     valid = true;
-    responseAsString = newResponse.value;
   }
 
   emit("result", {
     question: props.question,
-    response: responseAsString,
+    response: newResponse.value,
     valid,
     points: valid ? 10 : 0,
   });

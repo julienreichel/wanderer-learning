@@ -20,6 +20,7 @@ const schema = a.schema({
     points: a.integer(),
     response: a.string(),
     type: a.string(),
+    level: a.string(),
     feedbackType: a.string(),
   }),
 
