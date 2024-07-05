@@ -57,13 +57,7 @@
         square
         size="sm"
         icon="arrow_forward"
-        @click="
-          question.validated
-            ? hasResults
-              ? (step = activeQuestions.length)
-              : step++
-            : validateAnswers()
-        "
+        @click="nextCliked"
       />
     </q-card-actions>
   </q-card>
@@ -202,34 +196,54 @@ const getOptions = (question) => {
 };
 const options = computed(() => getOptions(question.value));
 
-const validateAnswers = () => {
-  question.value.validated = true;
+const nextCliked = () => {
+  if (question.value.validated) {
+    if (hasResults.value) {
+      step.value = activeQuestions.value.length;
+    } else {
+      step.value++;
+    }
+  } else {
+    if (props.examMode) {
+      step.value++;
+      if (step.value === activeQuestions.value.length) {
+        activeQuestions.value.forEach((question) => {
+          validateAnswers(question);
+        });
+      }
+    } else {
+      validateAnswers(question.value);
+    }
+  }
+};
+const validateAnswers = (question) => {
+  question.validated = true;
   let valid = false;
 
-  if (question.value.type === "radio") {
-    valid = question.value.answers[question.value.response]?.valid;
+  if (question.type === "radio") {
+    valid = question.answers[question.response]?.valid;
   }
-  if (question.value.type === "checkbox") {
+  if (question.type === "checkbox") {
     valid = true;
-    question.value.answers.forEach((answer, idx2) => {
+    question.answers.forEach((answer, idx2) => {
       const found =
-        question.value.response.find((value) => value === idx2) !== undefined;
+        question.response.find((value) => value === idx2) !== undefined;
       if (found && !answer.valid) valid = false;
       if (!found && answer.valid) valid = false;
     });
   }
-  if (question.value.type === "shorttext") {
+  if (question.type === "shorttext") {
     valid = false;
-    question.value.answers.forEach((answer) => {
+    question.answers.forEach((answer) => {
       if (
-        question.value.response?.toLowerCase() === answer.text.toLowerCase()
+        question.response?.toLowerCase() === answer.text.toLowerCase()
       ) {
         valid = answer.valid;
       }
     });
   }
-  question.value.valid = valid;
-  question.value.points = valid ? 10 : 0;
+  question.valid = valid;
+  question.points = valid ? 10 : 0;
 
   if (valid) {
     step.value++;

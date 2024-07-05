@@ -26,11 +26,7 @@
         align="justify"
         narrow-indicator
       >
-        <q-tab
-          name="review"
-          :label="$t('generic.review')"
-          v-if="questions"
-        />
+        <q-tab name="review" :label="$t('generic.review')" v-if="questions" />
         <q-tab
           name="progress"
           :label="$t('generic.lectures_in_progress')"
@@ -56,18 +52,35 @@
       <q-separator />
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="review" v-if="questions" class="q-pa-md q-gutter-sm">
-          <quiz-runner  :questions="questions" @finished="finishQuiz" @results="processResult" :max="5"/>
+          <quiz-runner
+            :questions="questions"
+            @finished="finishQuiz"
+            @results="processResult"
+            :max="5"
+          />
         </q-tab-panel>
-        <q-tab-panel name="progress" v-if="lecturesInProgress.length" class="q-pa-md q-gutter-sm">
+        <q-tab-panel
+          name="progress"
+          v-if="lecturesInProgress.length"
+          class="q-pa-md q-gutter-sm"
+        >
           <lectures-editing v-model="lecturesInProgress" />
         </q-tab-panel>
-        <q-tab-panel name="next" v-if="lecturesNext.length" class="q-pa-md q-gutter-sm">
+        <q-tab-panel
+          name="next"
+          v-if="lecturesNext.length"
+          class="q-pa-md q-gutter-sm"
+        >
           <lectures-editing v-model="lecturesNext" />
         </q-tab-panel>
         <q-tab-panel name="concepts" v-if="connectedConcepts.length">
-          <concept-list flat bordered :concepts="connectedConcepts"/>
+          <concept-list flat bordered :concepts="connectedConcepts" />
         </q-tab-panel>
-        <q-tab-panel name="lectures" v-if="similarLectures.length" class="q-pa-md q-gutter-sm">
+        <q-tab-panel
+          name="lectures"
+          v-if="similarLectures.length"
+          class="q-pa-md q-gutter-sm"
+        >
           <lectures-editing v-model="similarLectures" />
         </q-tab-panel>
       </q-tab-panels>
@@ -115,12 +128,20 @@ const newuser = computed(
 const addStep = (lecture, report) => {
   if (!lecture) return;
   const lectureStepId = report.lectureStepId;
-  let step = lecture.steps.find(({id}) => id === lectureStepId);
+  let step = lecture.steps.find(({ id }) => id === lectureStepId);
   if (!step) return;
   step.lecture = lecture;
-  step.points = reportingService.computePointsPerStep(step, [report]).averagePoints;
+  step.points = reportingService.computePointsPerStep(step, [
+    report,
+  ]).averagePoints;
   // check if there are any quizzes in the step
-  if (step.parts.some(({type, questions}) => type === "quiz" && questions.filter(q => q.type !== "feedback").length)) {
+  if (
+    step.parts.some(
+      ({ type, questions }) =>
+        type === "quiz" &&
+        questions.filter((q) => q.type !== "feedback").length,
+    )
+  ) {
     lastSteps.value.push(step);
   }
 };
@@ -205,18 +226,19 @@ onMounted(async () => {
 const reviewStep = computed(() => {
   if (!lastSteps.value.length) return;
 
-  const step = [...lastSteps.value].sort((a,b) => a.points - b.points)[0];
+  const step = [...lastSteps.value].sort((a, b) => a.points - b.points)[0];
 
   if (step.points === 100) return;
   return step;
-
 });
 
 const questions = computed(() => {
   if (!reviewStep.value) return;
-  const partWithQuiz = reviewStep.value.parts.filter(({ type }) => type === "quiz")
-  partWithQuiz.forEach(part => {
-    part.questions.forEach(q => {
+  const partWithQuiz = reviewStep.value.parts.filter(
+    ({ type }) => type === "quiz",
+  );
+  partWithQuiz.forEach((part) => {
+    part.questions.forEach((q) => {
       q.partId = part.id;
     });
   });
@@ -246,7 +268,9 @@ const processResult = async (questions) => {
       points: question.points,
       type: question.type,
       level: question.level,
-      response: Array.isArray(question.response) ? question.response.join(",") : question.response,
+      response: Array.isArray(question.response)
+        ? question.response.join(",")
+        : question.response,
     };
     reportings[partIndex].responses.push(response);
   });
@@ -255,10 +279,10 @@ const processResult = async (questions) => {
     lectureId: step.lecture.id,
     reportings: reportings,
   });
-}
+};
 const finishQuiz = async (questions) => {
   const step = reviewStep.value;
   // make sure this one is no longer shown to the user
   step.points = 100;
-}
+};
 </script>
