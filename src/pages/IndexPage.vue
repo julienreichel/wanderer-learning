@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-none q-gutter-sm">
+  <q-page class="q-px-none q-py-sm q-gutter-sm">
     <q-card v-if="newuser">
       <q-card-section>
         <div class="text-h5">{{ $t("generic.welcome") }}</div>

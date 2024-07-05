@@ -57,7 +57,13 @@
         square
         size="sm"
         icon="arrow_forward"
-        @click="question.validated ? (hasResults ? step = activeQuestions.length : step++) : validateAnswers()"
+        @click="
+          question.validated
+            ? hasResults
+              ? (step = activeQuestions.length)
+              : step++
+            : validateAnswers()
+        "
       />
     </q-card-actions>
   </q-card>
@@ -69,7 +75,7 @@
             <q-icon
               :name="q.valid ? 'check' : 'close'"
               :color="q.valid ? 'positive' : 'negative'"
-              />
+            />
             {{ q.text }}
           </q-item-label>
         </q-item-section>
@@ -106,22 +112,36 @@ const props = defineProps({
 });
 const emit = defineEmits(["finished", "results"]);
 import { useIris } from "src/composables/iris";
-const { router, t } = useIris();
+const { t } = useIris();
 
 let step = ref(0);
 let realMax = computed(() => props.max || props.questions.length);
 
-
-watch(() => props.questions, () => {
-  props.questions.forEach((question) => {
-    question.answers.forEach((answer) => {
-      answer.order = answer.order || Math.random();
+watch(
+  () => props.questions,
+  () => {
+    props.questions.forEach((question) => {
+      question.answers.forEach((answer) => {
+        answer.order = answer.order || Math.random();
+      });
+      question.response =
+        question.response || (question.type === "checkbox" ? [] : undefined);
+      question.time = question.time || 0;
+      if (!question.explanations && question.type === "shorttext") {
+        question.explanations =
+          t("quiz.question.valid_answers") +
+          " '" +
+          question.answers
+            .filter((a) => a.valid)
+            .map((a) => a.text)
+            .join("', '") +
+          "'";
+      }
     });
-    question.response = question.response || ( question.type === "checkbox" ? [] : undefined );
-    question.time = question.time || 0;
-  });
-  step.value = 0;
-}, { immediate: true });
+    step.value = 0;
+  },
+  { immediate: true },
+);
 let activeQuestions = computed(() => {
   // pick the questions to display
   let q = [...props.questions];
@@ -131,14 +151,18 @@ let activeQuestions = computed(() => {
   // TODO: implement adaptative mode
   return q.sort(() => Math.random() - 0.5);
 });
-const  hasResults = computed(() => activeQuestions.value.every((q) => q.validated));
+const hasResults = computed(() =>
+  activeQuestions.value.every((q) => q.validated),
+);
 watch(hasResults, (hasResults) => {
   if (hasResults) {
     emit("results", activeQuestions.value);
   }
 });
 
-const progress = computed(() => hasResults.value ? 1 : step.value / realMax.value);
+const progress = computed(() =>
+  hasResults.value ? 1 : step.value / realMax.value,
+);
 
 let timeStart = new Date();
 const question = computed(() => activeQuestions.value[step.value]);
@@ -197,14 +221,18 @@ const validateAnswers = () => {
   if (question.value.type === "shorttext") {
     valid = false;
     question.value.answers.forEach((answer) => {
-      if (question.value.response?.toLowerCase() === answer.text.toLowerCase()) {
+      if (
+        question.value.response?.toLowerCase() === answer.text.toLowerCase()
+      ) {
         valid = answer.valid;
       }
     });
   }
   question.value.valid = valid;
   question.value.points = valid ? 10 : 0;
+
+  if (valid) {
+    step.value++;
+  }
 };
-
-
 </script>
