@@ -47,7 +47,14 @@
     <q-card-actions class="">
       <q-btn
         square
-        v-if="step > 0"
+        v-if="step === 0"
+        size="sm"
+        icon="close"
+        @click="$emit('finished', [])"
+      />
+      <q-btn
+        square
+        v-else
         size="sm"
         icon="arrow_back"
         @click="step--"
@@ -108,12 +115,149 @@ const emit = defineEmits(["finished", "results"]);
 import { useIris } from "src/composables/iris";
 const { t } = useIris();
 
+const levels = [
+  "novice",
+  "beginner",
+  "intermediate",
+  "advanced",
+  "expert",
+];
+
 let step = ref(0);
 let realMax = computed(() => props.max || props.questions.length);
+let questionsPerLevels = {};
+let activeQuestions = ref([]);
+let previousQuestions = [];
+let getActiveQuestions = () => {
+  console.log("getActiveQuestions", previousQuestions.length, realMax.value);
+  if (previousQuestions.length === realMax.value) {
+    return previousQuestions;
+  }
+  // pick the questions to display
+  if (!props.adaptative || realMax.value === props.questions.length) {
+    let q = [...props.questions];
+    return q.sort(() => Math.random() - 0.5).slice(0, realMax.value);
+  }
+
+  if (props.examMode) {
+    // create the final quiz
+    let q = [];
+    let i = 0;
+    while (q.length < realMax.value) {
+      const keys = Object.keys(questionsPerLevels);
+      let level = keys[i % keys.length];
+      if (questionsPerLevels[level].length){
+        q.push(questionsPerLevels[level].pop());
+      }
+      i++;
+    }
+    return q;
+  }
+  // we update the question that have not been validated, depending on what the
+  // user has answered, if the user sucess rate for a difficulty and all the ones bellow
+  // is under 60% of sucess rate, we show question of the lover difficulty
+  // if this is above 80% we show question of the next difficulty
+  // if we do not know, we use difficulty=2
+  // then we add one extra question to the quiz
+
+  // compute the suces rate per level
+  let acc = [0,1,2,3,4].map(() => ({total: 0, valid: 0}));
+  let difficulties = previousQuestions.reduce((acc, q) => {
+    if (!q.validated) return acc;
+
+    acc[q.difficulty-1].total++;
+    if (q.valid) acc[q.difficulty-1].valid++;
+    return acc;
+  }, acc);
+
+  // acculate the lover levels
+  for (let i = 0; i < 4; i++) {
+    difficulties[i+1].total += difficulties[i].total;
+    difficulties[i+1].valid += difficulties[i].valid;
+  }
+  // find the difficulty to use for the next question
+  console.log("difficulties", difficulties);
+  // start with beginner level
+  if (difficulties[1].total < 3){
+    let level = levels[1];
+    if (questionsPerLevels[level]?.length){
+      console.log("inital level", level);
+      previousQuestions.push(questionsPerLevels[level].pop());
+      return previousQuestions;
+    }
+    let j = 0;
+    while (j < 5){
+      let level = levels[j];
+      if (questionsPerLevels[level]?.length){
+        console.log("inital level", level);
+        previousQuestions.push(questionsPerLevels[level].pop());
+        return previousQuestions;
+      }
+      j++;
+    }
+  }
+
+  for (let i = 0; i < 5; i++) {
+    const rate = difficulties[i].valid / difficulties[i].total;
+    if (rate < 0.6) {
+      let level = levels[Math.max(1, i - 1)];
+      if (questionsPerLevels[level]?.length){
+        console.log("going down level", level);
+        previousQuestions.push(questionsPerLevels[level].pop());
+        return previousQuestions;
+      }
+    }
+    if (rate < 0.80) {
+      let j = i;
+      // we get question from this level, or lower, if there are any
+      while (j >= 0){
+        let level = levels[j];
+        if (questionsPerLevels[level]?.length){
+          console.log("keeping level", level);
+          previousQuestions.push(questionsPerLevels[level].pop());
+          return previousQuestions;
+        }
+        j--;
+      }
+    }
+  }
+  // we get question from the expert level, or lower, if there are any
+  let j = 4;
+  while (j >= 0){
+    let level = levels[j];
+    if (questionsPerLevels[level]?.length){
+      console.log("going up level", level);
+      previousQuestions.push(questionsPerLevels[level].pop());
+      return previousQuestions;
+    }
+    j--;
+  }
+  // this case cannot happen we have scanned all the question
+  console.log("no more questions");
+  return previousQuestions;
+};
+
+const getQuestionsPerLevels = () => {
+  let questionsPerLevels = props.questions.reduce((acc, q) => {
+    const level = q.level;
+    if (!acc[level]) acc[level] = [];
+    acc[level].push(q);
+    return acc;
+  }, {});
+  console.log("questionsPerLevels", questionsPerLevels);
+
+  // randomize the order of the questions in the levels
+  questionsPerLevels = Object.keys(questionsPerLevels).reduce((acc, level) => {
+    acc[level] = questionsPerLevels[level].sort(() => Math.random() - 0.5);
+    return acc;
+  }, {});
+  return questionsPerLevels;
+};
 
 watch(
   () => props.questions,
   () => {
+
     props.questions.forEach((question) => {
       question.answers.forEach((answer) => {
         answer.order = answer.order || Math.random();
@@ -121,6 +265,8 @@ watch(
       question.response =
         question.response || (question.type === "checkbox" ? [] : undefined);
       question.time = question.time || 0;
+      question.level = question.level || "intermediate";
+      question.difficulty = question.difficulty || levels.indexOf(question.level) + 1 || 3;
       if (!question.explanations && question.type === "shorttext") {
         question.explanations =
           t("quiz.question.valid_answers") +
@@ -133,18 +279,13 @@ watch(
       }
     });
     step.value = 0;
+
+    questionsPerLevels = getQuestionsPerLevels();
+    activeQuestions.value = getActiveQuestions();
   },
   { immediate: true },
 );
-let activeQuestions = computed(() => {
-  // pick the questions to display
-  let q = [...props.questions];
-  if (!props.adaptative) {
-    return q.sort(() => Math.random() - 0.5).slice(0, realMax.value);
-  }
-  // TODO: implement adaptative mode
-  return q.sort(() => Math.random() - 0.5);
-});
+
 const hasResults = computed(() =>
   activeQuestions.value.every((q) => q.validated),
 );
@@ -197,6 +338,7 @@ const getOptions = (question) => {
 const options = computed(() => getOptions(question.value));
 
 const nextCliked = () => {
+
   if (question.value.validated) {
     if (hasResults.value) {
       step.value = activeQuestions.value.length;
@@ -214,6 +356,10 @@ const nextCliked = () => {
     } else {
       validateAnswers(question.value);
     }
+  }
+  if (activeQuestions.value.length <= step.value + 1) {
+    // we are building question dynamically
+    activeQuestions.value = getActiveQuestions();
   }
 };
 const validateAnswers = (question) => {
