@@ -28,7 +28,6 @@
   <PartDisplay
     v-if="part"
     :part="part"
-    :responses="responses"
     @results="processResults"
     :hasNext="hasNext && hasAnsweredCurrentQuizz"
     :hasAnsweredAllQuizzes="hasAnsweredAllQuizzes"
@@ -82,9 +81,6 @@ const processResults = ({ responses }) => {
 };
 
 const part = computed(() => props.parts[step.value]);
-const responses = computed(() => {
-  return reportings.value[step.value]?.responses;
-});
 
 const previewParts = computed(() => {
   const toDisplay = 5;

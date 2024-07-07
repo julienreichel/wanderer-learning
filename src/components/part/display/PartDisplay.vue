@@ -26,37 +26,36 @@
       :src="part.url"
     />
     <q-video v-if="part.type === 'video'" :ratio="16 / 9" :src="part.src" />
-    <questions-display
+    <quiz-runner
       v-if="part.type === 'quiz'"
       :questions="part.questions"
-      :responses="responses"
+      :max="part.options.nbQuestions || 3"
       @results="submitResults"
-    />
+      @finished="hasNext ? $emit('nextStep') : hasAnsweredAllQuizzes ? $emit('finish') :  null"
+      adaptative
+      :next-actions-icon="hasNext? 'east' : hasAnsweredAllQuizzes ? 'check' : null"
+      :prev-actions-icon="null"
+      :exam-mode="part.options.examMode"/>
     <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
       <div class="iframe-16-9">
         <iframe :title="part.text" :src="part.src" class="full-width"></iframe>
       </div>
     </q-card-section>
-    <q-card-actions v-if="hasNext">
+    <q-card-actions v-if="part.type !== 'quiz' && (hasAnsweredAllQuizzes || hasNext)">
       <q-space />
-      <q-btn size="sm" icon="east" @click="$emit('nextStep')" />
-    </q-card-actions>
-    <q-card-actions v-else-if="hasAnsweredAllQuizzes">
-      <q-space />
-      <q-btn size="sm" icon="east" @click="$emit('finish')" />
+      <q-btn size="sm" :icon="hasNext ? 'east' : 'check'" @click="hasNext ? $emit('nextStep') : $emit('finish')" />
     </q-card-actions>
   </q-card>
 </template>
 
 <script setup>
-import QuestionsDisplay from "./QuestionsDisplay.vue";
+import QuizRunner from "src/components/part/display/QuizRunner.vue";
 
 import { computed, inject, ref, watch } from "vue";
 const { lectureStep: lectureStepService } = inject("services");
 
 const props = defineProps({
   part: { type: Object, required: true },
-  responses: { type: Array, default: () => [] },
   hasNext: { type: Boolean, default: false },
   hasAnsweredAllQuizzes: { type: Boolean, default: false },
   flat: { type: Boolean, default: false },
@@ -90,9 +89,21 @@ watch(
     }
   },
 );
-const submitResults = (results) => {
+const submitResults = (questions) => {
   //forward the results to the parent component
-  emit("results", results);
+  const responses = questions.map((question) => {
+    return {
+      questionId: question.id,
+      valid: question.valid,
+      points: question.points,
+      type: question.type,
+      level: question.level,
+      response: Array.isArray(question.response)
+        ? question.response.join(",")
+        : question.response,
+    };
+  });
+  emit("results", { responses });
 };
 </script>
 

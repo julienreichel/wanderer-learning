@@ -53,20 +53,6 @@
           <q-item-section avatar>
             <q-icon name="assignment" />
           </q-item-section>
-          <q-item-section>
-            <q-slider
-              snap
-              label
-              switch-label-side
-              v-model="nbQuizzes"
-              :label-value="
-                nbQuizzes + ' ' + $t('quiz.question.nb_quizzes', nbQuizzes)
-              "
-              :min="1"
-              :inner-max="nbMaxQuizzes"
-              :max="6"
-            />
-          </q-item-section>
         </q-item>
         <q-item class="col col-md-3">
           <q-item-section avatar>
@@ -85,7 +71,7 @@
               "
               :min="1"
               :inner-max="nbMaxQuestions"
-              :max="5"
+              :max="20"
             />
           </q-item-section>
         </q-item>
@@ -160,21 +146,12 @@ watch(
   },
 );
 
-let nbQuizzes = ref(Number(quiz.value.options.nbQuizzes) || 1);
-watch(nbQuizzes, (value) => {
-  quiz.value.options.nbQuizzes = value;
-  if (value * nbQuestions.value > quiz.value.questions.length) {
-    nbQuestions.value = Math.floor(quiz.value.questions.length / value);
-  }
-});
-let nbMaxQuizzes = computed(() => Math.min(quiz.value.questions.length, 6));
-
 let nbQuestions = ref(Number(quiz.value.options.nbQuestions) || 5);
 watch(nbQuestions, (value) => {
   quiz.value.options.nbQuestions = value;
 });
 let nbMaxQuestions = computed(() =>
-  Math.min(Math.floor(quiz.value.questions.length / nbQuizzes.value), 5),
+  Math.min(Math.floor(quiz.value.questions.length), 5),
 );
 
 const removeQuestion = ({ index }) => {

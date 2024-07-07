@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-px-none q-py-sm q-gutter-sm">
+  <q-page class="q-px-none q-py-sm q-gutter-sm" v-if="!loading">
     <q-card v-if="newuser">
       <q-card-section>
         <div class="text-h5">{{ $t("generic.welcome") }}</div>
@@ -57,6 +57,7 @@
             @finished="finishQuiz"
             @results="processResult"
             :max="5"
+            adaptative
           />
         </q-tab-panel>
         <q-tab-panel
@@ -146,6 +147,7 @@ const addStep = (lecture, report) => {
   }
 };
 
+let loading = ref(true);
 onMounted(async () => {
   // Get the last 3 reports
   const data = await reportingService.list({ userId, username, limit: 3 });
@@ -221,6 +223,8 @@ onMounted(async () => {
       lecture.stepsSummary = reportingService.getLastReports(reports);
     }
   });
+
+  loading.value = false;
 });
 
 const reviewStep = computed(() => {

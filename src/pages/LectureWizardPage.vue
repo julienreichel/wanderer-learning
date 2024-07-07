@@ -469,7 +469,7 @@ const generateTableOfContent = async (toc = []) => {
 };
 
 let lectureId;
-const createQuizParts = (questions, nbQuizzes, nbQuestions, conceptIdMap) => {
+const createQuizParts = (questions, nbQuestions, conceptIdMap) => {
   let parts = [];
   if (!questions) {
     return parts;
@@ -556,7 +556,6 @@ const createQuizParts = (questions, nbQuizzes, nbQuestions, conceptIdMap) => {
     type: "quiz",
     questions,
     options: {
-      nbQuizzes,
       nbQuestions,
     },
   });
@@ -611,18 +610,16 @@ const generateLecture = async () => {
   progress.value = 10 / 100;
   progressLabel.value = t("wizard.generating.connect");
 
-  let nbQuiz = 3;
-  let nbQuestionPerQuiz = 2;
+  let nbQuestion = 6;
   let parts = [];
   const connectQuiz = await aiService.getInitialQuiz(
     courseDescription.value,
     keyConcepts.value,
-    getNbQuestions(nbQuiz * nbQuestionPerQuiz),
+    getNbQuestions(nbQuestion),
   );
   parts = createQuizParts(
     connectQuiz.questions,
-    nbQuiz,
-    nbQuestionPerQuiz,
+    nbQuestion,
     conceptIdMap,
   );
   parts.unshift({
@@ -659,8 +656,7 @@ const generateLecture = async () => {
   });
 
   // Creating the concept steps
-  nbQuiz = 3;
-  nbQuestionPerQuiz = 3;
+  nbQuestion = 0;
 
   progress.value = 20 / 100;
   for (let i = 0; i < tableOfContent.value.length; i++) {
@@ -687,15 +683,14 @@ const generateLecture = async () => {
 
     const conceptQuiz = await aiService.getConceptQuiz(
       step,
-      getNbQuestions(nbQuiz * nbQuestionPerQuiz),
+      getNbQuestions(nbQuestion),
     );
     conceptIdMap.default = conceptIdMap[step.concept];
     parts = [
       ...parts,
       ...createQuizParts(
         conceptQuiz.questions,
-        nbQuiz,
-        nbQuestionPerQuiz,
+        nbQuestion,
         conceptIdMap,
       ),
     ];
@@ -714,7 +709,7 @@ const generateLecture = async () => {
   // creating the practive quiz step
   progressLabel.value = t("wizard.generating.practice");
 
-  nbQuestionPerQuiz = 5;
+  nbQuestion = 5;
   // Generating the practice quiz
   parts = [];
   for (let level = 1; level <= 4; level++) {
@@ -730,8 +725,7 @@ const generateLecture = async () => {
     parts.push(
       ...createQuizParts(
         practiceQuiz.questions,
-        1,
-        nbQuestionPerQuiz,
+        nbQuestion,
         conceptIdMap,
       ),
     );
