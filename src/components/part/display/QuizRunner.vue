@@ -1,96 +1,135 @@
 <template>
   <q-card class="q-pt-sm" v-if="question">
-    <q-card-section>
-      <q-linear-progress :value="progress" class="q-mt-md" />
+    <q-card-section v-if="title" class="q-pb-none">
+      <div class="text-h5 text-center">{{ title }}</div>
+    </q-card-section>
+    <q-card-section class="q-pt-none">
+      <q-linear-progress :value="progress" class="q-mt-md" size="lg" />
     </q-card-section>
     <q-card-section>
-      <div class="text-h5">{{ question.text }}</div>
+      <q-card square>
+        <q-card-section>
+          <div class="text-h6">{{ question.text }}</div>
+        </q-card-section>
+        <q-separator inset />
+        <q-card-section
+          v-if="question.type === 'radio' || question.type === 'checkbox'"
+          class="q-gutter-sm"
+        >
+          <q-option-group
+            :options="options"
+            :type="question.type"
+            v-model="question.response"
+            :disable="question.validated"
+          />
+        </q-card-section>
+        <q-card-section
+          v-if="question.type === 'shorttext'"
+          class="q-gutter-sm q-pl-lg"
+        >
+          <q-input
+            clearable
+            dense
+            v-model="question.response"
+            :readonly="question.validated"
+          >
+            <template v-slot:before v-if="question.validated">
+              <q-icon
+                :name="options.icon"
+                :color="options.color"
+                class="q-px-sm"
+              />
+            </template>
+          </q-input>
+        </q-card-section>
+        <q-card-section
+          v-if="
+            question.validated &&
+            question.explanations &&
+            question.explanations !== ''
+          "
+          class="q-pa-md"
+        >
+          <q-banner class="bg-positive">
+            <div v-html="question.explanations"></div>
+          </q-banner>
+        </q-card-section>
+      </q-card>
     </q-card-section>
-    <q-card-section
-      v-if="question.type === 'radio' || question.type === 'checkbox'"
-      class="q-gutter-sm"
-    >
-      <q-option-group
-        :options="options"
-        :type="question.type"
-        v-model="question.response"
-        :disable="question.validated"
-      />
-    </q-card-section>
-    <q-card-section
-      v-if="question.type === 'shorttext'"
-      class="q-gutter-sm q-pl-lg"
-    >
-      <q-input
-        clearable
-        dense
-        v-model="question.response"
-        :readonly="question.validated"
-      >
-        <template v-slot:before v-if="question.validated">
-          <q-icon :name="options.icon" :color="options.color" class="q-px-sm" />
-        </template>
-      </q-input>
-    </q-card-section>
-    <q-card-section
-      v-if="
-        question.validated &&
-        question.explanations &&
-        question.explanations !== ''
-      "
-      class="q-pa-md"
-    >
-      <q-banner class="bg-primary text-white">
-        <div v-html="question.explanations"></div>
-      </q-banner>
-    </q-card-section>
-    <q-card-actions class="">
+    <q-card-actions class="q-px-none q-py-lg">
       <q-btn
         square
         v-if="step === 0 && prevActionsIcon"
-        size="sm"
+        size="md"
         :icon="prevActionsIcon"
         @click="$emit('finished', [])"
       />
       <q-btn
         square
         v-if="step > 0 && !hasResults"
-        size="sm"
-        icon="arrow_back"
+        size="md"
+        icon="chevron_left"
         @click="step--"
       />
       <q-space />
-      <q-btn square size="sm" icon="arrow_forward" @click="nextCliked" />
+      <q-btn
+        square
+        size="md"
+        icon="chevron_right"
+        @click="nextCliked"
+        :color="hasAnswer ? 'primary' : undefined"
+        padding="sm 64px"
+      />
     </q-card-actions>
   </q-card>
   <q-card class="q-pt-sm" v-else>
-    <q-list>
-      <q-item v-for="q in activeQuestions" :key="q.id">
-        <q-item-section>
-          <q-item-label>
-            <q-icon
-              :name="q.valid ? 'check' : 'close'"
-              :color="q.valid ? 'positive' : 'negative'"
-            />
-            {{ q.text }}
-          </q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn
-            square
-            size="sm"
-            icon="arrow_forward"
-            @click="step = activeQuestions.indexOf(q)"
-          />
-        </q-item-section>
-      </q-item>
-    </q-list>
-    <q-card-actions v-if="nextActionsIcon">
+    <q-card-section v-if="title" class="q-pb-none">
+      <div class="text-h5 text-center">{{ title }}</div>
+    </q-card-section>
+    <q-card-section>
+      <q-card square>
+        <q-card-section v-if="correctQuestions.length">
+          <div class="text-h6 text-center">{{ $t("quiz.well_done") }}</div>
+        </q-card-section>
+        <q-list class="q-pa-md q-gutter-sm">
+          <q-item v-for="q in correctQuestions" :key="q.id" class="bg-positive" clickable @click="step = activeQuestions.indexOf(q)">
+            <q-item-section avatar>
+              <q-icon name="check_circle_outline" />
+            </q-item-section>
+            <q-item-section class="text-ellipsis">
+                {{ q.text }}
+            </q-item-section>
+            <q-item-section side>
+              {{ q.points / 2 }} /  5
+            </q-item-section>
+          </q-item>
+        </q-list>
+        <q-card-section v-if="wrongQuestions.length">
+          <div class="text-h6 text-center">{{ $t("quiz.lets_review") }}</div>
+        </q-card-section>
+        <q-list class="q-pa-md q-gutter-sm">
+          <q-item v-for="q in wrongQuestions" :key="q.id" class="bg-negative" clickable @click="step = activeQuestions.indexOf(q)">
+            <q-item-section avatar>
+              <q-icon name="highlight_off" />
+            </q-item-section>
+            <q-item-section class="text-ellipsis">
+                {{ q.text }}
+            </q-item-section>
+            <q-item-section side>
+              {{ q.points / 2 }} /  5
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card>
+    </q-card-section>
+    <q-card-actions v-if="nextActionsIcon" class="q-px-none q-py-lg">
       <q-space />
       <q-btn
         square
-        size="sm"
+        size="md"
         :icon="nextActionsIcon"
+        color="primary"
+        padding="sm 64px"
         @click="$emit('finished', activeQuestions)"
       />
     </q-card-actions>
@@ -107,6 +146,7 @@ const props = defineProps({
   examMode: { type: Boolean, default: false },
   nextActionsIcon: { type: String, default: "check" },
   prevActionsIcon: { type: String, default: "close" },
+  title: { type: String, default: null },
 });
 const emit = defineEmits(["finished", "results"]);
 import { useIris } from "src/composables/iris";
@@ -127,7 +167,7 @@ let getActiveQuestions = () => {
         previousQuestions.push(question);
       }
     });
-    if(previousQuestions.length >= realMax.value){
+    if (previousQuestions.length >= realMax.value) {
       step.value = realMax.value;
     }
   }
@@ -138,7 +178,9 @@ let getActiveQuestions = () => {
   // pick the questions to display
   if (!props.adaptative || realMax.value === props.questions.length) {
     let q = [...props.questions];
-    previousQuestions = q.sort((a, b) => a.order - b.order).slice(0, realMax.value);
+    previousQuestions = q
+      .sort((a, b) => a.order - b.order)
+      .slice(0, realMax.value);
     return previousQuestions;
   }
 
@@ -264,7 +306,12 @@ watch(
       question.answers.forEach((answer) => {
         answer.order = answer.order || Math.random();
       });
-      question.response = question.response === undefined ? (question.type === "checkbox" ? [] : undefined) : question.response;
+      question.response =
+        question.response === undefined
+          ? question.type === "checkbox"
+            ? []
+            : undefined
+          : question.response;
       question.time = question.time || 0;
       question.level = question.level || "intermediate";
       question.order = question.order || Math.random();
@@ -311,6 +358,7 @@ watch(question, (newQuestion, oldQuestion) => {
   }
   timeStart = timeEnd;
 });
+const hasAnswer = computed(() => question.value.response !== undefined);
 
 const getOptions = (question) => {
   if (!question) return {};
@@ -395,4 +443,12 @@ const validateAnswers = (question) => {
     step.value++;
   }
 };
+
+const correctQuestions = computed(() =>
+  activeQuestions.value.filter((q) => q.valid),
+);
+
+const wrongQuestions = computed(() =>
+  activeQuestions.value.filter((q) => !q.valid),
+);
 </script>

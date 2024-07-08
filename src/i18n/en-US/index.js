@@ -35,6 +35,8 @@ export default {
   },
   quiz: {
     name: "Quiz",
+    well_done: "Well done",
+    lets_review: "Let's review",
     form: {
       title: "Quiz Title",
       confirm_delete_question: "Do you really want to delete this question ?",

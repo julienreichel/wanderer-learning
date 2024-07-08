@@ -219,4 +219,12 @@ h5 {
 .q-card-hover:hover {
   background-color: rgba(0, 0, 0, 0.15);
 }
+
+.text-ellipsis {
+  display: inline-block; /* Ensure the element is treated as inline-block */
+  margin: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>

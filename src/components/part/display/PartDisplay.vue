@@ -33,7 +33,7 @@
       @results="submitResults"
       @finished="hasNext ? $emit('nextStep') : hasAnsweredAllQuizzes ? $emit('finish') :  null"
       adaptative
-      :next-actions-icon="hasNext? 'east' : hasAnsweredAllQuizzes ? 'check' : null"
+      :next-actions-icon="hasNext? 'chevron_right' : hasAnsweredAllQuizzes ? 'check' : null"
       :prev-actions-icon="null"
       :exam-mode="Boolean(part.options.examMode)"/>
     <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
@@ -43,7 +43,7 @@
     </q-card-section>
     <q-card-actions v-if="part.type !== 'quiz' && (hasAnsweredAllQuizzes || hasNext)">
       <q-space />
-      <q-btn size="sm" :icon="hasNext ? 'east' : 'check'" @click="hasNext ? $emit('nextStep') : $emit('finish')" />
+      <q-btn size="sm" :icon="hasNext ? 'chevron_right' : 'check'" @click="hasNext ? $emit('nextStep') : $emit('finish')" />
     </q-card-actions>
   </q-card>
 </template>

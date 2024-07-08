@@ -120,6 +120,12 @@ export default configure((ctx) => {
           size: "10px",
           skipHijack: true,
         },
+        brand: {
+          //primary: "#EA3324",
+          //info: "#4a90e2",
+          positive: "#BCE2E2",
+          negative: "#FBE7E6",
+        }
       },
 
       // iconSet: 'material-icons', // Quasar icon set

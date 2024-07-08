@@ -35,6 +35,8 @@ export default {
   },
   quiz: {
     name: "Quiz",
+    well_done: "Bien joué",
+    lets_review: "Passons en revue",
     form: {
       title: "Titre du quiz",
       confirm_delete_question:

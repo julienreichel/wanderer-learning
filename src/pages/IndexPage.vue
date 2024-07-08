@@ -16,7 +16,7 @@
         />
       </q-card-section>
     </q-card>
-    <q-card v-else class="q-pa-sm">
+    <q-card v-else class="q-pa-none q-pt-sm">
       <q-tabs
         v-model="tab"
         dense
@@ -51,8 +51,10 @@
 
       <q-separator />
       <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="review" v-if="questions" class="q-pa-md q-gutter-sm">
+        <q-tab-panel name="review" v-if="questions" class="q-pa-none">
           <quiz-runner
+            flat
+            :title="reviewTitle"
             :questions="questions"
             @finished="finishQuiz"
             @results="processResult"
@@ -236,6 +238,10 @@ const reviewStep = computed(() => {
   return step;
 });
 
+const reviewTitle = computed(() => {
+  if (!reviewStep.value) return;
+  return reviewStep.value.title;
+});
 const questions = computed(() => {
   if (!reviewStep.value) return;
   const partWithQuiz = reviewStep.value.parts.filter(
@@ -290,3 +296,4 @@ const finishQuiz = async (questions) => {
   step.points = 100;
 };
 </script>
+
