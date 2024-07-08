@@ -24,10 +24,10 @@
               :key="index"
               :name="Boolean(reporting.responses) ? 'help_center' : 'article'"
               :color="
-                reporting.responses
+                reporting.responses?.length
                   ? reporting.responses[0].valid
-                    ? 'secondary'
-                    : 'warning'
+                    ? 'positive'
+                    : 'negative'
                   : 'primary'
               "
             />
