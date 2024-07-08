@@ -11,9 +11,9 @@
         >
         </q-input>
       </q-card-section>
-      <q-card-actions>
+      <q-card-actions class="q-px-none q-py-lg">
         <q-space />
-        <q-btn size="sm" icon="add" @click="addConcept()" />
+        <q-btn size="md" padding="sm 64px" icon="add" @click="addConcept()" />
       </q-card-actions>
     </q-card>
   </q-page>
