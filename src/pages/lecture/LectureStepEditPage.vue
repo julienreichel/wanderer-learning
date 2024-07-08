@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md q-gutter-sm" v-if="lectureStep">
+  <q-page class="q-pa-none q-pt-sm q-gutter-sm" v-if="lectureStep">
     <q-card class="q-mb-md">
       <q-input
         class="q-pa-sm"

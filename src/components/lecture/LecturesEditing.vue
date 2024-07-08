@@ -56,6 +56,12 @@
       />
       <q-space />
       <q-btn size="md" icon="delete" @click.stop="deleteLecture(lecture)" />
+      <q-btn
+        size="md"
+        padding="sm 64px"
+        icon="chevron_right"
+        @click.stop="editLecture(lecture)"
+      />
     </q-card-actions>
     <q-card-actions v-else class="q-px-none q-py-lg">
       <q-btn

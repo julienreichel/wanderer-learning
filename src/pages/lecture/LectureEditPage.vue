@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md q-gutter-sm">
+  <q-page class="q-pa-none q-pt-sm q-gutter-sm">
     <q-card>
       <q-card-section>
         <q-input
@@ -72,6 +72,12 @@
         />
         <q-space />
         <q-btn size="md" icon="delete" @click.stop="deleteStep(step)" />
+        <q-btn
+          size="md"
+          padding="sm 64px"
+          icon="chevron_right"
+          @click.stop="canEdit(step) ? editStep(step) : viewStep(step)"
+        />
       </q-card-actions>
     </q-card>
     <q-card>

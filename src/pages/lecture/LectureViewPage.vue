@@ -1,5 +1,5 @@
 <template>
-  <q-page v-if="lecture?.id" class="q-pa-md q-gutter-sm">
+  <q-page v-if="lecture?.id" class="q-pa-none q-pt-sm q-gutter-sm">
     <q-card>
       <q-card-section>
         <div class="text-h5">{{ lecture.title }}</div>

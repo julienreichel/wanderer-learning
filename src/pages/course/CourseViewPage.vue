@@ -1,6 +1,6 @@
 <template>
   <q-page class="">
-    <div v-if="course.id" class="q-pa-md q-gutter-sm">
+    <div v-if="course.id" class="q-pa-none q-pt-sm q-gutter-sm">
       <q-card>
         <q-card-section horizontal>
           <q-card-section>

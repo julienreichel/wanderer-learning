@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md q-gutter-sm">
+  <q-page class="q-pa-none q-pt-sm q-gutter-sm">
     <concept-list flat bordered :concepts="concepts" />
     <q-card v-if="userAttributes.isTeacher">
       <q-card-section>

@@ -113,8 +113,8 @@ const viewConcept = (concept) => {
 };
 </script>
 
-<style scoped>
+<style>
 .q-table__top {
-  padding: 12px 0px;
+  padding: 4px 4px;
 }
 </style>

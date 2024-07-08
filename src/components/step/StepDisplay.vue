@@ -38,7 +38,7 @@
           </q-list>
         </q-card-section>
       </q-card-section>
-      <q-card-section class="col-1">
+      <q-card-section class="col-md-1 cols-sm-3">
         <q-card-section class="q-pa-sm">
           <q-icon
             v-if="step.reporting"

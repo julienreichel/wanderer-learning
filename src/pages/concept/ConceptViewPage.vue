@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md q-gutter-sm">
+  <q-page class="q-pa-none q-pt-sm q-gutter-sm">
     <q-card>
       <q-card-section v-if="editing" class="q-gutter-sm">
         <q-input
