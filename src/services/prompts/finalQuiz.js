@@ -14,6 +14,38 @@ const system = (style, tone, audience, language, level, concepts) => {
     "expert",
   ][level - 1];
 
+  const quizTypes = {
+    tf: " true/false choice (type=radio)",
+    mf: " myth/fact choice (type=radio)",
+    c3: " multiple-choice questions with 3 choices (type=radio)",
+    c5: " multiple-choice questions with 5 choices (type=radio)",
+    s4: " sentences with a choice of various 4 possible endings (type=radio)",
+    m4: " sentence with a choice of 4 missing words. (type=radio)",
+    x2: " checkbox with 5 proposals and at elast 2 correct answers (type=checkbox)",
+    x5: " checkbox with 5 proposals and 0 to 5 correct answers (type=checkbox)",
+    s1: " sentence with one and only one missing word (type=word)",
+    q1: " sentence with a 1 to 3 words short answer, provide mulitple valid answers to the question (type=shorttext)"
+  };
+  let quizes = [];
+  if (level === 1) {
+    quizes.push(10 + quizTypes.tf);
+    quizes.push(10 + quizTypes.mf);
+  } else if (level === 2) {
+    quizes.push(3 + quizTypes.tf);
+    quizes.push(3 + quizTypes.mf);
+    quizes.push(7 + quizTypes.c3);
+    quizes.push(7 + quizTypes.s4);
+  } else if (level === 3) {
+    quizes.push(5 + quizTypes.s4);
+    quizes.push(10 + quizTypes.c5);
+    quizes.push(5 + quizTypes.x2);
+  } else if (level === 4) {
+    quizes.push(10 + quizTypes.x5);
+    quizes.push(10 + quizTypes.s1);
+  } else if (level === 5) {
+    quizes.push(20 + quizTypes.q1);
+  }
+
   return `
 <Context>
 You are an expert in educational design.
@@ -21,14 +53,16 @@ You are tasked with creating a final quiz for an online lecture based on key con
 The purpose of the quiz with ${difficultyLevel} level is to eveluate if the user are able to perform the learning objectives.
 <Objective>
 Given the lecture description, the key concepts, the learning objectives and the table of content, create a quiz covering the lecture.
-The quiz should encompass at least
-- 5 multiple-choice questions with 3 or 5 choices (type=radio)
-- 5 checkbox with 5 proposals and several correct answers (type=checkbox)
-- 2 true/false choice (type=radio)
-- 2 myth/fact choice (type=radio)
-- 2 sentences with a choice of various 4 possible endings (type=radio)
-- 2 sentence with a choice of 4 missing words. (type=radio)
-- 2 sentence with one and only one missing word (type=word)
+The quiz should encompass 20 questions in total distributed among the following types:
+${quizes.join('\n')}
+<Style>
+${style}
+<Audience>
+${audience}
+<Model>
+- ${quizes.join('\n- ')}
+Each question should be accompanied by a one-paragraph explanation with at least 3 sentences.
+The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective.
 <Tone>
 ${tone}
 <Quiz level>
@@ -41,8 +75,9 @@ ${language}
     "type": "radio" | "word" | "checkbox",
     "text": "...",
     "answers": [ { "text": "...", "valid": true | false } ],
-    "level": "novice|beginner|intermediate|advanced",
-    "concept": "${concepts.join("|")}"
+    "level": "novice" | "beginner" | "intermediate" | "advanced",
+    "concept": "${concepts.join('" | "')}",
+    "explanations":  "..."
   }, ...]
 }
 `;

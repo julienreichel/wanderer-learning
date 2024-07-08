@@ -469,10 +469,9 @@ const generateTableOfContent = async (toc = []) => {
 };
 
 let lectureId;
-const createQuizParts = (questions, nbQuestions, conceptIdMap) => {
-  let parts = [];
+const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
   if (!questions) {
-    return parts;
+    return undefined;
   }
 
   // remove response that are not valid
@@ -488,12 +487,6 @@ const createQuizParts = (questions, nbQuestions, conceptIdMap) => {
   questions.forEach((question) => {
     // map the concept to the conceptId
     question.conceptId = conceptIdMap[question.concept] || conceptIdMap.default;
-    console.log(
-      "question.conceptId",
-      question.concept,
-      question.conceptId,
-      conceptIdMap,
-    );
     delete question.concept;
 
     question.id = uid();
@@ -504,6 +497,10 @@ const createQuizParts = (questions, nbQuestions, conceptIdMap) => {
     );
     question.text = question.text.replace(
       /\s*(Complete the sentence:|Choose the correct ending:|Which of the following best completes the sentence:)\s*/,
+      "",
+    );
+    question.text = question.text.replace(
+      /\s*(as discussed in the section|based on the section content|according to the section)\s*/,
       "",
     );
     question.answers.forEach((answer) => {
@@ -552,14 +549,13 @@ const createQuizParts = (questions, nbQuestions, conceptIdMap) => {
       delete question.explanation;
     }
   });
-  parts.push({
+  return {
     type: "quiz",
     questions,
     options: {
       nbQuestions,
-    },
-  });
-  return parts;
+    }
+  };
 };
 const getNbQuestions = (nb) => {
   return Math.max(nb, Math.min(nb * 2, 20));
@@ -617,11 +613,11 @@ const generateLecture = async () => {
     keyConcepts.value,
     getNbQuestions(nbQuestion),
   );
-  parts = createQuizParts(
+  parts.push(createQuizPart(
     connectQuiz.questions,
     nbQuestion,
     conceptIdMap,
-  );
+  ));
   parts.unshift({
     type: "text",
     text:
@@ -656,7 +652,7 @@ const generateLecture = async () => {
   });
 
   // Creating the concept steps
-  nbQuestion = 0;
+  nbQuestion = 12;
 
   progress.value = 20 / 100;
   for (let i = 0; i < tableOfContent.value.length; i++) {
@@ -686,14 +682,12 @@ const generateLecture = async () => {
       getNbQuestions(nbQuestion),
     );
     conceptIdMap.default = conceptIdMap[step.concept];
-    parts = [
-      ...parts,
-      ...createQuizParts(
+    parts.push(createQuizPart(
         conceptQuiz.questions,
         nbQuestion,
         conceptIdMap,
       ),
-    ];
+    );
 
     await lectureStepService.create({
       title: step.name,
@@ -712,6 +706,7 @@ const generateLecture = async () => {
   nbQuestion = 5;
   // Generating the practice quiz
   parts = [];
+  let questions = [];
   for (let level = 1; level <= 4; level++) {
     progress.value += 0.05;
 
@@ -722,14 +717,15 @@ const generateLecture = async () => {
       tableOfContent.value,
       level,
     );
-    parts.push(
-      ...createQuizParts(
-        practiceQuiz.questions,
-        nbQuestion,
-        conceptIdMap,
-      ),
-    );
+    questions.push(...practiceQuiz.questions);
   }
+  let part = createQuizPart(
+    questions,
+    nbQuestion * 4,
+    conceptIdMap,
+  );
+  part.options.examMode = true;
+  parts.push(part);
 
   await lectureStepService.create({
     title: t("wizard.content.practice_title"),

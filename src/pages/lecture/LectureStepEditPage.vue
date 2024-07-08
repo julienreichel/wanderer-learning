@@ -124,8 +124,6 @@ onMounted(async () => {
       },
     ]);
     lectureStepInitial = toJSON(data);
-
-    console.log("lectureStepInitial", data);
   }
 });
 

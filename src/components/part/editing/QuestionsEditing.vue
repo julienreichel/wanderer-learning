@@ -53,6 +53,12 @@
           <q-item-section avatar>
             <q-icon name="assignment" />
           </q-item-section>
+          <q-item-section>
+            <q-toggle
+              v-model="examMode"
+              :label="$t('quiz.question.exam_mode')"
+            />
+          </q-item-section>
         </q-item>
         <q-item class="col col-md-3">
           <q-item-section avatar>
@@ -148,11 +154,16 @@ watch(
 
 let nbQuestions = ref(Number(quiz.value.options.nbQuestions) || 5);
 watch(nbQuestions, (value) => {
-  quiz.value.options.nbQuestions = value;
+  quiz.value.options.nbQuestions = "" + value;
 });
 let nbMaxQuestions = computed(() =>
-  Math.min(Math.floor(quiz.value.questions.length), 5),
+  Math.min(Math.floor(quiz.value.questions.length), 20),
 );
+
+let examMode = ref(quiz.value.options.examMode === "true");
+watch(examMode, (value) => {
+  quiz.value.options.examMode = value;
+});
 
 const removeQuestion = ({ index }) => {
   return quiz.value.questions.splice(index, 1)[0];

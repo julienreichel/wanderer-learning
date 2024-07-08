@@ -127,16 +127,19 @@ let getActiveQuestions = () => {
         previousQuestions.push(question);
       }
     });
+    if(previousQuestions.length >= realMax.value){
+      step.value = realMax.value;
+    }
   }
   console.log("getActiveQuestions", previousQuestions.length, realMax.value);
   if (previousQuestions.length >= realMax.value) {
-    step.value = realMax.value;
     return previousQuestions;
   }
   // pick the questions to display
   if (!props.adaptative || realMax.value === props.questions.length) {
     let q = [...props.questions];
-    return q.sort((a, b) => a.order - b.order).slice(0, realMax.value);
+    previousQuestions = q.sort((a, b) => a.order - b.order).slice(0, realMax.value);
+    return previousQuestions;
   }
 
   if (props.examMode) {
@@ -151,7 +154,8 @@ let getActiveQuestions = () => {
       }
       i++;
     }
-    return q;
+    previousQuestions = q;
+    return previousQuestions;
   }
   // we update the question that have not been validated, depending on what the
   // user has answered, if the user sucess rate for a difficulty and all the ones bellow
@@ -244,7 +248,6 @@ const getQuestionsPerLevels = () => {
     acc[level].push(q);
     return acc;
   }, {});
-  console.log("questionsPerLevels", questionsPerLevels);
 
   // randomize the order of the questions in the levels
   questionsPerLevels = Object.keys(questionsPerLevels).reduce((acc, level) => {
@@ -261,8 +264,7 @@ watch(
       question.answers.forEach((answer) => {
         answer.order = answer.order || Math.random();
       });
-      question.response =
-        question.response || (question.type === "checkbox" ? [] : undefined);
+      question.response = question.response === undefined ? (question.type === "checkbox" ? [] : undefined) : question.response;
       question.time = question.time || 0;
       question.level = question.level || "intermediate";
       question.order = question.order || Math.random();

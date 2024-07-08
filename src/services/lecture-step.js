@@ -41,9 +41,16 @@ export default class LectureStepService extends ServicePrototype {
   cleanParts(parts) {
     if (!parts) return;
 
-    parts.forEach((part) => {
+    parts = parts.map((part) => {
+      part = { ...part };
       delete part.url;
+      part.questions = part.questions?.map(({ answers, conceptId, explanations, id, level, options, text, type }) => {
+        answers = answers?.map(({ text, valid }) => ({ text, valid }));
+        return { answers, conceptId, explanations, id, level, options, text, type }
+      });
+      return part;
     });
+    return parts;
   }
 
   convertOptionsToObj(parts) {
@@ -119,7 +126,7 @@ export default class LectureStepService extends ServicePrototype {
    * @returns {Promise<object>}
    */
   async create(input) {
-    this.cleanParts(input.parts);
+    input.parts = this.cleanParts(input.parts);
     if (input.parts) this.convertOptionsToArr(input.parts);
     return super.create(input);
   }
@@ -138,11 +145,12 @@ export default class LectureStepService extends ServicePrototype {
     }
 
     // Cleanup fields that should not be updated
-    this.cleanParts(payload.parts);
+    payload.parts = this.cleanParts(payload.parts);
     delete payload.lecture;
     delete payload.concept;
     delete payload.timestampDistribution;
     delete payload.userTimeReportings;
+    delete payload.ratings;
     delete payload.ratings;
     // force to null to remove it from the DB
     payload.conceptId = payload.conceptId || null;

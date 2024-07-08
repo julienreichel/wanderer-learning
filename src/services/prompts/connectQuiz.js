@@ -31,9 +31,9 @@ ${language}
     "type": "radio" | "checkbox",
     "text": "...",
     "answers": [ { "text": "...", "valid": true | false } ],
-    "explanations":  "..."},
-    "level": "novice|beginner|intermediate",
-    "concept": "${concepts.join("|")}"
+    "explanations":  "...",
+    "level": "novice" | "beginner" | "intermediate",
+    "concept": "${concepts.join('" | "')}"
  }, ...]
 }
 `;

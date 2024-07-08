@@ -29,8 +29,8 @@ ${language}
   "sections": [{
     "name": "...",
     "items": [{"name": "...", "description": "..."}],
-    "level": "novice|beginner|intermediate|advanced|expert",
-    "concept": "${concepts.join("|")}"
+    "level": "novice" | "beginner" | "intermediate" | "advanced" | "expert",
+    "concept": "${concepts.join('" | "')}"
   }, ...]
 }
 `;

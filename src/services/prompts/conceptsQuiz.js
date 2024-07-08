@@ -5,13 +5,13 @@ The purpose of the quiz is help the user understanding the concepts explained in
 <Objective>
 Given the section descrioption, create a quiz covering the section content.
 The quiz should encompass
-- multiple-choice questions
-- true/false choice
-- myth/fact choice
-- multiple checkbox with several correct answers
-- sentences with a choice of various possible endings
-- sentence with a choice of missing words.
-- sentence with one and only one missing word
+- multiple-choice questions (type=radio)
+- true/false choice (type=radio)
+- myth/fact choice (type=radio)
+- multiple checkbox with several correct answers (type=checkbox)
+- sentences with a choice of various possible endings (type=radio)
+- sentence with a choice of missing words (type=radio)
+- sentence with one and only one missing word (type=word)
 The quiz levels should encompass:
 - novice: Recognizes and recalls basic concepts and terminology.
 - beginner: Explains fundamental concepts and describes simple applications.
@@ -26,15 +26,15 @@ ${language}
 <JSON Response Format>
 {
   "questions": [{
-    "type": "radio" | "shorttext" | "checkbox",
+    "type": "radio" | "word" | "checkbox",
     "text": "...",
     "answers": [{
       "text": "...",
       "valid": true | false
     }],
-    "level": "novice|beginner|intermediate|advanced",
+    "level": "novice" | "beginner" | "intermediate" | "advanced",
     "explanations":  "..."
-  }]
+  }, ...]
 }
 `;
 

@@ -29,13 +29,13 @@
     <quiz-runner
       v-if="part.type === 'quiz'"
       :questions="part.questions"
-      :max="part.options.nbQuestions || 3"
+      :max="Number(part.options.nbQuestions) || 0"
       @results="submitResults"
       @finished="hasNext ? $emit('nextStep') : hasAnsweredAllQuizzes ? $emit('finish') :  null"
       adaptative
       :next-actions-icon="hasNext? 'east' : hasAnsweredAllQuizzes ? 'check' : null"
       :prev-actions-icon="null"
-      :exam-mode="part.options.examMode"/>
+      :exam-mode="Boolean(part.options.examMode)"/>
     <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
       <div class="iframe-16-9">
         <iframe :title="part.text" :src="part.src" class="full-width"></iframe>

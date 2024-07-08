@@ -45,6 +45,7 @@ export default class ServicePrototype {
   async query(query, retryCount = 0) {
     console.log(query.system);
     console.log(query.prompt);
+    console.log(query.token);
 
     query.model = query.model || this.model;
     try {

@@ -26,7 +26,6 @@ const conceptId = defineModel();
 const newConceptTitle = ref();
 
 const mapIdtoTitle = async () => {
-  console.log("mapIdtoTitle", conceptId.value);
   if (!conceptList) {
     conceptList = await conceptService.list();
   }

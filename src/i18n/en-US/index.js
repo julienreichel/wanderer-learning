@@ -49,7 +49,7 @@ export default {
       },
       explanation: "Provide an explanation",
       valid_answers: "Valid answer(s):",
-      nb_quizzes: "Quiz",
+      exam_mode: "Exam Mode",
       nb_questions: "Question | Questions",
     },
     json: {

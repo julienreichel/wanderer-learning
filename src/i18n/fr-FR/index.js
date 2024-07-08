@@ -50,7 +50,7 @@ export default {
       },
       explanation: "Fournir une explication",
       valid_answers: "Réponse(s) valide(s) :",
-      nb_quizzes: "Questionaire | Questionaires",
+      exam_mode: "Mode examin",
       nb_questions: "Question | Questions",
     },
     json: {
