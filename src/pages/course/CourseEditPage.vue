@@ -67,9 +67,9 @@
           />
         </div>
       </q-card-section>
-      <q-card-actions>
+      <q-card-actions class="q-px-none q-py-lg">
         <q-space />
-        <q-btn size="sm" icon="delete" @click.stop="deleteCourse(course)" />
+        <q-btn size="md" icon="delete" @click.stop="deleteCourse(course)" />
       </q-card-actions>
     </q-card>
     <lectures-editing
@@ -87,11 +87,12 @@
         >
         </q-input>
       </q-card-section>
-      <q-card-actions>
+      <q-card-actions class="q-px-none q-py-lg">
         <q-space />
-        <q-btn size="sm" icon="add" @click="addLecture()" />
+        <q-btn size="md" icon="add" @click="addLecture()" />
         <q-btn
-          size="sm"
+          size="md"
+          padding="sm 64px"
           icon="switch_access_shortcut_add"
           @click="openWizard()"
         />

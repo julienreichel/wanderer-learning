@@ -38,37 +38,39 @@
       :lecture="lecture"
       class="q-pa-sm"
     />
-    <q-card-actions v-if="canEdit(lecture) && allowDelete">
-      <q-space />
+    <q-card-actions v-if="canEdit(lecture) && allowDelete" class="q-px-none q-py-lg">
+
       <q-btn
         v-if="index > 0"
-        size="sm"
+        size="md"
         icon="arrow_upward"
         @click.stop="moveUp(index)"
       />
       <q-btn
         v-if="index < lecturesArray.length - 1"
-        size="sm"
+        size="md"
         icon="arrow_downward"
         @click.stop="moveDown(index)"
       />
-      <q-btn size="sm" icon="delete" @click.stop="deleteLecture(lecture)" />
-    </q-card-actions>
-    <q-card-actions v-else>
       <q-space />
+      <q-btn size="md" icon="delete" @click.stop="deleteLecture(lecture)" />
+    </q-card-actions>
+    <q-card-actions v-else class="q-px-none q-py-lg">
+
       <q-btn
-        size="sm"
+        size="md"
         v-if="selectedLecture !== lecture"
         icon="expand_more"
         @click.stop="selectedLecture = lecture"
       />
       <q-btn
-        size="sm"
+        size="md"
         v-if="selectedLecture === lecture"
         icon="expand_less"
         @click.stop="selectedLecture = null"
       />
-      <q-btn size="sm" icon="east" @click.stop="viewLecture(lecture)" />
+      <q-space />
+      <q-btn size="md" padding="sm 64px" icon="chevron_right" @click.stop="viewLecture(lecture)" />
     </q-card-actions>
   </q-card>
 </template>

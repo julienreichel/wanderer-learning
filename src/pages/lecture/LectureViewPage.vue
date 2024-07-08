@@ -8,9 +8,8 @@
       <q-card-section>
         <div class="q-pt-sm" v-html="lecture.description"></div>
       </q-card-section>
-      <q-card-actions>
-        <q-space />
-        <q-btn square size="sm" icon="straight" @click="finished()" />
+      <q-card-actions class="q-px-none q-py-lg">
+        <q-btn square size="md" icon="chevron_left" @click="finished()" />
       </q-card-actions>
     </q-card>
     <step-display

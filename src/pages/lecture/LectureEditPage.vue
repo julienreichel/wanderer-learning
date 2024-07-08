@@ -18,15 +18,16 @@
           mode="simple"
         />
       </q-card-section>
-      <q-card-actions>
+      <q-card-actions class="q-px-none q-py-lg">
+        <q-btn square size="md" icon="chevron_left" @click="finished()" />
         <q-space />
-        <q-btn square size="sm" icon="straight" @click="finished()" />
         <q-btn
           v-if="canEdit(lecture)"
-          size="sm"
+          size="md"
           icon="delete"
           @click="deleteLecture(lecture)"
         />
+
       </q-card-actions>
     </q-card>
     <q-card
@@ -57,21 +58,24 @@
           <step-reporting :ratings="step.ratings"></step-reporting>
         </q-card-section>
       </q-card-section>
-      <q-card-actions v-if="canEdit(step)">
-        <q-space />
+      <q-card-actions v-if="canEdit(step)" class="q-px-none q-py-lg">
+
         <q-btn
           v-if="index > 0"
-          size="sm"
+          size="md"
           icon="arrow_upward"
           @click.stop="moveUp(index)"
         />
         <q-btn
           v-if="index < lecture.steps.length - 1"
-          size="sm"
+          size="md"
           icon="arrow_downward"
           @click.stop="moveDown(index)"
         />
-        <q-btn size="sm" icon="delete" @click.stop="deleteStep(step)" />
+        <q-space />
+        <q-btn size="md" icon="delete" @click.stop="deleteStep(step)" />
+
+
       </q-card-actions>
     </q-card>
     <q-card>
@@ -85,9 +89,9 @@
         >
         </q-input>
       </q-card-section>
-      <q-card-actions>
+      <q-card-actions class="q-px-none q-py-lg">
         <q-space />
-        <q-btn size="sm" icon="add" @click="addStep()" />
+        <q-btn size="md" icon="add" @click="addStep()" />
       </q-card-actions>
     </q-card>
   </q-page>

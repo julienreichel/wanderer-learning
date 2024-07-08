@@ -53,9 +53,9 @@
         </q-card-section>
       </q-card-section>
     </q-card-section>
-    <q-card-actions>
+    <q-card-actions class="q-px-none q-py-lg">
       <q-space />
-      <q-btn size="sm" icon="east" @click="viewStep(step)" />
+      <q-btn size="md" padding="sm 64px" icon="chevron_right" @click="viewStep(step)" />
     </q-card-actions>
   </q-card>
 </template>

@@ -41,9 +41,9 @@
         <iframe :title="part.text" :src="part.src" class="full-width"></iframe>
       </div>
     </q-card-section>
-    <q-card-actions v-if="part.type !== 'quiz' && (hasAnsweredAllQuizzes || hasNext)">
+    <q-card-actions v-if="part.type !== 'quiz' && (hasAnsweredAllQuizzes || hasNext)" class="q-px-none q-py-lg">
       <q-space />
-      <q-btn size="sm" :icon="hasNext ? 'chevron_right' : 'check'" @click="hasNext ? $emit('nextStep') : $emit('finish')" />
+      <q-btn size="md" color="primary" padding="sm 64px" :icon="hasNext ? 'chevron_right' : 'check'" @click="hasNext ? $emit('nextStep') : $emit('finish')" />
     </q-card-actions>
   </q-card>
 </template>
