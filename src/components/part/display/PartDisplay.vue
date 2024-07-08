@@ -31,19 +31,37 @@
       :questions="part.questions"
       :max="Number(part.options.nbQuestions) || 0"
       @results="submitResults"
-      @finished="hasNext ? $emit('nextStep') : hasAnsweredAllQuizzes ? $emit('finish') :  null"
+      @finished="
+        hasNext
+          ? $emit('nextStep')
+          : hasAnsweredAllQuizzes
+            ? $emit('finish')
+            : null
+      "
       adaptative
-      :next-actions-icon="hasNext? 'chevron_right' : hasAnsweredAllQuizzes ? 'check' : null"
+      :next-actions-icon="
+        hasNext ? 'chevron_right' : hasAnsweredAllQuizzes ? 'check' : null
+      "
       :prev-actions-icon="null"
-      :exam-mode="Boolean(part.options.examMode)"/>
+      :exam-mode="Boolean(part.options.examMode)"
+    />
     <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
       <div class="iframe-16-9">
         <iframe :title="part.text" :src="part.src" class="full-width"></iframe>
       </div>
     </q-card-section>
-    <q-card-actions v-if="part.type !== 'quiz' && (hasAnsweredAllQuizzes || hasNext)" class="q-px-none q-py-lg">
+    <q-card-actions
+      v-if="part.type !== 'quiz' && (hasAnsweredAllQuizzes || hasNext)"
+      class="q-px-none q-py-lg"
+    >
       <q-space />
-      <q-btn size="md" color="primary" padding="sm 64px" :icon="hasNext ? 'chevron_right' : 'check'" @click="hasNext ? $emit('nextStep') : $emit('finish')" />
+      <q-btn
+        size="md"
+        color="primary"
+        padding="sm 64px"
+        :icon="hasNext ? 'chevron_right' : 'check'"
+        @click="hasNext ? $emit('nextStep') : $emit('finish')"
+      />
     </q-card-actions>
   </q-card>
 </template>

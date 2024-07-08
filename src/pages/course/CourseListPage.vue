@@ -28,8 +28,13 @@
       </template>
       <template v-slot:item="props">
         <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
-          <q-card >
-            <q-img :src="getUrl(props.row)" :ratio="16 / 9" @click="viewCourse(props.row)" class="q-card-hover">
+          <q-card>
+            <q-img
+              :src="getUrl(props.row)"
+              :ratio="16 / 9"
+              @click="viewCourse(props.row)"
+              class="q-card-hover"
+            >
               <q-icon
                 v-if="props.row.private"
                 class="absolute-top-right q-pa-sm"
@@ -49,7 +54,12 @@
 
             <q-card-actions class="q-px-none q-py-lg">
               <q-space />
-              <q-btn size="md" padding="sm 64px" icon="chevron_right" @click="viewCourse(props.row)" />
+              <q-btn
+                size="md"
+                padding="sm 64px"
+                icon="chevron_right"
+                @click="viewCourse(props.row)"
+              />
             </q-card-actions>
           </q-card>
         </div>
@@ -67,7 +77,7 @@
       </q-card-section>
       <q-card-actions class="q-px-none q-py-lg">
         <q-space />
-        <q-btn size="md" padding="sm 64px"  icon="add" @click="addCourse()" />
+        <q-btn size="md" padding="sm 64px" icon="add" @click="addCourse()" />
       </q-card-actions>
     </q-card>
   </q-page>

@@ -27,7 +27,6 @@
           icon="delete"
           @click="deleteLecture(lecture)"
         />
-
       </q-card-actions>
     </q-card>
     <q-card
@@ -59,7 +58,6 @@
         </q-card-section>
       </q-card-section>
       <q-card-actions v-if="canEdit(step)" class="q-px-none q-py-lg">
-
         <q-btn
           v-if="index > 0"
           size="md"
@@ -74,8 +72,6 @@
         />
         <q-space />
         <q-btn size="md" icon="delete" @click.stop="deleteStep(step)" />
-
-
       </q-card-actions>
     </q-card>
     <q-card>

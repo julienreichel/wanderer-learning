@@ -44,10 +44,30 @@ export default class LectureStepService extends ServicePrototype {
     parts = parts.map((part) => {
       part = { ...part };
       delete part.url;
-      part.questions = part.questions?.map(({ answers, conceptId, explanations, id, level, options, text, type }) => {
-        answers = answers?.map(({ text, valid }) => ({ text, valid }));
-        return { answers, conceptId, explanations, id, level, options, text, type }
-      });
+      part.questions = part.questions?.map(
+        ({
+          answers,
+          conceptId,
+          explanations,
+          id,
+          level,
+          options,
+          text,
+          type,
+        }) => {
+          answers = answers?.map(({ text, valid }) => ({ text, valid }));
+          return {
+            answers,
+            conceptId,
+            explanations,
+            id,
+            level,
+            options,
+            text,
+            type,
+          };
+        },
+      );
       return part;
     });
     return parts;

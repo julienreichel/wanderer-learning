@@ -1,6 +1,11 @@
 <template>
   <q-dialog v-model="popupVisible">
-    <quiz-runner style="width: 60%; min-width: 350px; max-width: 800px" :questions="questions" :max="max" @finished="popupVisible = false"/>
+    <quiz-runner
+      style="width: 60%; min-width: 350px; max-width: 800px"
+      :questions="questions"
+      :max="max"
+      @finished="popupVisible = false"
+    />
   </q-dialog>
 </template>
 
@@ -15,5 +20,4 @@ const props = defineProps({
 });
 
 const popupVisible = defineModel();
-
 </script>

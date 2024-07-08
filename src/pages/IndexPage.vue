@@ -296,4 +296,3 @@ const finishQuiz = async (questions) => {
   step.points = 100;
 };
 </script>
-

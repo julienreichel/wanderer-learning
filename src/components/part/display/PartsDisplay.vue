@@ -66,7 +66,7 @@ const updateTimings = (index) => {
 
 watch(step, (newStep, oldStep) => {
   updateTimings(oldStep);
-  if (props.udpdateRoute){
+  if (props.udpdateRoute) {
     router.push({ params: { stepIdx: newStep.toString() } });
   }
 });

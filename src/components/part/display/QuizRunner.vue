@@ -92,32 +92,40 @@
           <div class="text-h6 text-center">{{ $t("quiz.well_done") }}</div>
         </q-card-section>
         <q-list class="q-pa-md q-gutter-sm">
-          <q-item v-for="q in correctQuestions" :key="q.id" class="bg-positive" clickable @click="step = activeQuestions.indexOf(q)">
+          <q-item
+            v-for="q in correctQuestions"
+            :key="q.id"
+            class="bg-positive"
+            clickable
+            @click="step = activeQuestions.indexOf(q)"
+          >
             <q-item-section avatar>
               <q-icon name="check_circle_outline" />
             </q-item-section>
             <q-item-section class="text-ellipsis">
-                {{ q.text }}
+              {{ q.text }}
             </q-item-section>
-            <q-item-section side>
-              {{ q.points / 2 }} /  5
-            </q-item-section>
+            <q-item-section side> {{ q.points / 2 }} / 5 </q-item-section>
           </q-item>
         </q-list>
         <q-card-section v-if="wrongQuestions.length">
           <div class="text-h6 text-center">{{ $t("quiz.lets_review") }}</div>
         </q-card-section>
         <q-list class="q-pa-md q-gutter-sm">
-          <q-item v-for="q in wrongQuestions" :key="q.id" class="bg-negative" clickable @click="step = activeQuestions.indexOf(q)">
+          <q-item
+            v-for="q in wrongQuestions"
+            :key="q.id"
+            class="bg-negative"
+            clickable
+            @click="step = activeQuestions.indexOf(q)"
+          >
             <q-item-section avatar>
               <q-icon name="highlight_off" />
             </q-item-section>
             <q-item-section class="text-ellipsis">
-                {{ q.text }}
+              {{ q.text }}
             </q-item-section>
-            <q-item-section side>
-              {{ q.points / 2 }} /  5
-            </q-item-section>
+            <q-item-section side> {{ q.points / 2 }} / 5 </q-item-section>
           </q-item>
         </q-list>
       </q-card>

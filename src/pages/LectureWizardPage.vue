@@ -554,7 +554,7 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
     questions,
     options: {
       nbQuestions,
-    }
+    },
   };
 };
 const getNbQuestions = (nb) => {
@@ -613,11 +613,7 @@ const generateLecture = async () => {
     keyConcepts.value,
     getNbQuestions(nbQuestion),
   );
-  parts.push(createQuizPart(
-    connectQuiz.questions,
-    nbQuestion,
-    conceptIdMap,
-  ));
+  parts.push(createQuizPart(connectQuiz.questions, nbQuestion, conceptIdMap));
   parts.unshift({
     type: "text",
     text:
@@ -682,12 +678,7 @@ const generateLecture = async () => {
       getNbQuestions(nbQuestion),
     );
     conceptIdMap.default = conceptIdMap[step.concept];
-    parts.push(createQuizPart(
-        conceptQuiz.questions,
-        nbQuestion,
-        conceptIdMap,
-      ),
-    );
+    parts.push(createQuizPart(conceptQuiz.questions, nbQuestion, conceptIdMap));
 
     await lectureStepService.create({
       title: step.name,
@@ -719,11 +710,7 @@ const generateLecture = async () => {
     );
     questions.push(...practiceQuiz.questions);
   }
-  let part = createQuizPart(
-    questions,
-    nbQuestion * 4,
-    conceptIdMap,
-  );
+  let part = createQuizPart(questions, nbQuestion * 4, conceptIdMap);
   part.options.examMode = true;
   parts.push(part);
 

@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md q-gutter-sm">
-    <concept-list flat bordered :concepts="concepts"/>
+    <concept-list flat bordered :concepts="concepts" />
     <q-card v-if="userAttributes.isTeacher">
       <q-card-section>
         <q-input
@@ -36,7 +36,6 @@ onMounted(async () => {
   const data = await conceptService.list({ locale: locale.value });
   concepts.value = data;
 });
-
 
 let newTitle = ref();
 const checkDuplicate = (title, id) => {

@@ -24,7 +24,7 @@ const system = (style, tone, audience, language, level, concepts) => {
     x2: " checkbox with 5 proposals and at elast 2 correct answers (type=checkbox)",
     x5: " checkbox with 5 proposals and 0 to 5 correct answers (type=checkbox)",
     s1: " sentence with one and only one missing word (type=word)",
-    q1: " sentence with a 1 to 3 words short answer, provide mulitple valid answers to the question (type=shorttext)"
+    q1: " sentence with a 1 to 3 words short answer, provide mulitple valid answers to the question (type=shorttext)",
   };
   let quizes = [];
   if (level === 1) {
@@ -54,13 +54,13 @@ The purpose of the quiz with ${difficultyLevel} level is to eveluate if the user
 <Objective>
 Given the lecture description, the key concepts, the learning objectives and the table of content, create a quiz covering the lecture.
 The quiz should encompass 20 questions in total distributed among the following types:
-${quizes.join('\n')}
+${quizes.join("\n")}
 <Style>
 ${style}
 <Audience>
 ${audience}
 <Model>
-- ${quizes.join('\n- ')}
+- ${quizes.join("\n- ")}
 Each question should be accompanied by a one-paragraph explanation with at least 3 sentences.
 The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective.
 <Tone>

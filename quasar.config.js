@@ -125,7 +125,7 @@ export default configure((ctx) => {
           //info: "#4a90e2",
           positive: "#BCE2E2",
           negative: "#FBE7E6",
-        }
+        },
       },
 
       // iconSet: 'material-icons', // Quasar icon set
