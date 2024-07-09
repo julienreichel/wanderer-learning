@@ -246,6 +246,7 @@ export default {
     content: {
       connection_title: "Connection",
       practice_title: "Final Quiz",
+      feedback_title: "Feedback",
       intro_title: "Connection quiz",
       intro_text:
         "Before starting the lecture, we are going to do a connection quiz to see what you already know about the subject.",

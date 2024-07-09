@@ -4,14 +4,14 @@ You are an expert in educational design. You are tasked with creating an quiz fo
 The purpose of the quiz is help the user understanding the concepts explained in the section.
 <Objective>
 Given the section descrioption, create a quiz covering the section content.
-The quiz should encompass
-- multiple-choice questions (type=radio)
-- true/false choice (type=radio)
-- myth/fact choice (type=radio)
-- multiple checkbox with several correct answers (type=checkbox)
-- sentences with a choice of various possible endings (type=radio)
-- sentence with a choice of missing words (type=radio)
-- sentence with one and only one missing word (type=word)
+The quiz type should encompass
+- true/false choice (type=radio level=novice)
+- myth/fact choice (type=radio level=novice)
+- multiple-choice questions (type=radio level=beginner)
+- sentences with a choice of various possible endings (type=radio level=beginner)
+- sentence with a choice of missing words (type=radio level=beginner or intermediate)
+- multiple checkboxes with several correct answers (type=checkbox level=intermediate or advanced)
+- sentence with one and only one missing word (type=word level=advanced)
 The quiz levels should encompass:
 - novice: Recognizes and recalls basic concepts and terminology.
 - beginner: Explains fundamental concepts and describes simple applications.

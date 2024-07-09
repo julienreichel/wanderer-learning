@@ -287,7 +287,7 @@ export default class ServicePrototype {
       tocList,
     );
 
-    return this.query({ system, prompt, token: 20 * 200 });
+    return this.query({ system, prompt, token: 15 * 200 });
   }
 
   async getQuiz(descritpion, difficulty, nbQuestions, type, explanation) {

@@ -600,6 +600,7 @@ const generateLecture = async () => {
     });
     keyConcept.id = concept.id;
     conceptIdMap[keyConcept.name] = concept.id;
+    conceptIdMap[concept.id] = concept.id;
   }
 
   // creating the connection step
@@ -649,7 +650,7 @@ const generateLecture = async () => {
 
   // Creating the concept steps
   nbQuestion = 12;
-
+  let questions = [];
   progress.value = 20 / 100;
   for (let i = 0; i < tableOfContent.value.length; i++) {
     parts = [];
@@ -677,6 +678,7 @@ const generateLecture = async () => {
       step,
       getNbQuestions(nbQuestion),
     );
+    questions.push(...conceptQuiz.questions);
     conceptIdMap.default = conceptIdMap[step.concept];
     parts.push(createQuizPart(conceptQuiz.questions, nbQuestion, conceptIdMap));
 
@@ -697,7 +699,6 @@ const generateLecture = async () => {
   nbQuestion = 5;
   // Generating the practice quiz
   parts = [];
-  let questions = [];
   for (let level = 1; level <= 4; level++) {
     progress.value += 0.05;
 
@@ -715,7 +716,7 @@ const generateLecture = async () => {
   parts.push(part);
 
   await lectureStepService.create({
-    title: t("wizard.content.practice_title"),
+    title: title.value + ": " + t("wizard.content.practice_title"),
     type: "step",
     lectureId,
     order: "" + Date.now(),
@@ -746,7 +747,7 @@ const generateLecture = async () => {
   }));
 
   await lectureStepService.create({
-    title: "Feedback",
+    title: title.value + ": " + t("wizard.content.feedback_title"),
     type: "step",
     lectureId,
     order: "" + Date.now(),

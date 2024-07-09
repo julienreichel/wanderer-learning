@@ -77,7 +77,6 @@ export default class LectureStepService extends ServicePrototype {
     parts.forEach((part) => {
       if (!part.options) {
         part.options = {};
-        return;
       }
       if (Array.isArray(part.options)) {
         part.options = part.options.reduce((acc, option) => {
@@ -103,7 +102,6 @@ export default class LectureStepService extends ServicePrototype {
     parts.forEach((part) => {
       if (!part.options) {
         part.options = [];
-        return;
       }
       if (!Array.isArray(part.options)) {
         part.options = Object.keys(part.options).map((key) => {
