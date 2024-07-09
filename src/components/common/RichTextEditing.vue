@@ -12,6 +12,8 @@
 <script setup>
 import { ref } from "vue";
 
+import { marked } from 'marked';
+import dompurify from "dompurify";
 import { useIris } from "src/composables/iris";
 const { $q } = useIris();
 
@@ -39,13 +41,17 @@ const onPaste = (evt) => {
   evt.stopPropagation();
   if (evt.originalEvent && evt.originalEvent.clipboardData.getData) {
     text = evt.originalEvent.clipboardData.getData("text/plain");
-    editorRef.value.runCmd("insertText", text);
+    // marked will replace \[ \] \( and \) by simply [ } ( ), so wee need to add an extra \ to escape it.
+    text = text.replace(/\\([\[\]\(\)])/g, "\\\\$1");
+    text = dompurify.sanitize(marked.parse(text));
+    editorRef.value.runCmd("insertHTML", text);
   } else if (evt.clipboardData && evt.clipboardData.getData) {
     text = evt.clipboardData.getData("text/plain");
-    editorRef.value.runCmd("insertText", text);
+    text = text.replace(/\\([\[\]\(\)])/g, "\\\\$1");
+    text = dompurify.sanitize(marked.parse(text));
+    editorRef.value.runCmd("insertHTML", text);
   } else if (window.clipboardData && window.clipboardData.getData) {
     if (!onPasteStripFormattingIEPaste) {
-      onPasteStripFormattingIEPaste = true;
       editorRef.value.runCmd("ms-pasteTextOnly", text);
     }
     onPasteStripFormattingIEPaste = false;
