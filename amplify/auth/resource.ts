@@ -8,7 +8,7 @@ export const auth = defineAuth({
   loginWith: {
     email: {
       verificationEmailStyle: "CODE",
-      verificationEmailSubject: "Welcome to my app!",
+      verificationEmailSubject: "Welcome to Wanderer Learning!",
       verificationEmailBody: (createCode) =>
         `Use this code to confirm your account: ${createCode()}`,
     },
