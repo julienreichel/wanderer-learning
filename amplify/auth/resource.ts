@@ -24,16 +24,8 @@ export const auth = defineAuth({
           fullname: "name",
         },
       },
-      callbackUrls: [
-        "http://localhost:9000/login",
-        "https://wandererlearning.com/login",
-        "https://beta.wandererlearning.com/login",
-      ],
-      logoutUrls: [
-        "http://localhost:9000/login",
-        "https://wandererlearning.com/login",
-        "https://wandererlearning.com/login",
-      ],
+      callbackUrls: ["https://epfl.wandererlearning.com/login"],
+      logoutUrls: ["https://epfl.wandererlearning.com/login"],
     },
   },
 
