@@ -121,8 +121,8 @@ export default configure((ctx) => {
           skipHijack: true,
         },
         brand: {
-          //primary: "#EA3324",
-          //info: "#4a90e2",
+          primary: "#EA3324",
+          info: "#4a90e2",
           positive: "#BCE2E2",
           negative: "#FBE7E6",
         },
