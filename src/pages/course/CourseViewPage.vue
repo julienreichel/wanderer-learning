@@ -172,7 +172,7 @@ let questions = computed(() => {
           const partQuestions = step.parts
             .map((part) => {
               if (part.type === "quiz") {
-                return part.questions;
+                return part.questions.filter((q) => q.type !== "feedback");
               }
             })
             .filter((q) => Boolean(q))
