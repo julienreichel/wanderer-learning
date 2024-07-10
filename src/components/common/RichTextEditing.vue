@@ -12,7 +12,7 @@
 <script setup>
 import { ref } from "vue";
 
-import { marked } from 'marked';
+import { marked } from "marked";
 import dompurify from "dompurify";
 import { useIris } from "src/composables/iris";
 const { $q } = useIris();

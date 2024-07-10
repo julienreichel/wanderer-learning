@@ -664,7 +664,7 @@ const generateLecture = async () => {
       step,
       extendedQueryForConcept.value,
     );
-    if (conceptText.pages){
+    if (conceptText.pages) {
       conceptText.pages.forEach((text) => {
         parts.push({
           type: "text",
@@ -681,10 +681,12 @@ const generateLecture = async () => {
       step,
       getNbQuestions(nbQuestion),
     );
-    if (conceptQuiz.questions){
+    if (conceptQuiz.questions) {
       questions.push(...conceptQuiz.questions);
       conceptIdMap.default = conceptIdMap[step.concept];
-      parts.push(createQuizPart(conceptQuiz.questions, nbQuestion, conceptIdMap));
+      parts.push(
+        createQuizPart(conceptQuiz.questions, nbQuestion, conceptIdMap),
+      );
     } else {
       console.log("No quiz for concept", conceptName);
     }

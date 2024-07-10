@@ -67,8 +67,8 @@
 
 <script setup>
 import QuizRunner from "src/components/part/display/QuizRunner.vue";
-import katex from 'katex';
-import 'katex/dist/katex.min.css';
+import katex from "katex";
+import "katex/dist/katex.min.css";
 
 import { computed, inject, ref, watch } from "vue";
 
@@ -76,7 +76,6 @@ import { useIris } from "src/composables/iris";
 const { $q } = useIris();
 
 const { lectureStep: lectureStepService } = inject("services");
-
 
 const props = defineProps({
   part: { type: Object, required: true },
@@ -94,7 +93,7 @@ function renderLatexString(latexString) {
       throwOnError: false,
     });
   } catch (error) {
-    console.error('Error rendering LaTeX string:', error);
+    console.error("Error rendering LaTeX string:", error);
     return latexString; // Return original string if there's an error
   }
 }
@@ -102,13 +101,13 @@ function renderLatexString(latexString) {
 const renderedText = computed(() => {
   // Replace display equations
   let text = props.part.text.replace(/\\\[(.*?)\\\]/gs, (match, p1) => {
-    console.log('display', match, p1);
+    console.log("display", match, p1);
     return renderLatexString(p1.trim());
   });
 
   // Replace inline equations
   text = text.replace(/\\\((.*?)\\\)/gs, (match, p1) => {
-    console.log('inline', match, p1);
+    console.log("inline", match, p1);
     return renderLatexString(p1.trim());
   });
 
@@ -124,7 +123,9 @@ watch(
 );
 
 const textSizeClass = computed(() =>
-  props.part.url && $q.screen.gt.sm ? "col-" + (12 - imageSize.value) : "col-12",
+  props.part.url && $q.screen.gt.sm
+    ? "col-" + (12 - imageSize.value)
+    : "col-12",
 );
 const imageSizeClass = computed(() =>
   props.part.url ? "col-" + imageSize.value : "col-0",

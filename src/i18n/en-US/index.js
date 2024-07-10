@@ -109,7 +109,7 @@ export default {
       advanced: "Advanced",
       expert: "Expert",
       in_progress: "In progress",
-    }
+    },
   },
   concept: {
     list: "Concepts",

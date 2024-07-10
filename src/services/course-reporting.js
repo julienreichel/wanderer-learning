@@ -63,10 +63,11 @@ export default class CourseReportingService extends ServicePrototype {
    * @returns String
    */
   getLevel(reporting) {
-    if (reporting.responses.length === 0) return {
-      level: "in_progress",
-      ratio: reporting.ratio
-    };
+    if (reporting.responses.length === 0)
+      return {
+        level: "in_progress",
+        ratio: reporting.ratio,
+      };
 
     const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
 
@@ -89,7 +90,11 @@ export default class CourseReportingService extends ServicePrototype {
     let level = "novice";
     let ratio = 0;
     for (let i = 0; i < 5; i++) {
-      if (i > 0 && difficulties[i].total === difficulties[i - 1].total && (i === 4 || difficulties[i].total === difficulties[i + 1].total)) {
+      if (
+        i > 0 &&
+        difficulties[i].total === difficulties[i - 1].total &&
+        (i === 4 || difficulties[i].total === difficulties[i + 1].total)
+      ) {
         // this level was not tested, keeping previous results
         break;
       }
