@@ -86,10 +86,17 @@ export default class CourseReportingService extends ServicePrototype {
       difficulties[i + 1].valid += difficulties[i].valid;
     }
 
+    console.log(difficulties);
+
     // find the level with 80% or more valid
-    let level = "novice";
+    let level = null;
     let ratio = 0;
     for (let i = 0; i < 5; i++) {
+      if (!difficulties[i].total) continue;
+      if (!level) {
+        level = levels[i];
+        ratio = difficulties[i].valid / difficulties[i].total;
+      }
       if (
         i > 0 &&
         difficulties[i].total === difficulties[i - 1].total &&

@@ -134,6 +134,12 @@ onMounted(async () => {
       ratio: lectureStarted / course.value.lectures.length,
     };
   }
+
+  if (!reporting.value && !lectureStarted) {
+    // this user has never touched this course, let's start with a quiz
+    checkCourse();
+  }
+
 });
 
 const userLevel = computed(() => {
@@ -157,11 +163,9 @@ const finished = () => {
 };
 
 let checkingCourse = ref(false);
-let questions = ref([]);
-const checkCourse = () => {
-  checkingCourse.value = true;
+let questions = computed(() => {
   // cumulate all the questions from the course
-  questions.value = course.value.lectures
+  return course.value.lectures
     .map((lecture) => {
       const stepQuestions = lecture.steps
         .map((step) => {
@@ -179,7 +183,11 @@ const checkCourse = () => {
       return stepQuestions;
     })
     .flat();
+});
+const checkCourse = () => {
+  checkingCourse.value = true;
 };
+
 const finishQuiz = () => {
   checkingCourse.value = false;
 };
