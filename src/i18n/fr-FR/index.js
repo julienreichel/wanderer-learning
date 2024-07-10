@@ -103,6 +103,14 @@ export default {
       private: "Privé",
       public: "Publique",
     },
+    levels: {
+      novice: "Novice",
+      beginner: "Débutant",
+      intermediate: "Intermédiaire",
+      advanced: "Avancé",
+      expert: "Expert",
+      in_progress: "En cours",
+    }
   },
   concept: {
     list: "Concepts",

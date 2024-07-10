@@ -1,3 +1,5 @@
+import { experimental } from "aws-cdk-lib/aws-cloudfront";
+
 export default {
   error: {
     form: {
@@ -100,6 +102,14 @@ export default {
       private: "Private",
       public: "Public",
     },
+    levels: {
+      novice: "Novice",
+      beginner: "Beginner",
+      intermediate: "Intermediate",
+      advanced: "Advanced",
+      expert: "Expert",
+      in_progress: "In progress",
+    }
   },
   concept: {
     list: "Concepts",

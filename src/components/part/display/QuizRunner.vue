@@ -349,6 +349,7 @@ const hasResults = computed(() =>
 );
 watch(hasResults, (hasResults) => {
   if (hasResults) {
+    console.log("results", activeQuestions.value);
     emit("results", activeQuestions.value);
   }
 });
