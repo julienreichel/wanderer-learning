@@ -111,21 +111,17 @@ onMounted(async () => {
       // If the reports are more recent that the course report, they take priority
       if (lecture.stepsSummary && reporting.value) {
         lectureStarted++;
-
+        if (lecture.stepsSummary.some((step) => step.createdAt > lastTest)){
+          newActions = true;
+        }
         const responses = lecture.stepsSummary
-          .filter((step) => step.createdAt > lastTest)
           .map(({ reportings }) =>
             reportings
               .map((r) => r.responses)
-              .filter(Boolean)
               .flat(),
           )
-          .flat();
-
-        if (responses.length) {
-          newActions = true;
-          lectureResponses.push(responses);
-        }
+          .flat().filter(Boolean);
+        lectureResponses.push(responses);
       }
     }),
   );
