@@ -664,13 +664,16 @@ const generateLecture = async () => {
       step,
       extendedQueryForConcept.value,
     );
-
-    conceptText.pages.forEach((text) => {
-      parts.push({
-        type: "text",
-        text,
+    if (conceptText.pages){
+      conceptText.pages.forEach((text) => {
+        parts.push({
+          type: "text",
+          text,
+        });
       });
-    });
+    } else {
+      console.log("No content for concept", conceptName);
+    }
 
     progress.value += 0.25 / tableOfContent.value.length;
 
@@ -678,9 +681,13 @@ const generateLecture = async () => {
       step,
       getNbQuestions(nbQuestion),
     );
-    questions.push(...conceptQuiz.questions);
-    conceptIdMap.default = conceptIdMap[step.concept];
-    parts.push(createQuizPart(conceptQuiz.questions, nbQuestion, conceptIdMap));
+    if (conceptQuiz.questions){
+      questions.push(...conceptQuiz.questions);
+      conceptIdMap.default = conceptIdMap[step.concept];
+      parts.push(createQuizPart(conceptQuiz.questions, nbQuestion, conceptIdMap));
+    } else {
+      console.log("No quiz for concept", conceptName);
+    }
 
     await lectureStepService.create({
       title: step.name,

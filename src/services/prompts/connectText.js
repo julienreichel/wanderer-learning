@@ -15,6 +15,7 @@ ${language}
 <Description format>
 Multiple titles are allowed in one content.
 Descriptions may contain the following HTML tags: <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <a>.
+For mathematical formulas, use Katex format.
 <JSON Response Format>
 { "content": [ "<h5>Title</h5><div>Description</div>", ... ] }
 `;
