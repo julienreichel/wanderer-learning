@@ -180,7 +180,6 @@ watch(
     if (feedbackType.value === "text") {
       question.value.text = t("quiz.feedback.question.text");
     }
-    part.value.options.feedbackType = feedbackType.value;
   },
   { immediate: true },
 );

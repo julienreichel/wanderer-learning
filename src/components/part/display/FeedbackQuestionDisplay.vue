@@ -65,8 +65,7 @@ watch(newResponse, (value) => {
 
 const feedbackType = computed(
   () =>
-    props.question.options?.find((option) => option.name === "feedbackType")
-      ?.value,
+    props.question.options?.feedbackType
 );
 
 const icons = {

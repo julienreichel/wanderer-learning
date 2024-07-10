@@ -54,6 +54,11 @@
             <div v-html="question.explanations"></div>
           </q-banner>
         </q-card-section>
+        <feedback-question-display
+          v-if="question.type === 'feedback'"
+          v-model="question.response"
+          :question="question"
+        />
       </q-card>
     </q-card-section>
     <q-card-actions class="q-px-none q-py-lg">
@@ -128,6 +133,25 @@
             <q-item-section side> {{ q.points / 2 }} / 5 </q-item-section>
           </q-item>
         </q-list>
+        <q-card-section v-if="feedbacks.length">
+          <div class="text-h6 text-center">{{ $t("quiz.thank_you") }}</div>
+        </q-card-section>
+        <q-list class="q-pa-md q-gutter-sm">
+          <q-item
+            v-for="q in feedbacks"
+            :key="q.id"
+            clickable
+            @click="step = activeQuestions.indexOf(q)"
+          >
+            <q-item-section avatar>
+              <q-icon :name="getFeedbackIcon(q)" />
+            </q-item-section>
+            <q-item-section class="text-ellipsis">
+              {{ q.text }}
+            </q-item-section>
+            <q-item-section side> {{ q.response }} / 5 </q-item-section>
+          </q-item>
+        </q-list>
       </q-card>
     </q-card-section>
     <q-card-actions v-if="nextActionsIcon" class="q-px-none q-py-lg">
@@ -145,6 +169,8 @@
 </template>
 
 <script setup>
+import FeedbackQuestionDisplay from "./FeedbackQuestionDisplay.vue";
+
 import { ref, computed, watch } from "vue";
 
 const props = defineProps({
@@ -156,9 +182,27 @@ const props = defineProps({
   prevActionsIcon: { type: String, default: "close" },
   title: { type: String, default: null },
 });
-const emit = defineEmits(["finished", "results"]);
+const emit = defineEmits(["finished", "results", "feedback"]);
 import { useIris } from "src/composables/iris";
 const { t } = useIris();
+
+const icons = {
+  difficulty: "speed",
+  roti: [
+    "sentiment_very_dissatisfied",
+    "sentiment_dissatisfied",
+    "sentiment_neutral",
+    "sentiment_satisfied",
+    "sentiment_satisfied_alt",
+  ],
+  stars: "star_border",
+};
+const getFeedbackIcon = (question) => {
+  const feedbackType = question.options?.feedbackType;
+  return Array.isArray(icons[feedbackType])
+                  ? icons[feedbackType][question.response - 1]
+                  : icons[feedbackType];
+};
 
 const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
 
@@ -445,6 +489,9 @@ const validateAnswers = (question) => {
       }
     });
   }
+  if (question.type === "feedback") {
+    valid = true;
+  }
   question.valid = valid;
   question.points = valid ? 10 : 0;
 
@@ -454,10 +501,14 @@ const validateAnswers = (question) => {
 };
 
 const correctQuestions = computed(() =>
-  activeQuestions.value.filter((q) => q.valid),
+  activeQuestions.value.filter((q) => q.valid && q.type !== "feedback"),
 );
 
 const wrongQuestions = computed(() =>
-  activeQuestions.value.filter((q) => !q.valid),
+  activeQuestions.value.filter((q) => !q.valid && q.type !== "feedback"),
+);
+
+const feedbacks = computed(() =>
+  activeQuestions.value.filter((q) => q.type === "feedback"),
 );
 </script>

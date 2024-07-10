@@ -12,7 +12,7 @@ export function useChecks() {
         throw { message: t("quiz.json.quiz_no_questions") };
       }
       part.questions.forEach((question) => {
-        if (question.answers.length === 0) {
+        if (question.answers.length === 0 && question.type !== "feedback") {
           throw { message: t("quiz.json.quiz_no_answers") };
         }
 
