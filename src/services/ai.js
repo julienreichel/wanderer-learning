@@ -7,7 +7,7 @@ import conceptsQuiz from "./prompts/conceptsQuiz.js";
 import conceptsText from "./prompts/conceptsText.js";
 import conceptsTextHtml from "./prompts/conceptsTextHtml.js";
 import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
-import practiceQuiz from "./prompts/finalQuiz.js";
+import singleQuiz from "./prompts/singleQuiz.js";
 import simpleQuiz from "./prompts/quiz.js";
 
 import { post } from "aws-amplify/api";
@@ -176,7 +176,7 @@ export default class ServicePrototype {
     return this.query({ system, prompt, token: 2000 });
   }
 
-  async getConceptQuiz(section, nbQuestions = 10) {
+  async getConceptQuiz(section, content, concepts) {
     const sectionName = section.name;
     const sectionItems = section.items
       .map(({ name, description }) => `${name}: ${description}`)
@@ -255,36 +255,15 @@ export default class ServicePrototype {
     }
   }
 
-  async getFinalQuiz(description, concepts, objectives, toc, level = 3) {
-    const conceptsList = concepts
-      .map(({ name, description }) => `${name}: ${description}`)
-      .join("\n");
-    const objectivesList = objectives.join("\n");
-
-    const tocList = toc
-      .map(
-        ({ name, items }) =>
-          name +
-          "\n" +
-          items
-            .map(({ name, description }) => `- ${name}: ${description}`)
-            .join("\n"),
-      )
-      .join("\n");
-
-    const system = practiceQuiz.system(
-      this.style,
+  async singleQuiz(sectionName, sectionContent, difficulty = 3) {
+    const system = singleQuiz.system(
       this.tone,
-      this.audience,
       this.language,
-      level,
-      concepts.map(({ name }) => name),
+      difficulty
     );
-    const prompt = practiceQuiz.prompt(
-      description,
-      conceptsList,
-      objectivesList,
-      tocList,
+    const prompt = singleQuiz.prompt(
+      sectionName,
+      sectionContent
     );
 
     return this.query({ system, prompt, token: 15 * 200 });

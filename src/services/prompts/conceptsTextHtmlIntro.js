@@ -28,9 +28,8 @@ const prompt = (section) => {
 
   return `
 You are an expert instructor.
-Your task is to create introduction page for an online self-study course chapter titled "${sectionName}".
+Your task is to create introduction summary for an online self-study course chapter titled "${sectionName}".
 You MUST cover the content thoroughly.
-You will be penalized if the descriptions are not detailed enough.
 
 Think step by step and consider all necessary information.
 

@@ -1,18 +1,18 @@
-const system = (style, tone, audience, language, level, concepts) => {
+const system = (tone, language, difficulty) => {
   const difficultyExplanation = [
     "novice: Recognizes and recalls basic concepts and terminology.",
     "beginner: Explains fundamental concepts and describes simple applications.",
     "intermediate: Understands and explains the impact of various conditions on the core concepts and applies them independently.",
     "advanced: Analyzes complex scenarios, understands nuanced aspects, and explores advanced phenomena.",
     "expert: Synthesizes knowledge to explain complex phenomena and contributes to the field through original research.",
-  ][level - 1];
+  ][difficulty - 1];
   const difficultyLevel = [
     "novice",
     "beginner",
     "intermediate",
     "advanced",
     "expert",
-  ][level - 1];
+  ][difficulty - 1];
 
   const quizTypes = {
     tf: " true/false choice (type=radio)",
@@ -27,22 +27,22 @@ const system = (style, tone, audience, language, level, concepts) => {
     q1: " sentence with a 1 to 3 words short answer, provide mulitple valid answers to the question (type=shorttext)",
   };
   let quizes = [];
-  if (level === 1) {
+  if (difficulty === 1) {
     quizes.push(8 + quizTypes.tf);
     quizes.push(7 + quizTypes.mf);
-  } else if (level === 2) {
+  } else if (difficulty === 2) {
     quizes.push(2 + quizTypes.tf);
     quizes.push(2 + quizTypes.mf);
     quizes.push(5 + quizTypes.c3);
     quizes.push(6 + quizTypes.s4);
-  } else if (level === 3) {
+  } else if (difficulty === 3) {
     quizes.push(4 + quizTypes.s4);
     quizes.push(7 + quizTypes.c5);
     quizes.push(4 + quizTypes.x2);
-  } else if (level === 4) {
+  } else if (difficulty === 4) {
     quizes.push(8 + quizTypes.x5);
     quizes.push(7 + quizTypes.s1);
-  } else if (level === 5) {
+  } else if (difficulty === 5) {
     quizes.push(15 + quizTypes.q1);
   }
 
@@ -57,10 +57,6 @@ The quiz should encompass 15 questions in total distributed among the following 
 ${quizes.join("\n- ")}
 Each question should be accompanied by a one-paragraph explanation with at least 3 sentences.
 The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective.
-<Style>
-${style}
-<Audience>
-${audience}
 <Tone>
 ${tone}
 <Quiz level>
@@ -74,31 +70,23 @@ ${language}
     "text": "...",
     "answers": [ { "text": "...", "valid": true | false } ],
     "level": "novice" | "beginner" | "intermediate" | "advanced",
-    "concept": "${concepts.join('" | "')}",
     "explanations":  "..."
   }, ...]
 }
 `;
 };
 
-const prompt = (description, conceptsList, objectivesList, tocList) => `
+const prompt = (sectionName, sectionContent) => `
 Your task is to create a final quiz for an online lecture.
-The quiz MUST have 15 questions and cover the lecture table of content and key concepts bellow.
-It MUST check if the user is able to perform the learning objectives.
+The quiz MUST have 15 questions and cover the content provided.
 You will be penalized if the quiz do not have 15 questions.
 Think step by step and consider all necessary information.
 
----------------- Key concepts ----------------
-${conceptsList}
+---------------- Section title ----------------
+${sectionName}
 
----------------- Learning outcomes ----------------
-${objectivesList}
-
----------------- Table of Content ----------------
-${tocList}
-
----------------- Lecture description ----------------
-${description}
+---------------- Section content ----------------
+${sectionContent}
 
 `;
 
