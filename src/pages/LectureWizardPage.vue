@@ -500,7 +500,7 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
     question.id = uid();
     // remove the "Fill in the blank:", "Myth or Fact: ", "True or False: "
     question.text = question.text.replace(
-      /\s*(Fill in the blank:|Myth or Fact:|Fact or Myth:|Is it a myth or a fact:|True or False:|Is this statement true or false?|\(True\/False\))\s*/,
+      /\s*(Fill in the blank:|Myth or Fact:|Fact or Myth:|Is it a myth or a fact:|True or False:|Is this statement true or false?|True or False?|Myth or Fact?|\(True\/False\))\s*/,
       "",
     );
     question.text = question.text.replace(
