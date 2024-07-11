@@ -604,36 +604,16 @@ const generateLecture = async () => {
   }
 
   // creating the connection step
+  parts = [];
   progress.value = 10 / 100;
   progressLabel.value = t("wizard.generating.connect");
 
-  let nbQuestion = 6;
-  let parts = [];
-  const connectQuiz = await aiService.getInitialQuiz(
-    courseDescription.value,
-    keyConcepts.value,
-    getNbQuestions(nbQuestion),
-  );
-  parts.push(createQuizPart(connectQuiz.questions, nbQuestion, conceptIdMap));
-  parts.unshift({
-    type: "text",
-    text:
-      "<h5>" +
-      t("wizard.content.intro_title") +
-      "</h5>" +
-      t("wizard.content.intro_text"),
-  });
-
-  progress.value = 15 / 100;
   const connectIntro = await aiService.getInitialContent(
     courseDescription.value,
     keyConcepts.value,
     learningObjectives.value,
   );
-  parts.unshift({
-    type: "text",
-    text: connectIntro.content.shift(),
-  });
+
   connectIntro.content.forEach((text) => {
     parts.push({
       type: "text",
@@ -658,7 +638,7 @@ const generateLecture = async () => {
     const step = tableOfContent.value[i];
     const conceptName = step.name;
     progressLabel.value = t("wizard.generating.concept") + " " + conceptName;
-    progress.value += 0.25 / tableOfContent.value.length;
+    progress.value += 0.3 / tableOfContent.value.length;
 
     const conceptText = await aiService.getConceptContent(
       step,
@@ -675,7 +655,7 @@ const generateLecture = async () => {
       console.log("No content for concept", conceptName);
     }
 
-    progress.value += 0.25 / tableOfContent.value.length;
+    progress.value += 0.3 / tableOfContent.value.length;
 
     const conceptQuiz = await aiService.getConceptQuiz(
       step,
@@ -702,38 +682,8 @@ const generateLecture = async () => {
     });
   }
 
-  // creating the practive quiz step
-  progressLabel.value = t("wizard.generating.practice");
-
-  nbQuestion = 5;
-  // Generating the practice quiz
-  parts = [];
-  for (let level = 1; level <= 4; level++) {
-    progress.value += 0.05;
-
-    const practiceQuiz = await aiService.getFinalQuiz(
-      courseDescription.value,
-      keyConcepts.value,
-      learningObjectives.value,
-      tableOfContent.value,
-      level,
-    );
-    questions.push(...practiceQuiz.questions);
-  }
-  let part = createQuizPart(questions, nbQuestion * 4, conceptIdMap);
-  part.options.examMode = true;
-  parts.push(part);
-
-  await lectureStepService.create({
-    title: title.value + ": " + t("wizard.content.practice_title"),
-    type: "step",
-    lectureId,
-    order: "" + Date.now(),
-    parts,
-  });
-
   // creating the final conclusion step
-  progress.value = 95 / 100;
+  progress.value = 90 / 100;
   progressLabel.value = t("wizard.generating.conclusion");
   parts = ["roti", "difficulty", "stars"].map((type, idx) => ({
     type: "quiz",
