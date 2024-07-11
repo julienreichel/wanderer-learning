@@ -130,7 +130,7 @@
             <q-item-section class="text-ellipsis">
               {{ q.text }}
             </q-item-section>
-            <q-item-section side> {{ q.points / 2 }} / 5 </q-item-section>
+            <q-item-section side> {{ q.points }} / 5 </q-item-section>
           </q-item>
         </q-list>
         <q-card-section v-if="feedbacks.length">
@@ -493,7 +493,7 @@ const validateAnswers = (question) => {
     valid = true;
   }
   question.valid = valid;
-  question.points = valid ? 10 : 0;
+  question.points = valid ? 5 : 0;
 
   if (valid) {
     step.value++;
