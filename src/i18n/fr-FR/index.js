@@ -151,6 +151,15 @@ export default {
     step: {
       not_completed: "Section de leçon non terminée, aucun résultat enregistré",
     },
+    levels: {
+      novice: "Novice",
+      beginner: "Débutant",
+      intermediate: "Intermédiaire",
+      advanced: "Avancé",
+      expert: "Expert",
+      in_progress: "En cours",
+    },
+    practice_title: "Quiz Final",
   },
   parts: {
     form: {

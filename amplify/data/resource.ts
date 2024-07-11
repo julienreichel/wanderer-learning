@@ -48,6 +48,24 @@ const schema = a.schema({
       allow.authenticated().to(["read"]),
     ]),
 
+  LectureReporting: a
+    .model({
+      id: a.id().required(),
+      createdAt: a.datetime(),
+      owner: a.string(),
+      lectureId: a.id().required(),
+      type: a.string(),
+      responses: a.ref("ReportingResponse").array(),
+    })
+    .secondaryIndexes((index) => [
+      index("owner").name("byOwner").sortKeys(["createdAt"]),
+      index("lectureId").name("byLecture").sortKeys(["owner"]),
+    ])
+    .authorization((allow) => [
+      allow.owner(),
+      allow.authenticated().to(["read"]),
+    ]),
+
   CourseReporting: a
     .model({
       id: a.id().required(),

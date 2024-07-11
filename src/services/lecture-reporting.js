@@ -4,15 +4,15 @@ import ServicePrototype from "./service-prototype";
  * Provide service to get and store reporting
  *
  * @example
- * import CourseReportingService from 'src/services/course-reporting';
+ * import LectureReportingService from 'src/services/lecture-reporting';
  * ...
- * const courseReporting = new CourseReportingService();
+ * const lectureReporting = new LectureReportingService();
  */
-export default class CourseReportingService extends ServicePrototype {
+export default class LectureReportingService extends ServicePrototype {
   constructor(cacheData) {
     super(cacheData);
 
-    this.model = this.client.models.CourseReporting;
+    this.model = this.client.models.LectureReporting;
   }
 
   /**
@@ -37,18 +37,18 @@ export default class CourseReportingService extends ServicePrototype {
       params.owner = `${params.userId}::${params.username}`;
     }
     let query = null;
-    if (params.courseId) {
-      query = this.model.listCourseReportingByCourseIdAndOwner;
+    if (params.lectureId) {
+      query = this.model.listLectureReportingByLectureIdAndOwner;
       if (params.owner) {
         params.owner = { eq: params.owner };
       }
     } else if (params.owner) {
-      query = this.model.listCourseReportingByOwnerAndCreatedAt;
+      query = this.model.listLectureReportingByOwnerAndCreatedAt;
       if (!params.sortDirection) {
         params.sortDirection = "DESC";
       }
     } else {
-      query = this.model.listCourseReportings;
+      query = this.model.listLectureReportings;
     }
 
     const { data } = await query(params);

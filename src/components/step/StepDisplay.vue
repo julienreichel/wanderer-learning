@@ -3,7 +3,7 @@
     <q-card-section horizontal>
       <q-card-section class="col">
         <q-card-section
-          class="q-pa-sm q-pb-md q-card-hover"
+          class="q-pa-none q-pb-md q-card-hover"
           @click="viewStep(step)"
         >
           <div class="text-h5">{{ step.title }}</div>
@@ -47,9 +47,6 @@
             size="lg"
             right
           />
-        </q-card-section>
-        <q-card-section class="q-pa-sm">
-          <q-badge v-if="step.reporting" :label="step.reporting.totalTime" />
         </q-card-section>
       </q-card-section>
     </q-card-section>

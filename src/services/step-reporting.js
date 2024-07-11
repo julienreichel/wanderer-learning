@@ -4,7 +4,7 @@ import ServicePrototype from "./service-prototype";
  * Provide service to get and store reporting
  *
  * @example
- * import StepReportingService from 'src/services/repoting-step';
+ * import StepReportingService from 'src/services/step-reporting';
  * ...
  * const stepReporting = new StepReportingService();
  */
