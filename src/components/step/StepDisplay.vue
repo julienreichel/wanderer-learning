@@ -2,10 +2,7 @@
   <q-card>
     <q-card-section horizontal>
       <q-card-section class="col">
-        <q-card-section
-          class="q-pa-none q-pb-md q-card-hover"
-          @click="viewStep(step)"
-        >
+        <q-card-section class="q-pa-none q-pb-md">
           <div class="text-h5">{{ step.title }}</div>
         </q-card-section>
         <q-card-section class="q-pa-sm">

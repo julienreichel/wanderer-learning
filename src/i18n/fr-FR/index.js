@@ -160,6 +160,7 @@ export default {
       in_progress: "En cours",
     },
     practice_title: "Quiz Final",
+    feedback_title: "Feedback",
   },
   parts: {
     form: {

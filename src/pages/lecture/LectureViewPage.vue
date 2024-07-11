@@ -23,7 +23,10 @@
         :max="20"
         adaptative
       />
-      <q-card-actions class="q-px-none q-py-lg" v-if="!connectionQuiz && !practiceQuiz">
+      <q-card-actions
+        class="q-px-none q-py-lg"
+        v-if="!connectionQuiz && !practiceQuiz"
+      >
         <q-btn square size="md" icon="chevron_left" @click="finished()" />
         <q-space />
         <q-btn
@@ -45,13 +48,13 @@
     </template>
     <q-card v-if="showFinalQuiz" class="q-pt-sm">
       <q-card-section class="q-gutter-sm">
-          <div class="text-h5">{{ $t("lecture.practice_title") }}</div>
-          <q-badge v-if="practiceLevel">
-            {{ $t("lecture.levels." + practiceLevel) }}
-          </q-badge>
-          <q-badge v-if="practiceLevel">
-            {{ Math.round(practiceRatio * 100) + "%" }}
-          </q-badge>
+        <div class="text-h5">{{ $t("lecture.practice_title") }}</div>
+        <q-badge v-if="practiceLevel">
+          {{ $t("lecture.levels." + practiceLevel) }}
+        </q-badge>
+        <q-badge v-if="practiceLevel">
+          {{ Math.round(practiceRatio * 100) + "%" }}
+        </q-badge>
       </q-card-section>
       <quiz-runner
         v-if="practiceQuiz"
@@ -59,7 +62,7 @@
         :questions="questions"
         @finished="practiceQuiz = false"
         @results="processResult"
-        :max="3"
+        :max="20"
         exam-mode
       />
       <q-card-actions class="q-px-none q-py-lg" v-if="!practiceQuiz">
@@ -73,6 +76,17 @@
         />
       </q-card-actions>
     </q-card>
+    <q-card v-if="practiceLevel && feedbackQuiz" class="q-pt-sm">
+      <q-card-section class="q-gutter-sm">
+        <div class="text-h5">{{ $t("lecture.feedback_title") }}</div>
+      </q-card-section>
+      <quiz-runner
+        flat
+        :questions="feedbacks"
+        @finished="feedbackQuiz = false"
+        @results="processResult"
+      />
+    </q-card>
   </q-page>
 </template>
 
@@ -83,9 +97,12 @@ import StepDisplay from "src/components/step/StepDisplay.vue";
 import QuizRunner from "src/components/part/display/QuizRunner.vue";
 
 import { useIris } from "src/composables/iris";
-const { t, $q, router, canEdit } = useIris();
-const { lecture: lectureService, stepReporting: reportingService, lectureReporting: lectureReportingService } =
-  inject("services");
+const { t, $q, router, canEdit, uid } = useIris();
+const {
+  lecture: lectureService,
+  stepReporting: reportingService,
+  lectureReporting: lectureReportingService,
+} = inject("services");
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
 const userAttributes = inject("userAttributes");
@@ -116,18 +133,26 @@ onMounted(async () => {
   ]);
 
   // Get the last report
-  const allReports =(await lectureReportingService.list({
+  const allReports = (
+    await lectureReportingService.list({
       lectureId: lecture.value.id,
       userId,
       username,
-    })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  reporting.value = allReports[0];
+    })
+  ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  reporting.value = allReports.filter(({ type }) => type !== "feedback")[0];
   // did the user passed the final quiz?
-  const practiceReport = allReports.find(({type}) => type === "practice");
-  if (practiceReport){
-    const {level, ratio} = lectureReportingService.getLevel(practiceReport);
+  const practiceReport = allReports.find(({ type }) => type === "practice");
+  if (practiceReport) {
+    const { level, ratio } = lectureReportingService.getLevel(practiceReport);
     practiceLevel.value = level;
     practiceRatio.value = ratio;
+  }
+
+  // was the last user action to generate a feedback?
+  const feedbackReport = allReports[0]?.type === "feedback";
+  if (feedbackReport) {
+    feedbackQuiz.value = false;
   }
 
   // load stats for the user for each step
@@ -181,6 +206,7 @@ const successRate = computed(() => {
 
 let connectionQuiz = ref(false);
 let practiceQuiz = ref(false);
+let feedbackQuiz = ref(true);
 let questions = computed(() => {
   // cumulate all the questions from the lecture
   return lecture.value.steps
@@ -198,6 +224,23 @@ let questions = computed(() => {
     .flat();
 });
 
+const feedbacks = ref(
+  ["roti", "difficulty", "stars"].map((type) => ({
+    id: uid(),
+    type: "feedback",
+    text: t("quiz.feedback.question." + type),
+    answers:
+      type == "stars"
+        ? []
+        : [1, 2, 3, 4, 5].map((index) => ({
+            text: t("quiz.feedback.tooltips." + type + "." + index),
+          })),
+    options: {
+      feedbackType: type,
+    },
+  })),
+);
+
 const processResult = async (questions) => {
   const responses = questions.map((question) => {
     // find the index of the part holding the question in the step
@@ -213,16 +256,41 @@ const processResult = async (questions) => {
     };
     return response;
   });
+  const type = connectionQuiz.value
+    ? "connection"
+    : practiceQuiz.value
+      ? "practice"
+      : "feedback";
   reporting.value = await lectureReportingService.create({
     lectureId: lecture.value.id,
-    type: connectionQuiz.value ? "connection" : "practice",
+    type,
     responses,
   });
 
-  if (practiceQuiz.value){
-    const {level, ratio} = lectureReportingService.getLevel(reporting.value);
+  if (practiceQuiz.value) {
+    const { level, ratio } = lectureReportingService.getLevel(reporting.value);
     practiceLevel.value = level;
     practiceRatio.value = ratio;
+  }
+
+  if (type === "feedback") {
+    // if there is a stars count, update the course stars
+    const starQuestion = questions.find(
+      (response) => response.feedbackType === "stars",
+    );
+    if (starQuestion) {
+      const stars = Number(starQuestion.response);
+      let course = lecture.value.course;
+      if (!lectureStep.value.lecture.course.ratings) {
+        course.ratings = [{ value: stars, reportingId: reporting.value.id }];
+      } else {
+        course.ratings.push({ value: stars, reportingId: reporting.value.id });
+      }
+      courseService.update(course);
+    }
+    feedbackQuiz.value = false;
+  } else {
+    feedbackQuiz.value = true;
   }
 };
 </script>

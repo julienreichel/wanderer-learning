@@ -80,10 +80,15 @@ export default class LectureReportingService extends ServicePrototype {
       return acc;
     }, acc);
 
-    // acculate the lover levels
+    // acculate the lover levels failurs
     for (let i = 0; i < 4; i++) {
-      difficulties[i + 1].total += difficulties[i].total;
-      difficulties[i + 1].valid += difficulties[i].valid;
+      const failure = difficulties[i].total - difficulties[i].valid;
+      difficulties[i + 1].total += failure;
+    }
+    // accumulate higher level sucess
+    for (let i = 4; i > 0; i--) {
+      difficulties[i - 1].total += difficulties[i].valid;
+      difficulties[i - 1].valid += difficulties[i].valid;
     }
 
     console.log(difficulties);
@@ -96,14 +101,6 @@ export default class LectureReportingService extends ServicePrototype {
       if (!level) {
         level = levels[i];
         ratio = difficulties[i].valid / difficulties[i].total;
-      }
-      if (
-        i > 0 &&
-        difficulties[i].total === difficulties[i - 1].total &&
-        (i === 4 || difficulties[i].total === difficulties[i + 1].total)
-      ) {
-        // this level was not tested, keeping previous results
-        break;
       }
       if (difficulties[i].valid / difficulties[i].total >= 0.6666) {
         level = levels[i];

@@ -638,7 +638,7 @@ const generateLecture = async () => {
     const step = tableOfContent.value[i];
     const conceptName = step.name;
     progressLabel.value = t("wizard.generating.concept") + " " + conceptName;
-    progress.value += 0.3 / tableOfContent.value.length;
+    progress.value += 0.35 / tableOfContent.value.length;
 
     const conceptText = await aiService.getConceptContent(
       step,
@@ -655,7 +655,7 @@ const generateLecture = async () => {
       console.log("No content for concept", conceptName);
     }
 
-    progress.value += 0.3 / tableOfContent.value.length;
+    progress.value += 0.35 / tableOfContent.value.length;
 
     const conceptQuiz = await aiService.getConceptQuiz(
       step,
@@ -681,38 +681,6 @@ const generateLecture = async () => {
       parts,
     });
   }
-
-  // creating the final conclusion step
-  progress.value = 90 / 100;
-  progressLabel.value = t("wizard.generating.conclusion");
-  parts = ["roti", "difficulty", "stars"].map((type, idx) => ({
-    type: "quiz",
-    questions: [
-      {
-        id: "conclusion-" + idx,
-        type: "feedback",
-        text: t("quiz.feedback.question." + type),
-        answers:
-          type == "stars"
-            ? []
-            : [1, 2, 3, 4, 5].map((index) => ({
-                text: t("quiz.feedback.tooltips." + type + "." + index),
-              })),
-        options: {
-          feedbackType: type,
-        },
-      },
-    ],
-  }));
-
-  await lectureStepService.create({
-    title: title.value + ": " + t("wizard.content.feedback_title"),
-    type: "step",
-    lectureId,
-    order: "" + Date.now(),
-    parts,
-  });
-
   progressLabel.value = t("wizard.generating.finished");
   progress.value = 1;
 };

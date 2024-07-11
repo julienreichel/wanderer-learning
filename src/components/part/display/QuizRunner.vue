@@ -268,10 +268,15 @@ let getActiveQuestions = () => {
     return acc;
   }, acc);
 
-  // acculate the lover levels
+  /// acculate the lover levels failurs
   for (let i = 0; i < 4; i++) {
-    difficulties[i + 1].total += difficulties[i].total;
-    difficulties[i + 1].valid += difficulties[i].valid;
+    const failure = difficulties[i].total - difficulties[i].valid;
+    difficulties[i + 1].total += failure;
+  }
+  // accumulate higher level sucess
+  for (let i = 4; i > 0; i--) {
+    difficulties[i - 1].total += difficulties[i].valid;
+    difficulties[i - 1].valid += difficulties[i].valid;
   }
   // find the difficulty to use for the next question
   console.log("difficulties", difficulties);
@@ -362,7 +367,7 @@ watch(
         question.response === undefined
           ? question.type === "checkbox"
             ? []
-            : undefined
+            : question.type === "feedback" ? NaN : undefined
           : question.response;
       question.time = question.time || 0;
       question.level = question.level || "intermediate";
