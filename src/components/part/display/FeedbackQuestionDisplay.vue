@@ -63,10 +63,7 @@ watch(newResponse, (value) => {
   emit("feedback", value);
 });
 
-const feedbackType = computed(
-  () =>
-    props.question.options?.feedbackType
-);
+const feedbackType = computed(() => props.question.options?.feedbackType);
 
 const icons = {
   difficulty: "speed",

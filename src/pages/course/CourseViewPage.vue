@@ -138,7 +138,6 @@ onMounted(async () => {
     // this user has never touched this course, let's start with a quiz
     checkCourse();
   }
-
 });
 
 const userLevel = computed(() => {

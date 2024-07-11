@@ -200,8 +200,8 @@ const icons = {
 const getFeedbackIcon = (question) => {
   const feedbackType = question.options?.feedbackType;
   return Array.isArray(icons[feedbackType])
-                  ? icons[feedbackType][question.response - 1]
-                  : icons[feedbackType];
+    ? icons[feedbackType][question.response - 1]
+    : icons[feedbackType];
 };
 
 const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
@@ -367,7 +367,9 @@ watch(
         question.response === undefined
           ? question.type === "checkbox"
             ? []
-            : question.type === "feedback" ? NaN : undefined
+            : question.type === "feedback"
+              ? NaN
+              : undefined
           : question.response;
       question.time = question.time || 0;
       question.level = question.level || "intermediate";
