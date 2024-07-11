@@ -157,31 +157,33 @@ onMounted(async () => {
 
   // load stats for the user for each step
   let lectureStarted = 0;
-  await Promise.all(lecture.value.steps.map(async (step) => {
-    const reports = await reportingService.list({
-      lectureStepId: step.id,
-      username,
-      userId,
-    });
-    if (reports.length) {
-      lectureStarted++;
-      // keep only the most recent
-      let report = reports.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-      )[0];
-      const totalTime = report.reportings.reduce(
-        (acc, val) => acc + val.time,
-        0,
-      );
-      if (totalTime < 60) {
-        report.totalTime = totalTime + " sec";
-      } else {
-        report.totalTime = Math.round(totalTime / 60) + " min";
+  await Promise.all(
+    lecture.value.steps.map(async (step) => {
+      const reports = await reportingService.list({
+        lectureStepId: step.id,
+        username,
+        userId,
+      });
+      if (reports.length) {
+        lectureStarted++;
+        // keep only the most recent
+        let report = reports.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        )[0];
+        const totalTime = report.reportings.reduce(
+          (acc, val) => acc + val.time,
+          0,
+        );
+        if (totalTime < 60) {
+          report.totalTime = totalTime + " sec";
+        } else {
+          report.totalTime = Math.round(totalTime / 60) + " min";
+        }
+        step.reporting = report;
       }
-      step.reporting = report;
-    }
-  }));
-  if (!lectureStarted && !allReports.length){
+    }),
+  );
+  if (!lectureStarted && !allReports.length) {
     // this user has never touched this lecture, let's start with a quiz
     connectionQuiz.value = true;
   }

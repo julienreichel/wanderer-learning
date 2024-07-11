@@ -37,7 +37,7 @@ const props = defineProps({
   lecture: {
     type: Object,
     required: true,
-  }
+  },
 });
 
 const toc = ref([]);

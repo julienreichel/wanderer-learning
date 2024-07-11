@@ -258,11 +258,15 @@ const questions = computed(() => {
     .flat();
   return questions;
 });
-watch(questions, (questions) => {
-  if (!questions && tab.value === "review") {
-    tab.value = "progress";
-  }
-}, { immediate: true });
+watch(
+  questions,
+  (questions) => {
+    if (!questions && tab.value === "review") {
+      tab.value = "progress";
+    }
+  },
+  { immediate: true },
+);
 
 const processResult = async (questions) => {
   const step = reviewStep.value;

@@ -233,15 +233,8 @@ export default class ServicePrototype {
   }
 
   async singleQuiz(sectionName, sectionContent, difficulty = 3) {
-    const system = singleQuiz.system(
-      this.tone,
-      this.language,
-      difficulty
-    );
-    const prompt = singleQuiz.prompt(
-      sectionName,
-      sectionContent
-    );
+    const system = singleQuiz.system(this.tone, this.language, difficulty);
+    const prompt = singleQuiz.prompt(sectionName, sectionContent);
 
     return this.query({ system, prompt, token: 15 * 200 });
   }

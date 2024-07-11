@@ -676,8 +676,10 @@ const generateLecture = async () => {
       progress.value += 0.1 / tableOfContent.value.length;
       const conceptQuiz = await aiService.singleQuiz(
         step.name,
-        fullLectureContent.length > 4000 ? shortLectureContent : fullLectureContent,
-        level
+        fullLectureContent.length > 4000
+          ? shortLectureContent
+          : fullLectureContent,
+        level,
       );
       if (conceptQuiz.questions) {
         questions.push(...conceptQuiz.questions);
@@ -686,9 +688,7 @@ const generateLecture = async () => {
       }
     }
     conceptIdMap.default = conceptIdMap[step.concept];
-    parts.push(
-      createQuizPart(questions, nbQuestion, conceptIdMap),
-    );
+    parts.push(createQuizPart(questions, nbQuestion, conceptIdMap));
 
     lecturePreview.value = null;
     const conceptStep = await lectureStepService.create({
