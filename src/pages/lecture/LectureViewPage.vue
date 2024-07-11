@@ -156,13 +156,15 @@ onMounted(async () => {
   }
 
   // load stats for the user for each step
-  lecture.value.steps.forEach(async (step) => {
+  let lectureStarted = 0;
+  await Promise.all(lecture.value.steps.map(async (step) => {
     const reports = await reportingService.list({
       lectureStepId: step.id,
       username,
       userId,
     });
     if (reports.length) {
+      lectureStarted++;
       // keep only the most recent
       let report = reports.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
@@ -178,7 +180,11 @@ onMounted(async () => {
       }
       step.reporting = report;
     }
-  });
+  }));
+  if (!lectureStarted && !allReports.length){
+    // this user has never touched this lecture, let's start with a quiz
+    connectionQuiz.value = true;
+  }
 });
 
 const showFinalQuiz = computed(() => {
