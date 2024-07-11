@@ -3,7 +3,6 @@ import concepts from "./prompts/concepts.js";
 import toc from "./prompts/toc.js";
 import connectQuiz from "./prompts/connectQuiz.js";
 import connectText from "./prompts/connectText.js";
-import conceptsQuiz from "./prompts/conceptsQuiz.js";
 import conceptsText from "./prompts/conceptsText.js";
 import conceptsTextHtml from "./prompts/conceptsTextHtml.js";
 import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
