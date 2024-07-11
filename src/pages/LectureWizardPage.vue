@@ -630,15 +630,15 @@ const generateLecture = async () => {
 
   // Creating the concept steps
   const nbQuestion = 12;
-  let questions = [];
   progress.value = 20 / 100;
   for (let i = 0; i < tableOfContent.value.length; i++) {
+    let questions = [];
     parts = [];
 
     const step = tableOfContent.value[i];
     const conceptName = step.name;
     progressLabel.value = t("wizard.generating.concept") + " " + conceptName;
-    progress.value += 0.35 / tableOfContent.value.length;
+    progress.value += 0.3 / tableOfContent.value.length;
 
     const conceptText = await aiService.getConceptContent(
       step,
@@ -652,24 +652,27 @@ const generateLecture = async () => {
         });
       });
     } else {
-      console.log("No content for concept", conceptName);
+      console.log("No content for concept section", conceptName);
     }
 
-    progress.value += 0.35 / tableOfContent.value.length;
-
-    const conceptQuiz = await aiService.getConceptQuiz(
-      step,
-      getNbQuestions(nbQuestion),
-    );
-    if (conceptQuiz.questions) {
-      questions.push(...conceptQuiz.questions);
-      conceptIdMap.default = conceptIdMap[step.concept];
-      parts.push(
-        createQuizPart(conceptQuiz.questions, nbQuestion, conceptIdMap),
+    const content = step.items.map(({ name, description }) => `${name}: ${description}`).join("\n");
+    for (let level = 1; level < 5; level++) {
+      progress.value += 0.1 / tableOfContent.value.length;
+      const conceptQuiz = await aiService.singleQuiz(
+        step.name,
+        content,
+        level
       );
-    } else {
-      console.log("No quiz for concept", conceptName);
+      if (conceptQuiz.questions) {
+        questions.push(...conceptQuiz.questions);
+      } else {
+        console.log("No quiz for concept section", conceptName, level);
+      }
     }
+    conceptIdMap.default = conceptIdMap[step.concept];
+    parts.push(
+      createQuizPart(questions, nbQuestion, conceptIdMap),
+    );
 
     await lectureStepService.create({
       title: step.name,

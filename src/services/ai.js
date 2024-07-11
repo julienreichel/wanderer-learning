@@ -176,28 +176,6 @@ export default class ServicePrototype {
     return this.query({ system, prompt, token: 2000 });
   }
 
-  async getConceptQuiz(section, content, concepts) {
-    const sectionName = section.name;
-    const sectionItems = section.items
-      .map(({ name, description }) => `${name}: ${description}`)
-      .join("\n");
-
-    const system = conceptsQuiz.system(
-      this.style,
-      this.tone,
-      this.audience,
-      this.language,
-    );
-    const prompt = conceptsQuiz.prompt(
-      sectionName,
-      sectionItems,
-      nbQuestions,
-      this.language,
-    );
-
-    return this.query({ system, prompt, token: nbQuestions * 200 });
-  }
-
   async getConceptContent(section, useHtmlQuery = false) {
     if (useHtmlQuery) {
       let pages = [];
