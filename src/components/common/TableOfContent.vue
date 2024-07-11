@@ -37,7 +37,7 @@ const props = defineProps({
   lecture: {
     type: Object,
     required: true,
-  },
+  }
 });
 
 const toc = ref([]);
@@ -98,10 +98,11 @@ const buildToc = (steps) => {
 // Watch the lecture prop and update TOC accordingly
 const selected = ref(null);
 watch(
-  () => props.lecture,
-  (newLecture) => {
-    if (newLecture && newLecture.steps && newLecture.steps) {
-      toc.value = buildToc(newLecture.steps);
+  () => props.lecture || props.lecture.steps,
+  () => {
+    console.log("update toc", props.lecture);
+    if (props.lecture && props.lecture.steps) {
+      toc.value = buildToc(props.lecture.steps);
     }
     selected.value = null;
   },

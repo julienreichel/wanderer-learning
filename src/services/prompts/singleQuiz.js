@@ -54,7 +54,7 @@ The purpose of the quiz with ${difficultyLevel} level is to eveluate if the user
 <Objective>
 Given the lecture description, the key concepts, the learning objectives and the table of content, create a quiz covering the lecture.
 The quiz should encompass 15 questions in total distributed among the following types:
-${quizes.join("\n- ")}
+- ${quizes.join("\n- ")}
 Each question should be accompanied by a one-paragraph explanation with at least 3 sentences.
 The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective.
 <Tone>
