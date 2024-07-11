@@ -110,7 +110,7 @@
             <q-item-section class="text-ellipsis">
               {{ q.text }}
             </q-item-section>
-            <q-item-section side> {{ q.points / 2 }} / 5 </q-item-section>
+            <q-item-section side> {{ q.points }} / 5 </q-item-section>
           </q-item>
         </q-list>
         <q-card-section v-if="wrongQuestions.length">
