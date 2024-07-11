@@ -604,7 +604,7 @@ const generateLecture = async () => {
   }
 
   // creating the connection step
-  parts = [];
+  let parts = [];
   progress.value = 10 / 100;
   progressLabel.value = t("wizard.generating.connect");
 
@@ -629,7 +629,7 @@ const generateLecture = async () => {
   });
 
   // Creating the concept steps
-  nbQuestion = 12;
+  const nbQuestion = 12;
   let questions = [];
   progress.value = 20 / 100;
   for (let i = 0; i < tableOfContent.value.length; i++) {
