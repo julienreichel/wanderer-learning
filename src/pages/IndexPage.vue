@@ -168,8 +168,8 @@ onMounted(async () => {
       continue;
     }
     const lecture = await lectureService.get(report.lectureId);
-    processedLectureIds[lecture.id] = lecture;
     if (!lecture) continue;
+    processedLectureIds[lecture.id] = lecture;
 
     addStep(lecture, report);
     // check if there in a next step in the lecture based report.lectureStepId
@@ -262,7 +262,7 @@ watch(questions, (questions) => {
   if (!questions && tab.value === "review") {
     tab.value = "progress";
   }
-});
+}, { immediate: true });
 
 const processResult = async (questions) => {
   const step = reviewStep.value;
