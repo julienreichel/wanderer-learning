@@ -30,12 +30,12 @@
       </q-card-actions>
     </q-card>
     <draggable
-        v-model="lecture.steps"
-        item-key="id"
-        ghost-class="ghost"
-        @change="moved"
-      >
-        <template #item="{element}" >
+      v-model="lecture.steps"
+      item-key="id"
+      ghost-class="ghost"
+      @change="moved"
+    >
+      <template #item="{ element }">
         <q-card
           clickable
           @click="canEdit(element) ? editStep(element) : viewStep(element)"
@@ -46,9 +46,12 @@
               <q-card-section>
                 <div class="text-h5">{{ element.title }}</div>
               </q-card-section>
-              <q-card-section ref="graphSection" v-if="element.timestampDistribution">
+              <q-card-section
+                ref="graphSection"
+                v-if="element.timestampDistribution"
+              >
                 <usage-histogram
-                  :serie="step.timestampDistribution"
+                  :serie="element.timestampDistribution"
                   :width="600"
                   :height="150"
                 />
@@ -65,12 +68,12 @@
           </q-card-section>
           <q-card-actions v-if="canEdit(element)" class="q-px-none q-py-lg">
             <q-space />
-            <q-btn size="md" icon="delete" @click.stop="deleteStep(step)" />
+            <q-btn size="md" icon="delete" @click.stop="deleteStep(element)" />
             <q-btn
               size="md"
               padding="sm 64px"
               icon="chevron_right"
-              @click.stop="canEdit(step) ? editStep(step) : viewStep(step)"
+              @click.stop="canEdit(element) ? editStep(element) : viewStep(element)"
             />
           </q-card-actions>
         </q-card>
@@ -96,7 +99,7 @@
 </template>
 
 <script setup>
-import draggable from 'vuedraggable';
+import draggable from "vuedraggable";
 import ConceptEditing from "src/components/concept/ConceptEditing.vue";
 import UsageHistogram from "src/components/charts/UsageHistogram.vue";
 import TimeDistribution from "src/components/charts/TimeDistribution.vue";
@@ -270,5 +273,4 @@ const finished = () => {
 
 .ghost
   opacity: 0
-
 </style>
