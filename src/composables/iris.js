@@ -15,15 +15,21 @@ export function useIris() {
   const canEdit = (item) => {
     return isAdmin || item?.owner === userId;
   };
-  const getIconFromType = (type) =>
-    ({
+  const getIconFromQuestion = (question) => {
+    console.log(question.type, question.answers?.length);
+    if (question.type === 'radio' && question.answers?.length === 2) {
+      return "join_left";
+    }
+    const icon = {
       shorttext: "short_text",
       radio: "radio_button_checked",
       checkbox: "check_box",
       feedback: "rate_review",
-    })[type] || type;
+    }[question.type] || question.type;
+    return icon;
+  }
 
-  return { router, t, locale, $q, uid, canEdit, getIconFromType };
+  return { router, t, locale, $q, uid, canEdit, getIconFromQuestion };
 }
 
 export function useFormatter() {

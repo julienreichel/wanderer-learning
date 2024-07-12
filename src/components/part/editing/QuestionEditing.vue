@@ -137,7 +137,7 @@ import ConceptSelecting from "src/components/concept/ConceptSelecting.vue";
 
 import { ref, watch, inject, onMounted } from "vue";
 import { useIris } from "src/composables/iris";
-const { t, getIconFromType } = useIris();
+const { t, getIconFromQuestion } = useIris();
 
 const question = defineModel();
 if (!question.value.explanations) {
@@ -234,7 +234,7 @@ const feedbackTypeOptions = [
 
 const questionTypeOptions = ["shorttext", "radio", "checkbox", "feedback"];
 
-const selectIcon = (value) => getIconFromType(value);
+const selectIcon = (value) => getIconFromQuestion({ type: value });
 
 const getIcon = (question, add) => {
   if (question.type === "radio") {

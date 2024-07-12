@@ -508,7 +508,7 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
       "",
     );
     question.text = question.text.replace(
-      /\s*(as discussed in the section|based on the section content|according to the section)\s*/,
+      /\s*(as discussed in the section|based on the section content|according to the section|according to the lecture)\s*/,
       "",
     );
     question.answers.forEach((answer) => {

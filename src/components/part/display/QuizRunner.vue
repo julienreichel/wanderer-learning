@@ -105,7 +105,7 @@
             @click="step = activeQuestions.indexOf(q)"
           >
             <q-item-section avatar>
-              <q-icon name="check_circle_outline" />
+              <q-icon name="task_alt" />
             </q-item-section>
             <q-item-section class="text-ellipsis">
               {{ q.text }}
@@ -427,6 +427,7 @@ const getOptions = (question) => {
       order: answer.order,
       label: answer.text,
       value: index,
+      checkedIcon: question.type === "radio" ? "task_alt": undefined,
       color: question.validated
         ? answer.valid
           ? "positive"

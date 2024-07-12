@@ -16,7 +16,7 @@
 import { computed } from "vue";
 
 import { useIris } from "src/composables/iris";
-const { getIconFromType } = useIris();
+const { getIconFromQuestion } = useIris();
 
 const props = defineProps({
   question: { type: Object, required: true },
@@ -24,5 +24,5 @@ const props = defineProps({
 
 const emit = defineEmits(["selected"]);
 
-const icon = computed(() => getIconFromType(props.question.type));
+const icon = computed(() => getIconFromQuestion(props.question));
 </script>
