@@ -288,7 +288,7 @@
 <script setup>
 import TableOfContent from "src/components/common/TableOfContent.vue";
 
-import { ref, inject, onMounted } from "vue";
+import { ref, inject, onMounted, nextTick } from "vue";
 
 import { useIris, useFormatter } from "src/composables/iris";
 const { t, locale, $q, router, uid } = useIris();
@@ -641,14 +641,11 @@ const generateLecture = async () => {
   // Creating the concept steps
   const nbQuestion = 12;
   progress.value = 20 / 100;
-  for (let i = 0; i < tableOfContent.value.length; i++) {
+  const conceptParts = await Promise.all(tableOfContent.value.map(async (step) => {
     let questions = [];
-    parts = [];
+    let parts = [];
 
-    const step = tableOfContent.value[i];
     const conceptName = step.name;
-    progressLabel.value = t("wizard.generating.concept") + " " + conceptName;
-    progress.value += 0.3 / tableOfContent.value.length;
 
     const conceptText = await aiService.getConceptContent(
       step,
@@ -665,6 +662,9 @@ const generateLecture = async () => {
       console.log("No content for concept section", conceptName);
     }
 
+    progressLabel.value = t("wizard.generating.concept") + " " + conceptName;
+    progress.value += 0.3 / tableOfContent.value.length;
+
     const shortLectureContent = htmlToMarkdown(parts[0].text);
 
     const fullLectureContent = parts
@@ -672,8 +672,8 @@ const generateLecture = async () => {
       .map((part) => htmlToMarkdown(part.text))
       .join("\n\n");
 
-    for (let level = 1; level < 5; level++) {
-      progress.value += 0.1 / tableOfContent.value.length;
+    // order of the question is not important
+    await Promise.all([1, 2, 3, 4].map(async (level) => {
       const conceptQuiz = await aiService.singleQuiz(
         step.name,
         fullLectureContent.length > 4000
@@ -686,12 +686,14 @@ const generateLecture = async () => {
       } else {
         console.log("No quiz for concept section", conceptName, level);
       }
-    }
+      progress.value += 0.1 / tableOfContent.value.length;
+    }));
+
     conceptIdMap.default = conceptIdMap[step.concept];
     parts.push(createQuizPart(questions, nbQuestion, conceptIdMap));
 
     lecturePreview.value = null;
-    const conceptStep = await lectureStepService.create({
+    const conceptStep = {
       title: step.name,
       type: "step",
       lectureId,
@@ -699,10 +701,19 @@ const generateLecture = async () => {
       conceptId: conceptIdMap[step.concept],
       level: step.level,
       parts,
-    });
+    };
 
     lecture.steps.push(conceptStep);
-    lecturePreview.value = lecture;
+    nextTick(() => {
+      lecturePreview.value = lecture;
+    });
+    return conceptStep;
+  }));
+  let now = Date.now();
+  for (const part of conceptParts) {
+    part.order = "" + now;
+    now += 1000;
+    await lectureStepService.create(part);
   }
   progressLabel.value = t("wizard.generating.finished");
   progress.value = 1;
