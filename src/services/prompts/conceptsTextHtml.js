@@ -21,14 +21,14 @@ The link <a> can only be use to link public web pages.
 For mathematical formulas, use Katex format.
 `;
 
-const prompt = (section, idx) => {
+const prompt = (section, item) => {
   const sectionName = section.name;
   const sectionItems = section.items
     .map(({ name, description }) => `- ${name}: ${description}`)
     .join("\n");
 
-  const activeSectionName = section.items[idx].name;
-  const activeSectionDescription = section.items[idx].description;
+  const activeSectionName = item.name;
+  const activeSectionDescription = item.description;
 
   return `
 You are an expert instructor.
@@ -46,7 +46,7 @@ ${sectionName}
 Section content:
 ${sectionItems}
 
-Write the HTML fragment describing ONLY the "${activeSectionName}" part with the description "${activeSectionDescription}".
+Write the HTML fragment describing ONLY the "${activeSectionName}" part with the description: "${activeSectionDescription}".
 
 Start the response by:
 "<h5>${activeSectionName}</h5> ..."

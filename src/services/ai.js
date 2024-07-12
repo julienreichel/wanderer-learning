@@ -197,7 +197,7 @@ export default class ServicePrototype {
       html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
       pages.push(html);
 
-      for (let i = 0; i < section.items.length; i++) {
+      const contentPages = await Promise.all(section.items.map(async (item) => {
         system = conceptsTextHtml.system(
           this.style,
           this.tone,
@@ -205,7 +205,7 @@ export default class ServicePrototype {
           this.prerequisites,
           this.language,
         );
-        prompt = conceptsTextHtml.prompt(section, i);
+        prompt = conceptsTextHtml.prompt(section, item);
         let html = await this.query({
           system,
           prompt,
@@ -214,8 +214,9 @@ export default class ServicePrototype {
         });
         // remove starting "```html" and ending "```" if present
         html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
-        pages.push(html);
-      }
+        return html;
+      }));
+      pages.push(...contentPages);
 
       return { pages };
     } else {
