@@ -16,7 +16,6 @@ export function useIris() {
     return isAdmin || item?.owner === userId;
   };
   const getIconFromQuestion = (question) => {
-    console.log(question.type, question.answers?.length);
     if (question.type === 'radio' && question.answers?.length === 2) {
       return "join_left";
     }
