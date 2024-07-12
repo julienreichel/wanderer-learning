@@ -29,57 +29,53 @@
         />
       </q-card-actions>
     </q-card>
-    <q-card
-      v-for="(step, index) in lecture.steps"
-      :key="index"
-      clickable
-      @click="canEdit(step) ? editStep(step) : viewStep(step)"
-    >
-      <q-card-section horizontal>
-        <q-card-section class="col q-pa-sm">
-          <q-card-section>
-            <div class="text-h5">{{ step.title }}</div>
+    <draggable
+        v-model="lecture.steps"
+        item-key="id"
+        ghost-class="ghost"
+        @change="moved"
+      >
+        <template #item="{element}" >
+        <q-card
+          clickable
+          @click="canEdit(element) ? editStep(element) : viewStep(element)"
+          class="q-mt-sm"
+        >
+          <q-card-section horizontal>
+            <q-card-section class="col q-pa-sm">
+              <q-card-section>
+                <div class="text-h5">{{ element.title }}</div>
+              </q-card-section>
+              <q-card-section ref="graphSection" v-if="element.timestampDistribution">
+                <usage-histogram
+                  :serie="step.timestampDistribution"
+                  :width="600"
+                  :height="150"
+                />
+              </q-card-section>
+            </q-card-section>
+            <q-card-section class="q-pa-sm text-right">
+              <!-- Stats -->
+              <time-distribution
+                v-if="element.userTimeReportings"
+                :serie="element.userTimeReportings"
+              />
+              <step-reporting :ratings="element.ratings"></step-reporting>
+            </q-card-section>
           </q-card-section>
-          <q-card-section ref="graphSection" v-if="step.timestampDistribution">
-            <usage-histogram
-              :serie="step.timestampDistribution"
-              :width="600"
-              :height="150"
+          <q-card-actions v-if="canEdit(element)" class="q-px-none q-py-lg">
+            <q-space />
+            <q-btn size="md" icon="delete" @click.stop="deleteStep(step)" />
+            <q-btn
+              size="md"
+              padding="sm 64px"
+              icon="chevron_right"
+              @click.stop="canEdit(step) ? editStep(step) : viewStep(step)"
             />
-          </q-card-section>
-        </q-card-section>
-        <q-card-section class="q-pa-sm text-right">
-          <!-- Stats -->
-          <time-distribution
-            v-if="step.userTimeReportings"
-            :serie="step.userTimeReportings"
-          />
-          <step-reporting :ratings="step.ratings"></step-reporting>
-        </q-card-section>
-      </q-card-section>
-      <q-card-actions v-if="canEdit(step)" class="q-px-none q-py-lg">
-        <q-btn
-          v-if="index > 0"
-          size="md"
-          icon="arrow_upward"
-          @click.stop="moveUp(index)"
-        />
-        <q-btn
-          v-if="index < lecture.steps.length - 1"
-          size="md"
-          icon="arrow_downward"
-          @click.stop="moveDown(index)"
-        />
-        <q-space />
-        <q-btn size="md" icon="delete" @click.stop="deleteStep(step)" />
-        <q-btn
-          size="md"
-          padding="sm 64px"
-          icon="chevron_right"
-          @click.stop="canEdit(step) ? editStep(step) : viewStep(step)"
-        />
-      </q-card-actions>
-    </q-card>
+          </q-card-actions>
+        </q-card>
+      </template>
+    </draggable>
     <q-card>
       <q-card-section>
         <q-input
@@ -100,6 +96,7 @@
 </template>
 
 <script setup>
+import draggable from 'vuedraggable';
 import ConceptEditing from "src/components/concept/ConceptEditing.vue";
 import UsageHistogram from "src/components/charts/UsageHistogram.vue";
 import TimeDistribution from "src/components/charts/TimeDistribution.vue";
@@ -196,29 +193,23 @@ const saveLecture = async () => {
   }
 };
 
-const moveUp = async (index) => {
+const moved = async (event) => {
+  let { newIndex } = event.moved;
   const steps = lecture.value.steps;
-  const previousOrder = index > 1 ? Number(steps[index - 2].order) : 0;
-  const nextOrder = index > 0 ? Number(steps[index - 1].order) : 0;
-  const step = steps[index];
-  step.order = "" + (previousOrder + nextOrder) / 2;
-  await lectureStepService.update(step);
-
-  lecture.value.steps = lectureStepService.sort(steps);
-};
-const moveDown = async (index) => {
-  const steps = lecture.value.steps;
-  const step = steps[index];
-  if (index >= steps.length - 2) {
+  const step = steps[newIndex];
+  if (newIndex === 0) {
+    step.order = "" + Number(steps[1].order) / 2;
+  } else if (newIndex === steps.length - 1) {
     step.order = "" + Date.now();
   } else {
-    const previousOrder = Number(steps[index + 1].order);
-    const nextOrder = Number(steps[index + 2].order);
+    const previousOrder = Number(steps[newIndex - 1].order);
+    const nextOrder = Number(steps[newIndex + 1].order);
     step.order = "" + (previousOrder + nextOrder) / 2;
   }
+
   await lectureStepService.update(step);
 
-  lecture.value.steps = lectureStepService.sort(steps);
+  lecture.value.steps = lectureService.sort(steps);
 };
 
 const deleteStep = async (step) => {
@@ -276,4 +267,8 @@ const finished = () => {
 <style lang="sass" scoped>
 .truncate-chip-labels > .q-chip
   max-width: 200px
+
+.ghost
+  opacity: 0
+
 </style>

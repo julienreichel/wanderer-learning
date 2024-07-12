@@ -158,7 +158,6 @@ const remove = (index) => {
 };
 
 const moved = (event) => {
-  console.log(event.moved)
   let { newIndex, oldIndex } = event.moved;
   const oldElement = previewParts.value[oldIndex];
   const oldRealIndex = parts.value.indexOf(oldElement);
