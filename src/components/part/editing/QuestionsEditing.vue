@@ -1,51 +1,46 @@
 <template>
-  <q-card
-    v-for="(question, index) in quiz.questions"
-    :key="index"
-    @click="activeQuestion = index"
-    :class="{ 'q-card-hover': activeQuestion !== index }"
+  <draggable
+    v-model="quiz.questions"
+    item-key="id"
+    ghost-class="ghost"
   >
-    <question-editing
-      v-if="activeQuestion === index"
-      v-model="quiz.questions[index]"
-    />
-    <q-card-actions>
-      <question-editing-preview
-        v-if="activeQuestion !== index"
-        :question="question"
-        @selected="activeQuestion = index"
+  <template #item="{element, index}" >
+    <q-card
+      @click="activeQuestion = element"
+      :class="{ 'q-card-hover': activeQuestion !== element }"
+      class="q-mt-sm"
+    >
+      <question-editing
+        v-if="activeQuestion === element"
+        v-model="quiz.questions[index]"
       />
-      <q-space />
-      <q-btn
-        v-if="activeQuestion === index"
-        size="sm"
-        icon="unfold_less"
-        @click.stop="activeQuestion = undefined"
-      />
-      <q-btn
-        v-if="index > 0"
-        size="sm"
-        icon="arrow_upward"
-        @click.stop="moveUpQuestion({ index, question })"
-      />
-      <q-btn
-        v-if="index < quiz.questions.length - 1"
-        size="sm"
-        icon="arrow_downward"
-        @click.stop="moveDownQuestion({ index, question })"
-      />
-      <q-btn
-        size="sm"
-        icon="content_copy"
-        @click.stop="copyQuestion({ index, question })"
-      />
-      <q-btn
-        size="sm"
-        icon="delete"
-        @click.stop="removeQuestion({ index, question })"
-      />
-    </q-card-actions>
-  </q-card>
+      <q-card-actions>
+        <question-editing-preview
+          v-if="activeQuestion !== element"
+          :question="element"
+          @selected="activeQuestion = element"
+        />
+        <q-space />
+        <q-btn
+          v-if="activeQuestion === element"
+          size="sm"
+          icon="unfold_less"
+          @click.stop="activeQuestion = undefined"
+        />
+        <q-btn
+          size="sm"
+          icon="content_copy"
+          @click.stop="copyQuestion({ index, element })"
+        />
+        <q-btn
+          size="sm"
+          icon="delete"
+          @click.stop="removeQuestion({ index, element })"
+        />
+      </q-card-actions>
+    </q-card>
+  </template>
+  </draggable>
   <q-card>
     <q-card-section>
       <div class="row q-gutter-sm">
@@ -124,6 +119,7 @@
 </template>
 
 <script setup>
+import draggable from 'vuedraggable';
 import QuestionEditing from "src/components/part/editing/QuestionEditing.vue";
 import QuestionEditingPreview from "src/components/part/editing/QuestionEditingPreview.vue";
 import QuestionGenerationDialog from "src/components/part/editing/QuestionGenerationDialog.vue";
@@ -144,12 +140,13 @@ if (!quiz.value) {
   };
 }
 
-let activeQuestion = ref(0);
+let activeQuestion = ref(null);
 watch(
   () => quiz.value.questions,
   (value) => {
-    activeQuestion.value = value.length > 1 ? undefined : 0;
+    activeQuestion.value = value.length > 1 ? undefined : value[0];
   },
+  { immediate: true },
 );
 
 let nbQuestions = ref(Number(quiz.value.options.nbQuestions) || 5);
@@ -177,28 +174,6 @@ const copyQuestion = ({ index }) => {
   activeQuestion.value = index;
 };
 
-const moveUpQuestion = ({ index }) => {
-  const question = removeQuestion({ index });
-  quiz.value.questions.splice(index - 1, 0, question);
-
-  if (activeQuestion.value === index) {
-    activeQuestion.value = activeQuestion.value - 1;
-  } else if (activeQuestion.value === index - 1) {
-    activeQuestion.value = activeQuestion.value + 1;
-  }
-};
-
-const moveDownQuestion = ({ index }) => {
-  const question = removeQuestion({ index });
-  quiz.value.questions.splice(index + 1, 0, question);
-
-  if (activeQuestion.value === index) {
-    activeQuestion.value = activeQuestion.value + 1;
-  } else if (activeQuestion.value === index + 1) {
-    activeQuestion.value = activeQuestion.value - 1;
-  }
-};
-
 const addQuestion = (type) => {
   quiz.value.questions.push({
     id: uid(),
@@ -221,3 +196,10 @@ const applyQuestions = async ({ questions }) => {
   }
 };
 </script>
+
+<style scoped>
+.ghost {
+  opacity: 0;
+}
+
+</style>
