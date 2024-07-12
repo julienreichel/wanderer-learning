@@ -6,20 +6,26 @@
         :showPrevious="hasPrevious"
         @stepChange="step = $event"
       />
-      <PartCard
-        v-for="part in previewParts"
-        :key="part.id"
-        :part="part"
-        :step="parts.indexOf(part)"
-        :maxStep="parts.length"
-        :active="step == parts.indexOf(part)"
-        :editing="true"
-        @stepChange="step = $event"
-        @remove="remove"
-        @moveLeft="moveUp"
-        @moveRight="moveRight"
-        @edit="editJsonStep"
-      />
+      <draggable
+        v-model="previewParts"
+        item-key="id"
+        ghost-class="ghost"
+        @change="moved"
+        class="q-pt-sm q-px-sm q-col-gutter-sm row col"
+      >
+        <template #item="{element}" >
+          <PartCard
+            :part="element"
+            :step="parts.indexOf(element)"
+            :maxStep="parts.length"
+            :active="step == parts.indexOf(element)"
+            :editing="true"
+            @stepChange="step = $event"
+            @remove="remove"
+            @edit="editJsonStep"
+          />
+        </template>
+      </draggable>
       <NavigationCard
         :step="step"
         :hasNext="hasNext"
@@ -91,6 +97,7 @@
 </template>
 
 <script setup>
+import draggable from 'vuedraggable';
 import NavigationCard from "../common/NavigationCard.vue";
 import PartCard from "../common/PartCard.vue";
 import PartEditing from "./PartEditing.vue";
@@ -149,13 +156,18 @@ const remove = (index) => {
   part.src = null;
   return;
 };
-const moveUp = (index) => {
-  const part = parts.value.splice(index, 1)[0];
-  parts.value.splice(index - 1, 0, part);
-};
-const moveRight = (index) => {
-  const part = parts.value.splice(index, 1)[0];
-  parts.value.splice(index + 1, 0, part);
+
+const moved = (event) => {
+  console.log(event.moved)
+  let { newIndex, oldIndex } = event.moved;
+  const oldElement = previewParts.value[oldIndex];
+  const oldRealIndex = parts.value.indexOf(oldElement);
+
+  const newElement = previewParts.value[newIndex];
+  const newRealIndex = parts.value.indexOf(newElement);
+
+  const [movedPart] = parts.value.splice(oldRealIndex, 1);
+  parts.value.splice(newRealIndex, 0, movedPart);
 };
 
 const jsonEditStep = ref(null);
@@ -263,3 +275,9 @@ const finish = (success = true) => {
   emit("finished", { success });
 };
 </script>
+
+<style scoped>
+.ghost {
+  opacity: 0;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-2">
+  <div class="col">
     <q-card
       class="aspect-ratio-16-9 q-card-hover"
       clickable
@@ -69,22 +69,7 @@
       </q-card-section>
 
       <q-card-actions v-if="editing" class="q-pa-xs">
-        <q-btn
-          v-if="step > 0"
-          size="sm"
-          icon="arrow_back"
-          flat
-          round
-          @click.stop="$emit('moveLeft', step)"
-        />
-        <q-btn
-          v-if="step + 1 < maxStep"
-          size="sm"
-          icon="arrow_forward"
-          flat
-          round
-          @click.stop="$emit('moveRight', step)"
-        />
+
         <q-space />
         <q-btn
           v-if="isAdmin"
