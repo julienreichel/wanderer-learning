@@ -2,7 +2,7 @@
   <q-item dense class="q-pa-none">
     <q-item-section avatar>
       <q-avatar>
-        <q-icon size="sm" :name="icon" />
+        <q-icon size="sm" :name="icon" :color="color" />
       </q-avatar>
     </q-item-section>
 
@@ -16,6 +16,7 @@
 import { computed } from "vue";
 
 import { useIris } from "src/composables/iris";
+import { experimental } from "aws-cdk-lib/aws-cloudfront";
 const { getIconFromQuestion } = useIris();
 
 const props = defineProps({
@@ -25,4 +26,15 @@ const props = defineProps({
 const emit = defineEmits(["selected"]);
 
 const icon = computed(() => getIconFromQuestion(props.question));
+const color = computed(() => {
+  const level = props.question.level || "beginner";
+  const colors = {
+    novice: "lime",
+    beginner: "light-green",
+    intermediate: "green",
+    advanced: "teal",
+    expert: "purple",
+  };
+  return colors[level] || "grey";
+});
 </script>

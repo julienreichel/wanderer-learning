@@ -171,17 +171,19 @@ const copyQuestion = ({ index }) => {
   const copy = JSON.parse(JSON.stringify(src));
   copy.id = uid();
   quiz.value.questions.splice(index, 0, copy);
-  activeQuestion.value = index;
+  activeQuestion.value = quiz.value.questions[index];
 };
 
 const addQuestion = (type) => {
-  quiz.value.questions.push({
+  const q = {
     id: uid(),
     type,
     text: "",
     answers: [],
     options: [],
-  });
+  };
+  quiz.value.questions.push(q);
+  activeQuestion.value = q;
 };
 
 let wizardVisible = ref(false);
