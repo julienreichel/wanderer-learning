@@ -7,7 +7,7 @@
         @stepChange="step = $event"
       />
       <draggable
-        v-model="previewParts"
+        :list="previewParts"
         item-key="id"
         ghost-class="ghost"
         @change="moved"
@@ -128,15 +128,21 @@ const emit = defineEmits(["finished"]);
 
 const step = ref(Number(props.stepIdx) || 0);
 const part = computed(() => parts.value[step.value]);
-const previewParts = computed(() => {
+const previewStart = computed(() => {
   const toDisplay = 5;
-  if (parts.value.length < toDisplay) return parts.value;
+  if (parts.value.length < toDisplay) return 0;
 
   const start = Math.min(
     Math.max(0, step.value - Math.floor(toDisplay / 2)),
     parts.value.length - toDisplay,
   );
-  return parts.value.slice(start, start + toDisplay);
+  return start;
+});
+const previewParts = computed(() => {
+  const toDisplay = 5;
+  if (parts.value.length < toDisplay) return parts.value;
+
+  return parts.value.slice(previewStart.value, previewStart.value + toDisplay);
 });
 
 watch(step, (newStep) => {
@@ -159,14 +165,9 @@ const remove = (index) => {
 
 const moved = (event) => {
   let { newIndex, oldIndex } = event.moved;
-  const oldElement = previewParts.value[oldIndex];
-  const oldRealIndex = parts.value.indexOf(oldElement);
-
-  const newElement = previewParts.value[newIndex];
-  const newRealIndex = parts.value.indexOf(newElement);
-
-  const [movedPart] = parts.value.splice(oldRealIndex, 1);
-  parts.value.splice(newRealIndex, 0, movedPart);
+  const offset = previewStart.value;
+  const [movedPart] = parts.value.splice(offset + oldIndex, 1);
+  parts.value.splice(offset + newIndex, 0, movedPart);
 };
 
 const jsonEditStep = ref(null);
