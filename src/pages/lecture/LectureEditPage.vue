@@ -73,7 +73,9 @@
               size="md"
               padding="sm 64px"
               icon="chevron_right"
-              @click.stop="canEdit(element) ? editStep(element) : viewStep(element)"
+              @click.stop="
+                canEdit(element) ? editStep(element) : viewStep(element)
+              "
             />
           </q-card-actions>
         </q-card>

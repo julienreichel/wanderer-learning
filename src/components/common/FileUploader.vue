@@ -165,7 +165,6 @@ const finish = async (msg) => {
 
   emit("uploaded", uploadedFiles);
 };
-
 </script>
 
 <style lang="scss">

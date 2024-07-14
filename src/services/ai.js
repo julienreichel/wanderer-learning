@@ -15,7 +15,6 @@ import { fetchAuthSession } from "aws-amplify/auth";
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`;
 
-
 export default class ServicePrototype {
   constructor() {
     /**
@@ -201,25 +200,27 @@ export default class ServicePrototype {
       html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
       pages.push(html);
 
-      const contentPages = await Promise.all(section.items.map(async (item) => {
-        system = conceptsTextHtml.system(
-          this.style,
-          this.tone,
-          this.audience,
-          this.prerequisites,
-          this.language,
-        );
-        prompt = conceptsTextHtml.prompt(section, item);
-        let html = await this.query({
-          system,
-          prompt,
-          token: 2000,
-          format: "text",
-        });
-        // remove starting "```html" and ending "```" if present
-        html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
-        return html;
-      }));
+      const contentPages = await Promise.all(
+        section.items.map(async (item) => {
+          system = conceptsTextHtml.system(
+            this.style,
+            this.tone,
+            this.audience,
+            this.prerequisites,
+            this.language,
+          );
+          prompt = conceptsTextHtml.prompt(section, item);
+          let html = await this.query({
+            system,
+            prompt,
+            token: 2000,
+            format: "text",
+          });
+          // remove starting "```html" and ending "```" if present
+          html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
+          return html;
+        }),
+      );
       pages.push(...contentPages);
 
       return { pages };
@@ -258,8 +259,8 @@ export default class ServicePrototype {
   }
 
   async extractTextFromPdfFile(pdfFile) {
-
-    const pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
+    const pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile))
+      .promise;
     const numPages = pdf.numPages;
     let tree = [];
 
@@ -279,15 +280,17 @@ export default class ServicePrototype {
       });
     }
     // Find the most common text size anything bellow is also considered as text
-    const mostCommonTextSize = Object.keys(fontSizeHistogram).reduce((a, b) =>
-      fontSizeHistogram[a] > fontSizeHistogram[b] ? a : b, 0);
+    const mostCommonTextSize = Object.keys(fontSizeHistogram).reduce(
+      (a, b) => (fontSizeHistogram[a] > fontSizeHistogram[b] ? a : b),
+      0,
+    );
 
     // find the 2 most commont text sizes above this one
     const titleTextSizes = Object.keys(fontSizeHistogram)
       .filter((size) => Number(size) > mostCommonTextSize)
       .sort((a, b) => fontSizeHistogram[b] - fontSizeHistogram[a])
       .slice(0, 2)
-      .sort()
+      .sort();
 
     let level = 0;
     let levels = [{ children: tree }];
@@ -298,16 +301,25 @@ export default class ServicePrototype {
       const viewport = page.getViewport({ scale: 1 });
       const textContent = await page.getTextContent();
       const headerFooterHeight = 40; // Assuming headers and footers are within 50 units of the top/bottom
-      const items = textContent.items.filter(item => {
-        const y = item.transform[5]; // y-coordinate of the text item
-        return y > headerFooterHeight && y < (viewport.height - headerFooterHeight);
-      }).filter((item) => item.str.trim().length);
+      const items = textContent.items
+        .filter((item) => {
+          const y = item.transform[5]; // y-coordinate of the text item
+          return (
+            y > headerFooterHeight && y < viewport.height - headerFooterHeight
+          );
+        })
+        .filter((item) => item.str.trim().length);
 
       let lastPos = -1;
       for (const item of items) {
         const pos = item.transform[5];
         const delta = Math.round(lastPos - pos);
-        if (lastPos >= 0 && (delta < mostCommonTextSize || lastPos < pos || item.str.trim().length < 3)) {
+        if (
+          lastPos >= 0 &&
+          (delta < mostCommonTextSize ||
+            lastPos < pos ||
+            item.str.trim().length < 3)
+        ) {
           levels[level].label += " " + item.str.trim();
         } else {
           const height = Math.round(item.height);

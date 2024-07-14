@@ -1,45 +1,41 @@
 <template>
-  <draggable
-    v-model="quiz.questions"
-    item-key="id"
-    ghost-class="ghost"
-  >
-  <template #item="{element, index}" >
-    <q-card
-      @click="activeQuestion = element"
-      :class="{ 'q-card-hover': activeQuestion !== element }"
-      class="q-mt-sm"
-    >
-      <question-editing
-        v-if="activeQuestion === element"
-        v-model="quiz.questions[index]"
-      />
-      <q-card-actions>
-        <question-editing-preview
-          v-if="activeQuestion !== element"
-          :question="element"
-          @selected="activeQuestion = element"
-        />
-        <q-space />
-        <q-btn
+  <draggable v-model="quiz.questions" item-key="id" ghost-class="ghost">
+    <template #item="{ element, index }">
+      <q-card
+        @click="activeQuestion = element"
+        :class="{ 'q-card-hover': activeQuestion !== element }"
+        class="q-mt-sm"
+      >
+        <question-editing
           v-if="activeQuestion === element"
-          size="sm"
-          icon="unfold_less"
-          @click.stop="activeQuestion = undefined"
+          v-model="quiz.questions[index]"
         />
-        <q-btn
-          size="sm"
-          icon="content_copy"
-          @click.stop="copyQuestion({ index, element })"
-        />
-        <q-btn
-          size="sm"
-          icon="delete"
-          @click.stop="removeQuestion({ index, element })"
-        />
-      </q-card-actions>
-    </q-card>
-  </template>
+        <q-card-actions>
+          <question-editing-preview
+            v-if="activeQuestion !== element"
+            :question="element"
+            @selected="activeQuestion = element"
+          />
+          <q-space />
+          <q-btn
+            v-if="activeQuestion === element"
+            size="sm"
+            icon="unfold_less"
+            @click.stop="activeQuestion = undefined"
+          />
+          <q-btn
+            size="sm"
+            icon="content_copy"
+            @click.stop="copyQuestion({ index, element })"
+          />
+          <q-btn
+            size="sm"
+            icon="delete"
+            @click.stop="removeQuestion({ index, element })"
+          />
+        </q-card-actions>
+      </q-card>
+    </template>
   </draggable>
   <q-card>
     <q-card-section>
@@ -119,7 +115,7 @@
 </template>
 
 <script setup>
-import draggable from 'vuedraggable';
+import draggable from "vuedraggable";
 import QuestionEditing from "src/components/part/editing/QuestionEditing.vue";
 import QuestionEditingPreview from "src/components/part/editing/QuestionEditingPreview.vue";
 import QuestionGenerationDialog from "src/components/part/editing/QuestionGenerationDialog.vue";
@@ -203,5 +199,4 @@ const applyQuestions = async ({ questions }) => {
 .ghost {
   opacity: 0;
 }
-
 </style>

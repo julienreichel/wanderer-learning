@@ -427,7 +427,7 @@ const getOptions = (question) => {
       order: answer.order,
       label: answer.text,
       value: index,
-      checkedIcon: question.type === "radio" ? "task_alt": undefined,
+      checkedIcon: question.type === "radio" ? "task_alt" : undefined,
       color: question.validated
         ? answer.valid
           ? "positive"

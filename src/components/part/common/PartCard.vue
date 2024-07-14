@@ -69,7 +69,6 @@
       </q-card-section>
 
       <q-card-actions v-if="editing" class="q-pa-xs">
-
         <q-space />
         <q-btn
           v-if="isAdmin"

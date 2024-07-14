@@ -13,7 +13,7 @@
         @change="moved"
         class="q-pt-sm q-px-sm q-col-gutter-sm row col"
       >
-        <template #item="{element}" >
+        <template #item="{ element }">
           <PartCard
             :part="element"
             :step="parts.indexOf(element)"
@@ -97,7 +97,7 @@
 </template>
 
 <script setup>
-import draggable from 'vuedraggable';
+import draggable from "vuedraggable";
 import NavigationCard from "../common/NavigationCard.vue";
 import PartCard from "../common/PartCard.vue";
 import PartEditing from "./PartEditing.vue";

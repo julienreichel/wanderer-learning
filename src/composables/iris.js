@@ -16,17 +16,18 @@ export function useIris() {
     return isAdmin || item?.owner === userId;
   };
   const getIconFromQuestion = (question) => {
-    if (question.type === 'radio' && question.answers?.length === 2) {
+    if (question.type === "radio" && question.answers?.length === 2) {
       return "join_left";
     }
-    const icon = {
-      shorttext: "short_text",
-      radio: "radio_button_checked",
-      checkbox: "check_box",
-      feedback: "rate_review",
-    }[question.type] || question.type;
+    const icon =
+      {
+        shorttext: "short_text",
+        radio: "radio_button_checked",
+        checkbox: "check_box",
+        feedback: "rate_review",
+      }[question.type] || question.type;
     return icon;
-  }
+  };
 
   return { router, t, locale, $q, uid, canEdit, getIconFromQuestion };
 }
