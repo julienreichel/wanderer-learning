@@ -101,13 +101,11 @@ function renderLatexString(latexString) {
 const renderedText = computed(() => {
   // Replace display equations
   let text = props.part.text.replace(/\\\[(.*?)\\\]/gs, (match, p1) => {
-    console.log("display", match, p1);
     return renderLatexString(p1.trim());
   });
 
   // Replace inline equations
   text = text.replace(/\\\((.*?)\\\)/gs, (match, p1) => {
-    console.log("inline", match, p1);
     return renderLatexString(p1.trim());
   });
 

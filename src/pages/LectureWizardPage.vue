@@ -2,61 +2,74 @@
   <q-page padding>
     <q-stepper v-model="step" animated>
       <!-- Step 1: Course Description -->
-      <q-step :title="$t('wizard.lecture.title')" :name="1" >
+      <q-step :title="$t('wizard.lecture.title')" :name="1">
         <div class="q-gutter-sm">
-        <div class="text-h6">{{ $t("wizard.lecture.description") }}</div>
-        <div class="row q-col-gutter-sm">
-        <q-input
-          class="col"
-          outlined
-          v-model="courseDescription"
-          :placeholder="$t('wizard.lecture.label')"
-          type="textarea"
-          rows="5"
-        />
-        <q-file
-          class="col-3 full-height"
-          style="max-width: 300px"
-          v-model="pdfFiles"
-          outlined
-          :label="$t('wizard.lecture.pdf_upload')"
-          accept=".pdf, application/pdf"
-        />
-        </div>
-        <q-toggle v-model="advanced" :label="$t('wizard.lecture.advanced')" />
-        <div v-if="advanced" class="q-pa-md q-col-gutter-sm">
-          <q-select
-            outlined
-            v-model="style"
-            :label="$t('wizard.lecture.style')"
-            :options="styleOptions"
-            emit-value
-          />
-          <q-select
-            outlined
-            v-model="tone"
-            :label="$t('wizard.lecture.tone')"
-            :options="toneOptions"
-            emit-value
-          />
-          <q-select
-            outlined
-            v-model="audience"
-            :label="$t('wizard.lecture.audience')"
-            :options="audienceOptions"
-            emit-value
-          />
-          <q-select
-            outlined
-            v-model="model"
-            :options="['gpt-3.5-turbo', 'gpt-4o']"
-            :label="$t('wizard.lecture.model')"
-          />
-          <q-toggle
-            v-model="extendedQueryForConcept"
-            :label="$t('wizard.lecture.queryType')"
-          />
-        </div>
+          <div class="text-h6">{{ $t("wizard.lecture.description") }}</div>
+          <div class="row q-col-gutter-sm">
+            <q-input
+              class="col"
+              outlined
+              v-model="courseDescription"
+              :placeholder="$t('wizard.lecture.label')"
+              type="textarea"
+              rows="20"
+            />
+            <q-file
+              v-if="!tree"
+              class="col-4"
+              style="max-width: 300px"
+              v-model="pdfFiles"
+              outlined
+              :label="$t('wizard.lecture.pdf_upload')"
+              accept=".pdf, application/pdf"
+            />
+            <div v-else class="col-4">
+              <q-slider v-model="nbLines" :min="0" :max="10" class="q-px-lg" />
+              <q-tree
+                class="col-4"
+                :nodes="tree"
+                node-key="label"
+                v-model:selected="selected"
+                v-model:ticked="ticked"
+                v-model:expanded="expanded"
+                tick-strategy="strict"
+              />
+            </div>
+          </div>
+          <q-toggle v-model="advanced" :label="$t('wizard.lecture.advanced')" />
+          <div v-if="advanced" class="q-pa-md q-col-gutter-sm">
+            <q-select
+              outlined
+              v-model="style"
+              :label="$t('wizard.lecture.style')"
+              :options="styleOptions"
+              emit-value
+            />
+            <q-select
+              outlined
+              v-model="tone"
+              :label="$t('wizard.lecture.tone')"
+              :options="toneOptions"
+              emit-value
+            />
+            <q-select
+              outlined
+              v-model="audience"
+              :label="$t('wizard.lecture.audience')"
+              :options="audienceOptions"
+              emit-value
+            />
+            <q-select
+              outlined
+              v-model="model"
+              :options="['gpt-3.5-turbo', 'gpt-4o']"
+              :label="$t('wizard.lecture.model')"
+            />
+            <q-toggle
+              v-model="extendedQueryForConcept"
+              :label="$t('wizard.lecture.queryType')"
+            />
+          </div>
         </div>
         <q-stepper-navigation>
           <q-space />
@@ -334,24 +347,73 @@ onMounted(async () => {
 });
 
 let pdfFiles = ref(null);
-watch(pdfFiles, async (file) => {
-  if (!file) {
-    return;
-  }
-  const tree = await aiService.extractTextFromPdfFile(file);
+let tree = ref(null);
+let selected = ref(null);
+let ticked = ref([]);
+let expanded = ref([]);
+let nbLines = ref(2);
+watch(ticked, (value) => {
   // flatten the tree
-  courseDescription.value = tree.reduce((acc, chapter) => {
-    acc += "\n# " + chapter.label + "\n";
+  const titleOnly = nbLines.value === 0;
+  courseDescription.value = tree.value.reduce((acc, chapter) => {
+    if (ticked.value.includes(chapter.label)) {
+      acc += (titleOnly ? "" : "\n") + chapter.label + "\n";
+    }
     acc += chapter.children.reduce((acc2, section) => {
-      acc2 += "\n## " + section.label + "\n";
+      if (ticked.value.includes(section.label)) {
+        acc2 += (titleOnly ? "" : "\n") + section.label + "\n";
+      }
       acc2 += section.children.reduce((acc3, page) => {
-        acc3 += page.label + "\n";
+        if (ticked.value.includes(page.label)) {
+          acc3 += page.label + "\n";
+        }
         return acc3;
       }, "");
       return acc2;
     }, "");
     return acc;
   }, "");
+});
+watch(nbLines, (value) => {
+  let newTicked = [];
+  tree.value.forEach((chapter) => {
+    if (!ticked.value.includes(chapter.label)) return;
+    newTicked.push(chapter.label);
+    chapter.children.forEach((section) => {
+      if (!ticked.value.includes(section.label)) return;
+      newTicked.push(section.label);
+      const lines =
+        value < 10 ? section.children.slice(0, value) : section.children;
+      lines.forEach((page) => {
+        if (!newTicked.includes(page.label)) {
+          newTicked.push(page.label);
+        }
+      });
+    });
+  });
+  ticked.value = newTicked;
+});
+
+watch(pdfFiles, async (file) => {
+  if (!file) {
+    return;
+  }
+  tree.value = await aiService.extractTextFromPdfFile(file);
+  // by default we tick all the title, and sub and the first 2 lines of text
+  ticked.value = tree.value.reduce((acc, chapter) => {
+    acc.push(chapter.label);
+    chapter.children.forEach((section) => {
+      acc.push(section.label);
+      const lines =
+        nbLines.value < 10
+          ? section.children.slice(0, nbLines.value)
+          : section.children;
+      lines.slice(0, nbLines.value).forEach((page) => {
+        acc.push(page.label);
+      });
+    });
+    return acc;
+  }, []);
 
   pdfFiles.value = null;
 });
@@ -677,74 +739,78 @@ const generateLecture = async () => {
   // Creating the concept steps
   const nbQuestion = 12;
   progress.value = 20 / 100;
-  const conceptParts = await Promise.all(tableOfContent.value.map(async (step) => {
-    let questions = [];
-    let parts = [];
+  const conceptParts = await Promise.all(
+    tableOfContent.value.map(async (step) => {
+      let questions = [];
+      let parts = [];
 
-    const conceptName = step.name;
+      const conceptName = step.name;
 
-    const conceptText = await aiService.getConceptContent(
-      step,
-      extendedQueryForConcept.value,
-    );
-    if (conceptText.pages) {
-      conceptText.pages.forEach((text) => {
-        parts.push({
-          type: "text",
-          text,
-        });
-      });
-    } else {
-      console.log("No content for concept section", conceptName);
-    }
-
-    progressLabel.value = t("wizard.generating.concept") + " " + conceptName;
-    progress.value += 0.3 / tableOfContent.value.length;
-
-    const shortLectureContent = htmlToMarkdown(parts[0].text);
-
-    const fullLectureContent = parts
-      .filter((part) => part.text)
-      .map((part) => htmlToMarkdown(part.text))
-      .join("\n\n");
-
-    // order of the question is not important
-    await Promise.all([1, 2, 3, 4].map(async (level) => {
-      const conceptQuiz = await aiService.singleQuiz(
-        step.name,
-        fullLectureContent.length > 4000
-          ? shortLectureContent
-          : fullLectureContent,
-        level,
+      const conceptText = await aiService.getConceptContent(
+        step,
+        extendedQueryForConcept.value,
       );
-      if (conceptQuiz.questions) {
-        questions.push(...conceptQuiz.questions);
+      if (conceptText.pages) {
+        conceptText.pages.forEach((text) => {
+          parts.push({
+            type: "text",
+            text,
+          });
+        });
       } else {
-        console.log("No quiz for concept section", conceptName, level);
+        console.log("No content for concept section", conceptName);
       }
-      progress.value += 0.1 / tableOfContent.value.length;
-    }));
 
-    conceptIdMap.default = conceptIdMap[step.concept];
-    parts.push(createQuizPart(questions, nbQuestion, conceptIdMap));
+      progressLabel.value = t("wizard.generating.concept") + " " + conceptName;
+      progress.value += 0.3 / tableOfContent.value.length;
 
-    lecturePreview.value = null;
-    const conceptStep = {
-      title: step.name,
-      type: "step",
-      lectureId,
-      order: "" + Date.now(),
-      conceptId: conceptIdMap[step.concept],
-      level: step.level,
-      parts,
-    };
+      const shortLectureContent = htmlToMarkdown(parts[0].text);
 
-    lecture.steps.push(conceptStep);
-    nextTick(() => {
-      lecturePreview.value = lecture;
-    });
-    return conceptStep;
-  }));
+      const fullLectureContent = parts
+        .filter((part) => part.text)
+        .map((part) => htmlToMarkdown(part.text))
+        .join("\n\n");
+
+      // order of the question is not important
+      await Promise.all(
+        [1, 2, 3, 4].map(async (level) => {
+          const conceptQuiz = await aiService.singleQuiz(
+            step.name,
+            fullLectureContent.length > 4000
+              ? shortLectureContent
+              : fullLectureContent,
+            level,
+          );
+          if (conceptQuiz.questions) {
+            questions.push(...conceptQuiz.questions);
+          } else {
+            console.log("No quiz for concept section", conceptName, level);
+          }
+          progress.value += 0.1 / tableOfContent.value.length;
+        }),
+      );
+
+      conceptIdMap.default = conceptIdMap[step.concept];
+      parts.push(createQuizPart(questions, nbQuestion, conceptIdMap));
+
+      lecturePreview.value = null;
+      const conceptStep = {
+        title: step.name,
+        type: "step",
+        lectureId,
+        order: "" + Date.now(),
+        conceptId: conceptIdMap[step.concept],
+        level: step.level,
+        parts,
+      };
+
+      lecture.steps.push(conceptStep);
+      nextTick(() => {
+        lecturePreview.value = lecture;
+      });
+      return conceptStep;
+    }),
+  );
   let now = Date.now();
   for (const part of conceptParts) {
     part.order = "" + now;
@@ -759,3 +825,11 @@ const openLecture = () => {
   router.push({ name: "LectureView", params: { id: lectureId } });
 };
 </script>
+
+<style>
+.q-tree__node-header-content div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
