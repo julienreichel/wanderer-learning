@@ -1,16 +1,28 @@
 <template>
   <q-page padding>
-    <q-stepper v-model="step" vertical animated>
+    <q-stepper v-model="step" animated>
       <!-- Step 1: Course Description -->
-      <q-step :title="$t('wizard.lecture.title')" :name="1">
+      <q-step :title="$t('wizard.lecture.title')" :name="1" >
+        <div class="q-gutter-sm">
         <div class="text-h6">{{ $t("wizard.lecture.description") }}</div>
+        <div class="row q-col-gutter-sm">
         <q-input
+          class="col"
           outlined
           v-model="courseDescription"
           :placeholder="$t('wizard.lecture.label')"
           type="textarea"
           rows="5"
         />
+        <q-file
+          class="col-3 full-height"
+          style="max-width: 300px"
+          v-model="pdfFiles"
+          outlined
+          :label="$t('wizard.lecture.pdf_upload')"
+          accept=".pdf, application/pdf"
+        />
+        </div>
         <q-toggle v-model="advanced" :label="$t('wizard.lecture.advanced')" />
         <div v-if="advanced" class="q-pa-md q-col-gutter-sm">
           <q-select
@@ -44,6 +56,7 @@
             v-model="extendedQueryForConcept"
             :label="$t('wizard.lecture.queryType')"
           />
+        </div>
         </div>
         <q-stepper-navigation>
           <q-space />
@@ -288,7 +301,7 @@
 <script setup>
 import TableOfContent from "src/components/common/TableOfContent.vue";
 
-import { ref, inject, onMounted, nextTick } from "vue";
+import { ref, inject, onMounted, nextTick, watch } from "vue";
 
 import { useIris, useFormatter } from "src/composables/iris";
 const { t, locale, $q, router, uid } = useIris();
@@ -318,6 +331,29 @@ onMounted(async () => {
     }
     return text;
   });
+});
+
+let pdfFiles = ref(null);
+watch(pdfFiles, async (file) => {
+  if (!file) {
+    return;
+  }
+  const tree = await aiService.extractTextFromPdfFile(file);
+  // flatten the tree
+  courseDescription.value = tree.reduce((acc, chapter) => {
+    acc += "\n# " + chapter.label + "\n";
+    acc += chapter.children.reduce((acc2, section) => {
+      acc2 += "\n## " + section.label + "\n";
+      acc2 += section.children.reduce((acc3, page) => {
+        acc3 += page.label + "\n";
+        return acc3;
+      }, "");
+      return acc2;
+    }, "");
+    return acc;
+  }, "");
+
+  pdfFiles.value = null;
 });
 
 const options = {

@@ -220,6 +220,7 @@ export default {
       title: "Description de la leçon",
       description: "Contenu de la leçon",
       label: "Description",
+      pdf_upload: "Utiliser un PDF comme source",
       style: "Style",
       audience: "Public",
       tone: "Ton",

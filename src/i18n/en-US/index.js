@@ -220,6 +220,7 @@ export default {
       title: "Lecture Description",
       description: "Describe the content of the lecture",
       label: "Description",
+      pdf_upload: "Use PDF as source",
       style: "Style",
       audience: "Audience",
       tone: "Tone",

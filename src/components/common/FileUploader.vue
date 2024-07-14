@@ -166,24 +166,6 @@ const finish = async (msg) => {
   emit("uploaded", uploadedFiles);
 };
 
-const convertPDFFilter = async (files) => {
-  let finalFiles = [];
-  for (const file of files) {
-    if (mime.lookup(file.name) === "application/pdf") {
-      try {
-        const files = await convertPdfToImages(file);
-        finalQueue.push(...files);
-        emit("added", files);
-      } catch (error) {
-        console.error("Failed to convert PDF to images", error);
-        helpers.updateFileStatus(file, "failed");
-      }
-    } else {
-      finalQueue.push(file);
-    }
-  }
-  return files;
-};
 </script>
 
 <style lang="scss">

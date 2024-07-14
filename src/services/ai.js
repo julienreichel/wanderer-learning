@@ -12,6 +12,10 @@ import simpleQuiz from "./prompts/quiz.js";
 import { post } from "aws-amplify/api";
 import { fetchAuthSession } from "aws-amplify/auth";
 
+import * as pdfjsLib from "pdfjs-dist/build/pdf";
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`;
+
+
 export default class ServicePrototype {
   constructor() {
     /**
@@ -251,5 +255,83 @@ export default class ServicePrototype {
     const prompt = simpleQuiz.prompt(descritpion, nbQuestions);
 
     return this.query({ system, prompt, token: nbQuestions * 200 });
+  }
+
+  async extractTextFromPdfFile(pdfFile) {
+
+    const pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
+    const numPages = pdf.numPages;
+    let tree = [];
+
+    // first step, get some stats about the document using the first 3 pages.
+    // Get the textsize (i.e. item.transform[0]) and create a small historgram
+    // Identify the most common text size and use it as a threshold to split the text
+    // identify the font size of the title and subtitle (only 2 levels of titles are supported)
+    let fontSizeHistogram = {};
+    for (let pageNum = 1; pageNum <= Math.min(numPages, 3); pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      textContent.items.forEach((item) => {
+        const textSize = Math.round(item.height);
+        if (textSize === 0) return;
+        if (!fontSizeHistogram[textSize]) fontSizeHistogram[textSize] = 0;
+        fontSizeHistogram[textSize] += item.str.length;
+      });
+    }
+    // Find the most common text size anything bellow is also considered as text
+    const mostCommonTextSize = Object.keys(fontSizeHistogram).reduce((a, b) =>
+      fontSizeHistogram[a] > fontSizeHistogram[b] ? a : b, 0);
+
+    // find the 2 most commont text sizes above this one
+    const titleTextSizes = Object.keys(fontSizeHistogram)
+      .filter((size) => Number(size) > mostCommonTextSize)
+      .sort((a, b) => fontSizeHistogram[b] - fontSizeHistogram[a])
+      .slice(0, 2)
+      .sort()
+
+    let level = 0;
+    let levels = [{ children: tree }];
+    for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+
+      // Extract the text content from the page
+      const viewport = page.getViewport({ scale: 1 });
+      const textContent = await page.getTextContent();
+      const headerFooterHeight = 40; // Assuming headers and footers are within 50 units of the top/bottom
+      const items = textContent.items.filter(item => {
+        const y = item.transform[5]; // y-coordinate of the text item
+        return y > headerFooterHeight && y < (viewport.height - headerFooterHeight);
+      }).filter((item) => item.str.trim().length);
+
+      let lastPos = -1;
+      for (const item of items) {
+        const pos = item.transform[5];
+        const delta = Math.round(lastPos - pos);
+        if (lastPos >= 0 && (delta < mostCommonTextSize || lastPos < pos || item.str.trim().length < 3)) {
+          levels[level].label += " " + item.str.trim();
+        } else {
+          const height = Math.round(item.height);
+          let branch = {
+            label: item.str,
+            children: [],
+          };
+          if (height <= mostCommonTextSize) {
+            level = 3;
+          } else if (height <= titleTextSizes[0]) {
+            level = 2;
+          } else {
+            level = 1;
+          }
+          levels[level] = branch;
+          if (!levels[level - 1]) {
+            tree.push(levels[level]);
+          } else {
+            levels[level - 1].children.push(branch);
+          }
+        }
+        lastPos = pos;
+      }
+    }
+    return tree;
   }
 }
