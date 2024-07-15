@@ -215,6 +215,26 @@ const schema = a.schema({
       allow.group("teacher"),
     ]),
 
+  AIUsage: a.customType({
+    prompt_tokens: a.integer(),
+    completion_tokens: a.integer(),
+    total_tokens: a.integer(),
+  }),
+
+  AIRequest: a
+    .model({
+      id: a.id().required(),
+      system: a.string(),
+      token: a.integer(),
+      format: a.string(),
+      model: a.string(),
+      prompt: a.string(),
+      content: a.string(),
+      token_usage: a.ref("AIUsage"),
+      finish_reason: a.string(),
+    })
+    .authorization((allow) => [allow.group("admin"), allow.group("teacher")]),
+
   AIMessage: a.customType({
     role: a.string(),
     content: a.string(),

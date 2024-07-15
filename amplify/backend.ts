@@ -11,8 +11,12 @@ import {
 } from "aws-cdk-lib/aws-apigatewayv2";
 import { HttpUserPoolAuthorizer } from "aws-cdk-lib/aws-apigatewayv2-authorizers";
 import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
-import { Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { AIQueryRest } from "./functions/ai-query-rest/resource";
+
+import { EventSourceMapping, StartingPosition } from "aws-cdk-lib/aws-lambda";
+import { DynamoEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import { dynamoDBAITrigger } from "./functions/dynamoDB-ai-trigger/resource";
 
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
@@ -22,7 +26,42 @@ const backend = defineBackend({
   storage,
   data,
   AIQueryRest,
+  dynamoDBAITrigger,
 });
+
+const AIRequestTable = backend.data.resources.tables["AIRequest"];
+
+const policy = new Policy(
+  Stack.of(AIRequestTable),
+  "DynamoDBTriggerPolicyForLambda",
+  {
+    statements: [
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: [
+          "dynamodb:DescribeStream",
+          "dynamodb:GetRecords",
+          "dynamodb:GetShardIterator",
+          "dynamodb:ListStreams",
+          "dynamodb:UpdateItem",
+        ],
+        resources: ["*"],
+      }),
+    ],
+  },
+);
+backend.dynamoDBAITrigger.resources.lambda.role?.attachInlinePolicy(policy);
+
+const mapping = new EventSourceMapping(
+  Stack.of(AIRequestTable),
+  "DynamoDBTriggerEvent",
+  {
+    target: backend.dynamoDBAITrigger.resources.lambda,
+    eventSourceArn: AIRequestTable.tableStreamArn,
+    startingPosition: StartingPosition.LATEST,
+  },
+);
+mapping.node.addDependency(policy);
 
 const { cfnIdentityPool, cfnUserPool } = backend.auth.resources.cfnResources;
 cfnIdentityPool.allowUnauthenticatedIdentities = false;

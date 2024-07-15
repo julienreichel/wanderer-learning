@@ -1,4 +1,4 @@
-import type { Schema } from "../resource";
+import { Schema } from "../resource";
 import { env } from "$amplify/env/ai-query";
 
 //const fetch = require("node-fetch");
@@ -62,5 +62,4 @@ export const handler: Schema["AIQuery"]["functionHandler"] = async (
 
   console.log(data);
   return JSON.stringify(data);
-
 };

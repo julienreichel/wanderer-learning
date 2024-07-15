@@ -62,10 +62,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
   console.log(data);
 
-  if (data.error) {
-    return data.error.message;
-  }
-
   return {
     statusCode: 200,
     headers: {
