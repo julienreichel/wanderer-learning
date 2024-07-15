@@ -258,10 +258,10 @@ export default {
     generating: {
       title: "Création de la leçon",
       create: "Création de la leçon",
-      connect: "Création de l'étape de connexion",
-      concept: "Création des étapes des concepts :",
+      connect: "Création de l'introduction",
+      concept: "Création des concepts :",
       practice: "Création du quiz final",
-      conclusion: "Création de l'étape de conclusion",
+      conclusion: "Création de la conclusion",
       finished: "Terminé",
       theory: "Théorie",
       quiz: "Quiz",
