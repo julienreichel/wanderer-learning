@@ -264,6 +264,9 @@ watch(
     if (!questions && tab.value === "review") {
       tab.value = "progress";
     }
+    if (questions) {
+      tab.value = "review";
+    }
   },
   { immediate: true },
 );
