@@ -13,7 +13,12 @@
               :placeholder="$t('wizard.lecture.label')"
               type="textarea"
               rows="20"
-            />
+              counter
+            >
+              <template v-slot:counter>
+                <div :class="{'text-warning': courseDescription.length > 10000}">{{ courseDescription.length }} / 10000</div>
+              </template>
+            </q-input>
             <q-file
               v-if="!tree"
               class="col-4"
@@ -23,18 +28,24 @@
               :label="$t('wizard.lecture.pdf_upload')"
               accept=".pdf, application/pdf"
             />
-            <div v-else class="col-4">
+            <div v-else class="col-4 q-gutter-sm">
               <q-slider v-model="nbLines" :min="0" :max="10" class="q-px-lg" />
               <q-tree
-                class="col-4"
                 :nodes="tree"
                 node-key="label"
-                v-model:selected="selected"
                 v-model:ticked="ticked"
-                v-model:expanded="expanded"
                 tick-strategy="strict"
               />
+              <div class="row">
+                <q-space />
+              <q-btn
+                size="sm"
+                class="text-right"
+                icon="clear"
+                @click="tree = null"/>
+              </div>
             </div>
+
           </div>
           <q-toggle v-model="advanced" :label="$t('wizard.lecture.advanced')" />
           <div v-if="advanced" class="q-pa-md q-col-gutter-sm">
@@ -74,6 +85,7 @@
         <q-stepper-navigation>
           <q-space />
           <q-btn
+            :disable="courseDescription.length > 10000"
             :loading="loading"
             color="primary"
             :label="$t('wizard.common.next')"
@@ -317,7 +329,6 @@ import TableOfContent from "src/components/common/TableOfContent.vue";
 import { ref, inject, onMounted, nextTick, watch } from "vue";
 
 import { useIris, useFormatter } from "src/composables/iris";
-import { remove } from "aws-amplify/storage";
 const { t, locale, $q, router, uid } = useIris();
 const { htmlToMarkdown } = useFormatter();
 const {
@@ -349,9 +360,7 @@ onMounted(async () => {
 
 let pdfFiles = ref(null);
 let tree = ref(null);
-let selected = ref(null);
 let ticked = ref([]);
-let expanded = ref([]);
 let nbLines = ref(2);
 watch(ticked, (newVal, oldVal) => {
   const added = newVal.filter((item) => !oldVal.includes(item));
@@ -419,7 +428,8 @@ watch(ticked, (newVal, oldVal) => {
       return acc2;
     }, "");
     return acc;
-  }, "");
+  }, "").slice(0, 10000);
+
 });
 watch(nbLines, (value) => {
   let newTicked = [];

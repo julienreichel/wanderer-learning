@@ -221,6 +221,7 @@ export default {
       description: "Contenu de la leçon",
       label: "Description",
       pdf_upload: "Utiliser un PDF comme source",
+      reset: "Reset",
       style: "Style",
       audience: "Public",
       tone: "Ton",

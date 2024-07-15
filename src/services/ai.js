@@ -293,7 +293,7 @@ export default class ServicePrototype {
       .sort();
 
     let level = 0;
-    let levels = [{ children: tree }];
+    let levels = [{ children: tree, lable: "" }];
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
       const page = await pdf.getPage(pageNum);
 
@@ -331,14 +331,27 @@ export default class ServicePrototype {
             level = 3;
           } else if (height <= titleTextSizes[0]) {
             level = 2;
+            levels[3] = undefined;
           } else {
             level = 1;
+            levels[2] = undefined;
           }
           levels[level] = branch;
-          if (!levels[level - 1]) {
-            tree.push(levels[level]);
-          } else {
+          if (levels[level - 1]) {
+            console.log("add to", levels[level - 1].label, item.str);
             levels[level - 1].children.push(branch);
+          } else {
+            console.log("no previous", item.str)
+            if (level === 2) {
+              tree.push(branch);
+            } else {
+              if (levels[1]) {
+                levels[1].children.push(branch);
+              } else {
+                tree.push(branch);
+              }
+              levels[2] = branch;
+            }
           }
         }
         lastPos = pos;
