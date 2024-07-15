@@ -16,7 +16,11 @@
               counter
             >
               <template v-slot:counter>
-                <div :class="{'text-warning': courseDescription.length > 10000}">{{ courseDescription.length }} / 10000</div>
+                <div
+                  :class="{ 'text-warning': courseDescription.length > 10000 }"
+                >
+                  {{ courseDescription.length }} / 10000
+                </div>
               </template>
             </q-input>
             <q-file
@@ -38,14 +42,14 @@
               />
               <div class="row">
                 <q-space />
-              <q-btn
-                size="sm"
-                class="text-right"
-                icon="clear"
-                @click="tree = null"/>
+                <q-btn
+                  size="sm"
+                  class="text-right"
+                  icon="clear"
+                  @click="tree = null"
+                />
               </div>
             </div>
-
           </div>
           <q-toggle v-model="advanced" :label="$t('wizard.lecture.advanced')" />
           <div v-if="advanced" class="q-pa-md q-col-gutter-sm">
@@ -382,7 +386,9 @@ watch(ticked, (newVal, oldVal) => {
         .find((item) => item.label === label);
       if (section) {
         const lines =
-        nbLines.value < 10 ? section.children.slice(0, nbLines.value) : section.children;
+          nbLines.value < 10
+            ? section.children.slice(0, nbLines.value)
+            : section.children;
         lines.forEach((page) => {
           if (!ticked.value.includes(page.label)) {
             ticked.value.push(page.label);
@@ -394,7 +400,7 @@ watch(ticked, (newVal, oldVal) => {
   removed.forEach((label) => {
     const chapter = tree.value.find((item) => item.label === label);
     if (chapter) {
-      const subLabels = chapter.children.map(section => section.label);
+      const subLabels = chapter.children.map((section) => section.label);
       ticked.value = ticked.value.filter((item) => !subLabels.includes(item));
       removed.push(...subLabels);
     } else {
@@ -403,7 +409,7 @@ watch(ticked, (newVal, oldVal) => {
         .flat()
         .find((item) => item.label === label);
       if (section) {
-        const subLabels = section.children.map(section => section.label);
+        const subLabels = section.children.map((section) => section.label);
         ticked.value = ticked.value.filter((item) => !subLabels.includes(item));
       }
     }
@@ -429,7 +435,6 @@ watch(ticked, (newVal, oldVal) => {
     }, "");
     return acc;
   }, "");
-
 });
 watch(nbLines, (value) => {
   let newTicked = [];

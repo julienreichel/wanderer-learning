@@ -347,7 +347,7 @@ export default class ServicePrototype {
             console.log("add to", levels[level - 1].label, item.str);
             levels[level - 1].children.push(branch);
           } else {
-            console.log("no previous", item.str)
+            console.log("no previous", item.str);
             if (level === 2) {
               tree.push(branch);
             } else {
