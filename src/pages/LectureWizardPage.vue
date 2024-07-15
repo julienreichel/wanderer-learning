@@ -317,6 +317,7 @@ import TableOfContent from "src/components/common/TableOfContent.vue";
 import { ref, inject, onMounted, nextTick, watch } from "vue";
 
 import { useIris, useFormatter } from "src/composables/iris";
+import { remove } from "aws-amplify/storage";
 const { t, locale, $q, router, uid } = useIris();
 const { htmlToMarkdown } = useFormatter();
 const {
@@ -352,7 +353,53 @@ let selected = ref(null);
 let ticked = ref([]);
 let expanded = ref([]);
 let nbLines = ref(2);
-watch(ticked, (value) => {
+watch(ticked, (newVal, oldVal) => {
+  const added = newVal.filter((item) => !oldVal.includes(item));
+  const removed = oldVal.filter((item) => !newVal.includes(item));
+  // check if added is a chapter or section, and in this case enabled the children
+  added.forEach((label) => {
+    const chapter = tree.value.find((item) => item.label === label);
+    if (chapter) {
+      chapter.children.forEach((section) => {
+        if (!ticked.value.includes(section.label)) {
+          ticked.value.push(section.label);
+          added.push(section.label);
+        }
+      });
+    } else {
+      const section = tree.value
+        .map((item) => item.children)
+        .flat()
+        .find((item) => item.label === label);
+      if (section) {
+        const lines =
+        nbLines.value < 10 ? section.children.slice(0, nbLines.value) : section.children;
+        lines.forEach((page) => {
+          if (!ticked.value.includes(page.label)) {
+            ticked.value.push(page.label);
+          }
+        });
+      }
+    }
+  });
+  removed.forEach((label) => {
+    const chapter = tree.value.find((item) => item.label === label);
+    if (chapter) {
+      const subLabels = chapter.children.map(section => section.label);
+      ticked.value = ticked.value.filter((item) => !subLabels.includes(item));
+      removed.push(...subLabels);
+    } else {
+      const section = tree.value
+        .map((item) => item.children)
+        .flat()
+        .find((item) => item.label === label);
+      if (section) {
+        const subLabels = section.children.map(section => section.label);
+        ticked.value = ticked.value.filter((item) => !subLabels.includes(item));
+      }
+    }
+  });
+
   // flatten the tree
   const titleOnly = nbLines.value === 0;
   courseDescription.value = tree.value.reduce((acc, chapter) => {
