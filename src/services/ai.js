@@ -15,6 +15,8 @@ import { fetchAuthSession } from "aws-amplify/auth";
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`;
 
+import { useFormatter } from "src/composables/iris";
+
 export default class ServicePrototype {
   constructor() {
     /**
@@ -179,6 +181,8 @@ export default class ServicePrototype {
   }
 
   async getConceptContent(section, useHtmlQuery = false) {
+    const { htmlToMarkdown } = useFormatter();
+
     if (useHtmlQuery) {
       let pages = [];
       let system = conceptsTextHtmlIntro.system(
@@ -200,6 +204,8 @@ export default class ServicePrototype {
       html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
       pages.push(html);
 
+      const introText = htmlToMarkdown(html);
+
       const contentPages = await Promise.all(
         section.items.map(async (item) => {
           system = conceptsTextHtml.system(
@@ -209,7 +215,7 @@ export default class ServicePrototype {
             this.prerequisites,
             this.language,
           );
-          prompt = conceptsTextHtml.prompt(section, item);
+          prompt = conceptsTextHtml.prompt(section, item, introText);
           let html = await this.query({
             system,
             prompt,

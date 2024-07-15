@@ -21,11 +21,8 @@ The link <a> can only be use to link public web pages.
 For mathematical formulas, use Katex format.
 `;
 
-const prompt = (section, item) => {
+const prompt = (section, item, introText) => {
   const sectionName = section.name;
-  const sectionItems = section.items
-    .map(({ name, description }) => `- ${name}: ${description}`)
-    .join("\n");
 
   const activeSectionName = item.name;
   const activeSectionDescription = item.description;
@@ -33,24 +30,22 @@ const prompt = (section, item) => {
   return `
 You are an expert instructor.
 Your task is to create detailed page for an online self-study course section titled "${activeSectionName}" part of the chapter titled "${sectionName}".
-You MUST cover the content thoroughly.
+You MUST cover the content thoroughly and not repeat the introduction text.
 You will be penalized if the descriptions are not detailed enough.
 
 Think step by step and consider all necessary information.
 
-Here are the details:
-
-Section title:
-${sectionName}
-
-Section content:
-${sectionItems}
-
-Write the HTML fragment describing ONLY the "${activeSectionName}" part with the description: "${activeSectionDescription}".
+Write the HTML fragment describing in details the "${activeSectionName}" part with the following description:
+"${activeSectionDescription}".
 
 Start the response by:
 "<h5>${activeSectionName}</h5> ..."
 
+---------------- Section title ----------------
+${sectionName}
+
+---------------- Introduction ----------------
+${introText}
 `;
 };
 
