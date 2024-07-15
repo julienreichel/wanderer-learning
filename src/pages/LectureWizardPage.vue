@@ -428,7 +428,7 @@ watch(ticked, (newVal, oldVal) => {
       return acc2;
     }, "");
     return acc;
-  }, "").slice(0, 10000);
+  }, "");
 
 });
 watch(nbLines, (value) => {
