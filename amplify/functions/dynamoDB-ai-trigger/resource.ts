@@ -2,7 +2,7 @@ import { defineFunction, secret } from "@aws-amplify/backend";
 
 export const dynamoDBAITrigger = defineFunction({
   name: "dynamoDB-ai-trigger",
-  timeoutSeconds: 120,
+  timeoutSeconds: 300,
   environment: {
     OPENAI_API_KEY: secret("OPENAI_API_KEY"),
     OPENAI_MODEL: process.env.OPENAI_MODEL || "gpt-3.5-turbo",

@@ -232,6 +232,7 @@ const schema = a.schema({
       content: a.string(),
       token_usage: a.ref("AIUsage"),
       finish_reason: a.string(),
+      ttl: a.integer(),
     })
     .authorization((allow) => [allow.group("admin"), allow.group("teacher")]),
 

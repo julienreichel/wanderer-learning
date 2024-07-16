@@ -47,43 +47,39 @@ export default class ServicePrototype {
   }
 
   async query(query, retryCount = 0) {
-    console.log(query.system);
-    console.log(query.prompt);
-    console.log(query.token);
-
     query.model = query.model || this.model;
+    query.ttl = Math.floor(Date.now() / 1000) + 3600 * 24 * 7; // kep request for a week
     try {
-      const authSession = await fetchAuthSession();
-      const authToken = authSession.tokens?.idToken;
+      const { data } = await this.client.models.AIRequest.create(query, { authMode: "userPool" });
+      const requestId = data.id;
 
-      const restOperation = post({
-        apiName: "aiHttpApi",
-        path: "ai-query",
-        options: {
-          body: query,
-          headers: {
-            Authorization: authToken,
-          },
-        },
-      });
+      // now we wait, at most 90sed, with backoff retry
+      let totalWaitTime = 0;
+      let waitTime = 1000;
+      while (totalWaitTime < 90 * 1000) {
+        await new Promise((resolve) => setTimeout(resolve, waitTime));
+        totalWaitTime += waitTime;
+        waitTime = Math.min(waitTime * 2, 10000);
 
-      const { body } = await restOperation.response;
-      const response = await body.json();
-      console.log(response.model, response.usage);
-
-      const data = response.choices[0].message.content.trim();
-      console.log(data);
-
-      if (query.format === "text") {
-        return data;
+        const { data } = await this.client.models.AIRequest.get({ id: requestId }, { authMode: "userPool" });
+        if (data.finish_reason === "stop") {
+          if (query.format === "text") {
+            return data.content;
+          }
+          return JSON.parse(data.content);
+        } else {
+          console.log("finish_reason", data.finish_reason, data.content);
+        }
       }
-      return JSON.parse(data);
+      return {};
     } catch (error) {
       console.log(error);
+      /*
       if (retryCount === 0) {
         // let's try again, maybe it was a temporary issue
         return this.query(query, retryCount + 1);
       }
+        */
       return {};
     }
   }
@@ -156,7 +152,7 @@ export default class ServicePrototype {
     );
     const prompt = connectQuiz.prompt(description, conceptsList, nbQuestions);
 
-    return this.query({ system, prompt, token: nbQuestions * 200 });
+    return this.query({ system, prompt, token: nbQuestions * 250 });
   }
 
   async getInitialContent(description, concepts, objectives) {
@@ -248,7 +244,7 @@ export default class ServicePrototype {
     const system = singleQuiz.system(this.tone, this.language, difficulty);
     const prompt = singleQuiz.prompt(sectionName, sectionContent);
 
-    return this.query({ system, prompt, token: 15 * 200 });
+    return this.query({ system, prompt, token: 15 * 250 });
   }
 
   async getQuiz(descritpion, difficulty, nbQuestions, type, explanation) {
@@ -261,7 +257,7 @@ export default class ServicePrototype {
     );
     const prompt = simpleQuiz.prompt(descritpion, nbQuestions);
 
-    return this.query({ system, prompt, token: nbQuestions * 200 });
+    return this.query({ system, prompt, token: nbQuestions * 250 });
   }
 
   async extractTextFromPdfFile(pdfFile) {

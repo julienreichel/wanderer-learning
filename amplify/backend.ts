@@ -63,6 +63,13 @@ const mapping = new EventSourceMapping(
 );
 mapping.node.addDependency(policy);
 
+backend.data.resources.cfnResources.amplifyDynamoDbTables[
+  "AIRequest"
+].timeToLiveAttribute = {
+  attributeName: "ttl",
+  enabled: true,
+};
+
 const { cfnIdentityPool, cfnUserPool } = backend.auth.resources.cfnResources;
 cfnIdentityPool.allowUnauthenticatedIdentities = false;
 

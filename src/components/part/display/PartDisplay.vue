@@ -112,11 +112,11 @@ const renderedText = computed(() => {
   return text;
 });
 
-const imageSize = ref(Number(props.part.options.imageSize) || 4);
+const imageSize = ref(Number(props.part.options?.imageSize) || 4);
 watch(
   () => props.part.options,
   () => {
-    imageSize.value = Number(props.part.options.imageSize || 4);
+    imageSize.value = Number(props.part.options?.imageSize || 4);
   },
 );
 
