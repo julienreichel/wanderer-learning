@@ -67,7 +67,7 @@ defineProps({
   step: {
     type: Object,
     default: () => ({}),
-  }
+  },
 });
 
 const getTitle = (part) => {

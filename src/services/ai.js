@@ -47,7 +47,9 @@ export default class ServicePrototype {
     query.model = query.model || this.model;
     query.ttl = Math.floor(Date.now() / 1000) + 3600 * 24 * 7; // kep request for a week
     try {
-      const { data } = await this.client.models.AIRequest.create(query, { authMode: "userPool" });
+      const { data } = await this.client.models.AIRequest.create(query, {
+        authMode: "userPool",
+      });
       const requestId = data.id;
 
       // now we wait, at most 90sed, with backoff retry
@@ -58,7 +60,10 @@ export default class ServicePrototype {
         totalWaitTime += waitTime;
         waitTime = Math.min(waitTime * 2, 10000);
 
-        const { data } = await this.client.models.AIRequest.get({ id: requestId }, { authMode: "userPool" });
+        const { data } = await this.client.models.AIRequest.get(
+          { id: requestId },
+          { authMode: "userPool" },
+        );
         if (data.finish_reason === "stop") {
           if (query.format === "text") {
             return data.content;

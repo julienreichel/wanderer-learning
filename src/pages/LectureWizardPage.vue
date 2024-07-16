@@ -294,7 +294,7 @@
       </q-step>
       <!-- Step 3: Generating lecture -->
       <q-step :title="$t('wizard.generating.title')" :name="4">
-        <q-spinner-gears v-if="progress < 1"  color="primary" size="xl"/>
+        <q-spinner-gears v-if="progress < 1" color="primary" size="xl" />
         <q-linear-progress
           :value="progress"
           class="q-mt-md"

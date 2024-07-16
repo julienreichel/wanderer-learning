@@ -96,7 +96,7 @@
         </q-input>
       </q-item>
     </q-list>
-    <q-btn size="sm" icon="add" @click="addAnswer(question)"/>
+    <q-btn size="sm" icon="add" @click="addAnswer(question)" />
   </q-card-section>
   <q-card-section v-if="question.type !== 'feedback'">
     <div class="row">

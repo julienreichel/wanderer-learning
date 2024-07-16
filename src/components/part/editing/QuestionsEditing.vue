@@ -129,7 +129,7 @@ defineProps({
   parts: { type: Array, required: true },
 });
 
-let quiz = defineModel({type: Object});
+let quiz = defineModel({ type: Object });
 if (!quiz.value) {
   quiz.value = {
     questions: [],

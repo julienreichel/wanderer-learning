@@ -76,7 +76,7 @@
         >
           <lectures-editing v-model="lecturesNext" />
         </q-tab-panel>
-        <q-tab-panel v-if="connectedConcepts.length" name="concepts" >
+        <q-tab-panel v-if="connectedConcepts.length" name="concepts">
           <concept-list flat bordered :concepts="connectedConcepts" />
         </q-tab-panel>
         <q-tab-panel

@@ -25,9 +25,9 @@
           <q-btn size="sm" icon="delete" @click="removeImage()" />
         </q-card-actions>
       </q-card-section>
-      <file-uploader v-else :prefix="lectureId" @uploaded="uploaded"/>
+      <file-uploader v-else :prefix="lectureId" @uploaded="uploaded" />
     </q-card-section>
-    <q-card-section  v-if="part.type === 'img'" class="row">
+    <q-card-section v-if="part.type === 'img'" class="row">
       <div class="col-6 q-gutter-sm">
         <q-input
           v-model="part.text"
@@ -102,10 +102,9 @@ import RichTextEditing from "../../common/RichTextEditing.vue";
 import QuestionEditing from "./QuestionEditing.vue";
 import FileUploader from "../../common/FileUploader.vue";
 
-const { storage: storageService } =
-  inject("services");
+const { storage: storageService } = inject("services");
 
-const part = defineModel({type: Object});
+const part = defineModel({ type: Object });
 part.value.options = part.value.options || {};
 part.value.options.imageSize = part.value.options.imageSize || "4";
 
