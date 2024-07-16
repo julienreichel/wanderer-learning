@@ -10,9 +10,9 @@
     </q-card>
     <parts-display
       :parts="lectureStep.parts"
-      @finished="finished"
       udpdate-route
-      :stepIdx="stepIdx"
+      :step-idx="stepIdx"
+      @finished="finished"
     />
   </q-page>
 </template>
@@ -33,7 +33,7 @@ const {
 const { updateBreadcrumbs } = inject("breadcrumbs");
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
   stepIdx: {
     type: String,
     default: "0",

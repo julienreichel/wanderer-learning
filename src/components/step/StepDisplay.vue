@@ -64,7 +64,10 @@ import { useIris } from "src/composables/iris";
 const { router, t } = useIris();
 
 defineProps({
-  step: Object,
+  step: {
+    type: Object,
+    default: () => ({}),
+  }
 });
 
 const getTitle = (part) => {

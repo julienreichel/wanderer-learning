@@ -14,6 +14,6 @@
 
 <script setup>
 defineProps({
-  stars: { type: Number },
+  stars: { type: Number, default: 3 },
 });
 </script>

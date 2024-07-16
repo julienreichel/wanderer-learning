@@ -18,14 +18,14 @@
         v-if="connectionQuiz"
         flat
         :questions="questions"
-        @finished="connectionQuiz = false"
-        @results="processResult"
         :max="20"
         adaptative
+        @finished="connectionQuiz = false"
+        @results="processResult"
       />
       <q-card-actions
-        class="q-px-none q-py-lg"
         v-if="!connectionQuiz && !practiceQuiz"
+        class="q-px-none q-py-lg"
       >
         <q-btn square size="md" icon="chevron_left" @click="finished()" />
         <q-space />
@@ -60,12 +60,12 @@
         v-if="practiceQuiz"
         flat
         :questions="questions"
-        @finished="practiceQuiz = false"
-        @results="processResult"
         :max="20"
         exam-mode
+        @finished="practiceQuiz = false"
+        @results="processResult"
       />
-      <q-card-actions class="q-px-none q-py-lg" v-if="!practiceQuiz">
+      <q-card-actions v-if="!practiceQuiz" class="q-px-none q-py-lg">
         <q-space />
         <q-btn
           size="md"
@@ -110,7 +110,7 @@ const userAttributes = inject("userAttributes");
 const { username, userId } = userAttributes.value;
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
 });
 
 const lecture = ref({});

@@ -7,15 +7,15 @@
           <div class="text-h6">{{ $t("wizard.lecture.description") }}</div>
           <div class="row q-col-gutter-sm">
             <q-input
+              v-model="courseDescription"
               class="col"
               outlined
-              v-model="courseDescription"
               :placeholder="$t('wizard.lecture.label')"
               type="textarea"
               rows="20"
               counter
             >
-              <template v-slot:counter>
+              <template #counter>
                 <div
                   :class="{ 'text-warning': courseDescription.length > 10000 }"
                 >
@@ -25,9 +25,9 @@
             </q-input>
             <q-file
               v-if="!tree"
+              v-model="pdfFiles"
               class="col-4"
               style="max-width: 300px"
-              v-model="pdfFiles"
               outlined
               :label="$t('wizard.lecture.pdf_upload')"
               accept=".pdf, application/pdf"
@@ -35,9 +35,9 @@
             <div v-else class="col-4 q-gutter-sm">
               <q-slider v-model="nbLines" :min="0" :max="10" class="q-px-lg" />
               <q-tree
+                v-model:ticked="ticked"
                 :nodes="tree"
                 node-key="label"
-                v-model:ticked="ticked"
                 tick-strategy="strict"
               />
               <div class="row">
@@ -54,29 +54,29 @@
           <q-toggle v-model="advanced" :label="$t('wizard.lecture.advanced')" />
           <div v-if="advanced" class="q-pa-md q-col-gutter-sm">
             <q-select
-              outlined
               v-model="style"
+              outlined
               :label="$t('wizard.lecture.style')"
               :options="styleOptions"
               emit-value
             />
             <q-select
-              outlined
               v-model="tone"
+              outlined
               :label="$t('wizard.lecture.tone')"
               :options="toneOptions"
               emit-value
             />
             <q-select
-              outlined
               v-model="audience"
+              outlined
               :label="$t('wizard.lecture.audience')"
               :options="audienceOptions"
               emit-value
             />
             <q-select
-              outlined
               v-model="model"
+              outlined
               :options="['gpt-3.5-turbo', 'gpt-4o']"
               :label="$t('wizard.lecture.model')"
             />
@@ -102,8 +102,8 @@
       <q-step :title="$t('wizard.titleKeyConceptsObjectives.title')" :name="2">
         <div class="q-pa-none q-col-gutter-sm">
           <q-input
-            outlined
             v-model="title"
+            outlined
             :label="$t('wizard.titleKeyConceptsObjectives.lectureTitle')"
           />
           <div class="text-h6">
@@ -136,7 +136,7 @@
               </q-item-section>
             </q-item>
           </q-list>
-          <div class="row" v-if="keyConcepts.length < 7">
+          <div v-if="keyConcepts.length < 7" class="row">
             <q-btn
               class="col"
               flat
@@ -209,19 +209,19 @@
         <div class="q-pa-none q-col-gutter-sm">
           <q-list>
             <q-item
-              v-for="(step, stepIndex) in tableOfContent"
+              v-for="(tocStep, stepIndex) in tableOfContent"
               :key="stepIndex"
             >
               <q-item-section>
                 <q-input
-                  v-model="step.name"
+                  v-model="tocStep.name"
                   :placeholder="$t('wizard.tableOfContent.stepName')"
                   outlined
                   dense
                 />
                 <q-list :label="$t('wizard.tableOfContent.stepParts')">
                   <q-item
-                    v-for="(item, itemIndex) in step.items"
+                    v-for="(item, itemIndex) in tocStep.items"
                     :key="itemIndex"
                   >
                     <q-item-section class="q-pa-none q-col-gutter-sm">
@@ -294,7 +294,7 @@
       </q-step>
       <!-- Step 3: Generating lecture -->
       <q-step :title="$t('wizard.generating.title')" :name="4">
-        <q-spinner-gears color="primary" size="xl" v-if="progress < 1" />
+        <q-spinner-gears v-if="progress < 1"  color="primary" size="xl"/>
         <q-linear-progress
           :value="progress"
           class="q-mt-md"
@@ -345,7 +345,7 @@ const {
 } = inject("services");
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
 });
 
 let prerequisites = [];

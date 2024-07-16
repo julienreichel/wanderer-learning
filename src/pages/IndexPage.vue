@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-px-none q-py-sm q-gutter-sm" v-if="!loading">
+  <q-page v-if="!loading" class="q-px-none q-py-sm q-gutter-sm">
     <q-card v-if="newuser">
       <q-card-section>
         <div class="text-h5">{{ $t("generic.welcome") }}</div>
@@ -26,62 +26,62 @@
         align="justify"
         narrow-indicator
       >
-        <q-tab name="review" :label="$t('generic.review')" v-if="questions" />
+        <q-tab v-if="questions" name="review" :label="$t('generic.review')" />
         <q-tab
+          v-if="lecturesInProgress.length"
           name="progress"
           :label="$t('generic.lectures_in_progress')"
-          v-if="lecturesInProgress.length"
         />
         <q-tab
+          v-if="lecturesNext.length"
           name="next"
           :label="$t('generic.lectures_next')"
-          v-if="lecturesNext.length"
         />
         <q-tab
+          v-if="connectedConcepts.length"
           name="concepts"
           :label="$t('generic.related_concepts')"
-          v-if="connectedConcepts.length"
         />
         <q-tab
+          v-if="similarLectures.length"
           name="lectures"
           :label="$t('generic.related_lectures')"
-          v-if="similarLectures.length"
         />
       </q-tabs>
 
       <q-separator />
       <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="review" v-if="questions" class="q-pa-none">
+        <q-tab-panel v-if="questions" name="review" class="q-pa-none">
           <quiz-runner
             flat
             :title="reviewTitle"
             :questions="questions"
-            @finished="finishQuiz"
-            @results="processResult"
             :max="5"
             adaptative
+            @finished="finishQuiz"
+            @results="processResult"
           />
         </q-tab-panel>
         <q-tab-panel
-          name="progress"
           v-if="lecturesInProgress.length"
+          name="progress"
           class="q-pa-md q-gutter-sm"
         >
           <lectures-editing v-model="lecturesInProgress" />
         </q-tab-panel>
         <q-tab-panel
-          name="next"
           v-if="lecturesNext.length"
+          name="next"
           class="q-pa-md q-gutter-sm"
         >
           <lectures-editing v-model="lecturesNext" />
         </q-tab-panel>
-        <q-tab-panel name="concepts" v-if="connectedConcepts.length">
+        <q-tab-panel v-if="connectedConcepts.length" name="concepts" >
           <concept-list flat bordered :concepts="connectedConcepts" />
         </q-tab-panel>
         <q-tab-panel
-          name="lectures"
           v-if="similarLectures.length"
+          name="lectures"
           class="q-pa-md q-gutter-sm"
         >
           <lectures-editing v-model="similarLectures" />

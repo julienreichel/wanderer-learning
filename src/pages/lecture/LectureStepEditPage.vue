@@ -1,18 +1,18 @@
 <template>
-  <q-page class="q-pa-none q-pt-sm q-gutter-sm" v-if="lectureStep">
+  <q-page v-if="lectureStep" class="q-pa-none q-pt-sm q-gutter-sm">
     <q-card class="q-mb-md">
       <q-input
+        v-model="lectureStep.title"
         class="q-pa-sm"
         outlined
-        v-model="lectureStep.title"
         :label="$t('step.form.title')"
         lazy-rules
         :rules="[(val) => (val && val.length > 0) || 'Please type something']"
       />
       <div class="row q-pa-sm">
         <concept-selecting
-          class="col-8"
           v-model="lectureStep.conceptId"
+          class="col-8"
           :placeholder="$t('concept.form.edit')"
           outlined
         />
@@ -26,9 +26,9 @@
     <parts-editing
       v-if="lectureStep.lecture"
       v-model="lectureStep.parts"
-      :stepIdx="stepIdx"
+      :step-idx="stepIdx"
+      :lecture-id="lectureStep.lecture.id"
       @finished="finish"
-      :lectureId="lectureStep.lecture.id"
     ></parts-editing>
   </q-page>
 </template>
@@ -47,7 +47,7 @@ const { lectureStep: lectureStepService } = inject("services");
 const { updateBreadcrumbs } = inject("breadcrumbs");
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
   stepIdx: {
     type: String,
     default: "0",

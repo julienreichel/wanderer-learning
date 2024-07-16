@@ -25,12 +25,12 @@
           v-if="checkingCourse"
           flat
           :questions="questions"
-          @finished="finishQuiz"
-          @results="processResult"
           :max="20"
           adaptative
+          @finished="finishQuiz"
+          @results="processResult"
         />
-        <q-card-actions class="q-px-none q-py-lg" v-if="!checkingCourse">
+        <q-card-actions v-if="!checkingCourse" class="q-px-none q-py-lg">
           <q-btn square size="md" icon="chevron_left" @click="finished()" />
           <q-space />
           <q-btn
@@ -43,7 +43,7 @@
           />
         </q-card-actions>
       </q-card>
-      <lectures-editing v-model="course.lectures" v-if="!checkingCourse" />
+      <lectures-editing v-if="!checkingCourse" v-model="course.lectures" />
     </div>
   </q-page>
 </template>
@@ -66,7 +66,7 @@ const userAttributes = inject("userAttributes");
 const { username, userId } = userAttributes.value;
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
 });
 
 const course = ref({});

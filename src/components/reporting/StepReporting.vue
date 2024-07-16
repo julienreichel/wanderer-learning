@@ -21,6 +21,6 @@ import RotiReporting from "./ROTIReporting.vue";
 import DifficultyReporting from "./DifficultyReporting.vue";
 
 defineProps({
-  ratings: { type: Object },
+  ratings: { type: Object, default: () => {} },
 });
 </script>

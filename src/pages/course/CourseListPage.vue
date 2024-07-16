@@ -12,28 +12,28 @@
       row-key="id"
       :filter="filter"
     >
-      <template v-slot:top>
+      <template #top>
         <q-space />
         <q-input
+          v-model="filter"
           outlined
           dense
           debounce="300"
-          v-model="filter"
           placeholder="Search"
         >
-          <template v-slot:append>
+          <template #append>
             <q-icon name="search" />
           </template>
         </q-input>
       </template>
-      <template v-slot:item="props">
+      <template #item="props">
         <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
           <q-card>
             <q-img
               :src="getUrl(props.row)"
               :ratio="16 / 9"
-              @click="viewCourse(props.row)"
               class="q-card-hover"
+              @click="viewCourse(props.row)"
             >
               <q-icon
                 v-if="props.row.private"
@@ -68,8 +68,8 @@
     <q-card v-if="userAttributes.isTeacher">
       <q-card-section>
         <q-input
-          outlined
           v-model="newTitle"
+          outlined
           :label="$t('course.form.add')"
           @keydown.enter="addCourse()"
         >
