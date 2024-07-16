@@ -1,7 +1,7 @@
 <template>
   <q-select
-    dense
     v-model="newConceptTitle"
+    dense
     use-input
     hide-selected
     fill-input
@@ -21,7 +21,9 @@ import { ref, inject, defineEmits, onMounted, watch, nextTick } from "vue";
 
 const { concept: conceptService } = inject("services");
 
-const conceptId = defineModel();
+const conceptId = defineModel({
+  type: String,
+});
 
 const newConceptTitle = ref();
 

@@ -1,11 +1,11 @@
 <template>
   <q-editor
     ref="editorRef"
-    @paste="onPaste"
     v-model="editor"
     :toolbar="toolbar"
     :fonts="fonts"
     :placeholder="placeholder"
+    @paste="onPaste"
   />
 </template>
 
@@ -17,7 +17,7 @@ import dompurify from "dompurify";
 import { useIris } from "src/composables/iris";
 const { $q } = useIris();
 
-const editor = defineModel();
+const editor = defineModel({ type: String });
 const props = defineProps({
   mode: {
     type: String,
@@ -25,6 +25,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
+    default: ""
   },
 });
 

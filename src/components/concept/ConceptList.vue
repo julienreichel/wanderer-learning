@@ -10,7 +10,7 @@
     row-key="title"
     :filter="filter"
   >
-    <template v-slot:top>
+    <template #top>
       <q-toggle
         v-model="visibleColumns"
         val="description"
@@ -19,26 +19,26 @@
       />
       <q-space />
       <q-input
+        v-model="filter"
         outlined
         dense
         debounce="300"
-        v-model="filter"
         placeholder="Search"
       >
-        <template v-slot:append>
+        <template #:append>
           <q-icon name="search" />
         </template>
       </q-input>
     </template>
-    <template v-slot:item="props">
+    <template #item="props">
       <div
-        class="q-pa-xs col-xs-12 col-sm-6 col-md-4"
         v-if="visibleColumns.includes('description')"
+        class="q-pa-xs col-xs-12 col-sm-6 col-md-4"
       >
         <q-card
           style="height: 120px"
-          @click="viewConcept(props.row)"
           class="q-card-hover"
+          @click="viewConcept(props.row)"
         >
           <q-card-section>
             <q-chip square color="primary" text-color="white">
@@ -46,8 +46,8 @@
             </q-chip>
             <div
               class="q-pa-sm"
-              v-html="props.row.description"
               style="overflow: hidden; height: 50px"
+              v-html="props.row.description"
             ></div>
           </q-card-section>
         </q-card>

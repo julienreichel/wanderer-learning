@@ -26,7 +26,7 @@
         ></step-reporting>
       </q-card-section>
     </q-card-section>
-    <q-card-section ref="graphSection" v-if="lecture.timestampDistribution">
+    <q-card-section v-if="lecture.timestampDistribution" ref="graphSection">
       <usage-histogram
         :serie="lecture.timestampDistribution"
         :width="600"
@@ -65,14 +65,14 @@
     </q-card-actions>
     <q-card-actions v-else class="q-px-none q-py-lg">
       <q-btn
-        size="md"
         v-if="selectedLecture !== lecture"
+        size="md"
         icon="expand_more"
         @click.stop="selectedLecture = lecture"
       />
       <q-btn
-        size="md"
         v-if="selectedLecture === lecture"
+        size="md"
         icon="expand_less"
         @click.stop="selectedLecture = null"
       />
@@ -99,7 +99,7 @@ import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();
 const { lecture: lectureService } = inject("services");
 
-const lectures = defineModel();
+const lectures = defineModel({ type: Array });
 defineProps({
   allowDelete: Boolean,
   editMode: Boolean,

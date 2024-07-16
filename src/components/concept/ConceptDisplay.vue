@@ -1,13 +1,13 @@
 <template>
   <q-card-section v-if="concepts" class="q-gutter-sm truncate-chip-labels">
     <q-chip
-      square
-      clickable
-      @click.stop="openConcept(item)"
-      color="primary"
-      text-color="white"
       v-for="(item, index) in concepts"
       :key="index"
+      square
+      clickable
+      color="primary"
+      text-color="white"
+      @click.stop="openConcept(item)"
     >
       <div class="ellipsis">
         {{ getConcept(item).title }}

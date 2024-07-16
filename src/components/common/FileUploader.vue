@@ -5,29 +5,29 @@
     :filename="
       (file) => prefix + '/' + uid() + '.' + file.name.split('.').pop()
     "
-    @uploaded="uploaded"
-    @start="start"
-    @finish="finish"
-    @added="addFile"
     :multiple="multiple"
     :flat="flat"
     :bordered="bordered"
     :square="square"
     :dark="dark"
     :color="color"
+    @uploaded="uploaded"
+    @start="start"
+    @finish="finish"
+    @added="addFile"
   >
-    <template v-slot:header="scope">
+    <template #header="scope">
       <div class="row no-wrap items-center q-pa-xs q-gutter-none">
         <q-spinner v-if="scope.isUploading" class="q-uploader__spinner" />
         <q-btn
           v-if="scope.canAddFiles"
           type="a"
           icon="add_box"
-          @click="scope.pickFiles"
           round
           dense
           flat
           size="sm"
+          @click="scope.pickFiles"
         >
           <q-uploader-add-trigger />
         </q-btn>
@@ -35,10 +35,10 @@
         <q-btn
           v-if="scope.canUpload"
           icon="cloud_upload"
-          @click="scope.upload"
           round
           dense
           flat
+          @click="scope.upload"
         >
         </q-btn>
       </div>
@@ -61,7 +61,7 @@ const { uid } = useIris();
 
 const props = defineProps({
   multiple: { type: Boolean, default: false },
-  title: { type: String },
+  title: { type: String, default: "" },
   flat: { type: Boolean, default: false },
   bordered: { type: Boolean, default: false },
   square: { type: Boolean, default: false },
