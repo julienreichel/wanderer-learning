@@ -12,7 +12,7 @@
 <script setup>
 import QuizRunner from "./QuizRunner.vue";
 
-const props = defineProps({
+defineProps({
   questions: { type: Array },
   max: { type: Number, default: 3 },
   adaptative: { type: Boolean, default: false },

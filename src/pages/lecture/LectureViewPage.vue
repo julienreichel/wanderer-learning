@@ -97,10 +97,11 @@ import StepDisplay from "src/components/step/StepDisplay.vue";
 import QuizRunner from "src/components/part/display/QuizRunner.vue";
 
 import { useIris } from "src/composables/iris";
-const { t, $q, router, canEdit, uid } = useIris();
+const { t, router, canEdit, uid } = useIris();
 const {
   lecture: lectureService,
   stepReporting: reportingService,
+  course: courseService,
   lectureReporting: lectureReportingService,
 } = inject("services");
 
@@ -289,7 +290,7 @@ const processResult = async (questions) => {
     if (starQuestion) {
       const stars = Number(starQuestion.response);
       let course = lecture.value.course;
-      if (!lectureStep.value.lecture.course.ratings) {
+      if (!course.ratings) {
         course.ratings = [{ value: stars, reportingId: reporting.value.id }];
       } else {
         course.ratings.push({ value: stars, reportingId: reporting.value.id });

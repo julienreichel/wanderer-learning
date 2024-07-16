@@ -20,7 +20,7 @@
 import { useIris } from "src/composables/iris";
 const { router } = useIris();
 
-const props = defineProps({
+defineProps({
   concepts: {
     type: Array,
     default: null,

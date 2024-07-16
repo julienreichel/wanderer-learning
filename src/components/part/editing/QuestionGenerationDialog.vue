@@ -170,7 +170,7 @@ const finishStepper = async () => {
     );
     question.answers.forEach((answer) => {
       // remove starting A. or B. or C. or D. from the answer
-      answer.text = answer.text.replace(/^[A-Z0-9a-z][\.)]\s/, "");
+      answer.text = answer.text.replace(/^[A-Z0-9a-z][.)]\s/, "");
     });
 
     // pluralise the explanation

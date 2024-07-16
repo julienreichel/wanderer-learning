@@ -1,5 +1,4 @@
 import ServicePrototype from "./service-prototype";
-import { generateClient } from "aws-amplify/api";
 
 /**
  * Provide service to get and store concepts

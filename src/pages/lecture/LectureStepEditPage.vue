@@ -45,8 +45,7 @@ const { t, $q, router } = useIris();
 const { lectureStep: lectureStepService } = inject("services");
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
-const userAttributes = inject("userAttributes");
-const { identityId } = userAttributes.value;
+
 const props = defineProps({
   id: String,
   stepIdx: {

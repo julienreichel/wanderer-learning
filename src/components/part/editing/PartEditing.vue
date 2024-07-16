@@ -102,14 +102,14 @@ import RichTextEditing from "../../common/RichTextEditing.vue";
 import QuestionEditing from "./QuestionEditing.vue";
 import FileUploader from "../../common/FileUploader.vue";
 
-const { storage: storageService, lectureStep: lectureStepService } =
+const { storage: storageService } =
   inject("services");
 
 const part = defineModel();
 part.value.options = part.value.options || {};
 part.value.options.imageSize = part.value.options.imageSize || "4";
 
-const props = defineProps({
+defineProps({
   lectureId: { type: String, required: true },
 });
 
@@ -158,8 +158,8 @@ const uploaded = async (files) => {
   const file = files[0];
   removeImage();
   // remove the extension from the name
-  const name = file.name.replace(/\.[^\.]+$/, "");
-  part.value.text = Boolean(part.value.text) ? part.value.text : name;
+  const name = file.name.replace(/\.[^.]+$/, "");
+  part.value.text = part.value.text ? part.value.text : name;
   part.value.src = file?.path;
   part.value.url = file?.url;
 };

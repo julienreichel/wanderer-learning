@@ -309,7 +309,7 @@
             />
           </div>
         </q-linear-progress>
-        <table-of-content
+        <my-table-of-content
           v-if="lecturePreview"
           :lecture="lecturePreview"
           class="q-pa-sm"
@@ -328,7 +328,7 @@
 </template>
 
 <script setup>
-import TableOfContent from "src/components/common/TableOfContent.vue";
+import MyTableOfContent from "src/components/common/TableOfContent.vue";
 
 import { ref, inject, onMounted, nextTick, watch } from "vue";
 
@@ -673,7 +673,7 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
     );
     question.answers.forEach((answer) => {
       // remove starting A. or B. or C. or D. from the answer
-      answer.text = answer.text.replace(/^[A-Z0-9a-z][\.)]\s/, "");
+      answer.text = answer.text.replace(/^[A-Z0-9a-z][.)]\s/, "");
     });
 
     // if there is only one answer, we add the missing one

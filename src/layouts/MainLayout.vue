@@ -132,7 +132,7 @@ function updateBreadcrumbs(data) {
 
   const routeInfo = data[data.length - 1];
   enableEditing.value = Boolean(routeInfo.view) || Boolean(routeInfo.edit);
-  editMode.value = !Boolean(routeInfo.edit);
+  editMode.value = !routeInfo.edit;
   viewRoute = routeInfo.view;
   editRoute = routeInfo.edit;
   id = routeInfo.id;

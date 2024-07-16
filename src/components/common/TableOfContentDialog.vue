@@ -14,7 +14,7 @@
 
 <script setup>
 import TableOfContent from "./TableOfContent.vue";
-import { ref, watch, defineProps, defineEmits, computed } from "vue";
+import { ref, watch, defineProps, defineEmits } from "vue";
 
 // Define the props
 const props = defineProps({

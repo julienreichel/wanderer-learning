@@ -67,7 +67,7 @@ const emit = defineEmits(["select", "create"]);
 
 const options = ref(null);
 let conceptList = null;
-const filterFn = async (val, update, abort) => {
+const filterFn = async (val, update) => {
   if (!conceptList) {
     conceptList = await conceptService.list();
   }
@@ -103,7 +103,7 @@ const createConcept = async (input, done) => {
     done(input);
   } else {
     emit("select", input);
-    conceptId.value = val.value;
+    conceptId.value = concept.id;
     done();
   }
   await nextTick();

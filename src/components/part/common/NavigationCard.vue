@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   showPrevious: { type: Boolean, default: false },
   step: { type: Number, required: true },
   hasNext: { type: Boolean, default: false },

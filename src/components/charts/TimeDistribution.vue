@@ -9,14 +9,9 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useIris } from "src/composables/iris";
 const { t } = useIris();
-
-const props = defineProps({
-  serie: { type: Array, required: true },
-  size: { type: Number, default: 150 },
-});
 
 const chartOptions = ref({
   chart: {

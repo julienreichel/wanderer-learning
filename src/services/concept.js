@@ -98,7 +98,7 @@ export default class ConceptService extends ServicePrototype {
    */
   async list(params = {}) {
     let concepts = this.getCachedData("concepts");
-    if (Boolean(concepts)) {
+    if (concepts) {
       return concepts;
     }
     params.selectionSet = ["id", "title", "description"];

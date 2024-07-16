@@ -20,7 +20,7 @@ import RatingReporting from "./RatingReporting.vue";
 import RotiReporting from "./ROTIReporting.vue";
 import DifficultyReporting from "./DifficultyReporting.vue";
 
-const props = defineProps({
+defineProps({
   ratings: { type: Object },
 });
 </script>

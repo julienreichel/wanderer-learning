@@ -63,7 +63,7 @@
 import { useIris } from "src/composables/iris";
 const { router, t } = useIris();
 
-const props = defineProps({
+defineProps({
   step: Object,
 });
 

@@ -108,7 +108,7 @@ import FileUploader from "../../common/FileUploader.vue";
 import { ref, computed, watch, nextTick, inject } from "vue";
 
 import { useIris } from "src/composables/iris";
-const { uid, router, $q, t } = useIris();
+const { uid, router, $q } = useIris();
 
 import { useChecks } from "src/composables/checks";
 const { checkPart, preparePart } = useChecks();
@@ -263,7 +263,7 @@ const openFileUpload = ref(false);
 const uploaded = (files) => {
   const newParts = files.map((file) => ({
     type: "img",
-    text: file.description || file.name.replace(/\.[^\.]+$/, ""),
+    text: file.description || file.name.replace(/\.[^.]+$/, ""),
     src: file.path,
     url: file.url,
   }));

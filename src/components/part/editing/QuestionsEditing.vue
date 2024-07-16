@@ -120,12 +120,12 @@ import QuestionEditing from "src/components/part/editing/QuestionEditing.vue";
 import QuestionEditingPreview from "src/components/part/editing/QuestionEditingPreview.vue";
 import QuestionGenerationDialog from "src/components/part/editing/QuestionGenerationDialog.vue";
 
-import { computed, ref, watch, inject } from "vue";
+import { computed, ref, watch } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { uid } = useIris();
 
-const props = defineProps({
+defineProps({
   parts: { type: Array },
 });
 

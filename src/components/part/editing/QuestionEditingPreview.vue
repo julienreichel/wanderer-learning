@@ -16,14 +16,11 @@
 import { computed } from "vue";
 
 import { useIris } from "src/composables/iris";
-import { experimental } from "aws-cdk-lib/aws-cloudfront";
 const { getIconFromQuestion } = useIris();
 
 const props = defineProps({
   question: { type: Object, required: true },
 });
-
-const emit = defineEmits(["selected"]);
 
 const icon = computed(() => getIconFromQuestion(props.question));
 const color = computed(() => {

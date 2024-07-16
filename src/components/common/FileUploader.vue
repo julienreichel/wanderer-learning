@@ -157,10 +157,10 @@ const uploaded = async (msg) => {
     uploader.removeUploadedFiles();
   }
 };
-const start = async (msg) => {
+const start = async () => {
   uploadedFiles = [];
 };
-const finish = async (msg) => {
+const finish = async () => {
   uploadedFiles = uploadedFiles.filter((file) => Boolean(file));
 
   emit("uploaded", uploadedFiles);

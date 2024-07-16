@@ -9,9 +9,6 @@ import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import singleQuiz from "./prompts/singleQuiz.js";
 import simpleQuiz from "./prompts/quiz.js";
 
-import { post } from "aws-amplify/api";
-import { fetchAuthSession } from "aws-amplify/auth";
-
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`;
 
@@ -46,7 +43,7 @@ export default class ServicePrototype {
     }
   }
 
-  async query(query, retryCount = 0) {
+  async query(query) {
     query.model = query.model || this.model;
     query.ttl = Math.floor(Date.now() / 1000) + 3600 * 24 * 7; // kep request for a week
     try {
@@ -74,12 +71,6 @@ export default class ServicePrototype {
       return {};
     } catch (error) {
       console.log(error);
-      /*
-      if (retryCount === 0) {
-        // let's try again, maybe it was a temporary issue
-        return this.query(query, retryCount + 1);
-      }
-        */
       return {};
     }
   }
@@ -104,7 +95,7 @@ export default class ServicePrototype {
 
   async getTableOfContent(description, concepts, objectives, previousToc) {
     const conceptsList = concepts
-      .map(({ name, description, id }) => `${name}: ${description}`)
+      .map(({ name, description }) => `${name}: ${description}`)
       .join("\n");
 
     const objectivesList = objectives.join("\n");

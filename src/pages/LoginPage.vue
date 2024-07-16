@@ -16,7 +16,7 @@ import { Authenticator, useAuthenticator } from "@aws-amplify/ui-vue";
 const auth = useAuthenticator();
 import "@aws-amplify/ui-vue/styles.css";
 
-watch(auth, (value) => {
+watch(auth, () => {
   if (auth.authStatus === "authenticated") {
     router.push({ name: "Home" });
   }

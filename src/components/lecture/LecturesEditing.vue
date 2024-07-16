@@ -100,7 +100,7 @@ const { t, $q, router, canEdit } = useIris();
 const { lecture: lectureService } = inject("services");
 
 const lectures = defineModel();
-const props = defineProps({
+defineProps({
   allowDelete: Boolean,
   editMode: Boolean,
 });

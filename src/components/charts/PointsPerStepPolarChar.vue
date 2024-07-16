@@ -10,12 +10,6 @@
 <script setup>
 import { ref } from "vue";
 
-const props = defineProps({
-  labels: { type: Array },
-  series: { type: Array, required: true },
-  size: { type: Number, default: 150 },
-});
-
 const chartOptions = ref({
   chart: {
     type: "polarArea",

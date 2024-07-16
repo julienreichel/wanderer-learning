@@ -54,7 +54,7 @@ import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
 import QuizRunner from "src/components/part/display/QuizRunner.vue";
 
 import { useIris } from "src/composables/iris";
-const { t, $q, router, canEdit } = useIris();
+const { router, canEdit } = useIris();
 const {
   course: courseService,
   stepReporting: reportingService,

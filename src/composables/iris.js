@@ -36,7 +36,7 @@ export function useFormatter() {
   const defaultOptions = {
     wordwrap: 100,
     formatters: {
-      headingFormatter: function (elem, walk, builder, formatOptions) {
+      headingFormatter: function (elem, walk, builder) {
         const level = Math.max(1, parseInt(elem.tagName[1], 10) - 0); // Get the heading level (e.g., 1 for <h1>, 2 for <h2>)
         const hashes = "#".repeat(level); // Create the appropriate number of hashes
         builder.openBlock(elem);

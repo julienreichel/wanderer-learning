@@ -1,5 +1,3 @@
-import { experimental } from "aws-cdk-lib/aws-cloudfront";
-
 export default {
   error: {
     form: {

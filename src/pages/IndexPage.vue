@@ -297,7 +297,7 @@ const processResult = async (questions) => {
     reportings: reportings,
   });
 };
-const finishQuiz = async (questions) => {
+const finishQuiz = async () => {
   const step = reviewStep.value;
   // make sure this one is no longer shown to the user
   step.points = 100;

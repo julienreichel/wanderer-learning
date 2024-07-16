@@ -135,7 +135,7 @@ import RichTextEditing from "../../common/RichTextEditing.vue";
 import DifficultySlider from "src/components/common/DifficultySlider.vue";
 import ConceptSelecting from "src/components/concept/ConceptSelecting.vue";
 
-import { ref, watch, inject, onMounted } from "vue";
+import { ref, watch } from "vue";
 import { useIris } from "src/composables/iris";
 const { t, getIconFromQuestion } = useIris();
 
