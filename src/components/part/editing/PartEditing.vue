@@ -1,7 +1,7 @@
 <template>
   <q-card>
-    <q-card-section horizontal v-if="part.type === 'text'">
-      <rich-text-editing :class="textSizeClass" v-model="part.text">
+    <q-card-section v-if="part.type === 'text'" horizontal>
+      <rich-text-editing v-model="part.text" :class="textSizeClass">
       </rich-text-editing>
       <q-card-section
         v-if="part.url && !uploadingFile"
@@ -25,41 +25,41 @@
           <q-btn size="sm" icon="delete" @click="removeImage()" />
         </q-card-actions>
       </q-card-section>
-      <file-uploader v-else @uploaded="uploaded" :prefix="lectureId" />
+      <file-uploader v-else :prefix="lectureId" @uploaded="uploaded"/>
     </q-card-section>
-    <q-card-section class="row" v-if="part.type === 'img'">
+    <q-card-section  v-if="part.type === 'img'" class="row">
       <div class="col-6 q-gutter-sm">
         <q-input
-          outlined
           v-model="part.text"
+          outlined
           autogrow
           :label="$t('parts.form.description')"
         />
         <div class="col-12">
           <file-uploader
             class="full-width full-height"
-            @uploaded="uploaded"
             :prefix="lectureId"
+            @uploaded="uploaded"
           />
         </div>
       </div>
       <q-img class="col" :ratio="16 / 9" fit="scale-down" :src="part.url" />
     </q-card-section>
     <q-card-section
-      class="row q-pa-md q-col-gutter-sm"
       v-if="part.type === 'video'"
+      class="row q-pa-md q-col-gutter-sm"
     >
       <div class="col-8 q-gutter-sm">
         <q-input
-          outlined
           v-model="part.text"
+          outlined
           autogrow
           :label="$t('parts.form.description')"
         />
         <q-input
+          v-model="part.src"
           outlined
           class="col-8"
-          v-model="part.src"
           :label="$t('parts.form.add.video')"
         />
       </div>
@@ -68,20 +68,20 @@
       </div>
     </q-card-section>
     <q-card-section
-      class="row q-pa-md q-col-gutter-sm"
       v-if="part.type === 'iframe'"
+      class="row q-pa-md q-col-gutter-sm"
     >
       <div class="col-8 q-gutter-sm">
         <q-input
-          outlined
           v-model="part.text"
+          outlined
           autogrow
           :label="$t('parts.form.description')"
         />
         <q-input
+          v-model="part.src"
           outlined
           class="col-8"
-          v-model="part.src"
           :label="$t('parts.form.add.iframe')"
         />
       </div>
@@ -105,7 +105,7 @@ import FileUploader from "../../common/FileUploader.vue";
 const { storage: storageService } =
   inject("services");
 
-const part = defineModel();
+const part = defineModel({type: Object});
 part.value.options = part.value.options || {};
 part.value.options.imageSize = part.value.options.imageSize || "4";
 

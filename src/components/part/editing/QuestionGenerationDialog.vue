@@ -5,8 +5,8 @@
         <q-step :title="$t('wizard.questions.step1')" name="step1">
           <q-card-section>
             <q-input
-              outlined
               v-model="subject"
+              outlined
               :placeholder="$t('wizard.questions.description')"
               type="textarea"
               rows="15"
@@ -23,10 +23,10 @@
                 </q-item-section>
                 <q-item-section>
                   <q-slider
+                    v-model="nbQuestions"
                     snap
                     label
                     switch-label-side
-                    v-model="nbQuestions"
                     :label-value="
                       nbQuestions +
                       ' ' +
@@ -49,9 +49,9 @@
               </q-item>
               <q-item>
                 <q-select
+                  v-model="type"
                   class="col-12"
                   outlined
-                  v-model="type"
                   :label="$t('wizard.questions.type')"
                   :options="typeOptions"
                 />
@@ -100,9 +100,9 @@ const { htmlToMarkdown } = useFormatter();
 
 const { ai: aiService } = inject("services");
 
-const popupVisible = defineModel();
+const popupVisible = defineModel({ type: Boolean });
 const props = defineProps({
-  parts: { type: Array },
+  parts: { type: Array, required: true },
 });
 
 const emit = defineEmits(["questions"]);

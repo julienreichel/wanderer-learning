@@ -4,8 +4,8 @@
       v-if="showPrevious"
       class="row justify-center items-center full-height"
       clickable
-      @click="stepChange(step - 1)"
       flat
+      @click="stepChange(step - 1)"
     >
       <q-btn flat round icon="chevron_left" size="lg" />
     </q-card>
@@ -13,8 +13,8 @@
       v-else-if="hasNext"
       class="row justify-center items-center full-height"
       clickable
-      @click="stepChange(step + 1)"
       flat
+      @click="stepChange(step + 1)"
     >
       <q-btn flat round icon="chevron_right" size="lg" />
     </q-card>
@@ -22,8 +22,8 @@
       v-else-if="hasAnsweredAllQuizzes"
       class="row justify-center items-center full-height"
       clickable
-      @click="finish()"
       flat
+      @click="finish()"
     >
       <q-btn flat round icon="check" size="lg" />
     </q-card>

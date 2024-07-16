@@ -3,24 +3,24 @@
     <q-card-section class="q-pt-sm q-px-sm q-col-gutter-sm row">
       <NavigationCard
         :step="step"
-        :showPrevious="hasPrevious"
-        @stepChange="step = $event"
+        :show-previous="hasPrevious"
+        @step-change="step = $event"
       />
       <draggable
         :list="previewParts"
         item-key="id"
         ghost-class="ghost"
-        @change="moved"
         class="q-pt-sm q-px-sm q-col-gutter-sm row col"
+        @change="moved"
       >
         <template #item="{ element }">
           <PartCard
             :part="element"
             :step="parts.indexOf(element)"
-            :maxStep="parts.length"
+            :max-step="parts.length"
             :active="step == parts.indexOf(element)"
             :editing="true"
-            @stepChange="step = $event"
+            @step-change="step = $event"
             @remove="remove"
             @edit="editJsonStep"
           />
@@ -28,8 +28,8 @@
       </draggable>
       <NavigationCard
         :step="step"
-        :hasNext="hasNext"
-        @stepChange="step = $event"
+        :has-next="hasNext"
+        @step-change="step = $event"
         @finish="finish"
       />
     </q-card-section>
@@ -75,7 +75,7 @@
     v-model="part"
     :parts="parts"
   />
-  <part-editing v-else-if="part" v-model="part" :lectureId="lectureId" />
+  <part-editing v-else-if="part" v-model="part" :lecture-id="lectureId" />
   <json-edit-dialog
     v-model="jsonDialog"
     :data="jsonToEdit"
@@ -84,13 +84,13 @@
   <q-dialog v-model="openFileUpload">
     <q-card>
       <file-uploader
-        @uploaded="uploaded"
         :multiple="true"
-        convertPdfToImages
+        convert-pdf-to-images
         accept=".jpg, image/*, application/pdf"
         style="min-height: 300px"
         :title="$t('step.form.file_upload')"
         :prefix="lectureId"
+        @uploaded="uploaded"
       />
     </q-card>
   </q-dialog>
@@ -118,9 +118,9 @@ const { storage: storageService } = inject("services");
 const userAttributes = inject("userAttributes");
 const { isAdmin } = userAttributes.value;
 
-const parts = defineModel();
+const parts = defineModel({ type: Array });
 const props = defineProps({
-  stepIdx: { type: String },
+  stepIdx: { type: String, default: "0" },
   lectureId: { type: String, required: true },
 });
 

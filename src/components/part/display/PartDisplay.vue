@@ -1,6 +1,6 @@
 <template>
   <q-card :flat="flat">
-    <q-card-section horizontal class="q-pa-md" v-if="part.type === 'text'">
+    <q-card-section v-if="part.type === 'text'" horizontal class="q-pa-md">
       <div class="row full-width">
         <q-img
           v-if="part.url"
@@ -29,6 +29,12 @@
       v-if="part.type === 'quiz'"
       :questions="part.questions"
       :max="Number(part.options.nbQuestions) || 0"
+      adaptative
+      :next-actions-icon="
+        hasNext ? 'chevron_right' : hasAnsweredAllQuizzes ? 'check' : null
+      "
+      :prev-actions-icon="null"
+      :exam-mode="Boolean(part.options.examMode)"
       @results="submitResults"
       @finished="
         hasNext
@@ -37,12 +43,6 @@
             ? $emit('finish')
             : null
       "
-      adaptative
-      :next-actions-icon="
-        hasNext ? 'chevron_right' : hasAnsweredAllQuizzes ? 'check' : null
-      "
-      :prev-actions-icon="null"
-      :exam-mode="Boolean(part.options.examMode)"
     />
     <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
       <div class="iframe-16-9">

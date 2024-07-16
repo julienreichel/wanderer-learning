@@ -13,11 +13,11 @@
 import QuizRunner from "./QuizRunner.vue";
 
 defineProps({
-  questions: { type: Array },
+  questions: { type: Array, required: true },
   max: { type: Number, default: 3 },
   adaptative: { type: Boolean, default: false },
   examMode: { type: Boolean, default: false },
 });
 
-const popupVisible = defineModel();
+const popupVisible = defineModel({ type: Boolean, default: false });
 </script>

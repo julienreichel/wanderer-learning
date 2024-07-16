@@ -2,9 +2,9 @@
   <draggable v-model="quiz.questions" item-key="id" ghost-class="ghost">
     <template #item="{ element, index }">
       <q-card
-        @click="activeQuestion = element"
         :class="{ 'q-card-hover': activeQuestion !== element }"
         class="q-mt-sm"
+        @click="activeQuestion = element"
       >
         <question-editing
           v-if="activeQuestion === element"
@@ -57,10 +57,10 @@
           </q-item-section>
           <q-item-section>
             <q-slider
+              v-model="nbQuestions"
               snap
               label
               switch-label-side
-              v-model="nbQuestions"
               :label-value="
                 nbQuestions +
                 ' ' +
@@ -126,10 +126,10 @@ import { useIris } from "src/composables/iris";
 const { uid } = useIris();
 
 defineProps({
-  parts: { type: Array },
+  parts: { type: Array, required: true },
 });
 
-let quiz = defineModel();
+let quiz = defineModel({type: Object});
 if (!quiz.value) {
   quiz.value = {
     questions: [],

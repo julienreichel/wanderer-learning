@@ -1,26 +1,26 @@
 <template>
-  <q-card class="q-pt-sm" v-if="parts.length > 1">
+  <q-card v-if="parts.length > 1" class="q-pt-sm">
     <q-card-section class="q-pt-sm q-px-sm q-col-gutter-sm row">
       <NavigationCard
         :step="step"
-        :showPrevious="step !== 0"
-        @stepChange="step = $event"
+        :show-previous="step !== 0"
+        @step-change="step = $event"
       />
       <PartCard
-        v-for="part in previewParts"
-        :key="part.id"
-        :part="part"
-        :step="parts.indexOf(part)"
-        :hasQuizAnswer="hasQuizAnswer(part)"
-        :active="step == parts.indexOf(part)"
-        :maxStep="parts.length"
-        @stepChange="step = $event"
+        v-for="previewPart in previewParts"
+        :key="previewPart.id"
+        :part="previewPart"
+        :step="parts.indexOf(previewPart)"
+        :has-quiz-answer="hasQuizAnswer(previewPart)"
+        :active="step == parts.indexOf(previewPart)"
+        :max-step="parts.length"
+        @step-change="step = $event"
       />
       <NavigationCard
         :step="step"
-        :hasNext="hasNext"
-        :hasAnsweredAllQuizzes="hasAnsweredAllQuizzes"
-        @stepChange="step = $event"
+        :has-next="hasNext"
+        :has-answered-all-quizzes="hasAnsweredAllQuizzes"
+        @step-change="step = $event"
         @finish="finish"
       />
     </q-card-section>
@@ -28,10 +28,10 @@
   <PartDisplay
     v-if="part"
     :part="part"
+    :has-next="hasNext && hasAnsweredCurrentQuizz"
+    :has-answered-all-quizzes="hasAnsweredAllQuizzes"
     @results="processResults"
-    :hasNext="hasNext && hasAnsweredCurrentQuizz"
-    :hasAnsweredAllQuizzes="hasAnsweredAllQuizzes"
-    @nextStep="step++"
+    @next-step="step++"
     @finish="finish"
   />
 </template>
@@ -44,8 +44,8 @@ import PartDisplay from "./PartDisplay.vue";
 import { ref, computed, watch } from "vue";
 
 const props = defineProps({
-  parts: { type: Array },
-  stepIdx: { type: String },
+  parts: { type: Array, required: true },
+  stepIdx: { type: String, default: "0" },
   udpdateRoute: { type: Boolean, default: false },
 });
 const emit = defineEmits(["finished"]);

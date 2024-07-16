@@ -1,15 +1,15 @@
 <template>
   <q-card-section class="row">
-    <q-input class="col-8" v-model="question.text" label="The question" />
+    <q-input v-model="question.text" class="col-8" label="The question" />
     <q-select
+      v-model="question.type"
       class="col-3 offset-1"
       outlined
-      v-model="question.type"
       :options="questionTypeOptions"
       :option-label="(item) => $t('quiz.question.type.' + item)"
       label="Type"
     >
-      <template v-slot:option="scope">
+      <template #option="scope">
         <q-item v-bind="scope.itemProps">
           <q-item-section avatar>
             <q-icon :name="selectIcon(scope.opt)" />
@@ -25,22 +25,22 @@
   </q-card-section>
   <q-card-section v-if="question.type === 'feedback'">
     <q-btn-toggle v-model="feedbackType" :options="feedbackTypeOptions">
-      <template v-slot:roti>
+      <template #roti>
         <q-icon right name="sentiment_satisfied_alt" />
       </template>
-      <template v-slot:difficulty>
+      <template #difficulty>
         <q-icon right name="speed" />
       </template>
-      <template v-slot:stars>
+      <template #stars>
         <q-icon right name="grade" />
       </template>
-      <template v-slot:text>
+      <template #text>
         <q-icon right name="short_text" />
       </template>
     </q-btn-toggle>
     <q-list
-      class="q-gutter-sm"
       v-if="feedbackType === 'roti' || feedbackType === 'difficulty'"
+      class="q-gutter-sm"
     >
       <q-item v-for="index in 5" :key="index">
         <q-input
@@ -48,7 +48,7 @@
           v-model="question.answers[index - 1].text"
           class="full-width"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <q-icon
               :name="
                 Array.isArray(icons[feedbackType])
@@ -69,21 +69,21 @@
   <q-card-section v-else>
     <q-list class="q-gutter-sm">
       <q-item
-        class="q-px-none"
         v-for="(answer, answerIdx) in question.answers"
         :key="answerIdx"
+        class="q-px-none"
       >
         <q-input v-model="answer.text" class="full-width">
-          <template v-slot:prepend>
+          <template #prepend>
             <q-icon :name="getIcon(question)" />
           </template>
-          <template v-slot:append>
+          <template #append>
             <q-toggle
+              v-model="answer.valid"
               checked-icon="check"
               color="green"
               :name="'valid' + answerIdx"
               unchecked-icon="clear"
-              v-model="answer.valid"
             />
             <q-btn
               flat
@@ -96,19 +96,19 @@
         </q-input>
       </q-item>
     </q-list>
-    <q-btn @click="addAnswer(question)" size="sm" icon="add" />
+    <q-btn size="sm" icon="add" @click="addAnswer(question)"/>
   </q-card-section>
   <q-card-section v-if="question.type !== 'feedback'">
     <div class="row">
       <q-toggle
-        class="col"
         v-model="provideExplanation"
+        class="col"
         name="explanation"
         :label="$t('quiz.question.explanation')"
       />
       <concept-selecting
-        class="col"
         v-model="question.conceptId"
+        class="col"
         :placeholder="$t('concept.form.edit')"
         outlined
       />
@@ -139,7 +139,7 @@ import { ref, watch } from "vue";
 import { useIris } from "src/composables/iris";
 const { t, getIconFromQuestion } = useIris();
 
-const question = defineModel();
+const question = defineModel({ type: Object });
 if (!question.value.explanations) {
   question.value.explanations = "";
 }
