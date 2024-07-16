@@ -1,16 +1,5 @@
 import type { ClientSchema } from "@aws-amplify/backend";
-import { a, defineData, defineFunction, secret } from "@aws-amplify/backend";
-
-const AIQueryHandler = defineFunction({
-  entry: "./ai-query/ai-query.ts",
-  timeoutSeconds: 30, // more than 30s is useless, because AppSync has a hard 30s timeout
-  environment: {
-    OPENAI_API_KEY: secret("OPENAI_API_KEY"),
-    OPENAI_MODEL: process.env.OPENAI_MODEL || "gpt-3.5-turbo",
-    OPENAI_MAX_TOKEN: process.env.OPENAI_MAX_TOKEN || "50",
-    OPENAI_TEMPERATURE: process.env.OPENAI_TEMPERATURE || "0.7",
-  },
-});
+import { a, defineData } from "@aws-amplify/backend";
 
 const schema = a.schema({
   ReportingResponse: a.customType({
@@ -235,27 +224,6 @@ const schema = a.schema({
       ttl: a.integer(),
     })
     .authorization((allow) => [allow.group("admin"), allow.group("teacher")]),
-
-  AIMessage: a.customType({
-    role: a.string(),
-    content: a.string(),
-  }),
-
-  AIQuery: a
-    .query()
-    .arguments({
-      system: a.string(),
-      prompt: a.string(),
-      messages: a.json(),
-      token: a.integer(),
-      format: a.string(),
-      model: a.string(),
-    })
-    // return type of the query
-    .returns(a.string())
-    // only allow signed-in users to call this API
-    .authorization((allow) => [allow.group("admin"), allow.group("teacher")])
-    .handler(a.handler.function(AIQueryHandler)),
 });
 
 export type Schema = ClientSchema<typeof schema>;

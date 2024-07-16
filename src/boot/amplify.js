@@ -12,14 +12,6 @@ import {
 import { ref } from "vue";
 
 Amplify.configure(outputs);
-const existingConfig = Amplify.getConfig();
-Amplify.configure({
-  ...existingConfig,
-  API: {
-    ...existingConfig.API,
-    REST: outputs.custom.API,
-  },
-});
 
 export default boot(({ app, router }) => {
   app.use(AmplifyVue);
