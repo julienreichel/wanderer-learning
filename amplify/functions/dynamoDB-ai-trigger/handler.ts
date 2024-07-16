@@ -7,7 +7,7 @@ import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 const client = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 
-import { env } from "$amplify/env/ai-query";
+import { env } from "$amplify/env/dynamoDB-ai-trigger";
 
 const logger = new Logger({
   logLevel: "INFO",
