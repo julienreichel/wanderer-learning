@@ -52,13 +52,13 @@ export default class ServicePrototype {
       });
       const requestId = data.id;
 
-      // now we wait, at most 90sed, with backoff retry
+      // now we wait, at most 300s, with backoff retry
       let totalWaitTime = 0;
-      let waitTime = 1000;
-      while (totalWaitTime < 90 * 1000) {
+      let waitTime = 2000;
+      while (totalWaitTime < 300 * 1000) {
         await new Promise((resolve) => setTimeout(resolve, waitTime));
         totalWaitTime += waitTime;
-        waitTime = Math.min(waitTime * 2, 10000);
+        waitTime = Math.min(waitTime + 1000, 10000);
 
         const { data } = await this.client.models.AIRequest.get(
           { id: requestId },
@@ -70,7 +70,9 @@ export default class ServicePrototype {
           }
           return JSON.parse(data.content);
         } else {
-          console.log("finish_reason", data.finish_reason, data.content);
+          if (data.finish_reason) {
+            console.log("finish_reason", data.finish_reason, data.content);
+          }
         }
       }
       return {};
@@ -240,7 +242,7 @@ export default class ServicePrototype {
     const system = singleQuiz.system(this.tone, this.language, difficulty);
     const prompt = singleQuiz.prompt(sectionName, sectionContent);
 
-    return this.query({ system, prompt, token: 15 * 250 });
+    return this.query({ system, prompt, token: 10 * 250 });
   }
 
   async getQuiz(descritpion, difficulty, nbQuestions, type, explanation) {

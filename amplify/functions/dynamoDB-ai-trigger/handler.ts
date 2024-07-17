@@ -15,6 +15,26 @@ const logger = new Logger({
 });
 
 export const handler: DynamoDBStreamHandler = async (event) => {
+  const apiKey = env.OPENAI_API_KEY;
+
+  /**
+   * @param {object} body
+   * @returns {Promise<any>}
+   */
+  const request = async (body: object): Promise<any> => {
+    const END_POINT = "https://api.openai.com/v1/chat/completions";
+
+    const response = await fetch(END_POINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(body),
+    });
+    return await response.json();
+  };
+
   await Promise.all(
     event.Records.map(async (record) => {
       logger.info(`Event Type: ${record.eventName} -> ${record.eventID}`);
@@ -23,6 +43,17 @@ export const handler: DynamoDBStreamHandler = async (event) => {
         const tableName = record.eventSourceARN?.split("/")[1];
         const key = record.dynamodb?.Keys?.id?.S;
         const row = record.dynamodb?.NewImage;
+        logger.info(`Starting: ${key} for record ${record.eventID}`);
+        const createdAt = row?.createdAt?.S;
+        const now = new Date();
+        // there is no point running the function if the data is older than 4 minutes, by the time we get the results, nobody is listening anymore
+        if (
+          !createdAt ||
+          now.getTime() - new Date(createdAt).getTime() > 4 * 60 * 1000
+        ) {
+          logger.warn(`Old data for: ${key} -> skipping`);
+          return;
+        }
         console.log(key, row);
         if (!tableName || !row || !key) return;
         let payload = {
@@ -33,7 +64,6 @@ export const handler: DynamoDBStreamHandler = async (event) => {
           format: row.format?.S,
         };
 
-        const apiKey = env.OPENAI_API_KEY;
         const temperature = Number(env.OPENAI_TEMPERATURE) || 0.7;
 
         const max_tokens =
@@ -64,23 +94,34 @@ export const handler: DynamoDBStreamHandler = async (event) => {
           response_format,
         };
 
-        console.log(key, body);
-        const END_POINT = "https://api.openai.com/v1/chat/completions";
+        let data = await request(body);
+        let retryCnt = 0;
 
-        const response = await fetch(END_POINT, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-          },
-          body: JSON.stringify(body),
-        });
-
-        let data = await response.json();
-        console.log(key, data);
+        while (data.error && data.error.code === "rate_limit_exceeded") {
+          retryCnt++;
+          // get the recomended time to wait from the message with some margin, or 10s by default
+          const retry =
+            Number(
+              data.error.message.match(/Please try again in ([.\d]+)s/)?.[1],
+            ) || 5;
+          logger.info(
+            `Rate limit exceeded for ${key}, retrying in ${retry * retryCnt}s`,
+          );
+          await new Promise((resolve) =>
+            setTimeout(resolve, retry * retryCnt * 1000),
+          );
+          data = await request(body);
+          const time = new Date();
+          if (time.getTime() - now.getTime() > 4 * 60 * 1000) {
+            // we stop, this is over, we will never make it
+            break;
+          }
+        }
+        logger.info(`Finished ${key} after ${retryCnt} retries`);
 
         // write the result into the table
         if (data.error) {
+          logger.warn(`Error for: ${key} -> ${data.error.message}`);
           data.choices = [
             {
               message: { content: data.error.message },
@@ -93,17 +134,18 @@ export const handler: DynamoDBStreamHandler = async (event) => {
           TableName: tableName,
           Key: { id: key },
           UpdateExpression:
-            "set content = :content, finish_reason = :finish_reason, token_usage = :token_usage",
+            "set content = :content, finish_reason = :finish_reason, token_usage = :token_usage, updatedAt = :updatedAt",
           ExpressionAttributeValues: {
             ":content": data.choices[0].message.content.trim(),
             ":finish_reason": data.choices[0].finish_reason,
             ":token_usage": data.usage,
+            ":updatedAt": new Date().toISOString(),
           },
         };
         const command = new UpdateCommand(updateParams);
         await ddbDocClient.send(command);
 
-        console.log(key, "successfully updated");
+        logger.info(`Success: ${key}`);
       }
     }),
   );

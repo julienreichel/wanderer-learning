@@ -219,6 +219,8 @@ let practiceQuiz = ref(false);
 let feedbackQuiz = ref(true);
 let questions = computed(() => {
   // cumulate all the questions from the lecture
+  if (!lecture.value.steps) return [];
+
   return lecture.value.steps
     .map((step) => {
       const partQuestions = step.parts

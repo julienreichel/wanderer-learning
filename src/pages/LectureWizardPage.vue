@@ -802,7 +802,12 @@ const generateLecture = async () => {
   const nbQuestion = 12;
   progress.value = 20 / 100;
   const conceptParts = await Promise.all(
-    tableOfContent.value.map(async (step) => {
+    tableOfContent.value.map(async (step, index) => {
+      // To avoid rate limits, we need to wait for 40s
+      // (10K for the HTML, 10K for the quiz for a rate limit of 30K, so 40s between runs)
+      if (index > 0) {
+        await new Promise((resolve) => setTimeout(resolve, index * 40 * 1000));
+      }
       let questions = [];
       let parts = [];
 

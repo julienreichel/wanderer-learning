@@ -33,7 +33,7 @@
                       $t('wizard.questions.number', nbQuestions)
                     "
                     :min="1"
-                    :max="12"
+                    :max="15"
                   />
                 </q-item-section>
               </q-item>
