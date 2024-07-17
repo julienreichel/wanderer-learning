@@ -8,6 +8,7 @@
           fit="scale-down"
           :src="part.url"
         />
+        <!-- eslint-disable vue/no-v-html -->
         <div ref="content" :class="textSizeClass" v-html="renderedText"></div>
         <q-img
           v-if="part.url"

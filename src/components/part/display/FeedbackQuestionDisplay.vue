@@ -1,6 +1,6 @@
 <template>
   <q-card-section>
-    <q-input v-if="feedbackType === 'text'" clearable v-model="newResponse">
+    <q-input v-if="feedbackType === 'text'" v-model="newResponse" clearable>
     </q-input>
     <div v-else-if="feedbackType === 'roti'">
       <q-icon
@@ -29,19 +29,19 @@
       :icon-selected="iconsSelected[feedbackType]"
       :color-selected="colorSelected[feedbackType]"
     >
-      <template #tip-1 v-if="question.answers?.[0]">
+      <template v-if="question.answers?.[0]" #tip-1>
         <q-tooltip>{{ question.answers[0].text }}</q-tooltip>
       </template>
-      <template #tip-2 v-if="question.answers?.[1]">
+      <template v-if="question.answers?.[1]" #tip-2>
         <q-tooltip>{{ question.answers[1].text }}</q-tooltip>
       </template>
-      <template #tip-3 v-if="question.answers?.[2]">
+      <template v-if="question.answers?.[2]" #tip-3>
         <q-tooltip>{{ question.answers[2].text }}</q-tooltip>
       </template>
-      <template #tip-4 v-if="question.answers?.[3]">
+      <template v-if="question.answers?.[3]" #tip-4>
         <q-tooltip>{{ question.answers[3].text }}</q-tooltip>
       </template>
-      <template #tip-5 v-if="question.answers?.[4]">
+      <template v-if="question.answers?.[4]" #tip-5>
         <q-tooltip>{{ question.answers[4].text }}</q-tooltip>
       </template>
     </q-rating>
@@ -51,7 +51,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 
-const newResponse = defineModel();
+const newResponse = defineModel({ type: String, default: "" });
 
 const props = defineProps({
   question: { type: Object, required: true },

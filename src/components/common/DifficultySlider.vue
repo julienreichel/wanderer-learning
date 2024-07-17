@@ -5,10 +5,10 @@
     </q-item-section>
     <q-item-section>
       <q-slider
+        v-model="value"
         snap
         label
         switch-label-side
-        v-model="value"
         :label-value="$t('wizard.questions.difficulties.' + value)"
         :min="1"
         :max="5"
@@ -23,8 +23,8 @@ import { defineEmits, watch, ref } from "vue";
 const emit = defineEmits(["level", "difficulty"]);
 
 const props = defineProps({
-  level: String,
-  difficulty: Number,
+  level: { type: String, default: undefined },
+  difficulty: { type: Number, default: undefined },
 });
 
 const textvalues = ["novice", "beginner", "intermediate", "advanced", "expert"];

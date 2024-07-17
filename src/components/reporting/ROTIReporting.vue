@@ -8,7 +8,7 @@
 import { computed } from "vue";
 
 const props = defineProps({
-  roti: { type: Number },
+  roti: { type: Number, default: 3 },
 });
 
 const icon = computed(() => {

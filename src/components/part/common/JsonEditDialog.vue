@@ -15,8 +15,8 @@
         <q-btn
           :label="$t('generic.form.apply')"
           color="primary"
-          @click="saveJson"
           :disable="!changed"
+          @click="saveJson"
         />
       </q-card-actions>
     </q-card>
@@ -34,9 +34,11 @@ import { ref, watch, defineProps, defineEmits } from "vue";
 const props = defineProps({
   json: {
     type: String,
+    default: "",
   },
   data: {
     type: [Object, Array],
+    default: null,
   },
   emitJson: {
     type: Boolean,
@@ -57,7 +59,7 @@ const editorOptions = ref({
   },
 });
 
-const isOpen = defineModel();
+const isOpen = defineModel({ type: Boolean, default: false });
 
 const jsonText = ref(props.data || (props.json && JSON.parse(props.json)));
 watch(

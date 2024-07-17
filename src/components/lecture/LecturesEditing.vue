@@ -11,6 +11,7 @@
         </q-card-section>
         <concept-display class="q-pa-sm" :concepts="lecture.concepts" />
         <q-card-section>
+          <!-- eslint-disable vue/no-v-html -->
           <div class="q-pt-sm" v-html="lecture.description"></div>
         </q-card-section>
       </q-card-section>

@@ -4,8 +4,8 @@
     <q-card v-if="userAttributes.isTeacher">
       <q-card-section>
         <q-input
-          outlined
           v-model="newTitle"
+          outlined
           :label="$t('concept.form.add')"
           @keydown.enter="addConcept()"
         >

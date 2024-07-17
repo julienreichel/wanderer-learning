@@ -44,6 +44,7 @@
             <q-chip square color="primary" text-color="white">
               {{ props.row.title }}
             </q-chip>
+            <!-- eslint-disable vue/no-v-html -->
             <div
               class="q-pa-sm"
               style="overflow: hidden; height: 50px"

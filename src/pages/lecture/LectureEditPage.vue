@@ -3,8 +3,8 @@
     <q-card>
       <q-card-section>
         <q-input
-          outlined
           v-model="lecture.title"
+          outlined
           :label="$t('lecture.form.title')"
           @blur="saveLecture()"
           @keydown.enter="saveLecture()"
@@ -38,8 +38,8 @@
       <template #item="{ element }">
         <q-card
           clickable
-          @click="canEdit(element) ? editStep(element) : viewStep(element)"
           class="q-mt-sm"
+          @click="canEdit(element) ? editStep(element) : viewStep(element)"
         >
           <q-card-section horizontal>
             <q-card-section class="col q-pa-sm">
@@ -47,8 +47,8 @@
                 <div class="text-h5">{{ element.title }}</div>
               </q-card-section>
               <q-card-section
-                ref="graphSection"
                 v-if="element.timestampDistribution"
+                ref="graphSection"
               >
                 <usage-histogram
                   :serie="element.timestampDistribution"
@@ -84,9 +84,9 @@
     <q-card>
       <q-card-section>
         <q-input
+          v-model="newTitle"
           outlined
           dense
-          v-model="newTitle"
           :label="$t('step.form.add.step')"
           @keydown.enter="addStep()"
         >
@@ -121,7 +121,7 @@ const {
 const { updateBreadcrumbs } = inject("breadcrumbs");
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
 });
 
 const lecture = ref({

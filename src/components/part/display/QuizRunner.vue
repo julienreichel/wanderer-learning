@@ -1,5 +1,5 @@
 <template>
-  <q-card class="q-pt-sm" v-if="question">
+  <q-card v-if="question" class="q-pt-sm">
     <q-card-section v-if="title" class="q-pb-none">
       <div class="text-h5 text-center">{{ title }}</div>
     </q-card-section>
@@ -17,9 +17,9 @@
           class="q-gutter-sm"
         >
           <q-option-group
+            v-model="question.response"
             :options="options"
             :type="question.type"
-            v-model="question.response"
             :disable="question.validated"
           />
         </q-card-section>
@@ -28,12 +28,12 @@
           class="q-gutter-sm q-pl-lg"
         >
           <q-input
+            v-model="question.response"
             clearable
             dense
-            v-model="question.response"
             :readonly="question.validated"
           >
-            <template v-slot:before v-if="question.validated">
+            <template v-if="question.validated" #before >
               <q-icon
                 :name="options.icon"
                 :color="options.color"
@@ -51,6 +51,7 @@
           class="q-pa-md"
         >
           <q-banner class="bg-positive">
+            <!-- eslint-disable vue/no-v-html -->
             <div v-html="question.explanations"></div>
           </q-banner>
         </q-card-section>
@@ -63,15 +64,15 @@
     </q-card-section>
     <q-card-actions class="q-px-none q-py-lg">
       <q-btn
-        square
         v-if="step === 0 && prevActionsIcon"
+        square
         size="md"
         :icon="prevActionsIcon"
         @click="$emit('finished', [])"
       />
       <q-btn
-        square
         v-if="step > 0 && !hasResults"
+        square
         size="md"
         icon="chevron_left"
         @click="step--"
@@ -81,13 +82,13 @@
         square
         size="md"
         icon="chevron_right"
-        @click="nextCliked"
         :color="hasAnswer ? 'primary' : undefined"
         padding="sm 64px"
+        @click="nextCliked"
       />
     </q-card-actions>
   </q-card>
-  <q-card class="q-pt-sm" v-else>
+  <q-card v-else class="q-pt-sm" >
     <q-card-section v-if="title" class="q-pb-none">
       <div class="text-h5 text-center">{{ title }}</div>
     </q-card-section>
@@ -174,7 +175,7 @@ import FeedbackQuestionDisplay from "./FeedbackQuestionDisplay.vue";
 import { ref, computed, watch } from "vue";
 
 const props = defineProps({
-  questions: { type: Array },
+  questions: { type: Array, default: () => [] },
   max: { type: Number, default: 0 },
   adaptative: { type: Boolean, default: false },
   examMode: { type: Boolean, default: false },

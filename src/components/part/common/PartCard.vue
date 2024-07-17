@@ -3,10 +3,10 @@
     <q-card
       class="aspect-ratio-16-9 q-card-hover"
       clickable
-      @click="stepChange(step)"
       :class="{ 'custom-highlight': active }"
       flat
       bordered
+      @click="stepChange(step)"
     >
       <q-card-section v-if="part.type === 'text'" class="gt-sm q-pa-sm">
         <q-item-label class="gt-md">{{ textPreview }}</q-item-label>

@@ -12,6 +12,7 @@
       </q-card-section>
       <concept-display :concepts="lecture.concepts" />
       <q-card-section>
+        <!-- eslint-disable vue/no-v-html -->
         <div class="q-pt-sm" v-html="lecture.description"></div>
       </q-card-section>
       <quiz-runner

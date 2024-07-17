@@ -21,8 +21,8 @@ import { computed, inject } from "vue";
 const { stepReporting: reportingService } = inject("services");
 
 const props = defineProps({
-  stepsSummary: { type: Object },
-  steps: { type: Array },
+  stepsSummary: { type: Object, default: null },
+  steps: { type: Array, default: () => [] },
 });
 
 const chartLabel = computed(() => {

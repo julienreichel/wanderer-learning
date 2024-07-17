@@ -4,9 +4,9 @@
       <q-card-section class="q-gutter-sm">
         <div class="row">
           <q-input
+            v-model="course.title"
             class="col-8"
             outlined
-            v-model="course.title"
             :label="$t('course.form.title')"
             @blur="saveCourse()"
             @keydown.enter="saveCourse()"
@@ -24,14 +24,14 @@
         </div>
         <div class="row">
           <rich-text-editing
-            class="col-8"
             v-model="course.description"
+            class="col-8"
             :placeholder="$t('course.form.description')"
             mode="simple"
           ></rich-text-editing>
           <q-card
-            flat
             v-if="course.url && !uploadingFile"
+            flat
             class="q-pa-none col-4"
           >
             <q-img class="col" fit="cover" :ratio="16 / 9" :src="course.url">
@@ -59,10 +59,10 @@
             </q-img>
           </q-card>
           <file-uploader
+            v-else
             class="col-4"
             flat
             bordered
-            v-else
             @uploaded="uploaded"
           />
         </div>
@@ -80,8 +80,8 @@
     <q-card>
       <q-card-section>
         <q-input
-          outlined
           v-model="newTitle"
+          outlined
           :label="$t('lecture.form.add')"
           @keydown.enter="addLecture()"
         >
@@ -119,7 +119,7 @@ const {
 const { updateBreadcrumbs } = inject("breadcrumbs");
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
 });
 
 const course = ref({

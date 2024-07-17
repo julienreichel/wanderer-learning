@@ -10,7 +10,7 @@
 import { computed } from "vue";
 
 const props = defineProps({
-  difficulty: { type: Number },
+  difficulty: { type: Number, default: 1 },
 });
 
 const color = computed(() => {

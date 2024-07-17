@@ -1,25 +1,26 @@
 <template>
   <q-card-section>
     <q-splitter v-model="splitterModel" style="height: 410px">
-      <template v-slot:before>
+      <template #before>
         <div class="q-pa-md">
           <q-tree
             ref="tree"
+            v-model:selected="selected"
             no-connectors
             accordion
             selected-color="primary"
             :nodes="toc"
             node-key="id"
-            v-model:selected="selected"
           />
         </div>
       </template>
-      <template v-slot:after>
+      <template #after>
         <part-display
           v-if="previewPart && previewPart.type !== 'quiz'"
           :part="previewPart"
           flat
         />
+        <!-- eslint-disable vue/no-v-html -->
         <div v-else class="q-pa-md" v-html="preview"></div>
       </template>
     </q-splitter>

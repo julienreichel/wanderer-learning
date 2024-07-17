@@ -44,6 +44,7 @@
               />
               <div class="absolute-bottom">
                 <div class="text-h6">{{ props.row.title }}</div>
+                <!-- eslint-disable vue/no-v-html -->
                 <div
                   class="text-subtitle2"
                   style="overflow: hidden; height: 42px"

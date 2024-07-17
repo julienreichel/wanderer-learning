@@ -11,6 +11,7 @@
             <q-badge v-if="userLevel">
               {{ Math.round(successRate * 100) + "%" }}
             </q-badge>
+            <!-- eslint-disable vue/no-v-html -->
             <div class="q-pt-sm" v-html="course.description"></div>
           </q-card-section>
           <q-img

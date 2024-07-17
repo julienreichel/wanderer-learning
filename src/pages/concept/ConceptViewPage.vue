@@ -3,8 +3,8 @@
     <q-card>
       <q-card-section v-if="editing" class="q-gutter-sm">
         <q-input
-          outlined
           v-model="concept.title"
+          outlined
           :label="$t('concept.form.title')"
         />
         <rich-text-editing
@@ -16,6 +16,7 @@
         <q-chip v-if="concept.title" square color="primary" text-color="white">
           {{ concept.title }}
         </q-chip>
+        <!-- eslint-disable vue/no-v-html -->
         <div class="q-pa-sm" v-html="concept.description"></div>
       </q-card-section>
       <q-card-actions v-if="editing">
@@ -29,8 +30,8 @@
         <q-space />
         <q-btn size="sm" icon="edit" @click="toogleEditing()" />
         <q-btn
-          size="sm"
           v-if="userAttributes.isAdmin"
+          size="sm"
           icon="delete"
           @click="deleteConcept(concept)"
         />
@@ -55,7 +56,7 @@ const userAttributes = inject("userAttributes");
 const { username, userId } = userAttributes.value;
 
 const props = defineProps({
-  id: String,
+  id: { type: String, required: true },
 });
 
 const showAllLocaleContent = inject("showAllLocaleContent");
