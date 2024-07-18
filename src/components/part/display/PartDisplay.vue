@@ -68,13 +68,12 @@
 
 <script setup>
 import QuizRunner from "src/components/part/display/QuizRunner.vue";
-import katex from "katex";
-import "katex/dist/katex.min.css";
 
 import { computed, inject, ref, watch } from "vue";
 
-import { useIris } from "src/composables/iris";
+import { useIris, useFormatter } from "src/composables/iris";
 const { $q } = useIris();
+const { renderKatex } = useFormatter();
 
 const { lectureStep: lectureStepService } = inject("services");
 
@@ -87,30 +86,8 @@ const props = defineProps({
 
 const emit = defineEmits(["results", "nextStep", "finish"]);
 
-// Function to render LaTeX to HTML using KaTeX
-function renderLatexString(latexString) {
-  try {
-    return katex.renderToString(latexString, {
-      throwOnError: false,
-    });
-  } catch (error) {
-    console.error("Error rendering LaTeX string:", error);
-    return latexString; // Return original string if there's an error
-  }
-}
-
 const renderedText = computed(() => {
-  // Replace display equations
-  let text = props.part.text.replace(/\\\[(.*?)\\\]/gs, (match, p1) => {
-    return renderLatexString(p1.trim());
-  });
-
-  // Replace inline equations
-  text = text.replace(/\\\((.*?)\\\)/gs, (match, p1) => {
-    return renderLatexString(p1.trim());
-  });
-
-  return text;
+  return renderKatex(props.part.text);
 });
 
 const imageSize = ref(Number(props.part.options?.imageSize) || 4);

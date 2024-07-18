@@ -9,7 +9,8 @@
     <q-card-section>
       <q-card square>
         <q-card-section>
-          <div class="text-h6">{{ question.text }}</div>
+          <!-- eslint-disable vue/no-v-html -->
+          <div class="text-h6" v-html="renderedQuestion"></div>
         </q-card-section>
         <q-separator inset />
         <q-card-section
@@ -52,7 +53,7 @@
         >
           <q-banner class="bg-positive">
             <!-- eslint-disable vue/no-v-html -->
-            <div v-html="question.explanations"></div>
+            <div v-html="renderedExplanations"></div>
           </q-banner>
         </q-card-section>
         <feedback-question-display
@@ -108,8 +109,9 @@
             <q-item-section avatar>
               <q-icon name="task_alt" />
             </q-item-section>
-            <q-item-section class="text-ellipsis">
-              {{ q.text }}
+            <!-- eslint-disable vue/no-v-html -->
+            <q-item-section class="text-ellipsis" >
+              <div v-html="renderKatex(q.text)"></div>
             </q-item-section>
             <q-item-section side> {{ q.points }} / 5 </q-item-section>
           </q-item>
@@ -128,8 +130,9 @@
             <q-item-section avatar>
               <q-icon name="highlight_off" />
             </q-item-section>
-            <q-item-section class="text-ellipsis">
-              {{ q.text }}
+            <!-- eslint-disable vue/no-v-html -->
+            <q-item-section class="text-ellipsis" >
+              <div v-html="renderKatex(q.text)"></div>
             </q-item-section>
             <q-item-section side> {{ q.points }} / 5 </q-item-section>
           </q-item>
@@ -174,6 +177,10 @@ import FeedbackQuestionDisplay from "./FeedbackQuestionDisplay.vue";
 
 import { ref, computed, watch } from "vue";
 
+import { useIris, useFormatter } from "src/composables/iris";
+const { t } = useIris();
+const { renderKatex } = useFormatter();
+
 const props = defineProps({
   questions: { type: Array, default: () => [] },
   max: { type: Number, default: 0 },
@@ -184,8 +191,6 @@ const props = defineProps({
   title: { type: String, default: null },
 });
 const emit = defineEmits(["finished", "results", "feedback"]);
-import { useIris } from "src/composables/iris";
-const { t } = useIris();
 
 const icons = {
   difficulty: "speed",
@@ -420,6 +425,13 @@ watch(question, (newQuestion, oldQuestion) => {
   timeStart = timeEnd;
 });
 const hasAnswer = computed(() => question.value.response !== undefined);
+
+const renderedQuestion = computed(() => {
+  return renderKatex(question.value.text);
+});
+const renderedExplanations = computed(() => {
+  return renderKatex(question.value.explanations);
+});
 
 const getOptions = (question) => {
   if (!question) return {};
