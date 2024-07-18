@@ -13,6 +13,11 @@ import { ref } from "vue";
 import { useIris } from "src/composables/iris";
 const { t } = useIris();
 
+defineProps({
+  serie: { type: Array, required: true },
+  size: { type: Number, default: 150 },
+});
+
 const chartOptions = ref({
   chart: {
     type: "pie",

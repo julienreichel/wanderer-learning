@@ -8,7 +8,7 @@
             <q-badge v-if="userLevel">
               {{ $t("course.levels." + userLevel) }}
             </q-badge>
-            <q-badge v-if="userLevel">
+            <q-badge v-if="userLevel && userLevel !== 'in_progress'">
               {{ Math.round(successRate * 100) + "%" }}
             </q-badge>
             <!-- eslint-disable vue/no-v-html -->
@@ -107,10 +107,10 @@ onMounted(async () => {
       });
       if (reports.length) {
         lecture.stepsSummary = reportingService.getLastReports(reports);
+        lectureStarted++;
       }
       // If the reports are more recent that the course report, they take priority
       if (lecture.stepsSummary && reporting.value) {
-        lectureStarted++;
         if (lecture.stepsSummary.some((step) => step.createdAt > lastTest)) {
           newActions = true;
         }
@@ -134,7 +134,7 @@ onMounted(async () => {
       ratio: lectureStarted / course.value.lectures.length,
     };
   }
-
+  console.log("reporting", reporting.value, lectureStarted);
   if (!reporting.value && !lectureStarted) {
     // this user has never touched this course, let's start with a quiz
     checkCourse();
