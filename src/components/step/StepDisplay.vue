@@ -45,6 +45,9 @@
             right
           />
         </q-card-section>
+        <q-card-section v-if="step.score" class="q-pa-none">
+          <step-score :serie="step.score" :width="75"/>
+        </q-card-section>
       </q-card-section>
     </q-card-section>
     <q-card-actions class="q-px-none q-py-lg">
@@ -60,6 +63,7 @@
 </template>
 
 <script setup>
+import StepScore from "src/components/charts/StepScore.vue";
 import { useIris } from "src/composables/iris";
 const { router, t } = useIris();
 

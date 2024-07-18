@@ -182,6 +182,8 @@ onMounted(async () => {
           report.totalTime = Math.round(totalTime / 60) + " min";
         }
         step.reporting = report;
+        step.score = reports.map((report) => ({value: reportingService.computePointsPerStep(step, [report]), key: report.createdAt}));
+        console.log(step.score)
       }
     }),
   );

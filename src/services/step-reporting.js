@@ -200,7 +200,7 @@ export default class StepReportingService extends ServicePrototype {
       (acc, part) => acc + (part.divisor ? 1 : 0),
       0,
     );
-    const averagePoints = divisor ? averageSumPoints / divisor : 5;
+    const averagePoints = divisor ? Math.round(averageSumPoints / divisor * 10) / 10 : 5;
 
     return { totalPoints, averagePoints, divisor };
   }
