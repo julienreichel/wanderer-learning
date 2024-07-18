@@ -16,6 +16,7 @@
         :max-step="parts.length"
         @step-change="step = $event"
       />
+      <div v-for="(fillerCard, index) in fillerCards" :key="index" class="col"></div>
       <NavigationCard
         :step="step"
         :has-next="hasNext"
@@ -91,6 +92,9 @@ const previewParts = computed(() => {
     props.parts.length - toDisplay,
   );
   return props.parts.slice(start, start + toDisplay);
+});
+const fillerCards = computed(() => {
+  return Array.from({ length: 5 - previewParts.value.length });
 });
 
 const hasNext = computed(() => step.value < props.parts.length - 1);

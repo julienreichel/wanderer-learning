@@ -17,7 +17,7 @@ const props = defineProps({
 });
 
 const data = computed(() => {
-  return props.serie.map(({ value }) => Math.round(value.averagePoints * 10) / 10);
+  return props.serie.map(({ value }) => value.divisor ? Math.round(value.averagePoints * 10) / 10: undefined );
 });
 
 const categories = computed(() => {

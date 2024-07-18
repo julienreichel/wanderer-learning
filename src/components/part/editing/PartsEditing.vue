@@ -25,7 +25,11 @@
             @edit="editJsonStep"
           />
         </template>
+        <template #footer>
+          <div v-for="(fillerCard, index) in fillerCards" :key="index" class="col"></div>
+        </template>
       </draggable>
+
       <NavigationCard
         :step="step"
         :has-next="hasNext"
@@ -143,6 +147,9 @@ const previewParts = computed(() => {
   if (parts.value.length < toDisplay) return parts.value;
 
   return parts.value.slice(previewStart.value, previewStart.value + toDisplay);
+});
+const fillerCards = computed(() => {
+  return Array.from({ length: 5 - previewParts.value.length });
 });
 
 watch(step, (newStep) => {
