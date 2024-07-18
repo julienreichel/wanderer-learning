@@ -1,19 +1,26 @@
 <template>
   <q-page v-if="lecture?.id" class="q-pa-none q-pt-sm q-gutter-sm">
     <q-card>
-      <q-card-section class="q-gutter-sm">
-        <div class="text-h5">{{ lecture.title }}</div>
-        <q-badge v-if="userLevel">
-          {{ $t("lecture.levels." + userLevel) }}
-        </q-badge>
-        <q-badge v-if="userLevel">
-          {{ Math.round(successRate * 100) + "%" }}
-        </q-badge>
-      </q-card-section>
-      <concept-display :concepts="lecture.concepts" />
-      <q-card-section>
-        <!-- eslint-disable vue/no-v-html -->
-        <div class="q-pt-sm" v-html="lecture.description"></div>
+      <q-card-section horizontal class="justify-between">
+        <q-card-section>
+          <q-card-section class="q-gutter-sm">
+            <div class="text-h5">{{ lecture.title }}</div>
+            <q-badge v-if="userLevel">
+              {{ $t("lecture.levels." + userLevel) }}
+            </q-badge>
+            <q-badge v-if="userLevel">
+              {{ Math.round(successRate * 100) + "%" }}
+            </q-badge>
+          </q-card-section>
+          <concept-display :concepts="lecture.concepts" />
+          <q-card-section>
+            <!-- eslint-disable vue/no-v-html -->
+            <div class="q-pt-sm" v-html="lecture.description"></div>
+          </q-card-section>
+        </q-card-section>
+        <q-card-section v-if="lecture.score?.length" style="width: 170px">
+          <step-score :serie="lecture.score" :width="150" />
+        </q-card-section>
       </q-card-section>
       <quiz-runner
         v-if="connectionQuiz"
@@ -96,6 +103,7 @@ import { ref, onMounted, inject, computed } from "vue";
 import ConceptDisplay from "src/components/concept/ConceptDisplay.vue";
 import StepDisplay from "src/components/step/StepDisplay.vue";
 import QuizRunner from "src/components/part/display/QuizRunner.vue";
+import StepScore from "src/components/charts/StepScore.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, router, canEdit, uid } = useIris();
@@ -142,7 +150,11 @@ onMounted(async () => {
       username,
     })
   ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  reporting.value = allReports.filter(({ type }) => type !== "feedback")[0];
+  const allReportWithScore = allReports
+    .filter(({ type }) => type !== "feedback")
+    .slice(0, 3);
+  reporting.value = allReportWithScore[0];
+
   // did the user passed the final quiz?
   const practiceReport = allReports.find(({ type }) => type === "practice");
   if (practiceReport) {
@@ -150,6 +162,12 @@ onMounted(async () => {
     practiceLevel.value = level;
     practiceRatio.value = ratio;
   }
+  lecture.value.score = allReportWithScore.reverse().map((report) => ({
+    key: t("lecture.reports." + report.type),
+    value: {
+      difficulties: lectureReportingService.getLevel(report).difficulties,
+    },
+  }));
 
   // was the last user action to generate a feedback?
   const feedbackReport = allReports[0]?.type === "feedback";
@@ -161,17 +179,20 @@ onMounted(async () => {
   let lectureStarted = 0;
   await Promise.all(
     lecture.value.steps.map(async (step) => {
-      const reports = await reportingService.list({
-        lectureStepId: step.id,
-        username,
-        userId,
-      });
+      // keep only the 5 most recent
+      const reports = (
+        await reportingService.list({
+          lectureStepId: step.id,
+          username,
+          userId,
+        })
+      )
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 3);
       if (reports.length) {
         lectureStarted++;
         // keep only the most recent
-        let report = reports.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-        )[0];
+        let report = reports[0];
         const totalTime = report.reportings.reduce(
           (acc, val) => acc + val.time,
           0,
@@ -182,8 +203,13 @@ onMounted(async () => {
           report.totalTime = Math.round(totalTime / 60) + " min";
         }
         step.reporting = report;
-        step.score = reports.map((report) => ({value: reportingService.computePointsPerStep(step, [report]), key: report.createdAt}));
-        console.log(step.score)
+        step.score = reports
+          .reverse()
+          .map((report) => ({
+            value: reportingService.computePointsPerStep(step, [report]),
+            key: report.createdAt,
+          }))
+          .filter((score) => score.value.total);
       }
     }),
   );

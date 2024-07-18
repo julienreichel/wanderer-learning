@@ -229,7 +229,7 @@ let getActiveQuestions = () => {
       step.value = realMax.value;
     }
   }
-  console.log("getActiveQuestions", previousQuestions.length, realMax.value);
+
   if (previousQuestions.length >= realMax.value) {
     return previousQuestions;
   }

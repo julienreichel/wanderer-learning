@@ -186,4 +186,67 @@ export default class ServicePrototype {
     });
     return input;
   }
+
+  /**
+   * check all the questions, and compute the sucess rate per level
+   * the level if the user, is the one that has a sucess rate of 80% or more
+   * @param {object} reporting
+   * @returns String
+   */
+  getLevel(reporting) {
+    let acc = [0, 1, 2, 3, 4].map(() => ({ total: 0, valid: 0, points: 0 }));
+
+    if (reporting.responses.length === 0)
+      return {
+        level: "in_progress",
+        ratio: reporting.ratio,
+        points: 5,
+        difficulties: acc
+      };
+
+    const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
+
+    // compute the success rate per level
+    let difficulties = reporting.responses.reduce((acc, response) => {
+      const difficulty = levels.indexOf(response.level || "beginner");
+      acc[difficulty].total++;
+      acc[difficulty].points += response.points;
+      if (response.valid) acc[difficulty].valid++;
+      return acc;
+    }, acc);
+
+    // acculate the lover levels failurs
+    for (let i = 0; i < 4; i++) {
+      const failure = difficulties[i].total - difficulties[i].valid;
+      difficulties[i + 1].total += failure;
+    }
+    // accumulate higher level success and points
+    for (let i = 4; i > 0; i--) {
+      difficulties[i - 1].total += difficulties[i].valid;
+      difficulties[i - 1].valid += difficulties[i].valid;
+      difficulties[i - 1].points += difficulties[i].points;
+    }
+
+    // find the level with 80% or more valid
+    let level = null;
+    let difficulty = null;
+    let ratio = 0;
+    let averagePoints = 0;
+    for (let i = 0; i < 5; i++) {
+      if (!difficulties[i].total) continue;
+      if (!level) {
+        difficulty = difficulties[i];
+        level = levels[i];
+        ratio = difficulties[i].valid / difficulties[i].total;
+        averagePoints = difficulties[i].points / difficulties[i].total;
+      }
+      if (difficulties[i].valid / difficulties[i].total >= 0.6666) {
+        level = levels[i];
+        difficulty = difficulties[i];
+        ratio = difficulties[i].valid / difficulties[i].total;
+        averagePoints = difficulties[i].points / difficulties[i].total;
+      }
+    }
+    return { level, ratio, averagePoints, ...difficulty, difficulties };
+  }
 }

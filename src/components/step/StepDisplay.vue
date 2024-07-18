@@ -35,7 +35,7 @@
           </q-list>
         </q-card-section>
       </q-card-section>
-      <q-card-section style="width: 150px" class="q-px-none q-py-sm column" >
+      <q-card-section style="width: 150px" class="q-px-none q-py-sm column">
         <q-card-section class="q-pa-sm row justify-end">
           <q-icon
             v-if="step.reporting"
@@ -45,8 +45,8 @@
             right
           />
         </q-card-section>
-        <q-card-section v-if="step.score" class="q-pa-none">
-          <step-score :serie="step.score" :width="150"/>
+        <q-card-section v-if="step.score?.length" class="q-pa-none">
+          <step-score :serie="step.score" :width="150" />
         </q-card-section>
       </q-card-section>
     </q-card-section>

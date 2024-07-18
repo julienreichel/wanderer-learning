@@ -51,7 +51,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 
-const newResponse = defineModel({ type: String, default: "" });
+const newResponse = defineModel({ type: Number });
 
 const props = defineProps({
   question: { type: Object, required: true },

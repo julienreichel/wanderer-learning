@@ -179,30 +179,32 @@ export default class StepReportingService extends ServicePrototype {
       return { averagePoints: 0 };
 
     const parts = stepSummary.reportings.map((part) => {
-      if (!part.responses?.length) return {};
-      const totalPoints = part.responses.reduce(
-        (acc, response) => acc + response.points,
-        0,
-      );
-      const averagePoints = totalPoints / part.responses.length;
+      if (!part.responses?.length) return { difficulties: [] };
+      const { difficulties, averagePoints, total, points } = this.getLevel(part);
 
-      return { totalPoints, averagePoints, divisor: part.responses.length };
+      return { totalPoints: points, averagePoints, total, difficulties };
     });
-    const totalPoints = parts.reduce(
-      (acc, part) => acc + (part.totalPoints || 0),
-      0,
-    );
-    const averageSumPoints = parts.reduce(
-      (acc, part) => acc + (part.averagePoints || 0),
-      0,
-    );
-    const divisor = parts.reduce(
-      (acc, part) => acc + (part.divisor ? 1 : 0),
-      0,
-    );
-    const averagePoints = divisor ? Math.round(averageSumPoints / divisor * 10) / 10 : 5;
 
-    return { totalPoints, averagePoints, divisor };
+    let difficulties = [0, 1, 2, 3, 4].map(() => ({ total: 0, valid: 0, points: 0 }));
+    const acc = parts.reduce(
+      (acc, part) => {
+        acc.totalPoints += part.totalPoints || 0;
+        acc.averageSumPoints += part.averagePoints || 0;
+        acc.divisor += part.total ? 1 : 0;
+        acc.total += part.total || 0;
+        acc.difficulties = acc.difficulties.map((difficulty, i) => ({
+          total: difficulty.total + (part.difficulties[i]?.total || 0),
+          valid: difficulty.valid + (part.difficulties[i]?.valid || 0),
+          points: difficulty.points + (part.difficulties[i]?.points || 0),
+        }));
+        return acc;
+      },
+      { totalPoints: 0, averageSumPoints: 0, total: 0, divisor: 0, difficulties },
+    );
+
+    const averagePoints = acc.divisor ? Math.round(acc.averageSumPoints / acc.divisor * 10) / 10 : 5;
+
+    return { totalPoints: acc.totalPoints, averagePoints, total: acc.total, difficulties: acc.difficulties };
   }
 
   /**

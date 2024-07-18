@@ -157,6 +157,11 @@ export default {
       expert: "Expert",
       in_progress: "In progress",
     },
+    reports: {
+      connection: "Connection",
+      practice: "Practice",
+      feedback: "Feedback",
+    },
     practice_title: "Final Quiz",
     feedback_title: "Feedback",
   },
