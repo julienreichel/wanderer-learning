@@ -20,12 +20,9 @@ const props = defineProps({
 });
 
 const series = computed(() => {
-  const series = [
-    "novice",
-    "beginner",
-    "intermediate",
-    "advanced",
-  ].map((level) => ({ name: t(`course.levels.${level}`), data: [] }));
+  const series = ["novice", "beginner", "intermediate", "advanced"].map(
+    (level) => ({ name: t(`course.levels.${level}`), data: [] }),
+  );
 
   props.serie.forEach(({ value }) =>
     series.forEach((serie, idx) =>

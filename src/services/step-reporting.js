@@ -180,12 +180,17 @@ export default class StepReportingService extends ServicePrototype {
 
     const parts = stepSummary.reportings.map((part) => {
       if (!part.responses?.length) return { difficulties: [] };
-      const { difficulties, averagePoints, total, points } = this.getLevel(part);
+      const { difficulties, averagePoints, total, points } =
+        this.getLevel(part);
 
       return { totalPoints: points, averagePoints, total, difficulties };
     });
 
-    let difficulties = [0, 1, 2, 3, 4].map(() => ({ total: 0, valid: 0, points: 0 }));
+    let difficulties = [0, 1, 2, 3, 4].map(() => ({
+      total: 0,
+      valid: 0,
+      points: 0,
+    }));
     const acc = parts.reduce(
       (acc, part) => {
         acc.totalPoints += part.totalPoints || 0;
@@ -199,12 +204,25 @@ export default class StepReportingService extends ServicePrototype {
         }));
         return acc;
       },
-      { totalPoints: 0, averageSumPoints: 0, total: 0, divisor: 0, difficulties },
+      {
+        totalPoints: 0,
+        averageSumPoints: 0,
+        total: 0,
+        divisor: 0,
+        difficulties,
+      },
     );
 
-    const averagePoints = acc.divisor ? Math.round(acc.averageSumPoints / acc.divisor * 10) / 10 : 5;
+    const averagePoints = acc.divisor
+      ? Math.round((acc.averageSumPoints / acc.divisor) * 10) / 10
+      : 5;
 
-    return { totalPoints: acc.totalPoints, averagePoints, total: acc.total, difficulties: acc.difficulties };
+    return {
+      totalPoints: acc.totalPoints,
+      averagePoints,
+      total: acc.total,
+      difficulties: acc.difficulties,
+    };
   }
 
   /**

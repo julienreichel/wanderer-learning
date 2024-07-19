@@ -55,7 +55,7 @@
       />
     </template>
     <q-card v-if="showFinalQuiz" class="q-pt-sm">
-      <q-card-section >
+      <q-card-section>
         <q-card-section horizontal class="justify-between">
           <q-card-section class="q-gutter-sm">
             <div class="text-h5">{{ $t("lecture.practice_title") }}</div>
@@ -66,11 +66,13 @@
               {{ Math.round(practiceRatio * 100) + "%" }}
             </q-badge>
           </q-card-section>
-          <q-card-section v-if="lecture.practiceScore?.length" style="width: 170px">
+          <q-card-section
+            v-if="lecture.practiceScore?.length"
+            style="width: 170px"
+          >
             <step-score :serie="lecture.practiceScore" :width="150" />
           </q-card-section>
         </q-card-section>
-
       </q-card-section>
       <quiz-runner
         v-if="practiceQuiz"
@@ -166,7 +168,9 @@ onMounted(async () => {
   // did the user passed the final quiz?
   const practiceReports = allReports.filter(({ type }) => type === "practice");
   if (practiceReports.length) {
-    const { level, ratio } = lectureReportingService.getLevel(practiceReports[0]);
+    const { level, ratio } = lectureReportingService.getLevel(
+      practiceReports[0],
+    );
     practiceLevel.value = level;
     practiceRatio.value = ratio;
     lecture.value.practiceScore = practiceReports.reverse().map((report) => ({

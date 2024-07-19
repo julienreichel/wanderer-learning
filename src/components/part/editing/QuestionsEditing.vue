@@ -1,5 +1,10 @@
 <template>
-  <draggable v-model="quiz.questions" item-key="id" ghost-class="ghost" filter=".non-draggable">
+  <draggable
+    v-model="quiz.questions"
+    item-key="id"
+    ghost-class="ghost"
+    filter=".non-draggable"
+  >
     <template #item="{ element, index }">
       <q-card
         :class="{ 'q-card-hover': activeQuestion !== element }"

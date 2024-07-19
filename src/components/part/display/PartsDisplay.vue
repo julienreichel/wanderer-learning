@@ -16,7 +16,11 @@
         :max-step="parts.length"
         @step-change="step = $event"
       />
-      <div v-for="(fillerCard, index) in fillerCards" :key="index" class="col"></div>
+      <div
+        v-for="(fillerCard, index) in fillerCards"
+        :key="index"
+        class="col"
+      ></div>
       <NavigationCard
         :step="step"
         :has-next="hasNext"

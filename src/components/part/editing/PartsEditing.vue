@@ -26,7 +26,11 @@
           />
         </template>
         <template #footer>
-          <div v-for="(fillerCard, index) in fillerCards" :key="index" class="col"></div>
+          <div
+            v-for="(fillerCard, index) in fillerCards"
+            :key="index"
+            class="col"
+          ></div>
         </template>
       </draggable>
 

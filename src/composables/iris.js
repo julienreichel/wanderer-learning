@@ -99,7 +99,7 @@ export function useFormatter() {
     },
     getDefaultOptions: () => defaultOptions,
     renderLatexString,
-    renderKatex
+    renderKatex,
   };
 
   return formatService;

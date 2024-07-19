@@ -201,7 +201,7 @@ export default class ServicePrototype {
         level: "in_progress",
         ratio: reporting.ratio,
         points: 5,
-        difficulties: acc
+        difficulties: acc,
       };
 
     const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
