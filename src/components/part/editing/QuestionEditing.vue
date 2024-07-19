@@ -23,7 +23,7 @@
       </template>
     </q-select>
   </q-card-section>
-  <q-card-section v-if="question.type === 'feedback'">
+  <q-card-section v-if="question.type === 'feedback'" class="non-draggable">
     <q-btn-toggle v-model="feedbackType" :options="feedbackTypeOptions">
       <template #roti>
         <q-icon right name="sentiment_satisfied_alt" />
@@ -66,7 +66,7 @@
       </q-item>
     </q-list>
   </q-card-section>
-  <q-card-section v-else>
+  <q-card-section v-else class="non-draggable">
     <q-list class="q-gutter-sm">
       <q-item
         v-for="(answer, answerIdx) in question.answers"
@@ -98,7 +98,7 @@
     </q-list>
     <q-btn size="sm" icon="add" @click="addAnswer(question)" />
   </q-card-section>
-  <q-card-section v-if="question.type !== 'feedback'">
+  <q-card-section v-if="question.type !== 'feedback'" class="non-draggable">
     <div class="row">
       <q-toggle
         v-model="provideExplanation"
@@ -125,7 +125,7 @@
     >
     </rich-text-editing>
   </q-card-section>
-  <q-card-section v-if="feedbackType === 'text'">
+  <q-card-section v-if="feedbackType === 'text'" class="non-draggable">
     <q-input v-model="question.answers[0].text" label="The answer" />
   </q-card-section>
 </template>
