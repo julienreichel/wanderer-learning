@@ -22,7 +22,12 @@
             :options="options"
             :type="question.type"
             :disable="question.validated"
-          />
+          >
+          <template #label="opt">
+            <!-- eslint-disable vue/no-v-html -->
+            <span v-html="renderKatex(opt.label)"></span>
+          </template>
+          </q-option-group>
         </q-card-section>
         <q-card-section
           v-if="question.type === 'shorttext'"
