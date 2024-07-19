@@ -101,7 +101,6 @@ const selected = ref(null);
 watch(
   () => props.lecture || props.lecture.steps,
   () => {
-    console.log("update toc", props.lecture);
     if (props.lecture && props.lecture.steps) {
       toc.value = buildToc(props.lecture.steps);
     }

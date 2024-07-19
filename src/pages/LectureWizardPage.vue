@@ -77,7 +77,7 @@
             <q-select
               v-model="model"
               outlined
-              :options="['gpt-3.5-turbo', 'gpt-4o']"
+              :options="['gpt-3.5-turbo', 'gpt-4o-mini', 'gpt-4o']"
               :label="$t('wizard.lecture.model')"
             />
             <q-toggle

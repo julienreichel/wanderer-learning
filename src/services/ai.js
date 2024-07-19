@@ -25,7 +25,7 @@ export default class ServicePrototype {
     this.style = `Richard Feldman Style: Engaging and practical teaching style. Focus on practical and Hands-On Learning, simplifying complex concepts, iterative Learning and encouraging exploration and experimentation.`;
     this.audience = `General readership.`;
     this.tone = `Enthusiastic and engaging with a touch of humour.`;
-    this.model = "gpt-3.5-turbo";
+    this.model = "gpt-4o-mini";
     this.prerequisites = [];
     this.language = "English";
   }
@@ -338,10 +338,8 @@ export default class ServicePrototype {
           }
           levels[level] = branch;
           if (levels[level - 1]) {
-            console.log("add to", levels[level - 1].label, item.str);
             levels[level - 1].children.push(branch);
           } else {
-            console.log("no previous", item.str);
             if (level === 2) {
               tree.push(branch);
             } else {

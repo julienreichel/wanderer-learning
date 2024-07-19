@@ -72,7 +72,7 @@ export const handler: DynamoDBStreamHandler = async (event) => {
         const system = payload.system;
         const prompt = payload.prompt;
         const format = payload.format || "json";
-        const model = payload.model || env.OPENAI_MODEL || "gpt-3.5-turbo";
+        const model = payload.model || env.OPENAI_MODEL || "gpt-4o-mini";
 
         let messages = [];
         if (system) {
