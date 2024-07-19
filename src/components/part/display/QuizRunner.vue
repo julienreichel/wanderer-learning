@@ -23,10 +23,10 @@
             :type="question.type"
             :disable="question.validated"
           >
-          <template #label="opt">
-            <!-- eslint-disable vue/no-v-html -->
-            <span v-html="renderKatex(opt.label)"></span>
-          </template>
+            <template #label="opt">
+              <!-- eslint-disable vue/no-v-html -->
+              <span v-html="renderKatex(opt.label)"></span>
+            </template>
           </q-option-group>
         </q-card-section>
         <q-card-section
@@ -39,7 +39,7 @@
             dense
             :readonly="question.validated"
           >
-            <template v-if="question.validated" #before >
+            <template v-if="question.validated" #before>
               <q-icon
                 :name="options.icon"
                 :color="options.color"
@@ -94,7 +94,7 @@
       />
     </q-card-actions>
   </q-card>
-  <q-card v-else class="q-pt-sm" >
+  <q-card v-else class="q-pt-sm">
     <q-card-section v-if="title" class="q-pb-none">
       <div class="text-h5 text-center">{{ title }}</div>
     </q-card-section>
@@ -115,7 +115,7 @@
               <q-icon name="task_alt" />
             </q-item-section>
             <!-- eslint-disable vue/no-v-html -->
-            <q-item-section class="text-ellipsis" >
+            <q-item-section class="text-ellipsis">
               <div v-html="renderKatex(q.text)"></div>
             </q-item-section>
             <q-item-section side> {{ q.points }} / 5 </q-item-section>
@@ -136,7 +136,7 @@
               <q-icon name="highlight_off" />
             </q-item-section>
             <!-- eslint-disable vue/no-v-html -->
-            <q-item-section class="text-ellipsis" >
+            <q-item-section class="text-ellipsis">
               <div v-html="renderKatex(q.text)"></div>
             </q-item-section>
             <q-item-section side> {{ q.points }} / 5 </q-item-section>
@@ -271,9 +271,10 @@ let getActiveQuestions = () => {
 
   // compute the suces rate per level
   let acc = [0, 1, 2, 3, 4].map(() => ({ total: 0, valid: 0 }));
+  let validatedQuestions = [];
   let difficulties = previousQuestions.reduce((acc, q) => {
     if (!q.validated) return acc;
-
+    validatedQuestions.push(q);
     acc[q.difficulty - 1].total++;
     if (q.valid) acc[q.difficulty - 1].valid++;
     return acc;
@@ -310,9 +311,27 @@ let getActiveQuestions = () => {
       j++;
     }
   }
+  // If the user failed twice in a row for the same level, we go down one level
+  validatedQuestions = validatedQuestions.reverse();
+  if (
+    validatedQuestions[0].difficulty > 1 &&
+    validatedQuestions[0].difficulty === validatedQuestions[1].difficulty &&
+    !validatedQuestions[0].valid &&
+    !validatedQuestions[1].valid
+  ) {
+    let level = levels[validatedQuestions[0].difficulty - 2];
+    // no loop here, if there are no easier question, then we keep the current level
+    if (questionsPerLevels[level]?.length) {
+      console.log("down level", level);
+      previousQuestions.push(questionsPerLevels[level].pop());
+      return previousQuestions;
+    }
+  }
 
   for (let i = 0; i < 5; i++) {
-    const rate = difficulties[i].total ? difficulties[i].valid / difficulties[i].total : 0;
+    const rate = difficulties[i].total
+      ? difficulties[i].valid / difficulties[i].total
+      : 0;
     if (rate < 0.75) {
       let j = i;
       // we get question from this level, or lower, if there are any
