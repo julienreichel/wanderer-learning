@@ -18,7 +18,7 @@ export function useChecks() {
 
         // check that at least one answer is valid
         if (
-          question.type !== "feedback" &&
+          question.type !== "feedback" && question.type !== "checkbox" &&
           question.answers.filter((a) => a.valid).length === 0
         ) {
           throw { message: t("quiz.json.quiz_no_valid_answers") };
