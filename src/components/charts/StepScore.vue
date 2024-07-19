@@ -78,7 +78,7 @@ const chartOptions = ref({
       enabled: true,
       color: "#1976D2",
       shadeTo: "dark",
-      shadeIntensity: 0.6,
+      shadeIntensity: 1,
     },
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <q-card-section class="row">
+  <q-card-section class="row non-draggable">
     <q-input v-model="question.text" class="col-8" label="The question" />
     <q-select
       v-model="question.type"
