@@ -56,7 +56,7 @@
             flat
             :title="reviewTitle"
             :questions="questions"
-            :max="5"
+            :max="7"
             adaptative
             @finished="finishQuiz"
             @results="processResult"

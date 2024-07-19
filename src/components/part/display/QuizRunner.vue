@@ -307,22 +307,14 @@ let getActiveQuestions = () => {
   }
 
   for (let i = 0; i < 5; i++) {
-    const rate = difficulties[i].valid / difficulties[i].total;
-    if (rate < 0.6) {
-      let level = levels[Math.max(1, i - 1)];
-      if (questionsPerLevels[level]?.length) {
-        console.log("going down level", level);
-        previousQuestions.push(questionsPerLevels[level].pop());
-        return previousQuestions;
-      }
-    }
-    if (rate < 0.8) {
+    const rate = difficulties[i].total ? difficulties[i].valid / difficulties[i].total : 0;
+    if (rate < 0.75) {
       let j = i;
       // we get question from this level, or lower, if there are any
       while (j >= 0) {
         let level = levels[j];
         if (questionsPerLevels[level]?.length) {
-          console.log("keeping level", level);
+          console.log("getting level", level);
           previousQuestions.push(questionsPerLevels[level].pop());
           return previousQuestions;
         }
@@ -330,12 +322,12 @@ let getActiveQuestions = () => {
       }
     }
   }
-  // we get question from the expert level, or lower, if there are any
+  // we get question from the expert level, or lower, if there aren't any
   let j = 4;
   while (j >= 0) {
     let level = levels[j];
     if (questionsPerLevels[level]?.length) {
-      console.log("going up level", level);
+      console.log("highest level", level);
       previousQuestions.push(questionsPerLevels[level].pop());
       return previousQuestions;
     }
