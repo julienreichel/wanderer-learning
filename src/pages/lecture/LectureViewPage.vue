@@ -55,14 +55,22 @@
       />
     </template>
     <q-card v-if="showFinalQuiz" class="q-pt-sm">
-      <q-card-section class="q-gutter-sm">
-        <div class="text-h5">{{ $t("lecture.practice_title") }}</div>
-        <q-badge v-if="practiceLevel">
-          {{ $t("lecture.levels." + practiceLevel) }}
-        </q-badge>
-        <q-badge v-if="practiceLevel">
-          {{ Math.round(practiceRatio * 100) + "%" }}
-        </q-badge>
+      <q-card-section >
+        <q-card-section horizontal class="justify-between">
+          <q-card-section class="q-gutter-sm">
+            <div class="text-h5">{{ $t("lecture.practice_title") }}</div>
+            <q-badge v-if="practiceLevel">
+              {{ $t("lecture.levels." + practiceLevel) }}
+            </q-badge>
+            <q-badge v-if="practiceLevel">
+              {{ Math.round(practiceRatio * 100) + "%" }}
+            </q-badge>
+          </q-card-section>
+          <q-card-section v-if="lecture.practiceScore?.length" style="width: 170px">
+            <step-score :serie="lecture.practiceScore" :width="150" />
+          </q-card-section>
+        </q-card-section>
+
       </q-card-section>
       <quiz-runner
         v-if="practiceQuiz"
@@ -156,11 +164,17 @@ onMounted(async () => {
   reporting.value = allReportWithScore[0];
 
   // did the user passed the final quiz?
-  const practiceReport = allReports.find(({ type }) => type === "practice");
-  if (practiceReport) {
-    const { level, ratio } = lectureReportingService.getLevel(practiceReport);
+  const practiceReports = allReports.filter(({ type }) => type === "practice");
+  if (practiceReports.length) {
+    const { level, ratio } = lectureReportingService.getLevel(practiceReports[0]);
     practiceLevel.value = level;
     practiceRatio.value = ratio;
+    lecture.value.practiceScore = practiceReports.reverse().map((report) => ({
+      key: report.createdAt,
+      value: {
+        difficulties: lectureReportingService.getLevel(report).difficulties,
+      },
+    }));
   }
   lecture.value.score = allReportWithScore.reverse().map((report) => ({
     key: t("lecture.reports." + report.type),
