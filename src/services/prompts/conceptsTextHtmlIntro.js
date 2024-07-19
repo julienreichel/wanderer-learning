@@ -17,7 +17,7 @@ ${language}
 <HTML Response Format>
 The response should be in HTML format, using only the following HTML tags: <h5> <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <a>.
 The link <a> can only be use to link public web pages.
-For mathematical formulas, use Katex format.
+For mathematical formulas, use Katex format using $$ as delimiter (i.e. $$\frac{1}{}$$).
 `;
 
 const prompt = (section) => {

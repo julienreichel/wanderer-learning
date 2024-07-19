@@ -56,6 +56,7 @@ The quiz should encompass 10 questions in total distributed among the following 
 - ${quizes.join("\n- ")}
 Each question should be accompanied by a one-paragraph explanation with at least 3 sentences.
 The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective.
+For mathematical formulas, use Katex format using $$ as delimiter (i.e. $$\frac{1}{}$$).
 <Tone>
 ${tone}
 <Quiz level>

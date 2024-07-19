@@ -41,6 +41,7 @@ You are tasked with creating a quiz for an online lecture based on the provided 
 Given the description, create a quiz, with ${difficultyLevel} level and ${nbQuestions} questions.
 ${explanation ? "Questions should help the user to understand the subject matter of the lecture." : "Questions should check the user's understanding of the lecture."}
 ${explanation ? "Each question should be accompanied by a one-paragraph explanation. The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective." : ""}
+For mathematical formulas, use Katex format using $$ as delimiter (i.e. $$\frac{1}{}$$).
 <Quiz format>
 ${format}
 <Quiz level>
