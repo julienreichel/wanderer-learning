@@ -134,7 +134,6 @@ onMounted(async () => {
       ratio: lectureStarted / course.value.lectures.length,
     };
   }
-  console.log("reporting", reporting.value, lectureStarted);
   if (!reporting.value && !lectureStarted) {
     // this user has never touched this course, let's start with a quiz
     checkCourse();
