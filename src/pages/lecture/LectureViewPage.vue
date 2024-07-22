@@ -14,8 +14,7 @@
           </q-card-section>
           <concept-display :concepts="lecture.concepts" />
           <q-card-section>
-            <!-- eslint-disable vue/no-v-html -->
-            <div class="q-pt-sm" v-html="lecture.description"></div>
+            <rich-text-renderer class="q-pt-sm" :html-content="lecture.description" />
           </q-card-section>
         </q-card-section>
         <q-card-section v-if="lecture.score?.length" style="width: 170px">
@@ -114,6 +113,7 @@ import ConceptDisplay from "src/components/concept/ConceptDisplay.vue";
 import StepDisplay from "src/components/step/StepDisplay.vue";
 import QuizRunner from "src/components/part/display/QuizRunner.vue";
 import StepScore from "src/components/charts/StepScore.vue";
+import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, router, canEdit, uid } = useIris();

@@ -24,6 +24,7 @@
     "json-editor-vue": "^0.15.1",
     "katex": "^0.16.11",
     "marked": "^13.0.1",
+    "mermaid": "^10.9.1",
     "mime-types": "^2.1.35",
     "path": "^0.12.7",
     "pdfjs-dist": "^4.3.136",

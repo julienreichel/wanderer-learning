@@ -44,12 +44,10 @@
               />
               <div class="absolute-bottom">
                 <div class="text-h6">{{ props.row.title }}</div>
-                <!-- eslint-disable vue/no-v-html -->
-                <div
-                  class="text-subtitle2"
+                <rich-text-renderer
+class="text-subtitle2"
                   style="overflow: hidden; height: 42px"
-                  v-html="props.row.description"
-                ></div>
+                  html-content="props.row.description" />
               </div>
             </q-img>
 
@@ -85,6 +83,7 @@
 </template>
 
 <script setup>
+import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 import { ref, inject, onMounted, watch } from "vue";
 
 import { useIris } from "src/composables/iris";

@@ -16,11 +16,6 @@
     >
       <div class="ellipsis">
         {{ item.concept?.title }}
-        <q-tooltip>
-          <div class="text-weight-bold">{{ item.concept?.title }}</div>
-          <!-- eslint-disable vue/no-v-html -->
-          <div v-html="item.concept?.description"></div>
-        </q-tooltip>
       </div>
     </q-chip>
   </q-card-section>

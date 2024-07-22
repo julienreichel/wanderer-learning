@@ -16,8 +16,7 @@
         <q-chip v-if="concept.title" square color="primary" text-color="white">
           {{ concept.title }}
         </q-chip>
-        <!-- eslint-disable vue/no-v-html -->
-        <div class="q-pa-sm" v-html="concept.description"></div>
+        <rich-text-renderer class="q-pt-sm" :html-content="concept.description" />
       </q-card-section>
       <q-card-actions v-if="editing">
         <q-space />
@@ -45,6 +44,7 @@
 import { ref, onMounted, watch, inject } from "vue";
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
 import RichTextEditing from "src/components/common/RichTextEditing.vue";
+import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, locale, $q, router } = useIris();

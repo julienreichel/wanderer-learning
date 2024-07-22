@@ -20,8 +20,7 @@
           :part="previewPart"
           flat
         />
-        <!-- eslint-disable vue/no-v-html -->
-        <div v-else class="q-pa-md" v-html="preview"></div>
+        <rich-text-renderer v-else class="q-pa-md" :html-content="preview" />
       </template>
     </q-splitter>
   </q-card-section>
@@ -29,6 +28,7 @@
 
 <script setup>
 import PartDisplay from "src/components/part/display/PartDisplay.vue";
+import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 import { ref, watch, defineProps, computed } from "vue";
 
 import { useIris } from "src/composables/iris";

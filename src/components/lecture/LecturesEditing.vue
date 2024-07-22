@@ -11,8 +11,7 @@
         </q-card-section>
         <concept-display class="q-pa-sm" :concepts="lecture.concepts" />
         <q-card-section>
-          <!-- eslint-disable vue/no-v-html -->
-          <div class="q-pt-sm" v-html="lecture.description"></div>
+          <rich-text-renderer class="q-pt-sm" :html-content="lecture.description" />
         </q-card-section>
       </q-card-section>
       <q-card-section class="q-pa-sm">
@@ -95,6 +94,7 @@ import UserLectureReporting from "src/components/reporting/UserLectureReporting.
 import UsageHistogram from "src/components/charts/UsageHistogram.vue";
 import StepReporting from "src/components/reporting/StepReporting.vue";
 import TableOfContent from "src/components/common/TableOfContent.vue";
+import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 
 import { useIris } from "src/composables/iris";
 const { t, $q, router, canEdit } = useIris();

@@ -11,8 +11,7 @@
             <q-badge v-if="userLevel && userLevel !== 'in_progress'">
               {{ Math.round(successRate * 100) + "%" }}
             </q-badge>
-            <!-- eslint-disable vue/no-v-html -->
-            <div class="q-pt-sm" v-html="course.description"></div>
+            <rich-text-renderer class="q-pt-sm" :html-content="course.description" />
           </q-card-section>
           <q-img
             v-if="course.src"
@@ -53,6 +52,7 @@
 import { ref, onMounted, inject, computed } from "vue";
 import LecturesEditing from "src/components/lecture/LecturesEditing.vue";
 import QuizRunner from "src/components/part/display/QuizRunner.vue";
+import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 
 import { useIris } from "src/composables/iris";
 const { router, canEdit } = useIris();

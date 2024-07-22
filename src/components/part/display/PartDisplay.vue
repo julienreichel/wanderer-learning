@@ -8,8 +8,7 @@
           fit="scale-down"
           :src="part.url"
         />
-        <!-- eslint-disable vue/no-v-html -->
-        <div ref="content" :class="textSizeClass" v-html="renderedText"></div>
+        <rich-text-renderer :class="textSizeClass" :html-content="part.text" />
         <q-img
           v-if="part.url"
           class="gt-sm"
@@ -68,12 +67,12 @@
 
 <script setup>
 import QuizRunner from "src/components/part/display/QuizRunner.vue";
+import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 
 import { computed, inject, ref, watch } from "vue";
 
-import { useIris, useFormatter } from "src/composables/iris";
+import { useIris } from "src/composables/iris";
 const { $q } = useIris();
-const { renderKatex } = useFormatter();
 
 const { lectureStep: lectureStepService } = inject("services");
 
@@ -86,9 +85,6 @@ const props = defineProps({
 
 const emit = defineEmits(["results", "nextStep", "finish"]);
 
-const renderedText = computed(() => {
-  return renderKatex(props.part.text);
-});
 
 const imageSize = ref(Number(props.part.options?.imageSize) || 4);
 watch(

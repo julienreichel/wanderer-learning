@@ -9,8 +9,7 @@
     <q-card-section>
       <q-card square>
         <q-card-section>
-          <!-- eslint-disable vue/no-v-html -->
-          <div class="text-h6" v-html="renderedQuestion"></div>
+          <rich-text-renderer class="text-h6" :html-content="question.text" />
         </q-card-section>
         <q-separator inset />
         <q-card-section
@@ -57,8 +56,7 @@
           class="q-pa-md"
         >
           <q-banner class="bg-positive">
-            <!-- eslint-disable vue/no-v-html -->
-            <div v-html="renderedExplanations"></div>
+            <rich-text-renderer :html-content="question.explanations" />
           </q-banner>
         </q-card-section>
         <feedback-question-display
@@ -179,6 +177,7 @@
 
 <script setup>
 import FeedbackQuestionDisplay from "./FeedbackQuestionDisplay.vue";
+import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 
 import { ref, computed, watch } from "vue";
 
@@ -441,13 +440,6 @@ watch(question, (newQuestion, oldQuestion) => {
   timeStart = timeEnd;
 });
 const hasAnswer = computed(() => question.value.response !== undefined);
-
-const renderedQuestion = computed(() => {
-  return renderKatex(question.value.text);
-});
-const renderedExplanations = computed(() => {
-  return renderKatex(question.value.explanations);
-});
 
 const getOptions = (question) => {
   if (!question) return {};
