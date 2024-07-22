@@ -73,6 +73,7 @@ const finished = async ({ finished, reportings } = {}) => {
       lectureStepId: lectureStep.value.id,
       lectureId: lectureStep.value.lecture.id,
       reportings: reportings,
+      type: "lecture",
     });
 
     // if there is a stars count, update the course stars

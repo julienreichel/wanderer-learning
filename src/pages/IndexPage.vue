@@ -295,6 +295,7 @@ const processResult = async (questions) => {
     lectureStepId: step.id,
     lectureId: step.lecture.id,
     reportings: reportings,
+    type: "review"
   });
 };
 const finishQuiz = async () => {

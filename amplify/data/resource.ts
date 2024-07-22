@@ -23,6 +23,7 @@ const schema = a.schema({
       id: a.id().required(),
       createdAt: a.datetime(),
       owner: a.string(),
+      type: a.string(),
       lectureStepId: a.id().required(),
       lectureId: a.id().required(),
       reportings: a.ref("ReportingPart").array(),

@@ -234,10 +234,18 @@ export default class StepReportingService extends ServicePrototype {
   getLastReports(reports) {
     // keep only the latest report for each step
     const stepReports = reports.reduce((acc, report) => {
-      if (
-        !acc[report.lectureStepId] ||
-        acc[report.lectureStepId].createdAt < report.createdAt
-      ) {
+      // compute the longest time it took to run the steps
+      const totalTime = report.reportings.reduce(
+        (acc, val) => acc + val.time,
+        0,
+      );
+      report.totalTime = totalTime;
+      if (!acc[report.lectureStepId]) {
+        acc[report.lectureStepId] = report;
+      } else if (acc[report.lectureStepId].createdAt < report.createdAt) {
+        if (acc[report.lectureStepId].totalTime > totalTime) {
+          report.totalTime = acc[report.lectureStepId].totalTime;
+        }
         acc[report.lectureStepId] = report;
       }
       return acc;

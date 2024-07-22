@@ -197,31 +197,37 @@ onMounted(async () => {
   let lectureStarted = 0;
   await Promise.all(
     lecture.value.steps.map(async (step) => {
-      // keep only the 5 most recent
       const reports = (
         await reportingService.list({
           lectureStepId: step.id,
           username,
           userId,
         })
-      )
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 3);
+      ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+
       if (reports.length) {
         lectureStarted++;
-        // keep only the most recent
-        let report = reports[0];
-        const totalTime = report.reportings.reduce(
-          (acc, val) => acc + val.time,
-          0,
-        );
-        if (totalTime < 60) {
-          report.totalTime = totalTime + " sec";
+        // get the longest time for all reports
+        let maxTime = 0;
+        let selectedReport = {};
+        reports.forEach((report) => {
+          const totalTime = report.reportings.reduce(
+            (acc, val) => acc + val.time,
+            0,
+          );
+          if (totalTime > maxTime) {
+            maxTime = totalTime;
+            selectedReport = report;
+          }
+        });
+        if (maxTime < 60) {
+          selectedReport.totalTime = maxTime + " sec";
         } else {
-          report.totalTime = Math.round(totalTime / 60) + " min";
+          selectedReport.totalTime = Math.round(maxTime / 60) + " min";
         }
-        step.reporting = report;
+        step.reporting = selectedReport;
         step.score = reports
+          .slice(0, 3)
           .reverse()
           .map((report) => ({
             value: reportingService.computePointsPerStep(step, [report]),
