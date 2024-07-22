@@ -9,6 +9,8 @@ import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import singleQuiz from "./prompts/singleQuiz.js";
 import simpleQuiz from "./prompts/quiz.js";
 
+import { marked } from "marked";
+
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`;
 
@@ -23,8 +25,8 @@ export default class ServicePrototype {
 
     this.model = null;
     this.style = `Richard Feldman Style: Engaging and practical teaching style. Focus on practical and Hands-On Learning, simplifying complex concepts, iterative Learning and encouraging exploration and experimentation.`;
-    this.audience = `General readership.`;
-    this.tone = `Enthusiastic and engaging with a touch of humour.`;
+    this.audience = "General Public: Accessible and clear language, covering a broad range of topics, aiming to be informative and engaging for a wide audience without assuming prior specialized knowledge.";
+    this.tone = "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.";
     this.model = "gpt-4o-mini";
     this.prerequisites = [];
     this.language = "English";
@@ -188,14 +190,15 @@ export default class ServicePrototype {
       );
       let prompt = conceptsTextHtmlIntro.prompt(section);
 
-      let html = await this.query({
+      let markdown = await this.query({
         system,
         prompt,
         token: 2000,
         format: "text",
       });
-      // remove starting "```html" and ending "```" if present
-      html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
+      // marked will replace \[ \] \( and \) by simply [ } ( ), so wee need to add an extra \ to escape it.
+      markdown = markdown.replace(/\\([[\]()])/g, "\\\\$1");
+      const html = marked.parse(markdown);
       pages.push(html);
 
       const introText = htmlToMarkdown(html);
@@ -210,14 +213,15 @@ export default class ServicePrototype {
             this.language,
           );
           prompt = conceptsTextHtml.prompt(section, item, introText);
-          let html = await this.query({
+          let markdown = await this.query({
             system,
             prompt,
             token: 2000,
             format: "text",
           });
-          // remove starting "```html" and ending "```" if present
-          html = html.replace(/^```html\n/, "").replace(/\n```$/, "");
+          // marked will replace \[ \] \( and \) by simply [ } ( ), so wee need to add an extra \ to escape it.
+          markdown = markdown.replace(/\\([[\]()])/g, "\\\\$1");
+          const html = marked.parse(markdown);
           return html;
         }),
       );

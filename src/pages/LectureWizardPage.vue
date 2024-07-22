@@ -487,8 +487,8 @@ const options = {
   audience:
     "University Students: More detailed and analytical, assuming a basic level of knowledge in the subject, with a focus on deeper understanding and critical thinking.",
   tone: "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.",
-  model: "gpt-3.5-turbo",
-  extendedQueryForConcept: false,
+  model: "gpt-4o-mini",
+  extendedQueryForConcept: true,
   ...$q.localStorage.getItem("aiOptions"),
 };
 

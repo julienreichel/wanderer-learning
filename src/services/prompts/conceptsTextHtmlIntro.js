@@ -1,10 +1,10 @@
 const system = (style, tone, audience, prerequisites, language) => `
 <Context>
-You are creating detailed page for an online self-study course.
+You are creating detailed introduction for an online self-study lecture.
 The students will study independently and use the material to prepare for a quiz testing their understanding of the subject.
 <Objective>
-Your task is to create an HTML fragment, it must cover the specified content thoroughly, ensuring students can grasp the basics and be able to answer a quiz later.
-You will be penalized if the descriptions are not detailed enough.
+Your task is to create an introduction to this chapter of the lecture.
+For mathematical formulas, use Katex format
 <Style>
 ${style}
 <Tone>
@@ -14,10 +14,6 @@ ${audience}
 ${prerequisites.length ? "<Prerequisites>\nI have already completed the following prerequisite courses:\n" + prerequisites.join("\n") : ""}
 <Response Language>
 ${language}
-<HTML Response Format>
-The response should be in HTML format, using only the following HTML tags: <h5> <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <a>.
-The link <a> can only be use to link public web pages.
-For mathematical formulas, use Katex format using $$ as delimiter (i.e. $$\frac{1}{}$$).
 `;
 
 const prompt = (section) => {
@@ -35,14 +31,14 @@ Think step by step and consider all necessary information.
 
 Here are the details:
 
-Section title:
+Chapter title:
 ${sectionName}
 
-Section content:
+Chapter content:
 ${sectionItems}
 
 Start the response by:
-"<h5>${sectionName}</h5> ..."
+### ${sectionName}
 `;
 };
 
