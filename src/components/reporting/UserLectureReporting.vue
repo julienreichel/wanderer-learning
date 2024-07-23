@@ -42,7 +42,6 @@ const chartSerie = computed(() => {
 
 const totalTime = computed(() => {
   if (!props.stepsSummary?.length) return;
-  console.log(props.stepsSummary)
   const times = props.stepsSummary.map((item) => {
     return item.totalTime || item.reportings.reduce((acc, reporting) => acc + reporting.time, 0);
   });

@@ -152,6 +152,8 @@ const toneOptions = [
   "Technical: Precise, jargon-heavy, and detail-oriented, suitable for explaining complex concepts and specialized information.",
 ].map(formatOption);
 
+const courseDescription = ref(options.prompt);
+
 watch(
   () =>
     style.value +
@@ -171,9 +173,9 @@ watch(
     $q.localStorage.set("aiOptions", options);
     emit("options", options);
   },
+  { immediate: true }
 );
 
-const courseDescription = ref(options.prompt);
 watch(courseDescription, (value) => {
   const options = {
     prompt: courseDescription.value,
