@@ -25,98 +25,12 @@
       </q-step>
       <!-- Step 2: Title, Key Concepts, and Learning Objectives -->
       <q-step :title="$t('wizard.titleKeyConceptsObjectives.title')" :name="2">
-        <div class="q-pa-none q-col-gutter-sm">
-          <q-input
-            v-model="title"
-            outlined
-            :label="$t('wizard.titleKeyConceptsObjectives.lectureTitle')"
-          />
-          <div class="text-h6">
-            {{ $t("wizard.titleKeyConceptsObjectives.concepts") }}
-          </div>
-          <q-list :label="$t('wizard.titleKeyConceptsObjectives.keyConcepts')">
-            <q-item v-for="(concept, index) in keyConcepts" :key="index">
-              <q-item-section class="q-pa-none q-col-gutter-sm">
-                <q-input
-                  v-model="concept.name"
-                  :placeholder="
-                    $t('wizard.titleKeyConceptsObjectives.conceptName')
-                  "
-                  outlined
-                  dense
-                />
-                <q-input
-                  v-model="concept.description"
-                  :placeholder="
-                    $t('wizard.titleKeyConceptsObjectives.conceptDescription')
-                  "
-                  type="textarea"
-                  rows="2"
-                  outlined
-                  dense
-                />
-              </q-item-section>
-              <q-item-section side>
-                <q-btn flat icon="close" @click="removeKeyConcept(index)" />
-              </q-item-section>
-            </q-item>
-          </q-list>
-          <div v-if="keyConcepts.length < 7" class="row">
-            <q-btn
-              class="col"
-              flat
-              :label="$t('wizard.titleKeyConceptsObjectives.addConcept')"
-              @click="addKeyConcept"
-            />
-            <q-btn
-              class="col"
-              flat
-              :label="$t('wizard.titleKeyConceptsObjectives.addAIConcepts')"
-              @click="
-                generateTitleAndObjectives(keyConcepts, learningObjectives)
-              "
-            />
-          </div>
-          <div class="text-h6">
-            {{ $t("wizard.titleKeyConceptsObjectives.objectives") }}
-          </div>
-          <q-list
-            :label="$t('wizard.titleKeyConceptsObjectives.learningObjectives')"
-          >
-            <q-item
-              v-for="(objective, index) in learningObjectives"
-              :key="index"
-            >
-              <q-item-section>
-                <q-input
-                  v-model="learningObjectives[index]"
-                  :placeholder="
-                    $t('wizard.titleKeyConceptsObjectives.learningObjective')
-                  "
-                  outlined
-                  dense
-                />
-              </q-item-section>
-              <q-item-section side top>
-                <q-btn
-                  flat
-                  icon="close"
-                  @click="removeLearningObjective(index)"
-                />
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-btn
-                  v-if="learningObjectives.length < 7"
-                  flat
-                  :label="$t('wizard.titleKeyConceptsObjectives.addObjective')"
-                  @click="addLearningObjective"
-                />
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </div>
+        <objectives-wizard-step
+          v-model:title="title"
+          v-model:keyConcepts="keyConcepts"
+          v-model:learningObjectives="learningObjectives"
+          @generate-title-and-objectives="generateTitleAndObjectives(keyConcepts, learningObjectives)"
+        />
         <q-stepper-navigation>
           <q-space />
           <q-btn flat :label="$t('wizard.common.back')" @click="step--" />
@@ -131,81 +45,9 @@
 
       <!-- Step 3: Table of Content -->
       <q-step :title="$t('wizard.tableOfContent.title')" :name="3">
-        <div class="q-pa-none q-col-gutter-sm">
-          <q-list>
-            <q-item
-              v-for="(tocStep, stepIndex) in tableOfContent"
-              :key="stepIndex"
-            >
-              <q-item-section>
-                <q-input
-                  v-model="tocStep.name"
-                  :placeholder="$t('wizard.tableOfContent.stepName')"
-                  outlined
-                  dense
-                />
-                <q-list :label="$t('wizard.tableOfContent.stepParts')">
-                  <q-item
-                    v-for="(item, itemIndex) in tocStep.items"
-                    :key="itemIndex"
-                  >
-                    <q-item-section class="q-pa-none q-col-gutter-sm">
-                      <q-input
-                        v-model="item.name"
-                        :placeholder="$t('wizard.tableOfContent.partName')"
-                        outlined
-                        dense
-                      />
-                      <q-input
-                        v-model="item.description"
-                        :placeholder="
-                          $t('wizard.tableOfContent.partDescription')
-                        "
-                        type="textarea"
-                        rows="2"
-                        outlined
-                        dense
-                      />
-                    </q-item-section>
-                    <q-item-section side top>
-                      <q-btn
-                        flat
-                        icon="close"
-                        @click="removePart(stepIndex, itemIndex)"
-                      />
-                    </q-item-section>
-                  </q-item>
-                  <q-item>
-                    <q-item-section>
-                      <q-btn
-                        flat
-                        :label="$t('wizard.tableOfContent.addPart')"
-                        @click="addPart(stepIndex)"
-                      />
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-item-section>
-              <q-item-section side top>
-                <q-btn flat icon="close" @click="removeStep(stepIndex)" />
-              </q-item-section>
-            </q-item>
-          </q-list>
-          <div class="row">
-            <q-btn
-              class="col"
-              flat
-              :label="$t('wizard.tableOfContent.addStep')"
-              @click="addStep"
-            />
-            <q-btn
-              class="col"
-              flat
-              :label="$t('wizard.tableOfContent.addAIStep')"
-              @click="generateTableOfContent(tableOfContent)"
-            />
-          </div>
-        </div>
+        <table-of-content-wizard-step
+          v-model="tableOfContent"
+          @generate-table-of-content="generateTableOfContent(tableOfContent)" />
         <q-stepper-navigation>
           <q-space />
           <q-btn flat :label="$t('wizard.common.back')" @click="step--" />
@@ -255,6 +97,8 @@
 <script setup>
 import MyTableOfContent from "src/components/common/TableOfContent.vue";
 import SetupWizardStep from "src/components/wizard/SetupWizardStep.vue";
+import ObjectivesWizardStep from "src/components/wizard/ObjectivesWizardStep.vue";
+import TableOfContentWizardStep from "src/components/wizard/TableOfContentWizardStep.vue";
 
 import { ref, inject, onMounted, nextTick } from "vue";
 
@@ -299,38 +143,6 @@ const tableOfContent = ref([]);
 const loading = ref(false);
 const progress = ref(0);
 const progressLabel = ref("");
-
-const addKeyConcept = () => {
-  keyConcepts.value.push({ name: "", description: "" });
-};
-
-const removeKeyConcept = (index) => {
-  keyConcepts.value.splice(index, 1);
-};
-
-const addLearningObjective = () => {
-  learningObjectives.value.push("");
-};
-
-const removeLearningObjective = (index) => {
-  learningObjectives.value.splice(index, 1);
-};
-
-const addStep = () => {
-  tableOfContent.value.push({ name: "", items: [] });
-};
-
-const removeStep = (index) => {
-  tableOfContent.value.splice(index, 1);
-};
-
-const addPart = (stepIndex) => {
-  tableOfContent.value[stepIndex].items.push({ name: "", description: "" });
-};
-
-const removePart = (stepIndex, itemIndex) => {
-  tableOfContent.value[stepIndex].items.splice(itemIndex, 1);
-};
 
 const generateTitleAndObjectives = async (concepts = [], objectives = []) => {
   loading.value = true;
