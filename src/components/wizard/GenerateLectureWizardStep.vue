@@ -289,7 +289,6 @@ const generateLecture = async () => {
 };
 
 watch(() => props.step, (value) => {
-  console.log("step", value);
   if (value === 4) {
     generateLecture();
   }

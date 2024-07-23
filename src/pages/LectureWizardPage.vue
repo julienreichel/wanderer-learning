@@ -131,7 +131,7 @@ const loading = ref(false);
 
 const generateTitleAndObjectives = async (concepts = [], objectives = []) => {
   loading.value = true;
-  console.log(options.value);
+
   options.value.prerequisites = prerequisites;
   options.value.locale = locale.value;
   aiService.setOptions(options.value);
