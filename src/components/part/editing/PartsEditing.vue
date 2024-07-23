@@ -71,6 +71,11 @@
       <q-btn
         v-if="isAdmin"
         size="sm"
+        icon="text_snippet"
+        @click="openMarkdownDialog = true"
+      /><q-btn
+        v-if="isAdmin"
+        size="sm"
         icon="data_object"
         @click="editJsonPart()"
       />
@@ -102,6 +107,10 @@
       />
     </q-card>
   </q-dialog>
+  <markdown-dialog
+    v-if="parts?.length"
+    v-model="openMarkdownDialog"
+    :sections="parts"/>
 </template>
 
 <script setup>
@@ -110,8 +119,9 @@ import NavigationCard from "../common/NavigationCard.vue";
 import PartCard from "../common/PartCard.vue";
 import PartEditing from "./PartEditing.vue";
 import QuestionsEditing from "./QuestionsEditing.vue";
-import JsonEditDialog from "../common/JsonEditDialog.vue";
-import FileUploader from "../../common/FileUploader.vue";
+import JsonEditDialog from "src/components/common/JsonEditDialog.vue";
+import FileUploader from "src/components/common/FileUploader.vue";
+import MarkdownDialog from "src/components/common/MarkdownDialog.vue";
 
 import { ref, computed, watch, nextTick, inject } from "vue";
 
@@ -285,6 +295,8 @@ const uploaded = (files) => {
 const finish = (success = true) => {
   emit("finished", { success });
 };
+
+let openMarkdownDialog = ref(false);
 </script>
 
 <style scoped>

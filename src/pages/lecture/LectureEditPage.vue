@@ -22,6 +22,17 @@
         <q-btn square size="md" icon="chevron_left" @click="finished()" />
         <q-space />
         <q-btn
+          v-if="isAdmin"
+          size="md"
+          icon="text_snippet"
+          @click="markdownDialog = true"
+        /><q-btn
+          v-if="isAdmin"
+          size="md"
+          icon="data_object"
+          @click="editJson()"
+        />
+        <q-btn
           v-if="canEdit(lecture)"
           size="md"
           icon="delete"
@@ -98,6 +109,14 @@
       </q-card-actions>
     </q-card>
   </q-page>
+  <json-edit-dialog
+    v-model="jsonDialog"
+    :data="jsonToEdit"
+    @save="updateFromJson"
+  />
+  <markdown-view-dialog
+    v-model="markdownDialog"
+    :sections="lecture.steps.map((step) => [ {text: `<h2>${step.title}</h2>` }, ...step.parts]).flat()"/>
 </template>
 
 <script setup>
@@ -107,7 +126,8 @@ import UsageHistogram from "src/components/charts/UsageHistogram.vue";
 import TimeDistribution from "src/components/charts/TimeDistribution.vue";
 import StepReporting from "src/components/reporting/StepReporting.vue";
 import RichTextEditing from "src/components/common/RichTextEditing.vue";
-
+import JsonEditDialog from "src/components/common/JsonEditDialog.vue";
+import MarkdownViewDialog from "src/components/common/MarkdownDialog.vue";
 import { ref, inject, computed, onMounted, onBeforeUnmount } from "vue";
 
 import { useIris } from "src/composables/iris";
@@ -117,6 +137,9 @@ const {
   lectureStep: lectureStepService,
   stepReporting: reportingService,
 } = inject("services");
+
+const userAttributes = inject("userAttributes");
+const { isAdmin } = userAttributes.value;
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
 
@@ -218,9 +241,9 @@ const moved = async (event) => {
 };
 
 const deleteStep = async (step) => {
-  $q.dialog({
+  await $q.dialog({
     title: t("generic.form.confirm_delete_title"),
-    message: t("step.form.confirm_delete_step"),
+    message: t("step.form.confirm_delete_step") + " " + step.title,
     cancel: true,
     persistent: true,
   }).onOk(async () => {
@@ -267,6 +290,67 @@ const deleteLecture = async (lecture) => {
 const finished = () => {
   router.push({ name: "CourseEdit", params: { id: lecture.value.course.id } });
 };
+
+let jsonDialog = ref(false);
+let jsonToEdit = ref({});
+const editJson = () => {
+  jsonDialog.value = true;
+
+  const {title, description, steps} = lecture.value;
+
+  const simplifiedSteps = steps.map(({title, order, id, parts}) => ({title, order, id, parts}));
+  const simplifiedLecture = {title, description, steps: simplifiedSteps};
+
+  jsonToEdit.value = simplifiedLecture;
+};
+const updateFromJson = async (json) => {
+  const existingIds = lecture.value.steps.map(({id}) => id);
+  // check if we need to remove steps
+  const stepIds = json.steps.map(({id}) => id);
+  const stepsToRemove = lecture.value.steps.filter(({id}) => !stepIds.includes(id));
+  for (const step of stepsToRemove){
+    console.log("removing step", step);
+    await deleteStep(step);
+  };
+
+  // check if we need to add new steps:
+  const stepsToAdd = json.steps.filter(({id}) => !existingIds.includes(id));
+  console.log("create step", stepsToAdd);
+  for (const {title, parts, order} of stepsToAdd){
+    console.log("create step", stepsToAdd);
+    const step = await lectureStepService.create({
+      title: title || "<no title>",
+      type: "step",
+      lectureId: lecture.value.id,
+      order: order || "" + Date.now(),
+      parts: parts || []
+    });
+    lecture.value.steps.push(step);
+  };
+
+  // update existing steps
+  for (const {id, title, parts, order} of json.steps){
+
+    const step = lecture.value.steps.find(({id: stepId}) => stepId === id);
+    if (!step){
+      continue;
+    }
+    step.title = title;
+    step.parts = parts;
+    step.order = order;
+    console.log("update step", step);
+    await lectureStepService.update(step);
+  };
+
+  // update the lecture
+  lecture.value.title = json.title;
+  lecture.value.description = json.description;
+  await saveLecture();
+
+  jsonDialog.value = false;
+};
+
+let markdownDialog = ref(false);
 </script>
 
 <style lang="sass" scoped>

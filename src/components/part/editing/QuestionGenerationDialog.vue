@@ -72,9 +72,9 @@
       <q-card-actions>
         <q-space />
         <q-btn
+          v-if="activeStep !== 'step1'"
           flat
           :label="$t('wizard.common.back')"
-          :disable="activeStep === 'step1'"
           @click="prevStep"
         />
         <q-btn

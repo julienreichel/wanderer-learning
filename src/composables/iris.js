@@ -49,6 +49,7 @@ export function useFormatter() {
   }
 
   function renderKatex(text) {
+    if (!text) return text;
     // Replace display equations
     let result = text.replace(/\\\[(.*?)\\\]/gs, (match, p1) => {
       return renderLatexString(p1.trim());

@@ -44,6 +44,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  type: {
+    type: String,
+    default: "parts",
+  },
 });
 
 const emit = defineEmits(["input", "save"]);
