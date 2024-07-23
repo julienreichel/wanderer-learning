@@ -307,3 +307,11 @@ watch(pdfFiles, async (file) => {
   pdfFiles.value = null;
 });
 </script>
+
+<style>
+.q-tree__node-header-content div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
