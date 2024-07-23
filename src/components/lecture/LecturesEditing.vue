@@ -11,7 +11,10 @@
         </q-card-section>
         <concept-display class="q-pa-sm" :concepts="lecture.concepts" />
         <q-card-section>
-          <rich-text-renderer class="q-pt-sm" :html-content="lecture.description" />
+          <rich-text-renderer
+            class="q-pt-sm"
+            :html-content="lecture.description"
+          />
         </q-card-section>
       </q-card-section>
       <q-card-section class="q-pa-sm">

@@ -25,8 +25,10 @@ export default class ServicePrototype {
 
     this.model = null;
     this.style = `Richard Feldman Style: Engaging and practical teaching style. Focus on practical and Hands-On Learning, simplifying complex concepts, iterative Learning and encouraging exploration and experimentation.`;
-    this.audience = "General Public: Accessible and clear language, covering a broad range of topics, aiming to be informative and engaging for a wide audience without assuming prior specialized knowledge.";
-    this.tone = "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.";
+    this.audience =
+      "General Public: Accessible and clear language, covering a broad range of topics, aiming to be informative and engaging for a wide audience without assuming prior specialized knowledge.";
+    this.tone =
+      "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.";
     this.model = "gpt-4o-mini";
     this.prerequisites = [];
     this.language = "English";

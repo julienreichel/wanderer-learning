@@ -37,12 +37,7 @@
       </q-card-section>
       <q-card-section style="width: 150px" class="q-px-none q-py-sm column">
         <q-card-section v-if="step.reporting" class="q-pa-sm row justify-end">
-          <q-icon
-            name="check_box"
-            color="positive"
-            size="lg"
-            right
-          />
+          <q-icon name="check_box" color="positive" size="lg" right />
         </q-card-section>
         <q-card-section v-if="step.reporting" class="q-pa-sm row justify-end">
           <q-badge :label="step.reporting.totalTime" />

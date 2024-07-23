@@ -110,7 +110,8 @@
   <markdown-dialog
     v-if="parts?.length"
     v-model="openMarkdownDialog"
-    :sections="parts"/>
+    :sections="parts"
+  />
 </template>
 
 <script setup>

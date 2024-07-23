@@ -115,7 +115,6 @@ const formatOption = (text) => {
   };
 };
 
-
 const style = ref(options.style);
 const styleOptions = [
   "Angela Duckworth: Motivational, research-driven, focusing on grit and perseverance, combining storytelling with evidence-based strategies.",
@@ -173,7 +172,7 @@ watch(
     $q.localStorage.set("aiOptions", options);
     emit("options", options);
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 watch(courseDescription, (value) => {

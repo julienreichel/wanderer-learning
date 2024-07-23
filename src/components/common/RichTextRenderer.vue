@@ -4,8 +4,8 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref, watch } from 'vue';
-import mermaid from 'mermaid';
+import { nextTick, onMounted, ref, watch } from "vue";
+import mermaid from "mermaid";
 
 import { useFormatter } from "src/composables/iris";
 const { renderKatex } = useFormatter();
@@ -13,8 +13,8 @@ const { renderKatex } = useFormatter();
 const props = defineProps({
   htmlContent: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 let renderedHtml = ref();
@@ -25,10 +25,9 @@ const render = async () => {
   renderedHtml.value = renderKatex(props.htmlContent);
   nextTick(async () => {
     await mermaid.run({
-      querySelector: '.mermaid',
+      querySelector: ".mermaid",
     });
   });
-
 };
 
 onMounted(render);

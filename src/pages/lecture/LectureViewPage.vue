@@ -14,7 +14,10 @@
           </q-card-section>
           <concept-display :concepts="lecture.concepts" />
           <q-card-section>
-            <rich-text-renderer class="q-pt-sm" :html-content="lecture.description" />
+            <rich-text-renderer
+              class="q-pt-sm"
+              :html-content="lecture.description"
+            />
           </q-card-section>
         </q-card-section>
         <q-card-section v-if="lecture.score?.length" style="width: 170px">
@@ -203,7 +206,7 @@ onMounted(async () => {
           username,
           userId,
         })
-      ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
       if (reports.length) {
         lectureStarted++;

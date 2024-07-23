@@ -1,11 +1,20 @@
 <template>
-    <q-spinner-gears v-if="progress < 1" color="primary" size="xl" />
-    <q-linear-progress :value="progress" class="q-mt-md" size="25px" animation-speed="10000">
-      <div class="absolute-full flex flex-center">
-        <q-badge color="white" text-color="primary" :label="progressLabel" />
-      </div>
-    </q-linear-progress>
-    <my-table-of-content v-if="lecturePreview" :lecture="lecturePreview" class="q-pa-sm" />
+  <q-spinner-gears v-if="progress < 1" color="primary" size="xl" />
+  <q-linear-progress
+    :value="progress"
+    class="q-mt-md"
+    size="25px"
+    animation-speed="10000"
+  >
+    <div class="absolute-full flex flex-center">
+      <q-badge color="white" text-color="primary" :label="progressLabel" />
+    </div>
+  </q-linear-progress>
+  <my-table-of-content
+    v-if="lecturePreview"
+    :lecture="lecturePreview"
+    class="q-pa-sm"
+  />
 </template>
 
 <script setup>
@@ -15,7 +24,13 @@ import { useIris, useFormatter } from "src/composables/iris";
 
 const { t, uid } = useIris();
 const { htmlToMarkdown } = useFormatter();
-const { ai: aiService, lecture: lectureService, concept: conceptService, lectureConcept: lectureConceptService, lectureStep: lectureStepService } = inject("services");
+const {
+  ai: aiService,
+  lecture: lectureService,
+  concept: conceptService,
+  lectureConcept: lectureConceptService,
+  lectureStep: lectureStepService,
+} = inject("services");
 
 const props = defineProps({
   lectureTitle: { type: String, required: true },
@@ -27,7 +42,6 @@ const props = defineProps({
   courseId: { type: String, required: true },
   step: { type: Number, required: true },
   extendedQueryForConcept: { type: Boolean, required: true },
-
 });
 console.log("props", props);
 
@@ -137,7 +151,7 @@ const generateLecture = async () => {
     "<b>" +
     t("wizard.titleKeyConceptsObjectives.objectives") +
     ":</b><br/><ul><li>" +
-      props.learningObjectives.join("</li><li>") +
+    props.learningObjectives.join("</li><li>") +
     "</li></ul>";
 
   let lecture = await lectureService.create({
@@ -288,9 +302,13 @@ const generateLecture = async () => {
   progress.value = 1;
 };
 
-watch(() => props.step, (value) => {
-  if (value === 4) {
-    generateLecture();
-  }
-}, { immediate: true });
+watch(
+  () => props.step,
+  (value) => {
+    if (value === 4) {
+      generateLecture();
+    }
+  },
+  { immediate: true },
+);
 </script>

@@ -16,7 +16,10 @@
         <q-chip v-if="concept.title" square color="primary" text-color="white">
           {{ concept.title }}
         </q-chip>
-        <rich-text-renderer class="q-pt-sm" :html-content="concept.description" />
+        <rich-text-renderer
+          class="q-pt-sm"
+          :html-content="concept.description"
+        />
       </q-card-section>
       <q-card-actions v-if="editing">
         <q-space />

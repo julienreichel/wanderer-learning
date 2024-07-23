@@ -7,10 +7,10 @@
           :prerequisites="prerequisites"
           @options="
             (values) => {
-              options = {...options, ...values}
+              options = { ...options, ...values };
             }
           "
-          @course-description="(value) => courseDescription = value"
+          @course-description="(value) => (courseDescription = value)"
         />
         <q-stepper-navigation>
           <q-space />
@@ -29,7 +29,9 @@
           v-model:title="title"
           v-model:keyConcepts="keyConcepts"
           v-model:learningObjectives="learningObjectives"
-          @generate-title-and-objectives="generateTitleAndObjectives(keyConcepts, learningObjectives)"
+          @generate-title-and-objectives="
+            generateTitleAndObjectives(keyConcepts, learningObjectives)
+          "
         />
         <q-stepper-navigation>
           <q-space />
@@ -47,7 +49,8 @@
       <q-step :title="$t('wizard.tableOfContent.title')" :name="3">
         <table-of-content-wizard-step
           v-model="tableOfContent"
-          @generate-table-of-content="generateTableOfContent(tableOfContent)" />
+          @generate-table-of-content="generateTableOfContent(tableOfContent)"
+        />
         <q-stepper-navigation>
           <q-space />
           <q-btn flat :label="$t('wizard.common.back')" @click="step--" />
@@ -72,7 +75,7 @@
           :step="step"
           :extended-query-for-concept="options.extendedQueryForConcept"
           @lecture-created="lectureId = $event.id"
-      />
+        />
         <q-stepper-navigation>
           <q-btn
             :disable="!lectureId"
@@ -96,10 +99,7 @@ import { ref, inject, onMounted } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { locale, router } = useIris();
-const {
-  ai: aiService,
-  course: courseService,
-} = inject("services");
+const { ai: aiService, course: courseService } = inject("services");
 
 const props = defineProps({
   id: { type: String, required: true },
@@ -174,11 +174,9 @@ const generateTableOfContent = async (toc = []) => {
   step.value = 3;
 };
 
-let lectureId = ref()
+let lectureId = ref();
 
 const openLecture = () => {
   router.push({ name: "LectureView", params: { id: lectureId.value } });
 };
 </script>
-
-

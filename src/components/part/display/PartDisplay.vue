@@ -85,7 +85,6 @@ const props = defineProps({
 
 const emit = defineEmits(["results", "nextStep", "finish"]);
 
-
 const imageSize = ref(Number(props.part.options?.imageSize) || 4);
 watch(
   () => props.part.options,

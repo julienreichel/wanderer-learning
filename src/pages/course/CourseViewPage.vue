@@ -11,7 +11,10 @@
             <q-badge v-if="userLevel && userLevel !== 'in_progress'">
               {{ Math.round(successRate * 100) + "%" }}
             </q-badge>
-            <rich-text-renderer class="q-pt-sm" :html-content="course.description" />
+            <rich-text-renderer
+              class="q-pt-sm"
+              :html-content="course.description"
+            />
           </q-card-section>
           <q-img
             v-if="course.src"

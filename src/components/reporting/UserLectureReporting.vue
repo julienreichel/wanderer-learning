@@ -43,7 +43,10 @@ const chartSerie = computed(() => {
 const totalTime = computed(() => {
   if (!props.stepsSummary?.length) return;
   const times = props.stepsSummary.map((item) => {
-    return item.totalTime || item.reportings.reduce((acc, reporting) => acc + reporting.time, 0);
+    return (
+      item.totalTime ||
+      item.reportings.reduce((acc, reporting) => acc + reporting.time, 0)
+    );
   });
   const totalTime = times.reduce((acc, item) => acc + item, 0);
   if (totalTime < 60) {
