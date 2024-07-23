@@ -49,7 +49,7 @@ export default class ServicePrototype {
 
   async query(query) {
     query.model = query.model || this.model;
-    query.ttl = Math.floor(Date.now() / 1000) + 3600 * 24 * 7; // kep request for a week
+    query.ttl = Math.floor(Date.now() / 1000) + 3600 * 24; // kep request for 24h
     try {
       const { data } = await this.client.models.AIRequest.create(query, {
         authMode: "userPool",
