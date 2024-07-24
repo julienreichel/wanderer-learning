@@ -101,7 +101,7 @@ export default class ServicePrototype {
     );
     const prompt = concepts.prompt(description);
 
-    return this.query({ system, prompt, token: 500 });
+    return this.query({ system, prompt, token: 800 });
   }
 
   async getTableOfContent(description, concepts, objectives, previousToc) {
@@ -136,7 +136,7 @@ export default class ServicePrototype {
 
     const prompt = toc.prompt(description, conceptsList, objectivesList);
 
-    return this.query({ system, prompt, token: 1000 });
+    return this.query({ system, prompt, token: 1500 });
   }
 
   async getInitialQuiz(description, concepts, nbQuestions = 10) {
