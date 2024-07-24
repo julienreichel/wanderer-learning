@@ -313,6 +313,7 @@ let getActiveQuestions = () => {
   // If the user failed twice in a row for the same level, we go down one level
   validatedQuestions = validatedQuestions.reverse();
   if (
+    validatedQuestions.length > 2 &&
     validatedQuestions[0].difficulty > 1 &&
     validatedQuestions[0].difficulty === validatedQuestions[1].difficulty &&
     !validatedQuestions[0].valid &&
