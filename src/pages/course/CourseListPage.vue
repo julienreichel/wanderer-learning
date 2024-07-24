@@ -47,7 +47,7 @@
                 <rich-text-renderer
                   class="text-subtitle2"
                   style="overflow: hidden; height: 42px"
-                  html-content="props.row.description"
+                  :html-content="props.row.description"
                 />
               </div>
             </q-img>
