@@ -8,6 +8,7 @@ import conceptsTextHtml from "./prompts/conceptsTextHtml.js";
 import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import singleQuiz from "./prompts/singleQuiz.js";
 import simpleQuiz from "./prompts/quiz.js";
+import { jsonrepair } from 'jsonrepair'
 
 import { marked } from "marked";
 
@@ -72,10 +73,19 @@ export default class ServicePrototype {
           if (query.format === "text") {
             return data.content;
           }
-          return JSON.parse(data.content);
+          try {
+            return JSON.parse(data.content);
+          } catch (error) {
+            return JSON.parse(jsonrepair(data.content));
+          }
         } else {
           if (data.finish_reason) {
             console.log("finish_reason", data.finish_reason, data.content);
+            if (query.format === "text") {
+              return data.content;
+            } else {
+              return JSON.parse(jsonrepair(data.content));
+            }
           }
         }
       }
