@@ -74,6 +74,7 @@
           :locale="locale"
           :step="step"
           :extended-query-for-concept="options.extendedQueryForConcept"
+          :model="options.model"
           @lecture-created="lectureId = $event.id"
         />
         <q-stepper-navigation>

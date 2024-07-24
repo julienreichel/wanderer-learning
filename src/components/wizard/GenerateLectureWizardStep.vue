@@ -42,6 +42,7 @@ const props = defineProps({
   courseId: { type: String, required: true },
   step: { type: Number, required: true },
   extendedQueryForConcept: { type: Boolean, required: true },
+  model: { type: String, required: true },
 });
 console.log("props", props);
 
@@ -216,10 +217,14 @@ const generateLecture = async () => {
   progress.value = 20 / 100;
   const conceptParts = await Promise.all(
     props.tableOfContent.map(async (step, index) => {
-      // To avoid rate limits, we need to wait for 40s
-      // (10K for the HTML, 10K for the quiz for a rate limit of 30K, so 40s between runs)
-      if (index > 0) {
-        await new Promise((resolve) => setTimeout(resolve, index * 40 * 1000));
+      // To avoid rate limits, we need to wait
+      const waitTime = {
+        "gpt-3": 10,
+        "gpt-40-mini": 5, // reate limits is very high, jsut wait a bit for the backend
+        "gpt-4o": 40, // (10K for the HTML, 10K for the quiz for a rate limit of 30K, so 40s between runs)
+      }[props.model];
+      if (props.model === 'gpt-4o' && index > 0) {
+        await new Promise((resolve) => setTimeout(resolve, index * waitTime * 1000));
       }
       let questions = [];
       let parts = [];
