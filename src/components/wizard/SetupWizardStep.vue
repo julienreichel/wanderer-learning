@@ -175,18 +175,22 @@ watch(
   { immediate: true },
 );
 
-watch(courseDescription, (value) => {
-  const options = {
-    prompt: courseDescription.value,
-    style: style.value,
-    tone: tone.value,
-    audience: audience.value,
-    model: model.value,
-    extendedQueryForConcept: extendedQueryForConcept.value,
-  };
-  $q.localStorage.set("aiOptions", options);
-  emit("courseDescription", value);
-});
+watch(
+  courseDescription,
+  (value) => {
+    const options = {
+      prompt: courseDescription.value,
+      style: style.value,
+      tone: tone.value,
+      audience: audience.value,
+      model: model.value,
+      extendedQueryForConcept: extendedQueryForConcept.value,
+    };
+    $q.localStorage.set("aiOptions", options);
+    emit("courseDescription", value);
+  },
+  { immediate: true },
+);
 
 let pdfFiles = ref(null);
 let tree = ref(null);
