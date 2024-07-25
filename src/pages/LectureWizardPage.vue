@@ -12,13 +12,15 @@
           "
           @course-description="(value) => (courseDescription = value)"
         />
-        <q-stepper-navigation>
+        <q-stepper-navigation class="row">
           <q-space />
           <q-btn
             :disable="courseDescription.length > 10000"
             :loading="loading"
             color="primary"
-            :label="$t('wizard.common.next')"
+            size="md"
+            padding="sm 64px"
+            icon="chevron_right"
             @click="generateTitleAndObjectives()"
           />
         </q-stepper-navigation>
@@ -33,13 +35,15 @@
             generateTitleAndObjectives(keyConcepts, learningObjectives)
           "
         />
-        <q-stepper-navigation>
+        <q-stepper-navigation class="row">
+          <q-btn size="md" icon="chevron_left" @click="step--" />
           <q-space />
-          <q-btn flat :label="$t('wizard.common.back')" @click="step--" />
           <q-btn
             :loading="loading"
             color="primary"
-            :label="$t('wizard.common.next')"
+            size="md"
+            padding="sm 64px"
+            icon="chevron_right"
             @click="generateTableOfContent()"
           />
         </q-stepper-navigation>
@@ -51,13 +55,15 @@
           v-model="tableOfContent"
           @generate-table-of-content="generateTableOfContent(tableOfContent)"
         />
-        <q-stepper-navigation>
+        <q-stepper-navigation class="row">
+          <q-btn size="md" icon="chevron_left" @click="step--" />
           <q-space />
-          <q-btn flat :label="$t('wizard.common.back')" @click="step--" />
           <q-btn
             :loading="loading"
             color="primary"
-            :label="$t('wizard.common.finish')"
+            size="md"
+            padding="sm 64px"
+            icon="chevron_right"
             @click="step = 4"
           />
         </q-stepper-navigation>
@@ -77,11 +83,14 @@
           :model="options.model"
           @lecture-created="lectureId = $event.id"
         />
-        <q-stepper-navigation>
+        <q-stepper-navigation class="row">
+          <q-space />
           <q-btn
             :disable="!lectureId"
             color="primary"
-            :label="$t('wizard.common.openLecture')"
+            size="md"
+            padding="sm 64px"
+            icon="chevron_right"
             @click="openLecture"
           />
         </q-stepper-navigation>

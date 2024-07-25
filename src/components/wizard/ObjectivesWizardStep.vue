@@ -32,21 +32,15 @@
           <q-btn flat icon="close" @click="removeKeyConcept(index)" />
         </q-item-section>
       </q-item>
+      <q-item>
+        <q-item-section  v-if="keyConcepts.length < 7">
+          <div class="row justify-end q-pa-none">
+            <q-btn flat icon="add" @click="addKeyConcept" />
+          </div>
+        </q-item-section>
+      </q-item>
     </q-list>
-    <div v-if="keyConcepts.length < 7" class="row">
-      <q-btn
-        class="col"
-        flat
-        :label="$t('wizard.titleKeyConceptsObjectives.addConcept')"
-        @click="addKeyConcept"
-      />
-      <q-btn
-        class="col"
-        flat
-        :label="$t('wizard.titleKeyConceptsObjectives.addAIConcepts')"
-        @click="$emit('generateTitleAndObjectives')"
-      />
-    </div>
+
     <div class="text-h6">
       {{ $t("wizard.titleKeyConceptsObjectives.objectives") }}
     </div>
@@ -68,15 +62,20 @@
       </q-item>
       <q-item>
         <q-item-section>
-          <q-btn
-            v-if="learningObjectives.length < 7"
-            flat
-            :label="$t('wizard.titleKeyConceptsObjectives.addObjective')"
-            @click="addLearningObjective"
-          />
+          <div class="row justify-end q-pa-none">
+            <q-btn v-if="learningObjectives.length < 7" flat icon="add" @click="addLearningObjective" />
+          </div>
         </q-item-section>
       </q-item>
     </q-list>
+    <div class="row justify-center">'
+      <q-btn
+        size="md"
+        icon="switch_access_shortcut_add"
+        class="q-mx-md"
+        @click="$emit('generateTitleAndObjectives')"
+      />
+    </div>
   </div>
 </template>
 

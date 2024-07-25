@@ -37,11 +37,9 @@
             </q-item>
             <q-item>
               <q-item-section>
-                <q-btn
-                  flat
-                  :label="$t('wizard.tableOfContent.addPart')"
-                  @click="addPart(stepIndex)"
-                />
+                <div class="row justify-end">
+                  <q-btn size="md" flat icon="add" @click="addPart(stepIndex)" />
+                </div>
               </q-item-section>
             </q-item>
           </q-list>
@@ -51,17 +49,11 @@
         </q-item-section>
       </q-item>
     </q-list>
-    <div class="row">
+    <div class="row justify-center">'
+      <q-btn size="md" icon="add"  class="q-mx-sm" @click="addStep" />
       <q-btn
-        class="col"
-        flat
-        :label="$t('wizard.tableOfContent.addStep')"
-        @click="addStep"
-      />
-      <q-btn
-        class="col"
-        flat
-        :label="$t('wizard.tableOfContent.addAIStep')"
+        size="md"
+        icon="switch_access_shortcut_add"
         @click="$emit('generateTableOfContent')"
       />
     </div>

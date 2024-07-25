@@ -1,5 +1,7 @@
 <template>
+  <div class="row justify-center">
   <q-spinner-gears v-if="progress < 1" color="primary" size="xl" />
+  </div>
   <q-linear-progress
     :value="progress"
     class="q-mt-md"
