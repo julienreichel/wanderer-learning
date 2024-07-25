@@ -36,8 +36,16 @@ const props = defineProps({
       g: {
         type: "glider",
         position: [1, 2],
-        options: { tangent: { dash: 2, strokeColor: "#aa0000" } },
+        options: {
+          tangent: { dash: 2, strokeColor: "#aa0000" },
+          line: { dash: 2, strokeColor: "#777", point: "p" },
+        },
       },
+      /* // samples
+      v2: { type: "point", position: [-2,3], settings: { style: 1 } },
+      v1: { type: "point", position: [-2,3], settings: { style: 1 }, options: { line: { point: "v2", straightFirst:false, straightLast:false, lastArrow:true} } },
+      v0: { type: "point", position: [-4,2], settings: { style: 1 }, options: { line: { point: "v1", straightFirst:false, straightLast:false, lastArrow:true} } },
+      */
     }),
   },
 });
@@ -61,7 +69,7 @@ const renderBoard = (funcStr) => {
 
   let vars = {};
   Object.keys(props.controls).forEach((key) => {
-    const { type, settings, position } = props.controls[key];
+    const { type, settings, position, options = {} } = props.controls[key];
     if (type === "glider") {
       vars[key] = { elType: "glider", X: () => 0, Y: () => 0 };
       return;
@@ -70,6 +78,9 @@ const renderBoard = (funcStr) => {
       name: key,
       ...settings,
     });
+    if (options.line) {
+      board.create("line", [vars[key], vars[options.line.point]], options.line);
+    }
   });
   if (!funcStr.length) {
     return;
@@ -104,6 +115,13 @@ const renderBoard = (funcStr) => {
         });
         if (options.tangent) {
           board.create("tangent", [vars[key]], options.tangent);
+        }
+        if (options.line) {
+          board.create(
+            "line",
+            [vars[key], options.line.point],
+            options.line,
+          );
         }
       }
     });
