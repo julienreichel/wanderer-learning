@@ -29,7 +29,7 @@
 <script setup>
 import PartDisplay from "src/components/part/display/PartDisplay.vue";
 import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
-import { ref, watch, defineProps, computed } from "vue";
+import { ref, watch, computed } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { t } = useIris();

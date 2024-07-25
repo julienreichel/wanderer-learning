@@ -31,6 +31,22 @@
         />
       </q-card-actions>
     </q-card>
+
+    <q-card class="my-card q-mb-md col">
+      <q-card-section>
+        <div class="text-h6">Function Plotter</div>
+        <q-img src="https://jsxgraph.org/wp/img/logo_tw.png" class="bg-primary"/>
+      </q-card-section>
+      <q-card-actions class="q-px-none q-py-lg">
+        <q-space/>
+        <q-btn
+          size="md"
+          padding="sm 64px"
+          icon="chevron_right"
+          :to="{ name: 'function' }"
+        />
+      </q-card-actions>
+    </q-card>
   </q-page>
 </template>
 

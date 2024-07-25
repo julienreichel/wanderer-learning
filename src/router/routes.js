@@ -144,6 +144,7 @@ const routes = [
         component: () => import("src/pages/playground/GraphvizPage.vue"),
       },
       { name: "mermaid", path: 'mermaid', component: () => import('src/pages/playground/MermaidPage.vue') },
+      { name: 'function', path: 'function', component: () => import('src/pages/playground/FunctionPlotterPage.vue') },
     ],
   },
   // Always leave this as last one,

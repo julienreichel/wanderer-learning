@@ -29,7 +29,7 @@ import JsonEditor from "json-editor-vue";
 import { useIris } from "src/composables/iris";
 const { $q, t } = useIris();
 
-import { ref, watch, defineProps, defineEmits } from "vue";
+import { ref, watch, defineEmits } from "vue";
 
 const props = defineProps({
   json: {

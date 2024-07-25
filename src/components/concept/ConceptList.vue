@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 
 import { useIris } from "src/composables/iris";
 const { router, t } = useIris();
