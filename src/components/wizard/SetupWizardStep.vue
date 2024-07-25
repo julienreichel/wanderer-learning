@@ -252,7 +252,7 @@ watch(ticked, (newVal, oldVal) => {
       acc += (titleOnly ? "" : "\n") + chapter.label + "\n";
     }
     acc += chapter.children.reduce((acc2, section) => {
-      if (ticked.value.includes(section.label)) {
+      if (ticked.value.includes(section.label) && section.label !== "...") {
         acc2 += (titleOnly ? "" : "\n") + section.label + "\n";
       }
       acc2 += section.children.reduce((acc3, page) => {

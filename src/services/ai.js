@@ -330,26 +330,26 @@ export default class ServicePrototype {
       for (const item of items) {
         const pos = item.transform[5];
         const delta = Math.round(lastPos - pos);
+        const height = Math.round(item.height);
+        const currentLevel = height <= mostCommonTextSize ? 3 : height <= titleTextSizes[0] ? 2 : 1;
         if (
           lastPos >= 0 &&
+          currentLevel === level &&
           (delta < mostCommonTextSize ||
             lastPos < pos ||
             item.str.trim().length < 3)
         ) {
           levels[level].label += " " + item.str.trim();
         } else {
-          const height = Math.round(item.height);
+
           let branch = {
             label: item.str,
             children: [],
           };
-          if (height <= mostCommonTextSize) {
-            level = 3;
-          } else if (height <= titleTextSizes[0]) {
-            level = 2;
+          level = currentLevel;
+          if (currentLevel === 2) {
             levels[3] = undefined;
-          } else {
-            level = 1;
+          } else if (currentLevel === 1) {
             levels[2] = undefined;
           }
           levels[level] = branch;
@@ -358,13 +358,18 @@ export default class ServicePrototype {
           } else {
             if (level === 2) {
               tree.push(branch);
-            } else {
+            } else { // level === 3
               if (levels[1]) {
-                levels[1].children.push(branch);
+                let intro = {
+                  label: "...",
+                  children: [],
+                };
+                levels[1].children.push(intro);
+                levels[2] = intro;
+                intro.children.push(branch);
               } else {
                 tree.push(branch);
               }
-              levels[2] = branch;
             }
           }
         }
