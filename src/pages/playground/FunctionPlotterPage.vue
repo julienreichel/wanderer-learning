@@ -26,11 +26,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import FunctionPlotter from 'src/components/charts/FunctionPlotterChart.vue';
+import { ref } from "vue";
+import FunctionPlotter from "src/components/charts/FunctionPlotterChart.vue";
 
 // Reactive data
-const functionContent = ref('a*(x-p.x)^3+p.y');
+const functionContent = ref("a*(x-p.x)^3+p.y");
 
 // Splitter model
 const splitterModel = ref(50);

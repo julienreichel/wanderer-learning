@@ -28,8 +28,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import Mermaid from 'src/components/charts/MermaidChart.vue';
+import { ref } from "vue";
+import Mermaid from "src/components/charts/MermaidChart.vue";
 
 // Reactive data
 const mermaidContent = ref(`

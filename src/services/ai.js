@@ -8,7 +8,7 @@ import conceptsTextHtml from "./prompts/conceptsTextHtml.js";
 import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import singleQuiz from "./prompts/singleQuiz.js";
 import simpleQuiz from "./prompts/quiz.js";
-import { jsonrepair } from 'jsonrepair'
+import { jsonrepair } from "jsonrepair";
 
 import { marked } from "marked";
 
@@ -331,7 +331,12 @@ export default class ServicePrototype {
         const pos = item.transform[5];
         const delta = Math.round(lastPos - pos);
         const height = Math.round(item.height);
-        const currentLevel = height <= mostCommonTextSize ? 3 : height <= titleTextSizes[0] ? 2 : 1;
+        const currentLevel =
+          height <= mostCommonTextSize
+            ? 3
+            : height <= titleTextSizes[0]
+              ? 2
+              : 1;
         if (
           lastPos >= 0 &&
           currentLevel === level &&
@@ -341,7 +346,6 @@ export default class ServicePrototype {
         ) {
           levels[level].label += " " + item.str.trim();
         } else {
-
           let branch = {
             label: item.str,
             children: [],
@@ -358,7 +362,8 @@ export default class ServicePrototype {
           } else {
             if (level === 2) {
               tree.push(branch);
-            } else { // level === 3
+            } else {
+              // level === 3
               if (levels[1]) {
                 let intro = {
                   label: "...",

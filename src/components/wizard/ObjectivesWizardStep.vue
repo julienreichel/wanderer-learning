@@ -33,7 +33,7 @@
         </q-item-section>
       </q-item>
       <q-item>
-        <q-item-section  v-if="keyConcepts.length < 7">
+        <q-item-section v-if="keyConcepts.length < 7">
           <div class="row justify-end q-pa-none">
             <q-btn flat icon="add" @click="addKeyConcept" />
           </div>
@@ -63,12 +63,18 @@
       <q-item>
         <q-item-section>
           <div class="row justify-end q-pa-none">
-            <q-btn v-if="learningObjectives.length < 7" flat icon="add" @click="addLearningObjective" />
+            <q-btn
+              v-if="learningObjectives.length < 7"
+              flat
+              icon="add"
+              @click="addLearningObjective"
+            />
           </div>
         </q-item-section>
       </q-item>
     </q-list>
-    <div class="row justify-center">'
+    <div class="row justify-center">
+      '
       <q-btn
         size="md"
         icon="switch_access_shortcut_add"

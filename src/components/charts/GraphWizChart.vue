@@ -4,9 +4,9 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import Viz from 'viz.js';
-import { Module, render } from 'viz.js/full.render.js';
+import { ref, watch } from "vue";
+import Viz from "viz.js";
+import { Module, render } from "viz.js/full.render.js";
 
 // Props
 const props = defineProps({
@@ -17,12 +17,12 @@ const props = defineProps({
   engine: {
     type: String,
     required: true,
-    default: 'dot',
+    default: "dot",
   },
 });
 
 // Reactive data
-const graphHtml = ref('');
+const graphHtml = ref("");
 
 // Method to render the graph
 const renderGraph = async (dot, engine) => {
@@ -39,10 +39,10 @@ const renderGraph = async (dot, engine) => {
 watch(
   () => [props.dot, props.engine],
   ([newDot, newEngine]) => {
-    console.log('Rendering graph with engine:', newEngine);
+    console.log("Rendering graph with engine:", newEngine);
     renderGraph(newDot, newEngine);
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 

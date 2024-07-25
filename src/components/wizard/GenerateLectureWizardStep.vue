@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-center">
-  <q-spinner-gears v-if="progress < 1" color="primary" size="xl" />
+    <q-spinner-gears v-if="progress < 1" color="primary" size="xl" />
   </div>
   <q-linear-progress
     :value="progress"
@@ -225,8 +225,10 @@ const generateLecture = async () => {
         "gpt-40-mini": 5, // reate limits is very high, jsut wait a bit for the backend
         "gpt-4o": 40, // (10K for the HTML, 10K for the quiz for a rate limit of 30K, so 40s between runs)
       }[props.model];
-      if (props.model === 'gpt-4o' && index > 0) {
-        await new Promise((resolve) => setTimeout(resolve, index * waitTime * 1000));
+      if (props.model === "gpt-4o" && index > 0) {
+        await new Promise((resolve) =>
+          setTimeout(resolve, index * waitTime * 1000),
+        );
       }
       let questions = [];
       let parts = [];

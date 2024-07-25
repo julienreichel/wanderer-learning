@@ -38,7 +38,12 @@
             <q-item>
               <q-item-section>
                 <div class="row justify-end">
-                  <q-btn size="md" flat icon="add" @click="addPart(stepIndex)" />
+                  <q-btn
+                    size="md"
+                    flat
+                    icon="add"
+                    @click="addPart(stepIndex)"
+                  />
                 </div>
               </q-item-section>
             </q-item>
@@ -49,8 +54,9 @@
         </q-item-section>
       </q-item>
     </q-list>
-    <div class="row justify-center">'
-      <q-btn size="md" icon="add"  class="q-mx-sm" @click="addStep" />
+    <div class="row justify-center">
+      '
+      <q-btn size="md" icon="add" class="q-mx-sm" @click="addStep" />
       <q-btn
         size="md"
         icon="switch_access_shortcut_add"

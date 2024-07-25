@@ -48,7 +48,8 @@ export function useFormatter() {
     }
   }
   function replaceHTMLEscapedChars(text) {
-    return text.trim()
+    return text
+      .trim()
       .replace(/&lt;/g, "<")
       .replace(/&gt;/g, ">")
       .replace(/&amp;/g, "&")

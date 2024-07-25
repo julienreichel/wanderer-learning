@@ -137,14 +137,26 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
 
     children: [
-      { name: 'Playground', path: '', component: () => import('src/pages/playground/PlaygroundPage.vue') },
+      {
+        name: "Playground",
+        path: "",
+        component: () => import("src/pages/playground/PlaygroundPage.vue"),
+      },
       {
         name: "graphviz",
         path: "graphviz",
         component: () => import("src/pages/playground/GraphvizPage.vue"),
       },
-      { name: "mermaid", path: 'mermaid', component: () => import('src/pages/playground/MermaidPage.vue') },
-      { name: 'function', path: 'function', component: () => import('src/pages/playground/FunctionPlotterPage.vue') },
+      {
+        name: "mermaid",
+        path: "mermaid",
+        component: () => import("src/pages/playground/MermaidPage.vue"),
+      },
+      {
+        name: "function",
+        path: "function",
+        component: () => import("src/pages/playground/FunctionPlotterPage.vue"),
+      },
     ],
   },
   // Always leave this as last one,

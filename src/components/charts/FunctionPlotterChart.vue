@@ -117,11 +117,7 @@ const renderBoard = (funcStr) => {
           board.create("tangent", [vars[key]], options.tangent);
         }
         if (options.line) {
-          board.create(
-            "line",
-            [vars[key], options.line.point],
-            options.line,
-          );
+          board.create("line", [vars[key], options.line.point], options.line);
         }
       }
     });

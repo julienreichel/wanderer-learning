@@ -27,7 +27,11 @@
       <template #after>
         <q-card class="q-pa-md full-height">
           <q-card-section class="full-height">
-            <Graphviz :dot="dotContent" :engine="selectedEngine.value" class="full-height" />
+            <Graphviz
+              :dot="dotContent"
+              :engine="selectedEngine.value"
+              class="full-height"
+            />
           </q-card-section>
         </q-card>
       </template>
@@ -36,8 +40,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import Graphviz from 'src/components/charts/GraphWizChart.vue';
+import { ref } from "vue";
+import Graphviz from "src/components/charts/GraphWizChart.vue";
 
 // Reactive data
 const dotContent = ref(`
@@ -120,15 +124,14 @@ const dotContent = ref(`
 `);
 
 // Reactive data for rendering engine
-const selectedEngine = ref('dot');
+const selectedEngine = ref("dot");
 const engines = ref([
-  { label: 'Dot', value: 'dot' },
-  { label: 'Circo', value: 'circo' },
-  { label: 'Neato', value: 'neato' },
-  { label: 'Force-Directed Placement', value: 'fdp' },
-  { label: 'Scalable Force-Directed Placement', value: 'sfdp' },
-  { label: 'Radial Layout', value: 'twopi' },
-
+  { label: "Dot", value: "dot" },
+  { label: "Circo", value: "circo" },
+  { label: "Neato", value: "neato" },
+  { label: "Force-Directed Placement", value: "fdp" },
+  { label: "Scalable Force-Directed Placement", value: "sfdp" },
+  { label: "Radial Layout", value: "twopi" },
 ]);
 
 // Splitter model
