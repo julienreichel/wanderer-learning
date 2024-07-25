@@ -51,7 +51,8 @@ export function useFormatter() {
     return text.trim()
       .replace(/&lt;/g, "<")
       .replace(/&gt;/g, ">")
-      .replace(/&amp;/g, "&");
+      .replace(/&amp;/g, "&")
+      .replace(/&#39;/g, "'");
   }
 
   function renderKatex(text) {
