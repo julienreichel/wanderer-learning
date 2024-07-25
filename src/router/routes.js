@@ -131,6 +131,21 @@ const routes = [
       },
     ],
   },
+
+  {
+    path: "/playground",
+    component: () => import("layouts/MainLayout.vue"),
+
+    children: [
+      { name: 'Playground', path: '', component: () => import('src/pages/playground/PlaygroundPage.vue') },
+      {
+        name: "graphviz",
+        path: "graphviz",
+        component: () => import("src/pages/playground/GraphvizPage.vue"),
+      },
+      { name: "mermaid", path: 'mermaid', component: () => import('src/pages/playground/MermaidPage.vue') },
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

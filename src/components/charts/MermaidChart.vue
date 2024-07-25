@@ -1,33 +1,68 @@
 <template>
-  <div ref="mermaidContainer"></div>
+  <!-- eslint-disable vue/no-v-html -->
+  <code ref="mermaidContainer" class="mermaid" v-html="diagramHtml"></code>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import mermaid from "mermaid";
 
+// Props
 const props = defineProps({
-  chart: {
+  mermaidCode: {
     type: String,
     required: true,
   },
 });
 
+// Reactive data
+const diagramHtml = ref("");
 const mermaidContainer = ref(null);
 
-const renderMermaid = () => {
-  mermaid.initialize({ startOnLoad: true });
-  mermaid.render("mermaidChart", props.chart, (svgCode) => {
-    mermaidContainer.value.innerHTML = svgCode;
+mermaid.initialize({
+  startOnLoad: true,
+  theme: "forest",
+});
+
+// Method to render the diagram
+const renderDiagram = async (code) => {
+  try {
+    const type = mermaid.detectType(code);
+    console.log(type); // 'sequence'
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+  const { svg } = await mermaid.render("theGraph", code);
+  diagramHtml.value = svg;
+  /*
+  diagramHtml.value = code;
+  nextTick(async () => {
+    console.log("Rendering mermaid diagram");
+    await mermaid.run({
+      querySelector: ".mermaid",
+    });
   });
+  */
 };
 
-onMounted(renderMermaid);
-watch(() => props.chart, renderMermaid);
+// Watch for changes in the mermaidCode prop and re-render the diagram
+watch(
+  () => props.mermaidCode,
+  (newVal) => {
+    renderDiagram(newVal);
+  },
+  { immediate: true },
+);
+
 </script>
 
 <style scoped>
-.mermaid-container {
+#mermaidContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: auto;
+  height: 100%;
 }
 </style>
