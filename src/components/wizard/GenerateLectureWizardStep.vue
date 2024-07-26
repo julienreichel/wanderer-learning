@@ -89,6 +89,7 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
       "",
     );
     question.text = question.text.replace(/\\(?![\\])/g, "\\\\");
+    question.explanations = question.explanations?.replace(/\\(?![\\])/g, "\\\\");
     question.answers.forEach((answer) => {
       // remove starting A. or B. or C. or D. from the answer
       answer.text = answer.text.replace(/^[A-Z0-9a-z][.)]\s/, "");
