@@ -89,9 +89,13 @@ export default class ServicePrototype {
           }
         }
       }
-      return {};
+      console.log("timeout", data.id);
     } catch (error) {
       console.log(error);
+    }
+    if (query.format === "text") {
+      return "";
+    } else {
       return {};
     }
   }
