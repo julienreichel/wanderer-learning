@@ -49,7 +49,7 @@ const system = (tone, language, difficulty) => {
 <Context>
 You are an expert in educational design.
 You are tasked with creating a final quiz for an online lecture based on key concepts, learning objective and a table of content.
-The purpose of the quiz with ${difficultyLevel} level is to eveluate if the user are able to perform the learning objectives.
+The purpose of the quiz with ${difficultyLevel} level is to evaluate if the user are able to perform the learning objectives.
 <Objective>
 Given the lecture description, the key concepts, the learning objectives and the table of content, create a quiz covering the lecture.
 The quiz should encompass 10 questions in total distributed among the following types:
