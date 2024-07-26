@@ -88,13 +88,13 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
       /\s*(as discussed in the section|based on the section content|according to the section|according to the lecture|according to the content)\s*/,
       "",
     );
-    question.text = question.text.replace(/\\(?![\\])/g, "\\\\");
-    question.explanations = question.explanations?.replace(/\\(?![\\])/g, "\\\\");
+    question.text = question.text.replace(/[^\\]\\[^\\]/g, "\\\\");
+    question.explanations = question.explanations?.replace(/[^\\]\\[^\\]/g, "\\\\");
     question.answers.forEach((answer) => {
       // remove starting A. or B. or C. or D. from the answer
       answer.text = answer.text.replace(/^[A-Z0-9a-z][.)]\s/, "");
       // there should not be isolated \ in the text, in this case replace it by \\
-      answer.text = answer.text.replace(/\\(?![\\])/g, "\\\\");
+      answer.text = answer.text.replace(/[^\\]\\[^\\]/g, "\\\\");
     });
 
     // if there is only one answer, we add the missing one
