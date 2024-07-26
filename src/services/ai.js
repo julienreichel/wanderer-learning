@@ -209,7 +209,8 @@ export default class ServicePrototype {
         format: "text",
       });
       // marked will replace \[ \] \( and \) by simply [ } ( ), so wee need to add an extra \ to escape it.
-      markdown = markdown.replace(/\\([[\]()])/g, "\\\\$1");
+      // in fact we add an extra \ to all isolated \ to escape them.
+      markdown = markdown.replace(/\\(?![\\])/g, "\\\\");
       const html = marked.parse(markdown);
       pages.push(html);
 
