@@ -24,7 +24,7 @@
           >
             <template #label="opt">
               <!-- eslint-disable vue/no-v-html -->
-              <span v-html="renderKatex(opt.label)"></span>
+              <span v-html="renderKatex(opt.label, true)"></span>
             </template>
           </q-option-group>
         </q-card-section>

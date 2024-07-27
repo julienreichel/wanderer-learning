@@ -25,7 +25,7 @@ const render = async () => {
   renderedHtml.value = renderKatex(props.htmlContent);
   nextTick(async () => {
     await mermaid.run({
-      querySelector: ".mermaid",
+      querySelector: "mermaid, .language-mermaid",
     });
   });
 };
