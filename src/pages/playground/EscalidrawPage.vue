@@ -2,9 +2,9 @@
   <q-page class="flex q-pa-md">
     <q-card class="q-pa-md full-width">
       <q-card-section class="full-height">
-        <ExcalidrawComponent
+        <EscalidrawWrapper
           :initial-data="excalidrawData"
-          class="full-height"
+          @change="(elements, appState, files) => changed(elements, appState, files)"
         />
       </q-card-section>
     </q-card>
@@ -13,10 +13,16 @@
 
 <script setup>
 import { ref } from "vue";
-import ExcalidrawComponent from "src/components/charts/EscalidrawEditor.vue";
+import EscalidrawWrapper from "src/components/common/EscalidrawWrapper.vue";
 
+import { useIris } from "src/composables/iris";
+const { $q, } = useIris();
 // Reactive data
-const excalidrawData = ref("");
+const data = $q.localStorage.getItem("excalidraw");
+const excalidrawData = ref( data || null);
 
+const changed = (elements, appState, files) => {
+  $q.localStorage.set("excalidraw", {elements, files});
+};
 </script>
 
