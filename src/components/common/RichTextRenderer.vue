@@ -18,7 +18,7 @@ const props = defineProps({
 });
 
 let renderedHtml = ref();
-mermaid.initialize({ startOnLoad: true });
+mermaid.initialize({ startOnLoad: true, theme: "forest", });
 
 const contentContainer = ref(null);
 const render = async () => {
