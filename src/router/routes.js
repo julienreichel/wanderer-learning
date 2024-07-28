@@ -157,6 +157,11 @@ const routes = [
         path: "function",
         component: () => import("src/pages/playground/FunctionPlotterPage.vue"),
       },
+      {
+        name: "excalidraw",
+        path: 'excalidraw',
+        component: () => import('src/pages/playground/EscalidrawPage.vue')
+      },
     ],
   },
   // Always leave this as last one,
