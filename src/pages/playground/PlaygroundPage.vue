@@ -1,6 +1,6 @@
 <template>
   <q-page padding class="row">
-    <q-card class="my-card q-mb-lg col">
+    <q-card class="my-card q-mb-lg col-sm-6 col-md-3">
       <q-card-section>
         <div class="text-h6">Mermaid</div>
         <q-img
@@ -19,7 +19,7 @@
       </q-card-actions>
     </q-card>
 
-    <q-card class="my-card q-mb-md col">
+    <q-card class="my-card q-mb-md col-sm-6 col-md-3">
       <q-card-section>
         <div class="text-h6">Graphviz</div>
         <q-img
@@ -38,12 +38,13 @@
       </q-card-actions>
     </q-card>
 
-    <q-card class="my-card q-mb-md col">
+    <q-card class="my-card q-mb-md col-sm-6 col-md-3">
       <q-card-section>
-        <div class="text-h6">Function Plotter</div>
+        <div class="text-h6">JSX Graph</div>
         <q-img
           src="https://jsxgraph.org/wp/img/logo_tw.png"
           class="bg-primary"
+          style="height: 100%; width: 100%"
         />
       </q-card-section>
       <q-card-actions class="q-px-none q-py-lg">
@@ -57,7 +58,7 @@
       </q-card-actions>
     </q-card>
 
-    <q-card class="my-card q-mb-md col">
+    <q-card class="my-card q-mb-md col-sm-6 col-md-3">
       <q-card-section>
         <div class="text-h6">Excalidraw</div>
         <q-img

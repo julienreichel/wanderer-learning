@@ -2,7 +2,7 @@
   <q-page class="flex q-pa-md">
     <q-card class="q-pa-md full-width">
       <q-card-section class="full-height">
-        <EscalidrawWrapper
+        <escalidraw-wrapper
           :initial-data="excalidrawData"
           @change="
             (elements, appState, files) => changed(elements, appState, files)
