@@ -88,11 +88,19 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
       "",
     );
     console.log("question ", question.text);
-    question.text = question.text.replace(/\t/g, "\\t").replace(/\f/g, "\\f").replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+    question.text = question.text
+      .replace(/\t/g, "\\t")
+      .replace(/\f/g, "\\f")
+      .replace(/\n/g, "\\n")
+      .replace(/\r/g, "\\r");
     console.log("-> ", question.text);
 
     console.log("explanations ", question.explanations);
-    question.explanations = question.explanations?.replace(/\t/g, "\\t").replace(/\f/g, "\\f").replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+    question.explanations = question.explanations
+      ?.replace(/\t/g, "\\t")
+      .replace(/\f/g, "\\f")
+      .replace(/\n/g, "\\n")
+      .replace(/\r/g, "\\r");
     console.log("-> ", question.explanations);
 
     question.answers.forEach((answer) => {
@@ -100,7 +108,11 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
       // remove starting A. or B. or C. or D. from the answer
       answer.text = answer.text.replace(/^[A-Z0-9a-z][.)]\s/, "");
       // there should not be isolated \ in the text, in this case replace it by \\
-      answer.text = answer.text.replace(/\t/g, "\\t").replace(/\f/g, "\\f").replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+      answer.text = answer.text
+        .replace(/\t/g, "\\t")
+        .replace(/\f/g, "\\f")
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r");
       console.log("-> ", answer.text);
     });
 

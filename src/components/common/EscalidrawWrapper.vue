@@ -4,84 +4,85 @@
 
 <script>
 const events = [
-  'change',
-  'collaborators',
-  'libraryChange',
-  'pointerUpdate',
-  'paste',
-  'copy',
-  'libraryOpen',
-  'pointerDown',
-  'pointerUp',
-  'pointerMove',
-  'scrollChange',
-  'historyChange',
-  'scenePointerDown',
-  'scenePointerUp',
-  'scenePointerMove',
-  'sceneScroll',
-  'libraryClose',
-  'selectElement',
-  'exportToBackend',
-  'menuToggle',
-  'collabButtonClick',
-  'collabLinkClick',
-  'imageAction',
-  'insertElements',
-  'canvasStateChange',
-  'viewModeToggle',
-  'shortcutAction',
-  'libraryLoad',
-  'dragNewElement',
-  'customUI',
+  "change",
+  "collaborators",
+  "libraryChange",
+  "pointerUpdate",
+  "paste",
+  "copy",
+  "libraryOpen",
+  "pointerDown",
+  "pointerUp",
+  "pointerMove",
+  "scrollChange",
+  "historyChange",
+  "scenePointerDown",
+  "scenePointerUp",
+  "scenePointerMove",
+  "sceneScroll",
+  "libraryClose",
+  "selectElement",
+  "exportToBackend",
+  "menuToggle",
+  "collabButtonClick",
+  "collabLinkClick",
+  "imageAction",
+  "insertElements",
+  "canvasStateChange",
+  "viewModeToggle",
+  "shortcutAction",
+  "libraryLoad",
+  "dragNewElement",
+  "customUI",
 ];
 </script>
 
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue';
-import { createRoot } from 'react-dom/client';
-import { createElement } from 'react';
-import { Excalidraw, MainMenu } from '@excalidraw/excalidraw';
-import { defineProps, defineEmits } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from "vue";
+import { createRoot } from "react-dom/client";
+import { createElement } from "react";
+import { Excalidraw, MainMenu } from "@excalidraw/excalidraw";
+import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
   initialData: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   isCollaborating: {
     type: Boolean,
-    default: false
+    default: false,
   },
   renderTopRightUI: {
     type: Function,
-    default: null
+    default: null,
   },
   renderCustomStats: {
     type: Function,
-    default: null
+    default: null,
   },
   initialState: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   viewModeEnabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   zenModeEnabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   gridModeEnabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   libraryReturnUrl: {
     type: String,
-    default: ''
+    default: "",
   },
-  options: { //UIOptions
+  options: {
+    //UIOptions
     type: Object,
     default: () => ({
       canvasActions: {
@@ -93,67 +94,67 @@ const props = defineProps({
         toggleTheme: null,
         saveAsImage: false,
       },
-    })
+    }),
   },
   detectScroll: {
     type: Boolean,
-    default: true
+    default: true,
   },
   handleKeyboardGlobally: {
     type: Boolean,
-    default: false
+    default: false,
   },
   autoFocus: {
     type: Boolean,
-    default: true
+    default: true,
   },
   user: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   initialDataState: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   collabAPI: {
     type: Object,
-    default: null
+    default: null,
   },
   langCode: {
     type: String,
-    default: 'en'
+    default: "en",
   },
   viewBackgroundColor: {
     type: String,
-    default: '#ffffff'
+    default: "#ffffff",
   },
   theme: {
     type: String,
-    default: 'light'
+    default: "light",
   },
   name: {
     type: String,
-    default: ''
+    default: "",
   },
   appState: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   elements: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   files: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   renderCustomUI: {
     type: Function,
-    default: null
+    default: null,
   },
   debounce: {
     type: Number,
-    default: 300
+    default: 300,
   },
 });
 
@@ -163,14 +164,19 @@ const excalidraw = ref(null);
 let root;
 
 let timeouts = {};
-const debounceEmit = (eventName, ...args) =>{
-  clearTimeout(timeouts[eventName] );
-  timeouts[eventName] = setTimeout(() => { emit(eventName, ...args); console.log(eventName); }, props.debounce);
-}
+const debounceEmit = (eventName, ...args) => {
+  clearTimeout(timeouts[eventName]);
+  timeouts[eventName] = setTimeout(() => {
+    emit(eventName, ...args);
+    console.log(eventName);
+  }, props.debounce);
+};
 
 const createEventHandlers = (eventNames) => {
   return eventNames.reduce((handlers, eventName) => {
-    handlers[`on${eventName.charAt(0).toUpperCase() + eventName.slice(1)}`] = (...args) => debounceEmit(eventName, ...args);
+    handlers[`on${eventName.charAt(0).toUpperCase() + eventName.slice(1)}`] = (
+      ...args
+    ) => debounceEmit(eventName, ...args);
     return handlers;
   }, {});
 };
@@ -183,13 +189,15 @@ const createExcalidrawElement = (props, eventHandlers) => {
     {
       ...props,
       UIOptions: props.options,
-      ...eventHandlers
+      ...eventHandlers,
     },
-    createElement(MainMenu, { },
+    createElement(
+      MainMenu,
+      {},
       createElement(MainMenu.DefaultItems.ChangeCanvasBackground),
       createElement(MainMenu.Separator),
-      createElement(MainMenu.DefaultItems.ClearCanvas)
-    )
+      createElement(MainMenu.DefaultItems.ClearCanvas),
+    ),
   );
 };
 
@@ -198,11 +206,15 @@ onMounted(() => {
   root.render(createExcalidrawElement(props, eventHandlers));
 });
 
-watch(props, (newProps) => {
-  if (root) {
-    root.render(createExcalidrawElement(newProps, eventHandlers));
-  }
-}, { deep: true });
+watch(
+  props,
+  (newProps) => {
+    if (root) {
+      root.render(createExcalidrawElement(newProps, eventHandlers));
+    }
+  },
+  { deep: true },
+);
 
 onUnmounted(() => {
   if (root) {
@@ -219,7 +231,7 @@ onUnmounted(() => {
 .excalidraw .App-menu_top > .layer-ui__wrapper__top-right {
   display: none;
 }
-.excalidraw .HelpDialog .Dialog__title{
+.excalidraw .HelpDialog .Dialog__title {
   display: none;
 }
 .excalidraw .HelpDialog .HelpDialog__header {

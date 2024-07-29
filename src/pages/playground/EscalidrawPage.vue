@@ -4,7 +4,9 @@
       <q-card-section class="full-height">
         <EscalidrawWrapper
           :initial-data="excalidrawData"
-          @change="(elements, appState, files) => changed(elements, appState, files)"
+          @change="
+            (elements, appState, files) => changed(elements, appState, files)
+          "
         />
       </q-card-section>
     </q-card>
@@ -16,13 +18,12 @@ import { ref } from "vue";
 import EscalidrawWrapper from "src/components/common/EscalidrawWrapper.vue";
 
 import { useIris } from "src/composables/iris";
-const { $q, } = useIris();
+const { $q } = useIris();
 // Reactive data
 const data = $q.localStorage.getItem("excalidraw");
-const excalidrawData = ref( data || null);
+const excalidrawData = ref(data || null);
 
 const changed = (elements, appState, files) => {
-  $q.localStorage.set("excalidraw", {elements, files});
+  $q.localStorage.set("excalidraw", { elements, files });
 };
 </script>
-

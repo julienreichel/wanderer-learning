@@ -159,8 +159,8 @@ const routes = [
       },
       {
         name: "excalidraw",
-        path: 'excalidraw',
-        component: () => import('src/pages/playground/EscalidrawPage.vue')
+        path: "excalidraw",
+        component: () => import("src/pages/playground/EscalidrawPage.vue"),
       },
     ],
   },
