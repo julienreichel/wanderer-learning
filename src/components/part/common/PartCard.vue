@@ -144,7 +144,7 @@ const textPreview = computed(() => {
   return text.substring(0, 21) + " ...";
 });
 
-const drawData = computed(() => ({...JSON.parse(props.part.src), appState: { zoom: { value: 0.2 }} }));
+const drawData = computed(() => ({...JSON.parse(props.part.src), appState: { zoom: { value: 0.15 }} }));
 
 </script>
 
