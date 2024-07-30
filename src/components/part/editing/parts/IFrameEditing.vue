@@ -24,17 +24,6 @@ watch(
       const src = part.value.src.match(/src="([^"]*)"/);
       part.value.src = src ? src[1] : "";
     }
-    // for youtube videos we extract the video id and build the embed url
-    if (
-      part.value.src &&
-      part.value.src.includes("youtube.com") &&
-      !part.value.src.includes("embed")
-    ) {
-      const videoId = part.value.src.match(/v=([^&]*)/);
-      part.value.src = videoId
-        ? `https://www.youtube.com/embed/${videoId[1]}`
-        : "";
-    }
   },
 );
 </script>
