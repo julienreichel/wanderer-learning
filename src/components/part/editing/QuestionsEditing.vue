@@ -4,6 +4,7 @@
     item-key="id"
     ghost-class="ghost"
     filter=".non-draggable"
+    :prevent-on-filter="false"
   >
     <template #item="{ element, index }">
       <q-card
