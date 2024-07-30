@@ -1,5 +1,7 @@
 <template>
-  <div id="excalidraw" ref="excalidraw" class="excalidraw">Loading...</div>
+  <div id="excalidraw" ref="excalidraw" class="excalidraw-wrapper">
+    Loading...
+  </div>
 </template>
 
 <script>
@@ -184,6 +186,7 @@ const createEventHandlers = (eventNames) => {
 const eventHandlers = createEventHandlers(events);
 
 const createExcalidrawElement = (props, eventHandlers) => {
+  //const attributes = props.viewModeEnabled ? { style: 'display: none', className: 'hide-menu' } : {};
   return createElement(
     Excalidraw,
     {
@@ -193,7 +196,7 @@ const createExcalidrawElement = (props, eventHandlers) => {
     },
     createElement(
       MainMenu,
-      {},
+      null,
       createElement(MainMenu.DefaultItems.ChangeCanvasBackground),
       createElement(MainMenu.Separator),
       createElement(MainMenu.DefaultItems.ClearCanvas),
@@ -224,17 +227,18 @@ onUnmounted(() => {
 </script>
 
 <style>
-.excalidraw {
+.excalidraw-wrapper {
   height: 100%;
   width: 100%;
 }
-.excalidraw .App-menu_top > .layer-ui__wrapper__top-right {
+.excalidraw-wrapper .App-menu_top > .layer-ui__wrapper__top-right,
+.excalidraw-wrapper .HelpDialog .Dialog__title,
+.excalidraw-wrapper .HelpDialog .HelpDialog__header {
   display: none;
 }
-.excalidraw .HelpDialog .Dialog__title {
-  display: none;
-}
-.excalidraw .HelpDialog .HelpDialog__header {
+
+.excalidraw.excalidraw--view-mode .App-menu.App-menu_top,
+.excalidraw.excalidraw--view-mode .App-toolbar .App-toolbar-content{
   display: none;
 }
 </style>

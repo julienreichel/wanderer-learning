@@ -56,6 +56,12 @@
       />
       <q-btn
         size="sm"
+        icon-right="edit_square"
+        icon="add"
+        @click="add('drawing')"
+      />
+      <q-btn
+        size="sm"
         icon-right="video_library"
         icon="add"
         @click="add('video')"

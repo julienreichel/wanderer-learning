@@ -55,7 +55,7 @@
 
       <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
         <div class="aspect-ratio-16-9" style="position: relative">
-          <iframe :title="part.text" :src="part.src"></iframe>
+          <iframe :title="part.text" :src="part.src" ></iframe>
           <div
             style="
               position: absolute;
@@ -65,6 +65,19 @@
               height: 100%;
             "
           ></div>
+        </div>
+      </q-card-section>
+
+      <q-card-section
+        v-if="part.type === 'drawing'"
+        class="q-pa-none"
+      >
+        <div class="aspect-ratio-16-9" style="position: relative">
+          <div class="sub">
+            <div class="full-height">
+              <escalidraw-wrapper :initial-data="drawData" view-mode-enabled zen-mode-enabled/>
+            </div>
+          </div>
         </div>
       </q-card-section>
 
@@ -91,6 +104,7 @@
 </template>
 
 <script setup>
+import EscalidrawWrapper from "src/components/common/EscalidrawWrapper.vue";
 import { inject, computed } from "vue";
 const userAttributes = inject("userAttributes");
 const { isAdmin } = userAttributes.value;
@@ -129,6 +143,9 @@ const textPreview = computed(() => {
   }
   return text.substring(0, 21) + " ...";
 });
+
+const drawData = computed(() => ({...JSON.parse(props.part.src), appState: { zoom: { value: 0.2 }} }));
+
 </script>
 
 <style lang="scss" scoped>
@@ -142,7 +159,8 @@ const textPreview = computed(() => {
 }
 
 .aspect-ratio-16-9 > .q-card__section,
-.aspect-ratio-16-9 > iframe {
+.aspect-ratio-16-9 > iframe,
+.aspect-ratio-16-9 > .sub {
   position: absolute;
   top: 0;
   right: 0;

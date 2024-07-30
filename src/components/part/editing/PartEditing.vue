@@ -1,24 +1,22 @@
 <template>
   <q-card>
     <text-editing v-if="part.type === 'text'" v-model="part" :lecture-id="lectureId" />
-    <image-editing v-if="part.type === 'img'" v-model="part" :lecture-dd="lectureId" />
+    <img-editing v-if="part.type === 'img'" v-model="part" :lecture-id="lectureId" />
     <video-editing v-if="part.type === 'video'" v-model="part"/>
-    <i-frame-editing v-if="part.type === 'iframe'" v-model="part"/>
-    <question-editing v-if="part.type === 'quiz'" v-model="part.questions[0]" />
+    <iframe-editing v-if="part.type === 'iframe'" v-model="part"/>
+    <drawing-editing v-if="part.type === 'drawing'" v-model="part"/>
   </q-card>
 </template>
 
 <script setup>
 
 import TextEditing from './parts/TextEditing.vue';
-import ImageEditing from './parts/ImageEditing.vue';
+import ImgEditing from './parts/ImageEditing.vue';
 import VideoEditing from './parts/VideoEditing.vue';
-import IFrameEditing from './parts/IFrameEditing.vue';
-import QuestionEditing from './QuestionEditing.vue';
+import IframeEditing from './parts/IFrameEditing.vue';
+import DrawingEditing from './parts/DrawingEditing.vue';
 
 const part = defineModel({ type: Object });
-part.value.options = part.value.options || {};
-part.value.options.imageSize = part.value.options.imageSize || "4";
 
 defineProps({
   lectureId: { type: String, required: true },
