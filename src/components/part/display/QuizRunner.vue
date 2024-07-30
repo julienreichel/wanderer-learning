@@ -8,7 +8,7 @@
     </q-card-section>
     <q-card-section>
       <q-card square>
-        <q-card-section>
+        <q-card-section v-if="question.text">
           <rich-text-renderer class="text-h6" :html-content="question.text" />
         </q-card-section>
         <q-separator inset />
@@ -55,7 +55,7 @@
           "
           class="q-pa-md"
         >
-          <q-banner class="bg-positive">
+          <q-banner v-if="question.explanations" class="bg-positive">
             <rich-text-renderer :html-content="question.explanations" />
           </q-banner>
         </q-card-section>
