@@ -1,5 +1,5 @@
 <template>
-  <q-card-section class="row q-pa-md q-col-gutter-sm">
+  <q-card-section class="row q-pa-md">
     <div class="col-8 q-gutter-sm">
       <q-input v-model="part.text" outlined autogrow :label="$t('parts.form.description')" />
       <q-input v-model="part.src" outlined class="col-8" :label="$t('parts.form.add.iframe')" />

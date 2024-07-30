@@ -1,6 +1,5 @@
 <template>
   <q-img
-    v-if="part.type === 'img'"
     :ratio="16 / 9"
     fit="scale-down"
     :src="part.url"

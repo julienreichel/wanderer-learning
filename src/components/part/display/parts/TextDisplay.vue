@@ -1,5 +1,5 @@
 <template>
-  <q-card-section v-if="part.type === 'text'" horizontal class="q-pa-md">
+  <q-card-section horizontal class="q-pa-md">
     <div class="row full-width">
       <q-img
         v-if="part.url"

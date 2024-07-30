@@ -34,6 +34,8 @@ defineProps({
 const { storage: storageService } = inject("services");
 
 const part = defineModel({ type: Object });
+part.value.options = part.value.options || {};
+part.value.options.imageSize = part.value.options.imageSize || "4";
 
 const textSizeClass = computed(() =>
   part.value.url && !uploadingFile.value

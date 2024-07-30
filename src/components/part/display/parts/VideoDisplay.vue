@@ -1,5 +1,5 @@
 <template>
-  <q-video v-if="part.type === 'video'" :ratio="16 / 9" :src="part.src" />
+  <q-video :ratio="16 / 9" :src="part.src" />
 </template>
 
 <script setup>

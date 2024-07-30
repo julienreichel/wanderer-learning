@@ -1,5 +1,5 @@
 <template>
-  <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
+  <q-card-section class="q-pa-none">
     <div class="iframe-16-9">
       <iframe :title="part.text" :src="part.src" class="full-width"></iframe>
     </div>
