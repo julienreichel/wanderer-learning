@@ -7,39 +7,27 @@
           'bg-secondary': userAttributes.isTeacher && !userAttributes.isAdmin,
         }"
       >
+        <q-btn flat icon="menu" class="lt-md" @click="toggleLeftDrawer" />
         <q-btn flat :label="$t('generic.app_name')" to="/" class="gt-md" />
-        <q-btn flat icon="home" to="/" class="lt-lg gt-xs" />
-        <q-tabs inline-label shrink class="gt-xs">
+        <q-tabs inline-label shrink class="gt-sm">
           <q-route-tab
-            icon="school"
-            :label="t('course.list')"
-            :to="{ name: 'CourseList' }"
+            v-for="link in essentialLinks"
+            :key="link.title"
+            :icon="link.icon"
+            :label="link.title"
+            :to="link.to"
           />
-          <q-route-tab
-            icon="square_foot"
-            :label="t('concept.list')"
-            :to="{ name: 'ConceptList' }"
-          />
-          <q-route-tab
-            icon="query_stats"
-            :label="t('reporting.list')"
-            :to="{ name: 'ReportingList' }"
-          />
-        </q-tabs>
-        <q-tabs inline-label shrink class="lt-sm">
-          <q-route-tab icon="school" :to="{ name: 'CourseList' }" />
-          <q-route-tab icon="square_foot" :to="{ name: 'ConceptList' }" />
-          <q-route-tab icon="query_stats" :to="{ name: 'ReportingList' }" />
         </q-tabs>
         <q-space />
 
-        <q-breadcrumbs active-color="white" class="gt-sm">
+        <q-breadcrumbs active-color="white">
           <q-breadcrumbs-el
-            v-for="breadcrumb in breadcrumbs"
+            v-for="(breadcrumb, index) in breadcrumbs"
             :key="breadcrumb.label"
             :label="breadcrumb.label"
             :to="breadcrumb.to"
             :icon="breadcrumb.icon"
+            :class="{ 'gt-xs': index == 0 && breadcrumbs.length > 1 }"
           />
         </q-breadcrumbs>
         <q-toggle
@@ -49,46 +37,25 @@
           checked-icon="edit"
           unchecked-icon="visibility"
         />
-        <q-btn-dropdown stretch flat icon="person">
+        <q-btn-dropdown stretch flat icon="person" class="gt-sm">
           <q-list>
-            <q-item>
-              <q-item-section>{{ userAttributes.name }}</q-item-section>
-            </q-item>
-            <q-item>
-              <LanguageSwitcher />
-            </q-item>
-            <q-item>
-              <q-checkbox
-                v-model="showAllLocaleContent"
-                dense
-                :label="$t('generic.show_all_locale_content')"
-              />
-            </q-item>
-            <q-item clickable @click="logOut">
-              <q-item-section>{{ $t("generic.sign_out") }}</q-item-section>
-            </q-item>
+            <user-menu v-model="showAllLocaleContent" :user-attributes="userAttributes" />
           </q-list>
         </q-btn-dropdown>
       </q-toolbar>
-      <q-toolbar
-        :class="{
-          'lt-md': true,
-          'bg-accent': userAttributes.isAdmin,
-          'bg-secondary': userAttributes.isTeacher && !userAttributes.isAdmin,
-        }"
-      >
-        <q-space />
-        <q-breadcrumbs active-color="white">
-          <q-breadcrumbs-el
-            v-for="breadcrumb in breadcrumbs"
-            :key="breadcrumb.label"
-            :label="breadcrumb.label"
-            :to="breadcrumb.to"
-            :icon="breadcrumb.icon"
-          />
-        </q-breadcrumbs>
-      </q-toolbar>
     </q-header>
+    <q-drawer v-model="leftDrawerOpen" class="lt-md" bordered>
+      <q-list>
+        <essential-link
+          v-for="link in essentialLinks"
+          :key="link.title"
+          v-bind="link"
+        />
+        <q-separator />
+        <user-menu v-model="showAllLocaleContent" :user-attributes="userAttributes" />
+      </q-list>
+    </q-drawer>
+
     <q-page-container :style="{ maxWidth: '1280px', margin: '0 auto' }">
       <router-view />
     </q-page-container>
@@ -96,13 +63,41 @@
 </template>
 
 <script setup>
-import LanguageSwitcher from "src/components/common/LanguageSwitcher.vue";
+
+import EssentialLink from "components/EssentialLink.vue";
+import UserMenu from "components/UserMenu.vue";
 
 import { ref, provide, inject, watch, onMounted } from "vue";
 
-import { signOut } from "aws-amplify/auth";
 import { useIris } from "src/composables/iris";
 const { $q, t, locale, router } = useIris();
+
+let leftDrawerOpen = ref(false);
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+};
+
+const essentialLinks = ref([
+  {
+    icon: "home",
+    to: "/",
+  },
+  {
+    title: t("course.list"),
+    icon: "school",
+    to: { name: "CourseList" },
+  },
+  {
+    title: t("concept.list"),
+    icon: "square_foot",
+    to: { name: "ConceptList" },
+  },
+  {
+    title: t("reporting.list"),
+    icon: "query_stats",
+    to: { name: "ReportingList" },
+  },
+]);
 
 onMounted(() => {
   locale.value = $q.localStorage.getItem("locale") || "en-US";
@@ -157,28 +152,24 @@ watch(editMode, async (value) => {
   }
 });
 
-const logOut = async () => {
-  await signOut();
-  router.push({ name: "SignIn" });
-};
 </script>
 
 <style>
 h1 {
-  font-size: 4rem;
-  line-height: 4rem;
-  margin-block-start: 0.5em;
-  margin-block-end: 0.5em;
-}
-h2 {
   font-size: 3.25rem;
   line-height: 3.25rem;
   margin-block-start: 0.5em;
   margin-block-end: 0.5em;
 }
-h3 {
+h2 {
   font-size: 2.75rem;
   line-height: 2.75rem;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+}
+h3 {
+  font-size: 2.25rem;
+  line-height: 2.25rem;
   margin-block-start: 0.5em;
   margin-block-end: 0.5em;
 }
@@ -198,7 +189,7 @@ h5 {
 .q-breadcrumbs__el.flex.inline {
   display: inline-block; /* Ensure the element is treated as inline-block */
 
-  max-width: 100px; /* Set the maximum width of the breadcrumb item */
+  max-width: 90px; /* Set the maximum width of the breadcrumb item */
   white-space: nowrap; /* Prevent the text from wrapping to a new line */
   overflow: hidden; /* Hide the overflowed text */
   text-overflow: ellipsis; /* Add ellipsis (...) to the overflowed text */
