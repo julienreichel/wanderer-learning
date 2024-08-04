@@ -174,6 +174,7 @@ export default {
         img: "Nouvelle image",
         video: "Vidéo link",
         iframe: "Intégrer un lien",
+        function: "Function",
       },
       text: "Texte",
       img: "Image",

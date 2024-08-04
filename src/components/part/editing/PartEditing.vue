@@ -5,6 +5,7 @@
     <video-editing v-if="part.type === 'video'" v-model="part"/>
     <iframe-editing v-if="part.type === 'iframe'" v-model="part"/>
     <drawing-editing v-if="part.type === 'drawing'" v-model="part"/>
+    <graph-editing v-if="part.type === 'graph'" v-model="part"/>
   </q-card>
 </template>
 
@@ -15,6 +16,7 @@ import ImgEditing from './parts/ImageEditing.vue';
 import VideoEditing from './parts/VideoEditing.vue';
 import IframeEditing from './parts/IFrameEditing.vue';
 import DrawingEditing from './parts/DrawingEditing.vue';
+import GraphEditing from './parts/GraphEditing.vue';
 
 const part = defineModel({ type: Object });
 

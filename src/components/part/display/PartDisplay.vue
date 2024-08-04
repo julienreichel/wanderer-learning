@@ -10,6 +10,7 @@
     <q-video v-if="part.type === 'video'" :ratio="16 / 9" :src="part.src" />
     <iframe-display v-if="part.type === 'iframe'" :part="part" />
     <drawing-display v-if="part.type === 'drawing'" :part="part" />
+    <graph-display v-if="part.type === 'graph'" :part="part" />
     <quiz-runner
       v-if="part.type === 'quiz'"
       :questions="part.questions"
@@ -50,6 +51,7 @@ import QuizRunner from "src/components/part/display/QuizRunner.vue";
 import TextDisplay from "./parts/TextDisplay.vue";
 import IframeDisplay from "./parts/IFrameDisplay.vue";
 import DrawingDisplay from "./parts/DrawingDisplay.vue";
+import GraphDisplay from "./parts/GraphDisplay.vue";
 
 import { inject, watch } from "vue";
 

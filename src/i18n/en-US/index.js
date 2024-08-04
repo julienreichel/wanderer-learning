@@ -172,6 +172,7 @@ export default {
         img: "New image",
         video: "Video source",
         iframe: "Embed source",
+        function: "Function",
       },
       text: "Text",
       img: "Image",

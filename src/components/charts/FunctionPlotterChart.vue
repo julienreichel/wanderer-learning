@@ -23,30 +23,7 @@ const props = defineProps({
   },
   controls: {
     type: Object,
-    default: () => ({
-      p: { type: "point", settings: { style: 4 } },
-      a: {
-        type: "slider",
-        position: [
-          [1, -4.5],
-          [3.9, -4.5],
-          [-2, 1, 2],
-        ],
-      },
-      g: {
-        type: "glider",
-        position: [1, 2],
-        options: {
-          tangent: { dash: 2, strokeColor: "#aa0000" },
-          line: { dash: 2, strokeColor: "#777", point: "p" },
-        },
-      },
-      /* // samples
-      v2: { type: "point", position: [-2,3], settings: { style: 1 } },
-      v1: { type: "point", position: [-2,3], settings: { style: 1 }, options: { line: { point: "v2", straightFirst:false, straightLast:false, lastArrow:true} } },
-      v0: { type: "point", position: [-4,2], settings: { style: 1 }, options: { line: { point: "v1", straightFirst:false, straightLast:false, lastArrow:true} } },
-      */
-    }),
+    default: () => ({}),
   },
 });
 

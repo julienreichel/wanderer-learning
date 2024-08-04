@@ -81,6 +81,29 @@
         </div>
       </q-card-section>
 
+      <q-card-section
+        v-if="part.type === 'graph'"
+        class="q-pa-none"
+      >
+        <div class="aspect-ratio-16-9" style="position: relative">
+          <div class="sub">
+            <div class="graph">
+              <function-plotter :function-string="props.part.src"/>
+            </div>
+            <div
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              "
+            ></div>
+          </div>
+        </div>
+      </q-card-section>
+
+
       <q-card-actions v-if="editing" class="q-pa-xs">
         <q-space />
         <q-btn
@@ -105,6 +128,7 @@
 
 <script setup>
 import EscalidrawWrapper from "src/components/common/EscalidrawWrapper.vue";
+import FunctionPlotter from "src/components/charts/FunctionPlotterChart.vue";
 import { inject, computed } from "vue";
 const userAttributes = inject("userAttributes");
 const { isAdmin } = userAttributes.value;
@@ -168,7 +192,7 @@ const drawData = computed(() => ({...JSON.parse(props.part.src), appState: { zoo
   left: 0;
 }
 
-iframe {
+iframe, .graph {
   width: 500%;
   height: 500%;
   border: 0; /* no border */

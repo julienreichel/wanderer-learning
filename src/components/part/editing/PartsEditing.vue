@@ -62,6 +62,12 @@
       />
       <q-btn
         size="sm"
+        icon-right="assessment"
+        icon="add"
+        @click="add('graph')"
+      />
+      <q-btn
+        size="sm"
         icon-right="video_library"
         icon="add"
         @click="add('video')"
