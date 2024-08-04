@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="hHh lpR fFf">
-    <q-header elevated>
+  <q-layout view="hhh LpR fff">
+    <q-header reveal elevated>
       <q-toolbar
         :class="{
           'bg-accent': userAttributes.isAdmin,
@@ -44,7 +44,7 @@
         </q-btn-dropdown>
       </q-toolbar>
     </q-header>
-    <q-drawer v-model="leftDrawerOpen" class="lt-md" bordered>
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay bordered>
       <q-list>
         <essential-link
           v-for="link in essentialLinks"
