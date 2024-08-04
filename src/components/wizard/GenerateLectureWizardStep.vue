@@ -87,24 +87,19 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
       /\s*(as discussed in the section|based on the section content|according to the section|according to the lecture|according to the content)\s*/,
       "",
     );
-    console.log("question ", question.text);
     question.text = question.text
       .replace(/\t/g, "\\t")
       .replace(/\f/g, "\\f")
       .replace(/\n/g, "\\n")
       .replace(/\r/g, "\\r");
-    console.log("-> ", question.text);
 
-    console.log("explanations ", question.explanations);
     question.explanations = question.explanations
       ?.replace(/\t/g, "\\t")
       .replace(/\f/g, "\\f")
       .replace(/\n/g, "\\n")
       .replace(/\r/g, "\\r");
-    console.log("-> ", question.explanations);
 
     question.answers.forEach((answer) => {
-      console.log("answer ", answer.text);
       // remove starting A. or B. or C. or D. from the answer
       answer.text = answer.text.replace(/^[A-Z0-9a-z][.)]\s/, "");
       // there should not be isolated \ in the text, in this case replace it by \\
@@ -113,7 +108,6 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
         .replace(/\f/g, "\\f")
         .replace(/\n/g, "\\n")
         .replace(/\r/g, "\\r");
-      console.log("-> ", answer.text);
     });
 
     // if there is only one answer, we add the missing one
@@ -240,8 +234,11 @@ const generateLecture = async () => {
   // Creating the concept steps
   const nbQuestion = 12;
   progress.value = 20 / 100;
-  const conceptParts = await Promise.all(
+  let now = Date.now();
+  await Promise.all(
     props.tableOfContent.map(async (step, index) => {
+      const order = "" + now;
+      now += 1000;
       // To avoid rate limits, we need to wait
       const waitTime = {
         "gpt-3": 10,
@@ -283,6 +280,15 @@ const generateLecture = async () => {
         .map((part) => htmlToMarkdown(part.text))
         .join("\n\n");
 
+      const conceptStep = await lectureStepService.create({
+        title: step.name,
+        type: "step",
+        lectureId,
+        order,
+        conceptId: conceptIdMap[step.concept],
+        level: step.level,
+        parts,
+      });
       // order of the question is not important
       await Promise.all(
         [1, 2, 3, 4].map(async (level) => {
@@ -303,18 +309,10 @@ const generateLecture = async () => {
       );
 
       conceptIdMap.default = conceptIdMap[step.concept];
-      parts.push(createQuizPart(questions, nbQuestion, conceptIdMap));
+      conceptStep.parts.push(createQuizPart(questions, nbQuestion, conceptIdMap));
+      await lectureStepService.update(conceptStep);
 
       lecturePreview.value = null;
-      const conceptStep = {
-        title: step.name,
-        type: "step",
-        lectureId,
-        order: "" + Date.now(),
-        conceptId: conceptIdMap[step.concept],
-        level: step.level,
-        parts,
-      };
 
       lecture.steps.push(conceptStep);
       nextTick(() => {
@@ -323,12 +321,8 @@ const generateLecture = async () => {
       return conceptStep;
     }),
   );
-  let now = Date.now();
-  for (const part of conceptParts) {
-    part.order = "" + now;
-    now += 1000;
-    await lectureStepService.create(part);
-  }
+
+
   emit("lectureCreated", lecture);
   progressLabel.value = t("wizard.generating.finished");
   progress.value = 1;
