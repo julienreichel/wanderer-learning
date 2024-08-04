@@ -1,9 +1,18 @@
 <template>
   <q-card-section class="row">
     <div class="col-6 q-gutter-sm">
-      <q-input v-model="part.text" outlined autogrow :label="$t('parts.form.description')" />
+      <q-input
+        v-model="part.text"
+        outlined
+        autogrow
+        :label="$t('parts.form.description')"
+      />
       <div class="col-12">
-        <file-uploader class="full-width full-height" :prefix="lectureId" @uploaded="uploaded" />
+        <file-uploader
+          class="full-width full-height"
+          :prefix="lectureId"
+          @uploaded="uploaded"
+        />
       </div>
     </div>
     <q-img class="col" :ratio="16 / 9" fit="scale-down" :src="part.url" />

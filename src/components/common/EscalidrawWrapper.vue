@@ -237,7 +237,7 @@ onUnmounted(() => {
 }
 
 .excalidraw.excalidraw--view-mode .App-menu.App-menu_top,
-.excalidraw.excalidraw--view-mode .App-toolbar .App-toolbar-content{
+.excalidraw.excalidraw--view-mode .App-toolbar .App-toolbar-content {
   display: none;
 }
 </style>

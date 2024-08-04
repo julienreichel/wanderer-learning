@@ -39,7 +39,10 @@
         />
         <q-btn-dropdown stretch flat icon="person" class="gt-sm">
           <q-list>
-            <user-menu v-model="showAllLocaleContent" :user-attributes="userAttributes" />
+            <user-menu
+              v-model="showAllLocaleContent"
+              :user-attributes="userAttributes"
+            />
           </q-list>
         </q-btn-dropdown>
       </q-toolbar>
@@ -52,7 +55,10 @@
           v-bind="link"
         />
         <q-separator />
-        <user-menu v-model="showAllLocaleContent" :user-attributes="userAttributes" />
+        <user-menu
+          v-model="showAllLocaleContent"
+          :user-attributes="userAttributes"
+        />
       </q-list>
     </q-drawer>
 
@@ -63,7 +69,6 @@
 </template>
 
 <script setup>
-
 import EssentialLink from "components/EssentialLink.vue";
 import UserMenu from "components/UserMenu.vue";
 
@@ -151,7 +156,6 @@ watch(editMode, async (value) => {
     router.push({ name: viewRoute, params: { id, stepIdx } });
   }
 });
-
 </script>
 
 <style>

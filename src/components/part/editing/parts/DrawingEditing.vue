@@ -1,11 +1,11 @@
 <template>
-  <q-card-section style="height: 80vh;">
-      <escalidraw-wrapper
-        :initial-data="data"
-        @change="
-          (elements, appState, files) => changed(elements, appState, files)
-        "
-      />
+  <q-card-section style="height: 80vh">
+    <escalidraw-wrapper
+      :initial-data="data"
+      @change="
+        (elements, appState, files) => changed(elements, appState, files)
+      "
+    />
   </q-card-section>
 </template>
 
@@ -20,5 +20,4 @@ const data = computed(() => JSON.parse(part.value.src || "{}"));
 const changed = (elements) => {
   part.value.src = JSON.stringify({ elements });
 };
-
 </script>

@@ -94,5 +94,3 @@ const submitResults = (questions) => {
   emit("results", { responses });
 };
 </script>
-
-

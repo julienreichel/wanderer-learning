@@ -42,7 +42,15 @@
       />
     </q-card-section>
     <q-card-actions>
-      <q-btn-dropdown size="sm" padding="xs sm" menu-anchor="bottom start" menu-self="top start" dropdown-icon="add" outlined dense>
+      <q-btn-dropdown
+        size="sm"
+        padding="xs sm"
+        menu-anchor="bottom start"
+        menu-self="top start"
+        dropdown-icon="add"
+        outlined
+        dense
+      >
         <q-list>
           <q-item
             v-for="(item, idx) in options"
@@ -242,13 +250,13 @@ const updateFromJson = async (json) => {
 };
 
 const options = [
-  { label: t("parts.form.add.text"), value: "text", icon: "library_books" },
-  { label: t("parts.form.add.img"), value: "img", icon: "collections" },
+  { label: t("parts.form.add.text"), value: "text", icon: "article" },
+  { label: t("parts.form.add.img"), value: "img", icon: "image" },
   { label: t("parts.form.add.drawing"), value: "drawing", icon: "edit_square" },
   { label: t("parts.form.add.graph"), value: "graph", icon: "assessment" },
-  { label: t("parts.form.add.video"), value: "video", icon: "video_library" },
-  { label: t("parts.form.add.iframe"), value: "iframe", icon: "folder_copy" },
-  { label: t("parts.form.add.quiz"), value: "quiz", icon: "quiz" },
+  { label: t("parts.form.add.video"), value: "video", icon: "slideshow" },
+  { label: t("parts.form.add.iframe"), value: "iframe", icon: "preview" },
+  { label: t("parts.form.add.quiz"), value: "quiz", icon: "help_center" },
 ];
 
 const add = (type) => {

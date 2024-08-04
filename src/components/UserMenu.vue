@@ -32,7 +32,6 @@ defineProps({
   },
 });
 
-
 const logOut = async () => {
   await signOut();
   router.push({ name: "SignIn" });

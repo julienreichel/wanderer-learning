@@ -55,7 +55,7 @@
 
       <q-card-section v-if="part.type === 'iframe'" class="q-pa-none">
         <div class="aspect-ratio-16-9" style="position: relative">
-          <iframe :title="part.text" :src="part.src" ></iframe>
+          <iframe :title="part.text" :src="part.src"></iframe>
           <div
             style="
               position: absolute;
@@ -68,27 +68,25 @@
         </div>
       </q-card-section>
 
-      <q-card-section
-        v-if="part.type === 'drawing'"
-        class="q-pa-none"
-      >
+      <q-card-section v-if="part.type === 'drawing'" class="q-pa-none">
         <div class="aspect-ratio-16-9" style="position: relative">
           <div class="sub">
             <div class="full-height">
-              <escalidraw-wrapper :initial-data="drawData" view-mode-enabled zen-mode-enabled/>
+              <escalidraw-wrapper
+                :initial-data="drawData"
+                view-mode-enabled
+                zen-mode-enabled
+              />
             </div>
           </div>
         </div>
       </q-card-section>
 
-      <q-card-section
-        v-if="part.type === 'graph'"
-        class="q-pa-none"
-      >
+      <q-card-section v-if="part.type === 'graph'" class="q-pa-none">
         <div class="aspect-ratio-16-9" style="position: relative">
           <div class="sub">
             <div class="graph">
-              <function-plotter :function-string="props.part.src"/>
+              <function-plotter :function-string="props.part.src" />
             </div>
             <div
               style="
@@ -102,7 +100,6 @@
           </div>
         </div>
       </q-card-section>
-
 
       <q-card-actions v-if="editing" class="q-pa-xs">
         <q-space />
@@ -171,8 +168,10 @@ const textPreview = computed(() => {
   return text.substring(0, 21) + " ...";
 });
 
-const drawData = computed(() => ({...JSON.parse(props.part.src || "{}"), appState: { zoom: { value: 0.15 }} }));
-
+const drawData = computed(() => ({
+  ...JSON.parse(props.part.src || "{}"),
+  appState: { zoom: { value: 0.15 } },
+}));
 </script>
 
 <style lang="scss" scoped>
@@ -195,7 +194,8 @@ const drawData = computed(() => ({...JSON.parse(props.part.src || "{}"), appStat
   left: 0;
 }
 
-iframe, .graph {
+iframe,
+.graph {
   width: 500%;
   height: 500%;
   border: 0; /* no border */

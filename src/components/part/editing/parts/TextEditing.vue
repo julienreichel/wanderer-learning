@@ -1,7 +1,14 @@
 <template>
   <q-card-section horizontal>
-    <rich-text-editing v-model="part.text" :class="textSizeClass"></rich-text-editing>
-    <q-card-section v-if="part.url && !uploadingFile" :class="imageSizeClass" class="q-pa-none">
+    <rich-text-editing
+      v-model="part.text"
+      :class="textSizeClass"
+    ></rich-text-editing>
+    <q-card-section
+      v-if="part.url && !uploadingFile"
+      :class="imageSizeClass"
+      class="q-pa-none"
+    >
       <q-img class="col" fit="scale-down" :src="part.url" />
       <q-card-actions>
         <q-btn-toggle
