@@ -3,7 +3,7 @@
     <q-item-section avatar>
       <q-icon name="speed" />
     </q-item-section>
-    <q-item-section>
+    <q-item-section v-if="value">
       <q-slider
         v-model="value"
         snap

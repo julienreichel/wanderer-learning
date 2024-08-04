@@ -42,43 +42,24 @@
       />
     </q-card-section>
     <q-card-actions>
-      <q-btn
-        size="sm"
-        icon="add"
-        icon-right="library_books"
-        @click="add('text')"
-      />
-      <q-btn
-        size="sm"
-        icon-right="collections"
-        icon="add"
-        @click="add('img')"
-      />
-      <q-btn
-        size="sm"
-        icon-right="edit_square"
-        icon="add"
-        @click="add('drawing')"
-      />
-      <q-btn
-        size="sm"
-        icon-right="assessment"
-        icon="add"
-        @click="add('graph')"
-      />
-      <q-btn
-        size="sm"
-        icon-right="video_library"
-        icon="add"
-        @click="add('video')"
-      />
-      <q-btn
-        size="sm"
-        icon-right="folder_copy"
-        icon="add"
-        @click="add('iframe')"
-      />
-      <q-btn size="sm" icon-right="quiz" icon="add" @click="add('quiz')" />
+      <q-btn-dropdown size="sm" padding="xs sm" menu-anchor="bottom start" menu-self="top start" dropdown-icon="add" outlined dense>
+        <q-list>
+          <q-item
+            v-for="(item, idx) in options"
+            :key="idx"
+            clickable
+            @click="add(item.value)"
+          >
+            <q-item-section avatar>
+              <q-icon :name="item.icon" />
+            </q-item-section>
+
+            <q-item-section>
+              {{ item.label }}
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
       <q-space />
       <q-btn
         v-if="isAdmin"
@@ -139,7 +120,7 @@ import MarkdownDialog from "src/components/common/MarkdownDialog.vue";
 import { ref, computed, watch, nextTick, inject } from "vue";
 
 import { useIris } from "src/composables/iris";
-const { uid, router, $q } = useIris();
+const { uid, router, $q, t } = useIris();
 
 import { useChecks } from "src/composables/checks";
 const { checkPart, preparePart } = useChecks();
@@ -259,6 +240,16 @@ const updateFromJson = async (json) => {
     });
   }
 };
+
+const options = [
+  { label: t("parts.form.add.text"), value: "text", icon: "library_books" },
+  { label: t("parts.form.add.img"), value: "img", icon: "collections" },
+  { label: t("parts.form.add.drawing"), value: "drawing", icon: "edit_square" },
+  { label: t("parts.form.add.graph"), value: "graph", icon: "assessment" },
+  { label: t("parts.form.add.video"), value: "video", icon: "video_library" },
+  { label: t("parts.form.add.iframe"), value: "iframe", icon: "folder_copy" },
+  { label: t("parts.form.add.quiz"), value: "quiz", icon: "quiz" },
+];
 
 const add = (type) => {
   const { src, text } = {

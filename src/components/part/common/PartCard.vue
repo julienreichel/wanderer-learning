@@ -155,6 +155,9 @@ const stepChange = (newStep) => {
 };
 
 const textPreview = computed(() => {
+  if (props.part.type !== "text") {
+    return "";
+  }
   // find the first <h3> or <h5> block and return it
   let text = props.part.text || "";
   const h = text.match(/<h\d>(.*?)<\/h\d>/);
@@ -168,7 +171,7 @@ const textPreview = computed(() => {
   return text.substring(0, 21) + " ...";
 });
 
-const drawData = computed(() => ({...JSON.parse(props.part.src), appState: { zoom: { value: 0.15 }} }));
+const drawData = computed(() => ({...JSON.parse(props.part.src || "{}"), appState: { zoom: { value: 0.15 }} }));
 
 </script>
 

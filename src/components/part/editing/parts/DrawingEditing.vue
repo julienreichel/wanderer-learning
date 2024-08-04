@@ -17,8 +17,7 @@ const part = defineModel({ type: Object });
 
 const data = computed(() => JSON.parse(part.value.src || "{}"));
 
-const changed = (elements, appState) => {
-  console.log("changed", appState);
+const changed = (elements) => {
   part.value.src = JSON.stringify({ elements });
 };
 

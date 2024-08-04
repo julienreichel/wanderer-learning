@@ -19,7 +19,7 @@ defineOptions({
 const props = defineProps({
   title: {
     type: String,
-    required: true,
+    default: ""
   },
 
   caption: {

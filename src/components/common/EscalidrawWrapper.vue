@@ -170,7 +170,6 @@ const debounceEmit = (eventName, ...args) => {
   clearTimeout(timeouts[eventName]);
   timeouts[eventName] = setTimeout(() => {
     emit(eventName, ...args);
-    console.log(eventName);
   }, props.debounce);
 };
 

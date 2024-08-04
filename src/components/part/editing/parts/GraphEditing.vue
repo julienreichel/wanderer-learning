@@ -3,7 +3,7 @@
     <q-splitter v-model="splitterModel" class="full-width full-height">
       <template #before>
         <div class="q-gutter-sm">
-          <q-input v-model="part.src" outlined :label="$t('parts.form.add.function')" />
+          <q-input v-model="part.src" outlined :label="$t('parts.form.add.graph')" />
           <q-input v-model="part.text" outlined autogrow :label="$t('parts.form.description')" />
         </div>
       </template>
