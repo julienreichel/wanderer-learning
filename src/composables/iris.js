@@ -87,7 +87,7 @@ export function useFormatter() {
     });
     if (!processed && allowInlineMath) {
       // if we find a \frac or \sum we assume it's a math equation
-      if (result.match(/\\(?:sum|frac)/s)) {
+      if (result.match(/\\(?:sum|frac|math|begin|text)/s)) {
         result = renderLatexString(replaceHTMLEscapedChars(result));
       }
     }

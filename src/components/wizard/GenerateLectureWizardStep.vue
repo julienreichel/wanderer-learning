@@ -91,13 +91,15 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
       .replace(/\t/g, "\\t")
       .replace(/\f/g, "\\f")
       .replace(/\n/g, "\\n")
-      .replace(/\r/g, "\\r");
+      .replace(/\r/g, "\\r")
+      .replace(/\b/g, "\\b");
 
     question.explanations = question.explanations
       ?.replace(/\t/g, "\\t")
       .replace(/\f/g, "\\f")
       .replace(/\n/g, "\\n")
-      .replace(/\r/g, "\\r");
+      .replace(/\r/g, "\\r")
+      .replace(/\b/g, "\\b");
 
     question.answers.forEach((answer) => {
       // remove starting A. or B. or C. or D. from the answer
@@ -107,7 +109,8 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
         .replace(/\t/g, "\\t")
         .replace(/\f/g, "\\f")
         .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r");
+        .replace(/\r/g, "\\r")
+        .replace(/\b/g, "\\b");
     });
 
     // if there is only one answer, we add the missing one
