@@ -28,7 +28,7 @@
         v-if="connectionQuiz"
         flat
         :questions="questions"
-        :max="20"
+        :max="10"
         adaptative
         @finished="connectionQuiz = false"
         @results="processResult"
@@ -80,7 +80,7 @@
         v-if="practiceQuiz"
         flat
         :questions="questions"
-        :max="20"
+        :max="10"
         exam-mode
         @finished="practiceQuiz = false"
         @results="processResult"
@@ -124,7 +124,7 @@ const {
   lecture: lectureService,
   stepReporting: reportingService,
   course: courseService,
-  lectureReporting: lectureReportingService,
+  quizReporting: quizReportingService,
 } = inject("services");
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
@@ -157,7 +157,7 @@ onMounted(async () => {
 
   // Get the last report
   const allReports = (
-    await lectureReportingService.list({
+    await quizReportingService.list({
       lectureId: lecture.value.id,
       userId,
       username,
@@ -171,7 +171,7 @@ onMounted(async () => {
   // did the user passed the final quiz?
   const practiceReports = allReports.filter(({ type }) => type === "practice");
   if (practiceReports.length) {
-    const { level, ratio } = lectureReportingService.getLevel(
+    const { level, ratio } = quizReportingService.getLevel(
       practiceReports[0],
     );
     practiceLevel.value = level;
@@ -179,14 +179,14 @@ onMounted(async () => {
     lecture.value.practiceScore = practiceReports.reverse().map((report) => ({
       key: report.createdAt,
       value: {
-        difficulties: lectureReportingService.getLevel(report).difficulties,
+        difficulties: quizReportingService.getLevel(report).difficulties,
       },
     }));
   }
   lecture.value.score = allReportWithScore.reverse().map((report) => ({
     key: t("lecture.reports." + report.type),
     value: {
-      difficulties: lectureReportingService.getLevel(report).difficulties,
+      difficulties: quizReportingService.getLevel(report).difficulties,
     },
   }));
 
@@ -233,13 +233,14 @@ onMounted(async () => {
           .slice(0, 3)
           .reverse()
           .map((report) => ({
-            value: reportingService.computePointsPerStep(step, [report]),
+            value: reportingService.computePointsPerStep(report),
             key: report.createdAt,
           }))
           .filter((score) => score.value.total);
       }
     }),
   );
+
   if (!lectureStarted && !allReports.length) {
     // this user has never touched this lecture, let's start with a quiz
     connectionQuiz.value = true;
@@ -255,7 +256,7 @@ const finished = () => {
 
 const userLevel = computed(() => {
   if (reporting.value) {
-    const { level } = lectureReportingService.getLevel(reporting.value);
+    const { level } = quizReportingService.getLevel(reporting.value);
     return level;
   }
   return undefined;
@@ -263,7 +264,7 @@ const userLevel = computed(() => {
 
 const successRate = computed(() => {
   if (reporting.value) {
-    const { ratio } = lectureReportingService.getLevel(reporting.value);
+    const { ratio } = quizReportingService.getLevel(reporting.value);
     return ratio;
   }
   return undefined;
@@ -328,14 +329,14 @@ const processResult = async (questions) => {
     : practiceQuiz.value
       ? "practice"
       : "feedback";
-  reporting.value = await lectureReportingService.create({
+  reporting.value = await quizReportingService.create({
     lectureId: lecture.value.id,
     type,
     responses,
   });
 
   if (practiceQuiz.value) {
-    const { level, ratio } = lectureReportingService.getLevel(reporting.value);
+    const { level, ratio } = quizReportingService.getLevel(reporting.value);
     practiceLevel.value = level;
     practiceRatio.value = ratio;
   }

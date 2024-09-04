@@ -15,7 +15,6 @@ const schema = a.schema({
 
   ReportingPart: a.customType({
     time: a.integer(),
-    responses: a.ref("ReportingResponse").array(),
   }),
 
   StepReporting: a
@@ -24,9 +23,11 @@ const schema = a.schema({
       createdAt: a.datetime(),
       owner: a.string(),
       type: a.string(),
+      inProgress: a.boolean(),
       lectureStepId: a.id().required(),
       lectureId: a.id().required(),
       reportings: a.ref("ReportingPart").array(),
+      responses: a.ref("ReportingResponse").array(),
     })
     .secondaryIndexes((index) => [
       index("owner").name("byOwner").sortKeys(["createdAt"]),
@@ -38,34 +39,22 @@ const schema = a.schema({
       allow.authenticated().to(["read"]),
     ]),
 
-  LectureReporting: a
+  QuizReporting: a
     .model({
       id: a.id().required(),
       createdAt: a.datetime(),
       owner: a.string(),
-      lectureId: a.id().required(),
+      lectureStepId: a.id(),
+      lectureId: a.id(),
+      courseId: a.id(),
       type: a.string(),
+      inProgress: a.boolean(),
       responses: a.ref("ReportingResponse").array(),
     })
     .secondaryIndexes((index) => [
       index("owner").name("byOwner").sortKeys(["createdAt"]),
+      index("lectureStepId").name("byLectureStep").sortKeys(["owner"]),
       index("lectureId").name("byLecture").sortKeys(["owner"]),
-    ])
-    .authorization((allow) => [
-      allow.owner(),
-      allow.authenticated().to(["read"]),
-    ]),
-
-  CourseReporting: a
-    .model({
-      id: a.id().required(),
-      createdAt: a.datetime(),
-      owner: a.string(),
-      courseId: a.id().required(),
-      responses: a.ref("ReportingResponse").array(),
-    })
-    .secondaryIndexes((index) => [
-      index("owner").name("byOwner").sortKeys(["createdAt"]),
       index("courseId").name("byCourse").sortKeys(["owner"]),
     ])
     .authorization((allow) => [

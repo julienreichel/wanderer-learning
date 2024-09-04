@@ -196,13 +196,14 @@ export default class ServicePrototype {
   getLevel(reporting) {
     let acc = [0, 1, 2, 3, 4].map(() => ({ total: 0, valid: 0, points: 0 }));
 
-    if (reporting.responses.length === 0)
+    if (reporting.responses.length === 0) {
       return {
         level: "in_progress",
         ratio: reporting.ratio,
         points: 5,
         difficulties: acc,
       };
+    }
 
     const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
 
@@ -232,6 +233,8 @@ export default class ServicePrototype {
     let difficulty = null;
     let ratio = 0;
     let averagePoints = 0;
+    let total = 0;
+    let points = 0;
     for (let i = 0; i < 5; i++) {
       if (!difficulties[i].total) continue;
       if (!level) {
@@ -246,7 +249,9 @@ export default class ServicePrototype {
         ratio = difficulties[i].valid / difficulties[i].total;
         averagePoints = difficulties[i].points / difficulties[i].total;
       }
+      total += difficulties[i].total;
+      points += difficulties[i].points;
     }
-    return { level, ratio, averagePoints, ...difficulty, difficulties };
+    return { level, ratio, averagePoints, ...difficulty, difficulties, total, points };
   }
 }

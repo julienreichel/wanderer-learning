@@ -4,15 +4,15 @@ import ServicePrototype from "./service-prototype";
  * Provide service to get and store reporting
  *
  * @example
- * import CourseReportingService from 'src/services/course-reporting';
+ * import QuizReportingService from 'src/services/course-reporting';
  * ...
- * const courseReporting = new CourseReportingService();
+ * const quizReporting = new QuizReportingService();
  */
-export default class CourseReportingService extends ServicePrototype {
+export default class QuizReportingService extends ServicePrototype {
   constructor(cacheData) {
     super(cacheData);
 
-    this.model = this.client.models.CourseReporting;
+    this.model = this.client.models.QuizReporting;
   }
 
   /**
@@ -38,17 +38,27 @@ export default class CourseReportingService extends ServicePrototype {
     }
     let query = null;
     if (params.courseId) {
-      query = this.model.listCourseReportingByCourseIdAndOwner;
+      query = this.model.listQuizReportingByCourseIdAndOwner;
+      if (params.owner) {
+        params.owner = { eq: params.owner };
+      }
+    } else if (params.lectureId) {
+      query = this.model.listQuizReportingByLectureIdAndOwner;
+      if (params.owner) {
+        params.owner = { eq: params.owner };
+      }
+    } else if (params.lectureStepId) {
+      query = this.model.listQuizReportingByLectureStepIdAndOwner;
       if (params.owner) {
         params.owner = { eq: params.owner };
       }
     } else if (params.owner) {
-      query = this.model.listCourseReportingByOwnerAndCreatedAt;
+      query = this.model.listQuizReportingByOwnerAndCreatedAt;
       if (!params.sortDirection) {
         params.sortDirection = "DESC";
       }
     } else {
-      query = this.model.listCourseReportings;
+      query = this.model.listQuizReportings;
     }
 
     const { data } = await query(params);

@@ -60,6 +60,7 @@
             adaptative
             @finished="finishQuiz"
             @results="processResult"
+            @progress="processPartial"
           />
         </q-tab-panel>
         <q-tab-panel
@@ -103,6 +104,7 @@ const { locale } = useIris();
 
 const {
   stepReporting: reportingService,
+  quizReporting: quizReportingService,
   lecture: lectureService,
   concept: conceptService,
   course: courseService,
@@ -128,25 +130,35 @@ const newuser = computed(
     similarLectures.value.length === 0 &&
     connectedConcepts.value.length === 0,
 );
-const addStep = (lecture, report) => {
+const addStep = async (lecture, report) => {
   if (!lecture) return;
   const lectureStepId = report.lectureStepId;
   let step = lecture.steps.find(({ id }) => id === lectureStepId);
   if (!step) return;
   step.lecture = lecture;
-  step.points = reportingService.computePointsPerStep(step, [
-    report,
-  ]).averagePoints;
-  // check if there are any quizzes in the step
+
+  // check if there are any quizzes in the step, otherwise skip it
   if (
-    step.parts.some(
+    !step.parts.some(
       ({ type, questions }) =>
         type === "quiz" &&
         questions.filter((q) => q.type !== "feedback").length,
     )
   ) {
-    lastSteps.value.push(step);
+    return;
   }
+
+  // get the quiz report for this step, in case the user has allready starting to revise them
+  const latestQuizReports = (await quizReportingService.list({ userId, username, lectureStepId }))
+    .sort((a, b) => a.createdAt - b.createdAt)[0];
+
+  if (latestQuizReports) {
+    step.points = reportingService.computePointsPerStep(latestQuizReports).averagePoints;
+  } else {
+    step.points = reportingService.computePointsPerStep(report).averagePoints;
+  }
+
+  lastSteps.value.push(step);
 };
 
 let loading = ref(true);
@@ -164,14 +176,14 @@ onMounted(async () => {
     // get the lecture if not already processed
     if (processedLectureIds[report.lectureId]) {
       const lecture = processedLectureIds[report.lectureId];
-      addStep(lecture, report);
+      await addStep(lecture, report);
       continue;
     }
     const lecture = await lectureService.get(report.lectureId);
     if (!lecture) continue;
     processedLectureIds[lecture.id] = lecture;
 
-    addStep(lecture, report);
+    await addStep(lecture, report);
     // check if there in a next step in the lecture based report.lectureStepId
     let lectureIsOver = true;
     const stepIndex = lecture.steps.findIndex(
@@ -271,14 +283,14 @@ watch(
   { immediate: true },
 );
 
-const processResult = async (questions) => {
+let currentReport = null;
+
+const saveReport = async (questions, inProgress) => {
   const step = reviewStep.value;
-  // store a new report
-  let reportings = step.parts.map(() => ({ time: 0, responses: [] }));
+  let responses = [];
+
   questions.forEach((question) => {
     // find the index of the part holding the question in the step
-    const partIndex = step.parts.findIndex(({ id }) => id === question.partId);
-    reportings[partIndex].time += question.time;
     const response = {
       questionId: question.id,
       valid: question.valid,
@@ -289,15 +301,29 @@ const processResult = async (questions) => {
         ? question.response.join(",")
         : question.response,
     };
-    reportings[partIndex].responses.push(response);
+    responses.push(response);
   });
-  await reportingService.create({
-    lectureStepId: step.id,
-    lectureId: step.lecture.id,
-    reportings: reportings,
-    type: "review",
-  });
+
+  if (currentReport) {
+    currentReport.responses = responses;
+    currentReport.inProgress = inProgress;
+    await quizReportingService.update(currentReport);
+  } else {
+    currentReport = await quizReportingService.create({
+      lectureStepId: step.id,
+      responses: responses,
+      type: "review",
+      inProgress
+    });
+  }
 };
+const processResult = async (questions) => {
+  await saveReport(questions, false);
+  currentReport = null;
+};
+const processPartial = async (questions) => {
+  await saveReport(questions, true);
+}
 const finishQuiz = async () => {
   const step = reviewStep.value;
   // make sure this one is no longer shown to the user

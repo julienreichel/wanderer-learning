@@ -76,13 +76,10 @@ watch(step, (newStep, oldStep) => {
   }
 });
 
-const quizLeft = ref(props.parts.filter((part) => part.type === "quiz").length);
+let quizResponses = ref(props.parts.map((part) => part.type !== "quiz" ? [] : null));
 const processResults = ({ responses }) => {
   const index = step.value;
-  if (!reportings.value[index].responses) {
-    quizLeft.value--;
-  }
-  reportings.value[index].responses = responses;
+  quizResponses.value[index] = responses;
 };
 
 const part = computed(() => props.parts[step.value]);
@@ -102,19 +99,15 @@ const fillerCards = computed(() => {
 });
 
 const hasNext = computed(() => step.value < props.parts.length - 1);
-const hasAnsweredAllQuizzes = computed(() => quizLeft.value === 0);
-const hasAnsweredCurrentQuizz = computed(
-  () =>
-    props.parts[step.value].type !== "quiz" ||
-    Boolean(reportings.value[step.value].responses),
-);
+const hasAnsweredAllQuizzes = computed(() => quizResponses.value.every(Boolean));
+const hasAnsweredCurrentQuizz = computed(() => Boolean(quizResponses.value[step.value]));
 
 const hasQuizAnswer = (part) => {
   const idx = props.parts.indexOf(part);
-  return part.type === "quiz" && Boolean(reportings.value[idx]?.responses);
+  return part.type === "quiz" && Boolean(quizResponses.value[idx]);
 };
 const finish = (finished = true) => {
   updateTimings(step.value);
-  emit("finished", { finished, reportings: reportings.value });
+  emit("finished", { finished, reportings: reportings.value, responses: quizResponses.value.flat() });
 };
 </script>

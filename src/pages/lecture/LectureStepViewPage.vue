@@ -60,7 +60,7 @@ onMounted(async () => {
   ]);
 });
 
-const finished = async ({ finished, reportings } = {}) => {
+const finished = async ({ finished, reportings, responses } = {}) => {
   const time = reportings?.reduce((acc, val) => acc + val.time, 0) || 0;
   if (!finished || time < 5) {
     console.log("[Lecture] Step not completed", reportings);
@@ -72,21 +72,17 @@ const finished = async ({ finished, reportings } = {}) => {
     const report = await stepReportingService.create({
       lectureStepId: lectureStep.value.id,
       lectureId: lectureStep.value.lecture.id,
-      reportings: reportings,
+      reportings,
+      responses,
       type: "lecture",
     });
 
     // if there is a stars count, update the course stars
-    let starValues = [];
-    reportings.forEach((partReport) => {
-      const response = partReport.responses?.find(
-        (response) => response.feedbackType === "stars",
-      );
-      if (response) {
-        starValues.push(Number(response.response));
-      }
-    });
-    if (starValues.length > 0) {
+    const starValues = responses?.filter(
+      (response) => response.feedbackType === "stars",
+    ).map((response) => Number(response.response));
+
+    if (starValues?.length) {
       let course = lectureStep.value.lecture.course;
       const stars = Math.round(
         starValues.reduce((a, b) => a + b, 0) / starValues.length,

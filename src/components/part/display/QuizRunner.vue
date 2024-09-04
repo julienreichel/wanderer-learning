@@ -194,7 +194,7 @@ const props = defineProps({
   prevActionsIcon: { type: String, default: "close" },
   title: { type: String, default: null },
 });
-const emit = defineEmits(["finished", "results", "feedback"]);
+const emit = defineEmits(["finished", "results", "progress", "feedback"]);
 
 const icons = {
   difficulty: "speed",
@@ -528,6 +528,8 @@ const validateAnswers = (question) => {
   if (valid) {
     step.value++;
   }
+
+  emit("progress", [...activeQuestions.value]);
 };
 
 const correctQuestions = computed(() =>

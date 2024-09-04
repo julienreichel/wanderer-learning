@@ -62,7 +62,7 @@ const { router, canEdit } = useIris();
 const {
   course: courseService,
   stepReporting: reportingService,
-  courseReporting: courseReportingService,
+  quizReporting: quizReportingService,
 } = inject("services");
 
 const { updateBreadcrumbs } = inject("breadcrumbs");
@@ -89,7 +89,7 @@ onMounted(async () => {
 
   // Get the last report
   reporting.value = (
-    await courseReportingService.list({
+    await quizReportingService.list({
       courseId: course.value.id,
       userId,
       username,
@@ -145,7 +145,7 @@ onMounted(async () => {
 
 const userLevel = computed(() => {
   if (reporting.value) {
-    const { level } = courseReportingService.getLevel(reporting.value);
+    const { level } = quizReportingService.getLevel(reporting.value);
     return level;
   }
   return undefined;
@@ -153,7 +153,7 @@ const userLevel = computed(() => {
 
 const successRate = computed(() => {
   if (reporting.value) {
-    const { ratio } = courseReportingService.getLevel(reporting.value);
+    const { ratio } = quizReportingService.getLevel(reporting.value);
     return ratio;
   }
   return undefined;
@@ -207,7 +207,7 @@ const processResult = async (questions) => {
     };
     return response;
   });
-  reporting.value = await courseReportingService.create({
+  reporting.value = await quizReportingService.create({
     courseId: course.value.id,
     responses,
   });
