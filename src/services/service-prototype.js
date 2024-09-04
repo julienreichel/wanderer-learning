@@ -77,7 +77,7 @@ export default class ServicePrototype {
     let payload = { ...input };
 
     // Cleanup fields that should not be updated
-    this.cleanGraphQLUpdate(payload);
+    payload = this.cleanGraphQLUpdate(payload);
 
     const { data } = await this.model.update(payload, options);
 
@@ -168,7 +168,7 @@ export default class ServicePrototype {
    * @returns {Object}
    */
   cleanGraphQLUpdate(input) {
-    if (!input || !input.__typename) return;
+    if (!input) return;
 
     delete input.createdAt;
     delete input.updatedAt;
@@ -179,9 +179,9 @@ export default class ServicePrototype {
 
     Object.values(input).forEach((attr) => {
       if (Array.isArray(attr)) {
-        attr.forEach((a) => this.cleanGraphQLUpdate(a));
+        attr.forEach((a) => a = this.cleanGraphQLUpdate(a));
       } else if (typeof attr === "object") {
-        this.cleanGraphQLUpdate(attr);
+        attr = this.cleanGraphQLUpdate(attr);
       }
     });
     return input;

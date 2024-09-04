@@ -98,67 +98,9 @@
     </q-card-section>
     <q-card-section>
       <q-card square>
-        <q-card-section v-if="correctQuestions.length">
-          <div class="text-h6 text-center">{{ $t("quiz.well_done") }}</div>
-        </q-card-section>
-        <q-list class="q-pa-md q-gutter-sm">
-          <q-item
-            v-for="q in correctQuestions"
-            :key="q.id"
-            class="bg-positive"
-            clickable
-            @click="step = activeQuestions.indexOf(q)"
-          >
-            <q-item-section avatar>
-              <q-icon name="task_alt" />
-            </q-item-section>
-            <!-- eslint-disable vue/no-v-html -->
-            <q-item-section class="text-ellipsis">
-              <div v-html="renderKatex(q.text)"></div>
-            </q-item-section>
-            <q-item-section side> {{ q.points }} / 5 </q-item-section>
-          </q-item>
-        </q-list>
-        <q-card-section v-if="wrongQuestions.length">
-          <div class="text-h6 text-center">{{ $t("quiz.lets_review") }}</div>
-        </q-card-section>
-        <q-list class="q-pa-md q-gutter-sm">
-          <q-item
-            v-for="q in wrongQuestions"
-            :key="q.id"
-            class="bg-negative"
-            clickable
-            @click="step = activeQuestions.indexOf(q)"
-          >
-            <q-item-section avatar>
-              <q-icon name="highlight_off" />
-            </q-item-section>
-            <!-- eslint-disable vue/no-v-html -->
-            <q-item-section class="text-ellipsis">
-              <div v-html="renderKatex(q.text)"></div>
-            </q-item-section>
-            <q-item-section side> {{ q.points }} / 5 </q-item-section>
-          </q-item>
-        </q-list>
-        <q-card-section v-if="feedbacks.length">
-          <div class="text-h6 text-center">{{ $t("quiz.thank_you") }}</div>
-        </q-card-section>
-        <q-list class="q-pa-md q-gutter-sm">
-          <q-item
-            v-for="q in feedbacks"
-            :key="q.id"
-            clickable
-            @click="step = activeQuestions.indexOf(q)"
-          >
-            <q-item-section avatar>
-              <q-icon :name="getFeedbackIcon(q)" />
-            </q-item-section>
-            <q-item-section class="text-ellipsis">
-              {{ q.text }}
-            </q-item-section>
-            <q-item-section side> {{ q.response }} / 5 </q-item-section>
-          </q-item>
-        </q-list>
+        <quiz-responses :questions="correctQuestions" :title="$t('quiz.well_done')" icon="task_alt" color="bg-positive" @activate="(q) => step = activeQuestions.indexOf(q)"></quiz-responses>
+        <quiz-responses :questions="wrongQuestions" :title="$t('quiz.lets_review')" icon="highlight_off" color="bg-negative" @activate="(q) => step = activeQuestions.indexOf(q)"></quiz-responses>
+        <quiz-responses :questions="feedbacks" :title="$t('quiz.thank_you')" icon="highlight_off" type="feedback" @activate="(q) => step = activeQuestions.indexOf(q)"></quiz-responses>
       </q-card>
     </q-card-section>
     <q-card-actions v-if="nextActionsIcon" class="q-px-none q-py-lg">
@@ -178,6 +120,7 @@
 <script setup>
 import FeedbackQuestionDisplay from "./FeedbackQuestionDisplay.vue";
 import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
+import QuizResponses from "./quiz/QuizResponses.vue";
 
 import { ref, computed, watch } from "vue";
 
@@ -187,6 +130,7 @@ const { renderKatex } = useFormatter();
 
 const props = defineProps({
   questions: { type: Array, default: () => [] },
+  answeredQuestions: { type: Array, default: () => [] },
   max: { type: Number, default: 0 },
   adaptative: { type: Boolean, default: false },
   examMode: { type: Boolean, default: false },
@@ -195,24 +139,6 @@ const props = defineProps({
   title: { type: String, default: null },
 });
 const emit = defineEmits(["finished", "results", "progress", "feedback"]);
-
-const icons = {
-  difficulty: "speed",
-  roti: [
-    "sentiment_very_dissatisfied",
-    "sentiment_dissatisfied",
-    "sentiment_neutral",
-    "sentiment_satisfied",
-    "sentiment_satisfied_alt",
-  ],
-  stars: "star_border",
-};
-const getFeedbackIcon = (question) => {
-  const feedbackType = question.options?.feedbackType;
-  return Array.isArray(icons[feedbackType])
-    ? icons[feedbackType][question.response - 1]
-    : icons[feedbackType];
-};
 
 const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
 
@@ -389,7 +315,7 @@ watch(
         question.response === undefined
           ? question.type === "checkbox"
             ? []
-            : question.type === "feedback"
+            : question.type === "feedback" && question.options.feedbackType !== "text"
               ? NaN
               : undefined
           : question.response;
@@ -525,11 +451,12 @@ const validateAnswers = (question) => {
   question.valid = valid;
   question.points = valid ? 5 : 0;
 
+  emit("progress", [...activeQuestions.value]);
+
   if (valid) {
     step.value++;
   }
 
-  emit("progress", [...activeQuestions.value]);
 };
 
 const correctQuestions = computed(() =>

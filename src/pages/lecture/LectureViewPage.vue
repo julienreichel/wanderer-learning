@@ -32,6 +32,7 @@
         adaptative
         @finished="connectionQuiz = false"
         @results="processResult"
+        @progress="processPartial"
       />
       <q-card-actions
         v-if="!connectionQuiz && !practiceQuiz"
@@ -309,7 +310,9 @@ const feedbacks = ref(
   })),
 );
 
-const processResult = async (questions) => {
+let currentReport = null;
+
+const saveReport = async (questions, inProgress) => {
   const responses = questions.map((question) => {
     // find the index of the part holding the question in the step
     const response = {
@@ -324,16 +327,31 @@ const processResult = async (questions) => {
     };
     return response;
   });
-  const type = connectionQuiz.value
-    ? "connection"
-    : practiceQuiz.value
-      ? "practice"
-      : "feedback";
-  reporting.value = await quizReportingService.create({
-    lectureId: lecture.value.id,
-    type,
-    responses,
-  });
+
+
+  if (currentReport) {
+    currentReport.responses = responses;
+    currentReport.inProgress = inProgress;
+    await quizReportingService.update(currentReport);
+  } else {
+    const type = connectionQuiz.value
+      ? "connection"
+      : practiceQuiz.value
+        ? "practice"
+        : "feedback";
+    currentReport = await quizReportingService.create({
+      lectureId: lecture.value.id,
+      type,
+      inProgress,
+      responses,
+    });
+  }
+};
+const processResult = async (questions) => {
+  await saveReport(questions, false);
+  const type = currentReport.type;
+
+  currentReport = null;
 
   if (practiceQuiz.value) {
     const { level, ratio } = quizReportingService.getLevel(reporting.value);
@@ -361,6 +379,10 @@ const processResult = async (questions) => {
     feedbackQuiz.value = true;
   }
 };
+const processPartial = async (questions) => {
+  await saveReport(questions, true);
+};
+
 </script>
 
 <style lang="sass" scoped>

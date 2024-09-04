@@ -190,7 +190,7 @@ watch(
     }
     if (feedbackType.value === "text") {
       question.value.text = t("quiz.feedback.question.text");
-      question.value.answers = [];
+      question.value.answers = [ "" ];
     }
 
   },
