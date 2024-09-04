@@ -28,7 +28,7 @@
         v-if="connectionQuiz"
         flat
         :questions="questions"
-        :max="10"
+        :max="20"
         adaptative
         @finished="connectionQuiz = false"
         @results="processResult"
@@ -80,7 +80,7 @@
         v-if="practiceQuiz"
         flat
         :questions="questions"
-        :max="10"
+        :max="20"
         exam-mode
         @finished="practiceQuiz = false"
         @results="processResult"
