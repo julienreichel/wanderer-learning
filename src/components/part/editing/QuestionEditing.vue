@@ -143,6 +143,11 @@ const question = defineModel({ type: Object });
 if (!question.value.explanations) {
   question.value.explanations = "";
 }
+if (!question.value.options){
+  question.value.options = { };
+}
+
+const feedbackType = ref();
 watch(
   () => question.value.options,
   (options) => {
@@ -151,16 +156,21 @@ watch(
     }
     feedbackType.value = question.value.options.feedbackType || "roti";
   },
+  { immediate: true },
 );
 
 const level = ref(question.value.level || "beginner");
 
-const feedbackType = ref(question.value.options.feedbackType || "roti");
+
 watch(
   [feedbackType, () => question.value.type],
   () => {
     if (question.value.type !== "feedback") {
+      delete question.value.options.feedbackType;
       return;
+    }
+    if (feedbackType.value !== question.value.options.feedbackType){
+      question.value.options.feedbackType = feedbackType.value;
     }
     if (feedbackType.value === "roti") {
       question.value.text = t("quiz.feedback.question.roti");
@@ -176,10 +186,13 @@ watch(
     }
     if (feedbackType.value === "stars") {
       question.value.text = t("quiz.feedback.question.stars");
+      question.value.answers = [];
     }
     if (feedbackType.value === "text") {
       question.value.text = t("quiz.feedback.question.text");
+      question.value.answers = [];
     }
+
   },
   { immediate: true },
 );

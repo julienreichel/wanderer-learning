@@ -182,7 +182,7 @@ const addQuestion = (type) => {
     type,
     text: "",
     answers: [],
-    options: [],
+    options: {},
   };
   quiz.value.questions.push(q);
   activeQuestion.value = q;
