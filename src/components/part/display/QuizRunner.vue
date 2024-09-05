@@ -1,5 +1,5 @@
 <template>
-  <q-card v-if="question" class="q-pt-sm">
+  <q-card v-if="!hasValidatedAnswers && question" class="q-pt-sm">
     <q-card-section v-if="title" class="q-pb-none">
       <div class="text-h5 text-center">{{ title }}</div>
     </q-card-section>
@@ -98,20 +98,49 @@
     </q-card-section>
     <q-card-section>
       <q-card square>
-        <quiz-responses :questions="correctQuestions" :title="$t('quiz.well_done')" icon="task_alt" color="bg-positive" @activate="(q) => step = activeQuestions.indexOf(q)"></quiz-responses>
-        <quiz-responses :questions="wrongQuestions" :title="$t('quiz.lets_review')" icon="highlight_off" color="bg-negative" @activate="(q) => step = activeQuestions.indexOf(q)"></quiz-responses>
-        <quiz-responses :questions="feedbacks" :title="$t('quiz.thank_you')" icon="highlight_off" type="feedback" @activate="(q) => step = activeQuestions.indexOf(q)"></quiz-responses>
+        <quiz-responses
+          :questions="correctQuestions"
+          :title="$t('quiz.well_done')"
+          icon="task_alt"
+          color="bg-positive"
+          @activate="goToQuestion"
+        ></quiz-responses>
+        <quiz-responses
+          :questions="wrongQuestions"
+          :title="$t('quiz.lets_review')"
+          icon="highlight_off"
+          color="bg-negative"
+          @activate="goToQuestion"
+        ></quiz-responses>
+        <quiz-responses
+          :questions="leftOverQuestions"
+          :title="$t('quiz.more_questions')"
+          icon="help_outline"
+          color="bg-info"
+          @activate="goToNextQuestion"
+        ></quiz-responses>
+        <quiz-responses
+          :questions="feedbacks"
+          :title="$t('quiz.thank_you')"
+          icon="highlight_off"
+          type="feedback"
+          @activate="goToQuestion"
+        ></quiz-responses>
       </q-card>
     </q-card-section>
-    <q-card-actions v-if="nextActionsIcon" class="q-px-none q-py-lg">
+    <q-card-actions v-if="nextActionsIcon || hasValidatedAnswers" class="q-px-none q-py-lg">
       <q-space />
       <q-btn
         square
         size="md"
-        :icon="nextActionsIcon"
+        :icon="nextActionsIcon || 'chevron_right'"
         color="primary"
         padding="sm 64px"
-        @click="$emit('finished', activeQuestions)"
+        @click="
+          hasValidatedAnswers
+            ? goToNextQuestion()
+            : $emit('finished', activeQuestions)
+        "
       />
     </q-card-actions>
   </q-card>
@@ -143,13 +172,14 @@ const emit = defineEmits(["finished", "results", "progress", "feedback"]);
 const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
 
 let step = ref(0);
-let realMax = computed(() => props.max || props.questions.length);
+let realMax = computed(() => props.max ? Math.min(props.max, props.questions.length) : props.questions.length);
+console.log("realMax", realMax.value);
 let questionsPerLevels = {};
 let activeQuestions = ref([]);
 let previousQuestions = [];
 let getActiveQuestions = () => {
   if (!previousQuestions.length) {
-    // check if there are some questions that have been validated, and add them tot he list
+    // check if there are some questions that have been validated, and add them to the list
     props.questions.forEach((question) => {
       if (question.validated) {
         previousQuestions.push(question);
@@ -177,7 +207,7 @@ let getActiveQuestions = () => {
     let q = [];
     let i = 0;
     while (q.length < realMax.value) {
-      const keys = Object.keys(questionsPerLevels);
+      const keys = Object.keys(questionsPerLevels.filter((q) => q.length));
       let level = keys[i % keys.length];
       if (questionsPerLevels[level].length) {
         q.push(questionsPerLevels[level].pop());
@@ -304,24 +334,46 @@ const getQuestionsPerLevels = () => {
   return questionsPerLevels;
 };
 
+let hasValidatedAnswers = ref(false);
 watch(
   () => props.questions,
   () => {
+    if (props.answeredQuestions?.length) {
+      // pre-populate the questions with the answers
+      props.answeredQuestions.forEach((answeredQuestion) => {
+        const question = props.questions.find(
+          (q) => q.id === answeredQuestion.questionId,
+        );
+        if (question) {
+          question.response =
+            question.type === "checkbox"
+              ? answeredQuestion.response.split(",")
+              : answeredQuestion.response;
+          question.validated = true;
+          question.valid = answeredQuestion.valid;
+          question.points = answeredQuestion.points;
+        }
+      });
+    }
     props.questions.forEach((question) => {
       question.answers.forEach((answer) => {
         answer.order = answer.order || Math.random();
       });
+      if (question.validated) {
+        hasValidatedAnswers.value = true;
+      }
       question.response =
         question.response === undefined
           ? question.type === "checkbox"
             ? []
-            : question.type === "feedback" && question.options.feedbackType !== "text"
+            : question.type === "feedback" &&
+                question.options.feedbackType !== "text"
               ? NaN
               : undefined
           : question.response;
       question.time = question.time || 0;
       question.level = question.level || "intermediate";
-      question.order = question.order || Math.random();
+      question.order = question.order || 1 + Math.random();
       question.difficulty =
         question.difficulty || levels.indexOf(question.level) + 1 || 3;
       if (!question.explanations && question.type === "shorttext") {
@@ -456,15 +508,37 @@ const validateAnswers = (question) => {
   if (valid) {
     step.value++;
   }
-
 };
+const goToQuestion = (q) => {
+  step.value = activeQuestions.value.indexOf(q);
+  hasValidatedAnswers.value = false;
+}
+const goToNextQuestion = () => {
+  step.value = numValidatedQuestions.value;
+  hasValidatedAnswers.value = false;
+}
 
 const correctQuestions = computed(() =>
-  activeQuestions.value.filter((q) => q.valid && q.type !== "feedback"),
+  activeQuestions.value.filter(
+    (q) => q.validated && q.valid && q.type !== "feedback",
+  ),
 );
 
 const wrongQuestions = computed(() =>
-  activeQuestions.value.filter((q) => !q.valid && q.type !== "feedback"),
+  activeQuestions.value.filter(
+    (q) => q.validated && !q.valid && q.type !== "feedback",
+  ),
+);
+
+const numValidatedQuestions = computed(
+  () => activeQuestions.value.filter((q) => q.validated).length,
+);
+
+const leftOverQuestions = computed(() =>
+  Array.from(
+    { length: realMax.value - numValidatedQuestions.value },
+    (_, index) => ({ id: index, text: "...", points: "?" }),
+  ),
 );
 
 const feedbacks = computed(() =>

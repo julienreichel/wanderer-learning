@@ -56,7 +56,8 @@
             flat
             :title="reviewTitle"
             :questions="questions"
-            :max="7"
+            :answered-questions="answeredQuestions"
+            :max="3"
             adaptative
             @finished="finishQuiz"
             @results="processResult"
@@ -152,8 +153,12 @@ const addStep = async (lecture, report) => {
   const latestQuizReports = (await quizReportingService.list({ userId, username, lectureStepId }))
     .sort((a, b) => a.createdAt - b.createdAt)[0];
 
+  console.log("latestQuizReports", latestQuizReports);
   if (latestQuizReports) {
     step.points = reportingService.computePointsPerStep(latestQuizReports).averagePoints;
+    if ( latestQuizReports.inProgress ){
+      step.answeredQuestions = latestQuizReports.responses;
+    }
   } else {
     step.points = reportingService.computePointsPerStep(report).averagePoints;
   }
@@ -270,6 +275,12 @@ const questions = computed(() => {
     .flat();
   return questions;
 });
+
+const answeredQuestions = computed(() => {
+  if (!reviewStep.value) return;
+  return reviewStep.value.answeredQuestions;
+});
+
 watch(
   questions,
   (questions) => {
