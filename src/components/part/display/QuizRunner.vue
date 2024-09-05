@@ -128,19 +128,26 @@
         ></quiz-responses>
       </q-card>
     </q-card-section>
-    <q-card-actions v-if="nextActionsIcon || hasValidatedAnswers" class="q-px-none q-py-lg">
+    <q-card-actions v-if="hasValidatedAnswers" class="q-px-none q-py-lg">
       <q-space />
       <q-btn
         square
         size="md"
-        :icon="nextActionsIcon || 'chevron_right'"
+        icon="chevron_right"
         color="primary"
         padding="sm 64px"
-        @click="
-          hasValidatedAnswers
-            ? goToNextQuestion()
-            : $emit('finished', activeQuestions)
-        "
+        @click="goToNextQuestion"
+      />
+    </q-card-actions>
+    <q-card-actions v-else-if="nextActionsIcon" class="q-px-none q-py-lg">
+      <q-space />
+      <q-btn
+        square
+        size="md"
+        :icon="nextActionsIcon"
+        color="primary"
+        padding="sm 64px"
+        @click="$emit('finished', activeQuestions)"
       />
     </q-card-actions>
   </q-card>
@@ -173,7 +180,7 @@ const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
 
 let step = ref(0);
 let realMax = computed(() => props.max ? Math.min(props.max, props.questions.length) : props.questions.length);
-console.log("realMax", realMax.value);
+
 let questionsPerLevels = {};
 let activeQuestions = ref([]);
 let previousQuestions = [];
@@ -335,32 +342,42 @@ const getQuestionsPerLevels = () => {
 };
 
 let hasValidatedAnswers = ref(false);
+// this is the main initialization loop
 watch(
   () => props.questions,
   () => {
     if (props.answeredQuestions?.length) {
       // pre-populate the questions with the answers
-      props.answeredQuestions.forEach((answeredQuestion) => {
+      props.answeredQuestions.forEach((answeredQuestion, idx) => {
+        if (answeredQuestion.valid === null) {
+          // the question has not been validated otherwise it would be true or false
+          return;
+        }
         const question = props.questions.find(
           (q) => q.id === answeredQuestion.questionId,
         );
-        if (question) {
-          question.response =
-            question.type === "checkbox"
-              ? answeredQuestion.response.split(",")
-              : answeredQuestion.response;
-          question.validated = true;
-          question.valid = answeredQuestion.valid;
-          question.points = answeredQuestion.points;
+        if (!question) {
+          return;
         }
+        question.response =
+          question.type === "checkbox"
+            ? answeredQuestion.response.split(",")
+            : question.type === "radio"
+              ? Number(answeredQuestion.response)
+              : answeredQuestion.response
+        question.validated = true;
+        question.valid = answeredQuestion.valid;
+        question.points = answeredQuestion.points;
+        question.order = -props.answeredQuestions.length + idx;
       });
     }
+    let validAnswers = 0;
     props.questions.forEach((question) => {
       question.answers.forEach((answer) => {
         answer.order = answer.order || Math.random();
       });
       if (question.validated) {
-        hasValidatedAnswers.value = true;
+        validAnswers++;
       }
       question.response =
         question.response === undefined
@@ -373,7 +390,7 @@ watch(
           : question.response;
       question.time = question.time || 0;
       question.level = question.level || "intermediate";
-      question.order = question.order || 1 + Math.random();
+      question.order = question.order || Math.random();
       question.difficulty =
         question.difficulty || levels.indexOf(question.level) + 1 || 3;
       if (!question.explanations && question.type === "shorttext") {
@@ -387,6 +404,9 @@ watch(
           "'";
       }
     });
+    if (validAnswers && validAnswers < props.questions.length) {
+      hasValidatedAnswers.value = true;
+    }
     step.value = 0;
     previousQuestions = [];
     questionsPerLevels = getQuestionsPerLevels();

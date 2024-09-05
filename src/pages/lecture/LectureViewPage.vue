@@ -13,7 +13,7 @@
             </q-badge>
           </q-card-section>
           <concept-display :concepts="lecture.concepts" />
-          <q-card-section>
+          <q-card-section v-if="lecture.description">
             <rich-text-renderer
               class="q-pt-sm"
               :html-content="lecture.description"
@@ -28,6 +28,7 @@
         v-if="connectionQuiz"
         flat
         :questions="questions"
+        :answered-questions="activeConnection?.responses"
         :max="20"
         adaptative
         @finished="connectionQuiz = false"
@@ -57,7 +58,7 @@
         :step="step"
       />
     </template>
-    <q-card v-if="showFinalQuiz" class="q-pt-sm">
+    <q-card v-if="!connectionQuiz && showFinalQuiz" class="q-pt-sm">
       <q-card-section>
         <q-card-section horizontal class="justify-between">
           <q-card-section class="q-gutter-sm">
@@ -140,6 +141,7 @@ const lecture = ref({});
 const reporting = ref();
 let practiceLevel = ref();
 let practiceRatio = ref();
+let activeConnection = ref();
 onMounted(async () => {
   const data = await lectureService.get(props.id);
   lecture.value = data;
@@ -165,10 +167,17 @@ onMounted(async () => {
     })
   ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   const allReportWithScore = allReports
-    .filter(({ type }) => type !== "feedback")
+    .filter(({ type, inProgress }) => type !== "feedback" && !inProgress)
     .slice(0, 3);
   reporting.value = allReportWithScore[0];
 
+  // is there a connection quiz in progress?
+  const inProgressConnectionReport = allReports.find(({ inProgress, type }) => inProgress && type === 'connection');
+  if (inProgressConnectionReport) {
+    connectionQuiz.value = true;
+    activeConnection.value = inProgressConnectionReport;
+    console.log('activeConnection', activeConnection.value);
+  }
   // did the user passed the final quiz?
   const practiceReports = allReports.filter(({ type }) => type === "practice");
   if (practiceReports.length) {
@@ -184,6 +193,7 @@ onMounted(async () => {
       },
     }));
   }
+
   lecture.value.score = allReportWithScore.reverse().map((report) => ({
     key: t("lecture.reports." + report.type),
     value: {
@@ -310,8 +320,22 @@ const feedbacks = ref(
   })),
 );
 
-let currentReport = null;
+const debounceAsync = (func, delay) => {
+  let timeoutId;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeoutId);
+    return new Promise((resolve) => {
+      timeoutId = setTimeout(async () => {
+        const result = await func.apply(context, args);
+        resolve(result);
+      }, delay);
+    });
+  };
+}
 
+
+let currentReport = null;
 const saveReport = async (questions, inProgress) => {
   const responses = questions.map((question) => {
     // find the index of the part holding the question in the step
@@ -328,6 +352,9 @@ const saveReport = async (questions, inProgress) => {
     return response;
   });
 
+  if (!currentReport && connectionQuiz.value && activeConnection.value){
+    currentReport = activeConnection.value;
+  }
 
   if (currentReport) {
     currentReport.responses = responses;
@@ -347,8 +374,11 @@ const saveReport = async (questions, inProgress) => {
     });
   }
 };
+
+const debouncedSaveReport = debounceAsync(saveReport, 500); // 500 milliseconds delay
+
 const processResult = async (questions) => {
-  await saveReport(questions, false);
+  await debouncedSaveReport(questions, false);
   const type = currentReport.type;
 
   currentReport = null;
@@ -380,7 +410,7 @@ const processResult = async (questions) => {
   }
 };
 const processPartial = async (questions) => {
-  await saveReport(questions, true);
+  await debouncedSaveReport(questions, true);
 };
 
 </script>
