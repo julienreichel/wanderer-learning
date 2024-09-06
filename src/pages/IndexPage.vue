@@ -57,7 +57,7 @@
             :title="reviewTitle"
             :questions="questions"
             :answered-questions="answeredQuestions"
-            :max="3"
+            :max="10"
             adaptative
             @finished="finishQuiz"
             @results="processResult"
