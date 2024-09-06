@@ -172,18 +172,18 @@ onMounted(async () => {
   reporting.value = allReportWithScore[0];
 
   // is there a connection quiz in progress?
-  const inProgressConnectionReport = allReports.find(({ inProgress, type }) => inProgress && type === 'connection');
+  const inProgressConnectionReport = allReports.find(
+    ({ inProgress, type }) => inProgress && type === "connection",
+  );
   if (inProgressConnectionReport) {
     connectionQuiz.value = true;
     activeConnection.value = inProgressConnectionReport;
-    console.log('activeConnection', activeConnection.value);
+    console.log("activeConnection", activeConnection.value);
   }
   // did the user passed the final quiz?
   const practiceReports = allReports.filter(({ type }) => type === "practice");
   if (practiceReports.length) {
-    const { level, ratio } = quizReportingService.getLevel(
-      practiceReports[0],
-    );
+    const { level, ratio } = quizReportingService.getLevel(practiceReports[0]);
     practiceLevel.value = level;
     practiceRatio.value = ratio;
     lecture.value.practiceScore = practiceReports.reverse().map((report) => ({
@@ -337,7 +337,7 @@ const saveReport = async (questions, inProgress) => {
     return response;
   });
 
-  if (!currentReport && connectionQuiz.value && activeConnection.value){
+  if (!currentReport && connectionQuiz.value && activeConnection.value) {
     currentReport = activeConnection.value;
   }
 
@@ -397,7 +397,6 @@ const processResult = async (questions) => {
 const processPartial = async (questions) => {
   debouncedSaveReport(questions, true);
 };
-
 </script>
 
 <style lang="sass" scoped>

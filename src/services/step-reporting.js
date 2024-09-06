@@ -171,12 +171,12 @@ export default class StepReportingService extends ServicePrototype {
    * @returns {Array} pointsPerStep
    */
   computePointsPerStep(stepSummary) {
-    if (!stepSummary)
-      return { averagePoints: 0, totalPoints: 0 };
+    if (!stepSummary) return { averagePoints: 0, totalPoints: 0 };
 
     if (!stepSummary.responses?.length)
       return { averagePoints: 5, totalPoints: 5 };
-    const { difficulties, averagePoints, total, points } = this.getLevel(stepSummary);
+    const { difficulties, averagePoints, total, points } =
+      this.getLevel(stepSummary);
 
     return {
       totalPoints: points,

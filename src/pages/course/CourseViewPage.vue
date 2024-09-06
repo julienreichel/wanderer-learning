@@ -91,7 +91,8 @@ onMounted(async () => {
   ]);
 
   // Get the last report
-  const allReports = (await quizReportingService.list({
+  const allReports = (
+    await quizReportingService.list({
       courseId: course.value.id,
       userId,
       username,
@@ -221,7 +222,7 @@ const saveReport = async (questions, inProgress) => {
     return response;
   });
 
-  if (!currentReport && activeReport.value){
+  if (!currentReport && activeReport.value) {
     currentReport = activeReport.value;
   }
 

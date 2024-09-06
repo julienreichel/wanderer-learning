@@ -312,7 +312,9 @@ const generateLecture = async () => {
       );
 
       conceptIdMap.default = conceptIdMap[step.concept];
-      conceptStep.parts.push(createQuizPart(questions, nbQuestion, conceptIdMap));
+      conceptStep.parts.push(
+        createQuizPart(questions, nbQuestion, conceptIdMap),
+      );
       await lectureStepService.update(conceptStep);
 
       lecturePreview.value = null;
@@ -324,7 +326,6 @@ const generateLecture = async () => {
       return conceptStep;
     }),
   );
-
 
   emit("lectureCreated", lecture);
   progressLabel.value = t("wizard.generating.finished");

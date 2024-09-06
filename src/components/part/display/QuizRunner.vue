@@ -179,7 +179,11 @@ const emit = defineEmits(["finished", "results", "progress", "feedback"]);
 const levels = ["novice", "beginner", "intermediate", "advanced", "expert"];
 
 let step = ref(0);
-let realMax = computed(() => props.max ? Math.min(props.max, props.questions.length) : props.questions.length);
+let realMax = computed(() =>
+  props.max
+    ? Math.min(props.max, props.questions.length)
+    : props.questions.length,
+);
 
 let questionsPerLevels = {};
 let activeQuestions = ref([]);
@@ -364,7 +368,7 @@ watch(
             ? answeredQuestion.response.split(",")
             : question.type === "radio"
               ? Number(answeredQuestion.response)
-              : answeredQuestion.response
+              : answeredQuestion.response;
         question.validated = true;
         question.valid = answeredQuestion.valid;
         question.points = answeredQuestion.points;
@@ -532,11 +536,11 @@ const validateAnswers = (question) => {
 const goToQuestion = (q) => {
   step.value = activeQuestions.value.indexOf(q);
   hasValidatedAnswers.value = false;
-}
+};
 const goToNextQuestion = () => {
   step.value = numValidatedQuestions.value;
   hasValidatedAnswers.value = false;
-}
+};
 
 const correctQuestions = computed(() =>
   activeQuestions.value.filter(

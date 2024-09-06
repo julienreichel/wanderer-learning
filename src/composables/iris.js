@@ -47,7 +47,7 @@ export function useIris() {
         }, delay);
       });
     };
-  }
+  };
 
   return { router, t, locale, $q, uid, canEdit, getIconFromQuestion, debounce };
 }

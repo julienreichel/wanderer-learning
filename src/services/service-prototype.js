@@ -179,7 +179,7 @@ export default class ServicePrototype {
 
     Object.values(input).forEach((attr) => {
       if (Array.isArray(attr)) {
-        attr.forEach((a) => a = this.cleanGraphQLUpdate(a));
+        attr.forEach((a) => (a = this.cleanGraphQLUpdate(a)));
       } else if (typeof attr === "object") {
         attr = this.cleanGraphQLUpdate(attr);
       }
@@ -252,6 +252,14 @@ export default class ServicePrototype {
       total += difficulties[i].total;
       points += difficulties[i].points;
     }
-    return { level, ratio, averagePoints, ...difficulty, difficulties, total, points };
+    return {
+      level,
+      ratio,
+      averagePoints,
+      ...difficulty,
+      difficulties,
+      total,
+      points,
+    };
   }
 }

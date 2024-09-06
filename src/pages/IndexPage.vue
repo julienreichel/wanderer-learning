@@ -150,17 +150,23 @@ const addStep = async (lecture, report) => {
   }
 
   // get the quiz report for this step, in case the user has allready starting to revise them
-  const latestQuizReports = (await quizReportingService.list({ userId, username, lectureStepId }))
-    .sort((a, b) => a.createdAt - b.createdAt);
+  const latestQuizReports = (
+    await quizReportingService.list({ userId, username, lectureStepId })
+  ).sort((a, b) => a.createdAt - b.createdAt);
 
-  const latestFinishedQuiz = latestQuizReports.find(({ inProgress }) => !inProgress);
+  const latestFinishedQuiz = latestQuizReports.find(
+    ({ inProgress }) => !inProgress,
+  );
   if (latestFinishedQuiz) {
-    step.points = reportingService.computePointsPerStep(latestQuizReports).averagePoints;
+    step.points =
+      reportingService.computePointsPerStep(latestQuizReports).averagePoints;
   } else {
     step.points = reportingService.computePointsPerStep(report).averagePoints;
   }
 
-  const inProgressQuiz = latestQuizReports.find(({ inProgress, type }) => inProgress && type === "review");
+  const inProgressQuiz = latestQuizReports.find(
+    ({ inProgress, type }) => inProgress && type === "review",
+  );
   if (inProgressQuiz) {
     step.inProgressQuiz = inProgressQuiz;
   }
@@ -209,7 +215,6 @@ onMounted(async () => {
       const nextLecture = course.lectures[lectureIndex + 1];
       lecturesNext.value.push(nextLecture);
     }
-
 
     // check the concept covered by the lecture, and get similar lectures
     lecture.concepts.forEach(async ({ concept }) => {
@@ -321,7 +326,7 @@ const saveReport = async (questions, inProgress) => {
       lectureStepId: step.id,
       responses: responses,
       type: "review",
-      inProgress
+      inProgress,
     });
   }
 };
@@ -332,7 +337,7 @@ const processResult = async (questions) => {
 };
 const processPartial = async (questions) => {
   debouncedSaveReport(questions, true);
-}
+};
 const finishQuiz = async () => {
   const step = reviewStep.value;
   // make sure this one is no longer shown to the user

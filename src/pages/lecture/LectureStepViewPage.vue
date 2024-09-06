@@ -78,9 +78,9 @@ const finished = async ({ finished, reportings, responses } = {}) => {
     });
 
     // if there is a stars count, update the course stars
-    const starValues = responses?.filter(
-      (response) => response.feedbackType === "stars",
-    ).map((response) => Number(response.response));
+    const starValues = responses
+      ?.filter((response) => response.feedbackType === "stars")
+      .map((response) => Number(response.response));
 
     if (starValues?.length) {
       let course = lectureStep.value.lecture.course;

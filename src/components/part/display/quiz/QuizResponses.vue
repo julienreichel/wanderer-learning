@@ -17,7 +17,12 @@
       <q-item-section class="text-ellipsis">
         <div v-html="renderKatex(q.text)"></div>
       </q-item-section>
-      <q-item-section v-if="type !== 'feedback' || q.options?.feedbackType !== 'text'" side> {{ type === 'feedback' ? q.response : q.points }} / 5 </q-item-section>
+      <q-item-section
+        v-if="type !== 'feedback' || q.options?.feedbackType !== 'text'"
+        side
+      >
+        {{ type === "feedback" ? q.response : q.points }} / 5
+      </q-item-section>
       <q-item-section v-else> {{ q.response }} </q-item-section>
     </q-item>
   </q-list>

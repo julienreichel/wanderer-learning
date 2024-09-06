@@ -33,7 +33,9 @@ const chartSerie = computed(() => {
   if (!props.stepsSummary?.length) return [];
 
   const stepsSerie = props.steps.map((step) =>
-    reportingService.computePointsPerStep(props.stepsSummary.find((item) => item.lectureStepId === step.id)),
+    reportingService.computePointsPerStep(
+      props.stepsSummary.find((item) => item.lectureStepId === step.id),
+    ),
   );
   return stepsSerie.map(
     ({ averagePoints }) => Math.round(averagePoints * 10) / 10,

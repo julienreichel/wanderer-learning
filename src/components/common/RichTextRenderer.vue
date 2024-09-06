@@ -21,9 +21,9 @@ let renderedHtml = ref();
 mermaid.initialize({ startOnLoad: true, theme: "forest" });
 // Function to decode HTML entities
 function decodeHTMLEntities(text) {
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = text;
-    return textarea.value;
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = text;
+  return textarea.value;
 }
 
 const contentContainer = ref(null);
@@ -34,9 +34,12 @@ const render = async () => {
   const html = renderKatex(props.htmlContent);
 
   // Extract the SVG code from the string
-  renderedHtml.value = html.replace(/<code class="language-svg">([\s\S]*?)<\/code>/g, (match, code) => {
-    return decodeHTMLEntities(code);
-  });
+  renderedHtml.value = html.replace(
+    /<code class="language-svg">([\s\S]*?)<\/code>/g,
+    (match, code) => {
+      return decodeHTMLEntities(code);
+    },
+  );
 
   nextTick(async () => {
     await mermaid.run({
