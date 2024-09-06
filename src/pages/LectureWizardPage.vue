@@ -29,8 +29,8 @@
       <q-step :title="$t('wizard.titleKeyConceptsObjectives.title')" :name="2">
         <objectives-wizard-step
           v-model:title="title"
-          v-model:keyConcepts="keyConcepts"
-          v-model:learningObjectives="learningObjectives"
+          v-model:key-concepts="keyConcepts"
+          v-model:learning-objectives="learningObjectives"
           @generate-title-and-objectives="
             generateTitleAndObjectives(keyConcepts, learningObjectives)
           "
