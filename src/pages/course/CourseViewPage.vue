@@ -28,10 +28,12 @@
           v-if="checkingCourse"
           flat
           :questions="questions"
+          :answered-questions="activeReport?.responses"
           :max="20"
           adaptative
           @finished="finishQuiz"
           @results="processResult"
+          @progress="processPartial"
         />
         <q-card-actions v-if="!checkingCourse" class="q-px-none q-py-lg">
           <q-btn square size="md" icon="chevron_left" @click="finished()" />
@@ -58,7 +60,7 @@ import QuizRunner from "src/components/part/display/QuizRunner.vue";
 import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 
 import { useIris } from "src/composables/iris";
-const { router, canEdit } = useIris();
+const { router, canEdit, debounce } = useIris();
 const {
   course: courseService,
   stepReporting: reportingService,
@@ -75,6 +77,7 @@ const props = defineProps({
 
 const course = ref({});
 const reporting = ref();
+let activeReport = ref();
 onMounted(async () => {
   const data = await courseService.get(props.id);
   course.value = data;
@@ -88,13 +91,21 @@ onMounted(async () => {
   ]);
 
   // Get the last report
-  reporting.value = (
-    await quizReportingService.list({
+  const allReports = (await quizReportingService.list({
       courseId: course.value.id,
       userId,
       username,
     })
-  ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+  ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // is there a quiz in progress?
+  const inProgressReport = allReports.find(({ inProgress }) => inProgress);
+  if (inProgressReport) {
+    activeReport.value = inProgressReport;
+    checkCourse();
+  }
+
+  reporting.value = allReports.find((report) => !report.inProgress);
   const lastTest = reporting.value?.createdAt || 0;
 
   // load stats for the user for each lecture
@@ -192,7 +203,9 @@ const checkCourse = () => {
 const finishQuiz = () => {
   checkingCourse.value = false;
 };
-const processResult = async (questions) => {
+
+let currentReport = null;
+const saveReport = async (questions, inProgress) => {
   const responses = questions.map((question) => {
     // find the index of the part holding the question in the step
     const response = {
@@ -207,9 +220,32 @@ const processResult = async (questions) => {
     };
     return response;
   });
-  reporting.value = await quizReportingService.create({
-    courseId: course.value.id,
-    responses,
-  });
+
+  if (!currentReport && activeReport.value){
+    currentReport = activeReport.value;
+  }
+
+  if (currentReport) {
+    currentReport.responses = responses;
+    currentReport.inProgress = inProgress;
+    currentReport = await quizReportingService.update(currentReport);
+  } else {
+    currentReport = await quizReportingService.create({
+      courseId: course.value.id,
+      inProgress,
+      responses,
+    });
+  }
+  return currentReport;
+};
+
+const debouncedSaveReport = debounce(saveReport, 500); // 500 milliseconds delay
+
+const processResult = async (questions) => {
+  reporting.value = await debouncedSaveReport(questions, false);
+  currentReport = null;
+};
+const processPartial = async (questions) => {
+  debouncedSaveReport(questions, true);
 };
 </script>

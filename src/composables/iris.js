@@ -32,7 +32,24 @@ export function useIris() {
     return icon;
   };
 
-  return { router, t, locale, $q, uid, canEdit, getIconFromQuestion };
+  const debounce = (func, delay) => {
+    let timeoutId;
+    let pendingResolves = [];
+    return function (...args) {
+      const context = this;
+      clearTimeout(timeoutId);
+      return new Promise((resolve) => {
+        pendingResolves.push(resolve);
+        timeoutId = setTimeout(async () => {
+          const result = await func.apply(context, args);
+          pendingResolves.forEach((resolve) => resolve(result));
+          pendingResolves = [];
+        }, delay);
+      });
+    };
+  }
+
+  return { router, t, locale, $q, uid, canEdit, getIconFromQuestion, debounce };
 }
 
 export function useFormatter() {

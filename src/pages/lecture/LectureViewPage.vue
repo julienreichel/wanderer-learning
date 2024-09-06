@@ -121,7 +121,7 @@ import StepScore from "src/components/charts/StepScore.vue";
 import RichTextRenderer from "src/components/common/RichTextRenderer.vue";
 
 import { useIris } from "src/composables/iris";
-const { t, router, canEdit, uid } = useIris();
+const { t, router, canEdit, uid, debounce } = useIris();
 const {
   lecture: lectureService,
   stepReporting: reportingService,
@@ -320,21 +320,6 @@ const feedbacks = ref(
   })),
 );
 
-const debounceAsync = (func, delay) => {
-  let timeoutId;
-  return function (...args) {
-    const context = this;
-    clearTimeout(timeoutId);
-    return new Promise((resolve) => {
-      timeoutId = setTimeout(async () => {
-        const result = await func.apply(context, args);
-        resolve(result);
-      }, delay);
-    });
-  };
-}
-
-
 let currentReport = null;
 const saveReport = async (questions, inProgress) => {
   const responses = questions.map((question) => {
@@ -375,7 +360,7 @@ const saveReport = async (questions, inProgress) => {
   }
 };
 
-const debouncedSaveReport = debounceAsync(saveReport, 500); // 500 milliseconds delay
+const debouncedSaveReport = debounce(saveReport, 500); // 500 milliseconds delay
 
 const processResult = async (questions) => {
   await debouncedSaveReport(questions, false);
@@ -410,7 +395,7 @@ const processResult = async (questions) => {
   }
 };
 const processPartial = async (questions) => {
-  await debouncedSaveReport(questions, true);
+  debouncedSaveReport(questions, true);
 };
 
 </script>

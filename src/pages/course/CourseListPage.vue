@@ -156,7 +156,7 @@ const columns = [
   },
 ];
 const getUrl = (course) => {
-  const idx = Math.floor(Math.random() * 7.9) + 1;
+  const idx = (course.title.length % 8) + 1;
   return course?.url || `/covers/Course${idx}.jpg`;
 };
 
