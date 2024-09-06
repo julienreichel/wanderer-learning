@@ -101,7 +101,7 @@ import ConceptList from "src/components/concept/ConceptList.vue";
 import { ref, inject, onMounted, computed, watch } from "vue";
 
 import { useIris } from "src/composables/iris";
-const { locale } = useIris();
+const { locale, debounce } = useIris();
 
 const {
   stepReporting: reportingService,
@@ -151,16 +151,18 @@ const addStep = async (lecture, report) => {
 
   // get the quiz report for this step, in case the user has allready starting to revise them
   const latestQuizReports = (await quizReportingService.list({ userId, username, lectureStepId }))
-    .sort((a, b) => a.createdAt - b.createdAt)[0];
+    .sort((a, b) => a.createdAt - b.createdAt);
 
-  console.log("latestQuizReports", latestQuizReports);
-  if (latestQuizReports) {
+  const latestFinishedQuiz = latestQuizReports.find(({ inProgress }) => !inProgress);
+  if (latestFinishedQuiz) {
     step.points = reportingService.computePointsPerStep(latestQuizReports).averagePoints;
-    if ( latestQuizReports.inProgress ){
-      step.answeredQuestions = latestQuizReports.responses;
-    }
   } else {
     step.points = reportingService.computePointsPerStep(report).averagePoints;
+  }
+
+  const inProgressQuiz = latestQuizReports.find(({ inProgress, type }) => inProgress && type === "review");
+  if (inProgressQuiz) {
+    step.inProgressQuiz = inProgressQuiz;
   }
 
   lastSteps.value.push(step);
@@ -278,7 +280,7 @@ const questions = computed(() => {
 
 const answeredQuestions = computed(() => {
   if (!reviewStep.value) return;
-  return reviewStep.value.answeredQuestions;
+  return reviewStep.value.inProgressQuiz?.responses;
 });
 
 watch(
@@ -293,8 +295,6 @@ watch(
   },
   { immediate: true },
 );
-
-let currentReport = null;
 
 const saveReport = async (questions, inProgress) => {
   const step = reviewStep.value;
@@ -315,12 +315,12 @@ const saveReport = async (questions, inProgress) => {
     responses.push(response);
   });
 
-  if (currentReport) {
-    currentReport.responses = responses;
-    currentReport.inProgress = inProgress;
-    await quizReportingService.update(currentReport);
+  if (step.inProgressQuiz) {
+    step.inProgressQuiz.responses = responses;
+    step.inProgressQuiz.inProgress = inProgress;
+    await quizReportingService.update(step.inProgressQuiz);
   } else {
-    currentReport = await quizReportingService.create({
+    step.inProgressQuiz = await quizReportingService.create({
       lectureStepId: step.id,
       responses: responses,
       type: "review",
@@ -328,12 +328,13 @@ const saveReport = async (questions, inProgress) => {
     });
   }
 };
+
+const debouncedSaveReport = debounce(saveReport, 500); // 500 milliseconds delay
 const processResult = async (questions) => {
-  await saveReport(questions, false);
-  currentReport = null;
+  await debouncedSaveReport(questions, false);
 };
 const processPartial = async (questions) => {
-  await saveReport(questions, true);
+  debouncedSaveReport(questions, true);
 }
 const finishQuiz = async () => {
   const step = reviewStep.value;
