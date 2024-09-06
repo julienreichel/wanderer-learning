@@ -192,27 +192,24 @@ onMounted(async () => {
 
     await addStep(lecture, report);
     // check if there in a next step in the lecture based report.lectureStepId
-    let lectureIsOver = true;
     const stepIndex = lecture.steps.findIndex(
       ({ id }) => id === report.lectureStepId,
     );
     if (stepIndex + 1 < lecture.steps.length) {
       lecture.nextStep = lecture.steps[stepIndex + 1];
       lecturesInProgress.value.push(lecture);
-      lectureIsOver = false;
     }
 
     // check if there is any next lecture in the course
-    if (lectureIsOver) {
-      const course = await courseService.get(lecture.course.id);
-      const lectureIndex = course.lectures.findIndex(
-        ({ id }) => id === lecture.id,
-      );
-      if (lectureIndex + 1 < course.lectures.length) {
-        const nextLecture = course.lectures[lectureIndex + 1];
-        lecturesNext.value.push(nextLecture);
-      }
+    const course = await courseService.get(lecture.course.id);
+    const lectureIndex = course.lectures.findIndex(
+      ({ id }) => id === lecture.id,
+    );
+    if (lectureIndex + 1 < course.lectures.length) {
+      const nextLecture = course.lectures[lectureIndex + 1];
+      lecturesNext.value.push(nextLecture);
     }
+
 
     // check the concept covered by the lecture, and get similar lectures
     lecture.concepts.forEach(async ({ concept }) => {
