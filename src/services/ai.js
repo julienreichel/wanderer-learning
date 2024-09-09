@@ -17,7 +17,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs
 
 import { useFormatter } from "src/composables/iris";
 
-export default class ServicePrototype {
+export default class AIService {
   constructor() {
     /**
      * @type {import('aws-amplify/data').Client<import('../amplify/data/resource').Schema>}

@@ -8,6 +8,7 @@ import StepReportingService from "src/services/step-reporting";
 import QuizReportingService from "src/services/quiz-reporting";
 import StorageService from "src/services/storage";
 
+import ExcalidrawService from "src/services/excalidraw";
 import AIService from "src/services/ai";
 
 export default boot(({ app }) => {
@@ -23,6 +24,7 @@ export default boot(({ app }) => {
   const quizReporting = new QuizReportingService(cacheData);
   const storage = new StorageService(cacheData);
   const ai = new AIService();
+  const excalidraw = new ExcalidrawService();
 
   app.provide("services", {
     lectureStep,
@@ -34,5 +36,6 @@ export default boot(({ app }) => {
     quizReporting,
     storage,
     ai,
+    excalidraw
   });
 });
