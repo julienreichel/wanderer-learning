@@ -209,11 +209,14 @@ onMounted(() => {
 });
 
 watch(
-  props,
+  () => props,
   (newProps) => {
+    console.log("props changed", newProps);
     if (root) {
-      root.render(createExcalidrawElement(newProps, eventHandlers));
+      root.unmount();
     }
+    root = createRoot(excalidraw.value);
+    root.render(createExcalidrawElement(newProps, eventHandlers));
   },
   { deep: true },
 );
