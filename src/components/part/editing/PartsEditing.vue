@@ -89,7 +89,7 @@
     v-model="part"
     :parts="parts"
   />
-  <part-editing v-else-if="part" v-model="part" :lecture-id="lectureId" />
+  <part-editing v-else-if="part" v-model="part" :index="step" :lecture-id="lectureId" />
   <json-edit-dialog
     v-model="jsonDialog"
     :data="jsonToEdit"

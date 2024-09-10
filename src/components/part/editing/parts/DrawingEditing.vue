@@ -10,12 +10,19 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { ref, watch } from "vue";
 import EscalidrawWrapper from "src/components/common/EscalidrawWrapper.vue";
+
+const props = defineProps({
+  index: { type: Number, default: 0 },
+});
 
 const part = defineModel({ type: Object });
 
-const data = computed(() => JSON.parse(part.value.src || "{}"));
+const data = ref();
+watch(() => props.index, () => {
+  data.value = JSON.parse(part.value.src || "{}");
+}, { immediate: true });
 
 const changed = (elements) => {
   part.value.src = JSON.stringify({ elements });
