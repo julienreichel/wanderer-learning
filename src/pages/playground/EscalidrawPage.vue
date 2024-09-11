@@ -54,10 +54,11 @@ const options = ref([
   { label: "Bulleyes", value: "bullsEyes" },
   { label: "Podium", value: "podium" },
   { label: "Timeline", value: "timeline" },
+  { label: "Pyramid", value: "pyramid" },
 ]);
 
 watch(selectedOption, (value) => {
-  if (value === "bullsEyes" || value === "timeline") {
+  if (value === "bullsEyes" || value === "timeline" || value === "pyramid") {
     jsonText.value = {
       text: ['1st', '2nd', '3rd', '4th', '5th'],
     }

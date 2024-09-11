@@ -24,6 +24,15 @@ const DEFAULT_TEXT_OPTS = {
   lineHeight: 1.25
 };
 
+const COLORS = [
+  '#ffec99',
+  '#ffc9c9',
+  '#a5d8ff',
+  '#b2f2bb',
+  '#d0bfff',
+  '#eaddd7',
+  '#e9ecef',
+];
 
 export default class ExcalidrawService {
   constructor() {
@@ -175,15 +184,7 @@ export default class ExcalidrawService {
 
     const ox = 300;
     const oy = 120;
-    const colors = [
-      '#e9ecef',
-      '#eaddd7',
-      '#d0bfff',
-      '#b2f2bb',
-      '#a5d8ff',
-      '#ffc9c9',
-      '#ffec99',
-    ];
+
     let elements = [];
     for (let i = 0; i < levels; i++) {
       elements.push(this.circle({
@@ -191,7 +192,7 @@ export default class ExcalidrawService {
         y: oy + i * circleStep / 2,
         width: circleSize - i * circleStep,
         height: circleSize - i * circleStep,
-        backgroundColor: colors[i + 7 - levels],
+        backgroundColor: COLORS[levels - i - 1],
       }));
     }
     let vy = circleStep
@@ -202,10 +203,10 @@ export default class ExcalidrawService {
       }
       elements.push(this.line({
         x: ox - 60,
-        y: oy + i * circleStep + 20,
+        y: oy + circleSize - i * circleStep - 20,
         points: [
           [0, 0],
-          [90 + i * circleStep / 2, vy],
+          [90 + i * circleStep / 2, - vy],
         ],
       }));
       vy -= circleStep / 1.5;
@@ -213,8 +214,8 @@ export default class ExcalidrawService {
     for (let i = 0; i < levels; i++) {
       // let add text
       elements.push(this.text({
-        x: ox - 60 - 150 - 5,
-        y: oy + i * circleStep + 20 - 12.5,
+        x: ox - 60 - 150 - 10,
+        y: oy + circleSize - i * circleStep - 20 - 12.5,
         width: 150,
         height: 25,
         text: opts.text[levels - i - 1],
@@ -225,6 +226,11 @@ export default class ExcalidrawService {
     return elements;
   }
 
+  /**
+   * @param {object} opts
+   * @params {array} opts.text
+   * @returns {array}
+   */
   podium(opts) {
     let elements = [];
     const pudiumWidth = 200;
@@ -232,13 +238,7 @@ export default class ExcalidrawService {
     const pudiumStep = 60;
 
     const ox = 160;
-    const oy = 140;
-
-    const colors = [
-      '#ffec99',
-      '#b2f2bb',
-      '#a5d8ff',
-    ];
+    const oy = 160;
 
     // winner
     elements.push(this.rectangle({
@@ -246,7 +246,7 @@ export default class ExcalidrawService {
       y: oy,
       width: pudiumWidth,
       height: pudiumHeight,
-      backgroundColor: colors[0],
+      backgroundColor: COLORS[0],
     }));
     elements.push(this.text({
       x: ox + pudiumWidth,
@@ -262,7 +262,7 @@ export default class ExcalidrawService {
       y: oy + pudiumStep,
       width: pudiumWidth,
       height: pudiumHeight - pudiumStep,
-      backgroundColor: colors[1],
+      backgroundColor: COLORS[1],
     }));
     elements.push(this.text({
       x: ox,
@@ -278,7 +278,7 @@ export default class ExcalidrawService {
       y: oy + 2 * pudiumStep,
       width: pudiumWidth,
       height: pudiumHeight - 2 * pudiumStep,
-      backgroundColor: colors[2],
+      backgroundColor: COLORS[2],
     }));
     elements.push(this.text({
       x: ox + 2 * pudiumWidth,
@@ -294,7 +294,6 @@ export default class ExcalidrawService {
   /**
    * @param {object} opts
    * @params {array} opts.text
-   * @params {number} [opts.levels]
    * @returns {array}
    */
   timeline(opts) {
@@ -338,6 +337,77 @@ export default class ExcalidrawService {
         text: opts.text[i],
       }));
     }
+    return elements;
+  }
+
+  /**
+   * @param {object} opts
+   * @params {array} opts.text
+   * @returns {array}
+   */
+  pyramid(opts) {
+
+    let elements = [];
+    const ox = 280;
+    const oy = 160;
+
+    const levels = opts.text.length;
+
+    /// draw a triangle for the top element and then losanges for the rest
+    const triangleSize = 350;
+
+    // the intial tiangle is twice the height of the losanges
+    const triangleHeight = triangleSize / (levels + 1);
+
+    const offset = triangleHeight / Math.sqrt(3);
+    let width = 2 * offset;
+    elements.push(this.line({
+      x: ox + triangleSize / 2,
+      y: oy,
+      points: [
+        [0, 0],
+        [offset * 2, triangleHeight * 2],
+        [- 2 * offset, triangleHeight * 2],
+        [0, 0],
+      ],
+      backgroundColor: COLORS[0],
+    }));
+    elements.push(this.text({
+      x: ox + triangleSize / 2 - width / 2,
+      y: oy + triangleHeight * 1.5 - 12.5,
+      width: width,
+      height: 25,
+      text: opts.text[0],
+      textAlign: 'center',
+    }));
+
+    for (let i = 1; i < levels; i++) {
+      width += 2 * offset;
+      elements.push(this.line({
+        x: ox + triangleSize / 2,
+        y: oy + (triangleHeight + 10) * i + triangleHeight,
+        points: [
+          [0, 0],
+          [width / 2, 0],
+          [width / 2 + offset, triangleHeight],
+          [- width / 2 - offset, triangleHeight],
+          [- width / 2, 0],
+          [0, 0]
+        ],
+        backgroundColor: COLORS[i],
+      }));
+      elements.push(this.text({
+        x: ox + triangleSize / 2 - width / 2,
+        y: oy + (triangleHeight + 10) * i + triangleHeight * 1.5 - 12.5,
+        width: width,
+        height: 25,
+        text: opts.text[i],
+        textAlign: 'center',
+      }));
+
+
+    }
+
     return elements;
   }
 }
