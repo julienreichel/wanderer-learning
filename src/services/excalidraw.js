@@ -15,13 +15,18 @@ const DEFAULT_FILLED_OPTS = {
   backgroundColor: "transparent",
 };
 
+const TEXT_X_OFFEST = 75;
+const TEXT_Y_OFFEST = 12.5;
+
 const DEFAULT_TEXT_OPTS = {
   fontSize: 20,
   fontFamily: 1,
   textAlign: "center",
   verticalAlign: "middle",
   autoResize: false,
-  lineHeight: 1.25
+  lineHeight: 1.25,
+  width: TEXT_X_OFFEST * 2,
+  height: TEXT_Y_OFFEST * 2,
 };
 
 const COLORS = [
@@ -215,9 +220,7 @@ export default class ExcalidrawService {
       // let add text
       elements.push(this.text({
         x: ox - 60 - 150 - 10,
-        y: oy + circleSize - i * circleStep - 20 - 12.5,
-        width: 150,
-        height: 25,
+        y: oy + circleSize - i * circleStep - 20 - TEXT_Y_OFFEST,
         text: opts.text[levels - i - 1],
         textAlign: 'right',
       }));
@@ -268,7 +271,6 @@ export default class ExcalidrawService {
       x: ox,
       y: oy + pudiumStep - 30,
       width: pudiumWidth,
-      height: 25,
       text: opts.text[1]
     }));
 
@@ -284,7 +286,6 @@ export default class ExcalidrawService {
       x: ox + 2 * pudiumWidth,
       y: oy + 2 * pudiumStep - 30,
       width: pudiumWidth,
-      height: 25,
       text: opts.text[2]
     }));
 
@@ -330,10 +331,8 @@ export default class ExcalidrawService {
       }));
 
       elements.push(this.text({
-        x: ox + (i + 1) * lineOffset - 75,
+        x: ox + (i + 1) * lineOffset - TEXT_X_OFFEST,
         y: oy + height + ((i % 2) - 1) * 25,
-        width: 150,
-        height: 25,
         text: opts.text[i],
       }));
     }
@@ -374,9 +373,8 @@ export default class ExcalidrawService {
     }));
     elements.push(this.text({
       x: ox + triangleSize / 2 - width / 2,
-      y: oy + triangleHeight * 1.5 - 12.5,
+      y: oy + triangleHeight * 1.5 - TEXT_Y_OFFEST,
       width: width,
-      height: 25,
       text: opts.text[0],
       textAlign: 'center',
     }));
@@ -398,14 +396,108 @@ export default class ExcalidrawService {
       }));
       elements.push(this.text({
         x: ox + triangleSize / 2 - width / 2,
-        y: oy + (triangleHeight + 10) * i + triangleHeight * 1.5 - 12.5,
+        y: oy + (triangleHeight + 10) * i + triangleHeight * 1.5 - TEXT_Y_OFFEST,
         width: width,
-        height: 25,
         text: opts.text[i],
         textAlign: 'center',
       }));
 
 
+    }
+
+    return elements;
+  }
+
+  /**
+   * @param {object} opts
+   * @params {array} opts.text
+   * @params {object} opts.axis
+   * @params {array} opts.axis.x
+   * @params {array} opts.axis.y
+   * @returns {array}
+   */
+  matrix(opts) {
+
+    let elements = [];
+    const matrixSize = 500;
+
+    const ox = 200 + matrixSize / 2;
+    const oy = 160 + matrixSize / 2;
+
+    // the x axis
+    elements.push(this.arrow({
+      x: ox,
+      y: oy,
+      points: [
+        [-matrixSize / 2, 0],
+        [matrixSize / 2, 0],
+      ],
+      startArrowhead: "arrow",
+      endArrowhead: "arrow",
+    }));
+
+    elements.push(this.text({
+      x: ox - matrixSize / 2 - 10 - TEXT_X_OFFEST * 2,
+      y: oy - TEXT_Y_OFFEST,
+      text: opts.axis?.x?.[0],
+      textAlign: 'right',
+    }));
+    elements.push(this.text({
+      x: ox + matrixSize / 2 + 10,
+      y: oy - TEXT_Y_OFFEST,
+      text: opts.axis?.x?.[1],
+      textAlign: 'left',
+    }));
+
+    // the y axis
+    elements.push(this.arrow({
+      x: ox,
+      y: oy,
+      points: [
+        [0, - matrixSize / 2],
+        [0, matrixSize / 2],
+      ],
+      startArrowhead: "arrow",
+      endArrowhead: "arrow",
+    }));
+    elements.push(this.text({
+      x: ox - TEXT_X_OFFEST,
+      y: oy - matrixSize / 2 - 10 - TEXT_Y_OFFEST * 2,
+      text: opts.axis?.y?.[0],
+      textAlign: 'center',
+    }));
+    elements.push(this.text({
+      x: ox - TEXT_X_OFFEST,
+      y: oy + matrixSize / 2 + 10,
+      text: opts.axis?.y?.[1],
+      textAlign: 'center',
+    }));
+
+    // the four squares
+    const space = 30;
+    const squareSize = matrixSize / 2 - space * 2;
+    let idx = 0;
+    for (let y = -1; y < 1; y++) {
+      for (let x = -1; x < 1; x++) {
+        elements.push(this.rectangle({
+          x: ox + x * (squareSize + space * 2) + space,
+          y: oy + y * (squareSize + space * 2) + space,
+          width: squareSize,
+          height: squareSize,
+          backgroundColor: COLORS[idx],
+          roundness: {
+            type: 3
+          },
+        }));
+        elements.push(this.text({
+          x: ox + x * (squareSize + space * 2) + space,
+          y: oy + y * (squareSize + space * 2) + squareSize / 2 + space - TEXT_Y_OFFEST,
+          width: squareSize,
+          text: opts.text[idx],
+          textAlign: 'center',
+        }));
+        idx++;
+      }
     }
 
     return elements;

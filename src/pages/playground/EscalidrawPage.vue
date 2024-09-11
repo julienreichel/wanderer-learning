@@ -55,6 +55,7 @@ const options = ref([
   { label: "Podium", value: "podium" },
   { label: "Timeline", value: "timeline" },
   { label: "Pyramid", value: "pyramid" },
+  { label: "Matrix", value: "matrix" },
 ]);
 
 watch(selectedOption, (value) => {
@@ -67,6 +68,13 @@ watch(selectedOption, (value) => {
   if (value === "podium") {
     jsonText.value = {
       text: ['1st', '2nd', '3rd'],
+    }
+  }
+
+  if (value === "matrix") {
+    jsonText.value = {
+      text: ['NW', 'NE', 'SW', 'SE'],
+      axis: { x :['West', 'East'], y: ['North', 'South']},
     }
   }
 
