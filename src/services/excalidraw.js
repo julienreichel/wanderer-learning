@@ -380,7 +380,7 @@ export default class ExcalidrawService {
     }));
 
     for (let i = 1; i < levels; i++) {
-      width += 2 * offset;
+      width += 2 * offset + 7;
       elements.push(this.line({
         x: ox + triangleSize / 2,
         y: oy + (triangleHeight + 10) * i + triangleHeight,
@@ -498,6 +498,54 @@ export default class ExcalidrawService {
         }));
         idx++;
       }
+    }
+
+    return elements;
+  }
+
+  /**
+   * @param {object} opts
+   * @params {array} opts.text
+   * @returns {array}
+   */
+  funnel(opts) {
+
+    let elements = [];
+
+    const figureSize = 400;
+    const ox = 260 + figureSize / 2;
+    const oy = 160;
+
+    const levels = opts.text.length;
+
+    const itemHeight = figureSize / levels;
+
+    let width = figureSize + levels * 10;
+    let offset = itemHeight / 1.5;
+
+    for (let i = 0; i < levels; i++) {
+      elements.push(this.line({
+        x: ox,
+        y: oy + (itemHeight + 10) * i,
+        points: [
+          [-width / 2, 0],
+          [width / 2, 0],
+          [width / 2 - offset, itemHeight],
+          [-width / 2 + offset, itemHeight],
+          [-width / 2, 0],
+        ],
+        backgroundColor: COLORS[i],
+      }));
+      width -= 2 * offset + 5;
+      offset *= 0.5 + levels / 20;
+      elements.push(this.text({
+        x: ox - width / 2,
+        y: oy + (itemHeight + 10) * i + itemHeight * 0.5 - TEXT_Y_OFFEST,
+        width: width,
+        text: opts.text[i],
+        textAlign: 'center',
+      }));
+
     }
 
     return elements;
