@@ -39,6 +39,13 @@ const COLORS = [
   '#e9ecef',
 ];
 
+const point = (angle, radius) => {
+  return [
+    radius * Math.cos(angle),
+    radius * Math.sin(angle),
+  ];
+}
+
 export default class ExcalidrawService {
   constructor() {
   }
@@ -573,12 +580,6 @@ export default class ExcalidrawService {
     const angleStep = (2 * Math.PI) / levels; // The angle between each point
     const angelOffset = 2 * Math.PI / 15; // The offset to start from the top
 
-    const point = (angle, radius) => {
-      return [
-        radius * Math.cos(angle),
-        radius * Math.sin(angle),
-      ];
-    }
     // Draw a line from the center circle to the outter circle
     // then move by the angle step
     // then draw a line from the outter circle to the center circle
@@ -702,8 +703,44 @@ export default class ExcalidrawService {
         textAlign: 'center',
       }));
     }
-
-
     return elements;
   }
+
+  /**
+   * @param {object} opts
+   * @params {array} opts.text
+   * @returns {array}
+   */
+  staircases(opts) {
+
+    let elements = [];
+    const stepsHeight = 300;
+    const stepsWidth = 500;
+
+    const ox = 200;
+    const oy = 120;
+    const levels = opts.text.length;
+
+    const stepHeight = stepsHeight / levels;
+    const stepWidth = stepsWidth / (levels + 1);
+    // draw each start starting from the base
+    for (let i = 0; i < levels; i++) {
+      elements.push(this.rectangle({
+        x: ox + i * stepWidth,
+        y: oy + stepsHeight - (i + 1) * stepHeight,
+        width: (levels - i + 1) * stepWidth,
+        height: stepHeight,
+        backgroundColor: COLORS[i],
+      }));
+      elements.push(this.text({
+        x: ox + i * stepWidth + 15,
+        y: oy + stepsHeight - (i + 1) * stepHeight + stepHeight / 2 - TEXT_Y_OFFEST,
+        width: (levels - i + 1) * stepWidth - 25,
+        text: opts.text[i],
+        textAlign: 'left',
+      }));
+    }
+    return elements;
+  }
+
 }
