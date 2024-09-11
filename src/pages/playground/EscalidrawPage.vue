@@ -57,19 +57,26 @@ const options = ref([
   { label: "Pyramid", value: "pyramid" },
   { label: "Matrix", value: "matrix" },
   { label: "Funnel", value: "funnel" },
+  { label: "Cycle", value: "cycle" },
+  { label: "Pillars", value: "pillars" },
 ]);
 
 watch(selectedOption, (value) => {
-  if (value === "bullsEyes" || value === "timeline" || value === "pyramid" || value === "funnel") {
+  if (value === "bullsEyes" || value === "timeline" || value === "pyramid" || value === "funnel" || value === "cycle") {
     jsonText.value = {
       text: ['1st', '2nd', '3rd', '4th', '5th'],
     }
   }
 
-  if (value === "podium") {
+  if (value === "podium" || value === "pillars") {
     jsonText.value = {
       text: ['1st', '2nd', '3rd'],
     }
+  }
+
+  if (value === "pillars") {
+    jsonText.value.roof = "Roof";
+    jsonText.value.base = "Base";
   }
 
   if (value === "matrix") {

@@ -550,4 +550,160 @@ export default class ExcalidrawService {
 
     return elements;
   }
+
+  /**
+   * @param {object} opts
+   * @params {array} opts.text
+   * @returns {array}
+   */
+  cycle(opts) {
+
+    let elements = [];
+    const innerCircleRadius = 75;
+    const outterCircleRadius = 200;
+
+    const ox = 320 + outterCircleRadius / 2;
+    const oy = 220 + outterCircleRadius / 2;;
+    const levels = opts.text.length;
+
+    // The drwaing is based on 2 cicles centered at (ox, oy)
+
+    const middleCircelRadius = (innerCircleRadius * 2 + outterCircleRadius * 3) / 5;
+
+    const angleStep = (2 * Math.PI) / levels; // The angle between each point
+    const angelOffset = 2 * Math.PI / 15; // The offset to start from the top
+
+    const point = (angle, radius) => {
+      return [
+        radius * Math.cos(angle),
+        radius * Math.sin(angle),
+      ];
+    }
+    // Draw a line from the center circle to the outter circle
+    // then move by the angle step
+    // then draw a line from the outter circle to the center circle
+    for (let i = 0; i < levels; i++) {
+      const offset = point(i * angleStep + angleStep / 2, 15);
+      elements.push(this.line({
+        x: ox + offset[0],
+        y: oy + offset[1],
+        points: [
+          point(i * angleStep, innerCircleRadius),
+          point(i * angleStep + angelOffset, middleCircelRadius),
+          point(i * angleStep, outterCircleRadius),
+          point((i + 0.25) * angleStep, outterCircleRadius),
+          point((i + 0.5) * angleStep, outterCircleRadius),
+          point((i + 0.75) * angleStep, outterCircleRadius),
+          point((i + 1) * angleStep, outterCircleRadius),
+          point((i + 1) * angleStep + angelOffset, middleCircelRadius),
+          point((i + 1) * angleStep, innerCircleRadius),
+          point((i + 0.75) * angleStep, innerCircleRadius),
+          point((i + 0.5) * angleStep, innerCircleRadius),
+          point((i + 0.25) * angleStep, innerCircleRadius),
+          point(i * angleStep, innerCircleRadius),
+        ],
+        roundness: {
+          type: 3
+        },
+        backgroundColor: COLORS[i],
+      }));
+      const textCenter = point(i * angleStep + angleStep / 3 + angelOffset, (innerCircleRadius + outterCircleRadius) / 2);
+      elements.push(this.text({
+        x: ox + textCenter[0] + offset[0] - TEXT_X_OFFEST,
+        y: oy + textCenter[1] + offset[1] - TEXT_Y_OFFEST,
+        text: opts.text[i],
+        textAlign: 'center',
+      }));
+
+    }
+    return elements;
+  }
+
+  /**
+   * @param {object} opts
+   * @params {array} opts.text
+   * @params {text} opts.base
+   * @params {text} opts.roof
+   * @returns {array}
+   */
+  pillars(opts) {
+    let elements = [];
+    const templleWidth = 500;
+    const columnHeight = 300;
+    const roofHeight = 100;
+    const baseHeight = 40;
+
+
+    const ox = 200;
+    const oy = 120;
+    const levels = opts.text.length;
+
+    // draw the base
+    elements.push(this.rectangle({
+      x: ox,
+      y: oy + columnHeight + roofHeight + baseHeight,
+      width: templleWidth,
+      height: baseHeight,
+      backgroundColor: COLORS[0],
+    }));
+    elements.push(this.text({
+      x: ox,
+      y: oy + columnHeight + roofHeight + baseHeight * 1.5 - TEXT_Y_OFFEST,
+      width: templleWidth,
+      text: opts.base,
+      textAlign: 'center',
+    }));
+
+    // draw the roof
+    elements.push(this.rectangle({
+      x: ox,
+      y: oy + roofHeight,
+      width: templleWidth,
+      height: baseHeight,
+      backgroundColor: COLORS[0],
+    }));
+
+    elements.push(this.line({
+      x: ox,
+      y: oy,
+      points: [
+        [templleWidth / 2, 0],
+        [templleWidth + 20, roofHeight],
+        [-20, roofHeight],
+        [templleWidth / 2, 0],
+      ],
+      backgroundColor: COLORS[0],
+    }));
+    elements.push(this.text({
+      x: ox,
+      y: oy + roofHeight - baseHeight - TEXT_Y_OFFEST,
+      width: templleWidth,
+      text: opts.roof,
+      textAlign: 'center',
+    }));
+
+    // draw the columns
+    const space = templleWidth / levels / 4;
+    const columnWidth = templleWidth / levels - space;
+    for (let i = 0; i < levels; i++) {
+      elements.push(this.rectangle({
+        x: ox + i * (columnWidth + space) + space / 2,
+        y: oy + roofHeight + baseHeight,
+        width: columnWidth,
+        height: columnHeight,
+        backgroundColor: COLORS[i + 1],
+      }));
+      elements.push(this.text({
+        x: ox + i * (columnWidth + space) + space / 2 + columnWidth / 2 - columnHeight / 2,
+        y: oy + roofHeight + baseHeight + columnHeight / 2,
+        width: columnHeight,
+        text: opts.text[i],
+        angle: Math.PI / 2,
+        textAlign: 'center',
+      }));
+    }
+
+
+    return elements;
+  }
 }
