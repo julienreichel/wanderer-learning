@@ -747,6 +747,11 @@ export default class ExcalidrawService {
     return { elements };
   }
 
+  /**
+   * @param {object} opts
+   * @params {text} opts.text
+   * @returns {array}
+   */
   async mermaid(opts) {
     const mermaidSyntax = opts.text;
     const ox = 200;
@@ -768,4 +773,94 @@ export default class ExcalidrawService {
       return [];
     }
   }
+
+  /**
+   * @param {object} opts
+   * @params {object[]} opts.bars
+   * @params {number} opts.basrs[].value
+   * @params {text} opts.basrs[].text
+   * @params {object} opts.axis
+   * @params {array} opts.axis.x
+   * @params {array} opts.axis.y
+   * @returns {array}
+   */
+  async bars(opts) {
+    let elements = [];
+
+    const graphSize = 400;
+    const ox = 200;
+    const oy = 140;
+    const levels = opts.bars.length;
+
+    // the x axis
+    elements.push(this.arrow({
+      x: ox,
+      y: oy + graphSize,
+      points: [
+        [0, 0],
+        [graphSize, 0],
+      ]
+    }));
+
+    elements.push(this.text({
+      x: ox + graphSize + 10,
+      y: oy + graphSize - TEXT_Y_OFFEST,
+      text: opts.axis?.x,
+      textAlign: 'left',
+    }));
+
+    // the y axis
+    elements.push(this.arrow({
+      x: ox,
+      y: oy + graphSize,
+      points: [
+        [0, 0],
+        [0, - graphSize],
+      ],
+
+    }));
+    elements.push(this.text({
+      x: ox - TEXT_X_OFFEST,
+      y: oy - TEXT_Y_OFFEST * 2 - 10,
+      text: opts.axis?.y,
+      textAlign: 'center',
+    }));
+
+    // the bars
+    const space = 15;
+    const barSize = graphSize * 0.9;
+    const delta = graphSize - barSize;
+    const barHeight = (barSize - (levels + 1) * space) / levels;
+    const maxValue = Math.max(...opts.bars.map(bar => bar.value));
+    for (let i = 0; i < levels; i++) {
+      elements.push(this.rectangle({
+        x: ox,
+        y: oy + delta + (i + 1) * space + i * barHeight,
+        width: opts.bars[i].value / maxValue * barSize,
+        height: barHeight,
+        backgroundColor: COLORS[i],
+      }));
+      if (opts.bars[i].value < maxValue / 3) {
+        elements.push(this.text({
+          x: ox + opts.bars[i].value / maxValue * barSize + 15,
+          y: oy + delta + (i + 1) * space + (i + 0.5) * barHeight - TEXT_Y_OFFEST,
+          width: barSize - opts.bars[i].value / maxValue * barSize,
+          text: opts.bars[i].text,
+          textAlign: 'left',
+        }));
+      } else {
+        elements.push(this.text({
+          x: ox + 15,
+          y: oy + delta + (i + 1) * space + (i + 0.5) * barHeight - TEXT_Y_OFFEST,
+          width: opts.bars[i].value / maxValue * barSize,
+          text: opts.bars[i].text,
+          textAlign: 'left',
+        }));
+      }
+    }
+
+
+    return { elements };
+  }
+
 }

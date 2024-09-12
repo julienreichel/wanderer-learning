@@ -61,6 +61,7 @@ const options = ref([
   { label: "Pillars", value: "pillars" },
   { label: "Staircases", value: "staircases" },
   { label: "Mermaid", value: "mermaid" },
+  { label: "Bars", value: "bars" },
 ]);
 
 watch(selectedOption, (value) => {
@@ -99,6 +100,13 @@ watch(selectedOption, (value) => {
     jsonText.value = {
       text: ['NW', 'NE', 'SW', 'SE'],
       axis: { x :['West', 'East'], y: ['North', 'South']},
+    }
+  }
+
+  if (value === "bars") {
+    jsonText.value = {
+      bars: [{ value: 50, text: "1st" }, { value: 30, text: "2nd" }, { value: 20, text: "3rd" }, { value: 5, text: "4th" }],
+      axis: { x : "Points", y: "Ranks"},
     }
   }
 
