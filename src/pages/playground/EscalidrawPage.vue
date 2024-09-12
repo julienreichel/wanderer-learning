@@ -60,6 +60,7 @@ const options = ref([
   { label: "Cycle", value: "cycle" },
   { label: "Pillars", value: "pillars" },
   { label: "Staircases", value: "staircases" },
+  { label: "Mermaid", value: "mermaid" },
 ]);
 
 watch(selectedOption, (value) => {
@@ -73,6 +74,20 @@ watch(selectedOption, (value) => {
     jsonText.value = {
       text: ['1st', '2nd', '3rd'],
     }
+  }
+
+  if (value === "mermaid") {
+    jsonText.value = {
+      text: `flowchart TB
+  c1-->a2
+  subgraph one
+  a1-->a2
+  end
+  subgraph two
+  b1-->b2
+  end`
+    }
+    jsonText.value.base = "Base";
   }
 
   if (value === "pillars") {
@@ -102,11 +117,11 @@ const editorOptions = ref({
   },
 });
 
-const applyChanges = () => {
-  let elements = [];
-  elements = excalidrawService[selectedOption.value](jsonText.value);
+const applyChanges = async () => {
 
-  excalidrawData.value = { elements };
+  const {elements, files} = await excalidrawService[selectedOption.value](jsonText.value);
+
+  excalidrawData.value = { elements, files };
   // Logic to apply changes
   console.log("Changes applied:", elements);
 };

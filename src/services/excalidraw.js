@@ -1,5 +1,8 @@
 import { uid } from 'quasar'
 
+import { parseMermaidToExcalidraw } from "@excalidraw/mermaid-to-excalidraw";
+import { convertToExcalidrawElements } from "@excalidraw/excalidraw"
+
 const DEFAULT_OPTS = {
   roughness: 1,
   opacity: 100,
@@ -11,6 +14,7 @@ const DEFAULT_OPTS = {
 };
 
 const DEFAULT_FILLED_OPTS = {
+  strokeWidth: 1,
   fillStyle: "solid",
   backgroundColor: "transparent",
 };
@@ -233,7 +237,7 @@ export default class ExcalidrawService {
       }));
     }
 
-    return elements;
+    return { elements };
   }
 
   /**
@@ -296,7 +300,7 @@ export default class ExcalidrawService {
       text: opts.text[2]
     }));
 
-    return elements;
+    return { elements };
   }
 
   /**
@@ -343,7 +347,7 @@ export default class ExcalidrawService {
         text: opts.text[i],
       }));
     }
-    return elements;
+    return { elements };
   }
 
   /**
@@ -412,7 +416,7 @@ export default class ExcalidrawService {
 
     }
 
-    return elements;
+    return { elements };
   }
 
   /**
@@ -507,7 +511,7 @@ export default class ExcalidrawService {
       }
     }
 
-    return elements;
+    return { elements };
   }
 
   /**
@@ -555,7 +559,7 @@ export default class ExcalidrawService {
 
     }
 
-    return elements;
+    return { elements };
   }
 
   /**
@@ -617,7 +621,7 @@ export default class ExcalidrawService {
       }));
 
     }
-    return elements;
+    return { elements };
   }
 
   /**
@@ -703,7 +707,7 @@ export default class ExcalidrawService {
         textAlign: 'center',
       }));
     }
-    return elements;
+    return { elements };
   }
 
   /**
@@ -740,7 +744,28 @@ export default class ExcalidrawService {
         textAlign: 'left',
       }));
     }
-    return elements;
+    return { elements };
   }
 
+  async mermaid(opts) {
+    const mermaidSyntax = opts.text;
+    const ox = 200;
+    const oy = 120;
+
+    try {
+      const { elements, files } = await parseMermaidToExcalidraw(mermaidSyntax, {
+        ...DEFAULT_TEXT_OPTS,
+      });
+      elements.forEach((element) => {
+        element.x += ox;
+        element.y += oy;
+      });
+      const excalidrawElements = convertToExcalidrawElements(elements);
+      // Render elements and files on Excalidraw
+      return { elements: excalidrawElements, files };
+    } catch (e) {
+      // Parse error, displaying error message to users
+      return [];
+    }
+  }
 }
