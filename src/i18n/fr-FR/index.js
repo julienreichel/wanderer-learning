@@ -225,6 +225,12 @@ export default {
         5: "Expert",
       },
     },
+    drawing: {
+      description: "Contenu a utiliser pour les illustrations",
+      step1: "Data",
+      step2: "Création",
+      step3: "Choix",
+    },
     lecture: {
       title: "Description de la leçon",
       description: "Contenu de la leçon",

@@ -19,7 +19,7 @@ const DEFAULT_FILLED_OPTS = {
   backgroundColor: "transparent",
 };
 
-const TEXT_X_OFFEST = 75;
+const TEXT_X_OFFEST = 150;
 const TEXT_Y_OFFEST = 12.5;
 
 const DEFAULT_TEXT_OPTS = {
@@ -192,7 +192,7 @@ export default class ExcalidrawService {
    * @returns {array}
    */
 
-  bullsEyes(opts) {
+  bullseye(opts) {
 
     const levels = Math.min(7, opts.text.length || 3);
     const circleSize = 400;
@@ -230,7 +230,7 @@ export default class ExcalidrawService {
     for (let i = 0; i < levels; i++) {
       // let add text
       elements.push(this.text({
-        x: ox - 60 - 150 - 10,
+        x: ox - 60 - TEXT_X_OFFEST * 2 - 10,
         y: oy + circleSize - i * circleStep - 20 - TEXT_Y_OFFEST,
         text: opts.text[levels - i - 1],
         textAlign: 'right',

@@ -223,6 +223,12 @@ export default {
         5: "Expert",
       },
     },
+    drawing: {
+      description: "Base to use to create illustration",
+      step1: "Data",
+      step2: "Creation",
+      step3: "Choices",
+    },
     lecture: {
       title: "Lecture Description",
       description: "Describe the content of the lecture",

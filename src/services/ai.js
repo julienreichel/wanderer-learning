@@ -8,6 +8,7 @@ import conceptsTextHtml from "./prompts/conceptsTextHtml.js";
 import conceptsTextHtmlIntro from "./prompts/conceptsTextHtmlIntro.js";
 import singleQuiz from "./prompts/singleQuiz.js";
 import simpleQuiz from "./prompts/quiz.js";
+import drawings from "./prompts/drawings.js";
 import { jsonrepair } from "jsonrepair";
 
 import { marked } from "marked";
@@ -279,6 +280,14 @@ export default class AIService {
     return this.query({ system, prompt, token: nbQuestions * 250 });
   }
 
+  getDrawingsSugestions(description) {
+    const system = drawings.system(
+      this.language,
+    );
+
+    return this.query({ system, prompt: description, token: 2000 });
+  }
+
   async extractTextFromPdfFile(pdfFile) {
     const pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile))
       .promise;
@@ -388,4 +397,6 @@ export default class AIService {
     }
     return tree;
   }
+
+
 }

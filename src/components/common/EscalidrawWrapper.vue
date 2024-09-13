@@ -211,7 +211,6 @@ onMounted(() => {
 watch(
   () => props,
   (newProps) => {
-    console.log("props changed", newProps);
     if (root) {
       root.unmount();
     }

@@ -51,7 +51,7 @@ const excalidrawData = ref(data || null);
 
 const selectedOption = ref(null);
 const options = ref([
-  { label: "Bulleyes", value: "bullsEyes" },
+  { label: "Bulleyes", value: "bullseye" },
   { label: "Podium", value: "podium" },
   { label: "Timeline", value: "timeline" },
   { label: "Pyramid", value: "pyramid" },
@@ -130,8 +130,6 @@ const applyChanges = async () => {
   const {elements, files} = await excalidrawService[selectedOption.value](jsonText.value);
 
   excalidrawData.value = { elements, files };
-  // Logic to apply changes
-  console.log("Changes applied:", elements);
 };
 
 const changed = (elements, appState, files) => {
