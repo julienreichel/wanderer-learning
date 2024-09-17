@@ -89,7 +89,13 @@
     v-model="part"
     :parts="parts"
   />
-  <part-editing v-else-if="part" v-model="part" :parts="parts" :index="step" :lecture-id="lectureId" />
+  <part-editing
+    v-else-if="part"
+    v-model="part"
+    :parts="parts"
+    :index="step"
+    :lecture-id="lectureId"
+  />
   <json-edit-dialog
     v-model="jsonDialog"
     :data="jsonToEdit"
@@ -178,7 +184,12 @@ const hasNext = computed(() => step.value < parts.value.length - 1);
 const remove = (index) => {
   const part = parts.value.splice(index, 1)[0];
   // need to delete image if any
-  if (part.src && !part.src.startsWith("http") && part.type !== "drawing" && part.type !== "graph") {
+  if (
+    part.src &&
+    !part.src.startsWith("http") &&
+    part.type !== "drawing" &&
+    part.type !== "graph"
+  ) {
     storageService.removeImg(part.src);
   }
   part.url = null;

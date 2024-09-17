@@ -74,10 +74,7 @@
         :options="['gpt-3.5-turbo', 'gpt-4o-mini', 'gpt-4o']"
         :label="$t('wizard.lecture.model')"
       />
-      <q-toggle
-        v-model="useVisuals"
-        :label="$t('wizard.lecture.useVisuals')"
-      />
+      <q-toggle v-model="useVisuals" :label="$t('wizard.lecture.useVisuals')" />
       <q-toggle
         v-model="extendedQueryForConcept"
         :label="$t('wizard.lecture.queryType')"

@@ -166,11 +166,9 @@ const generateDrawing = async (part) => {
   // generate the visuals for each part
   const text = htmlToMarkdown(part.text);
   const drawings = await aiService.getDrawingsSugestions(text);
-  console.log('drawings', drawings);
+  console.log("drawings", drawings);
   let visual = drawings.selection.visual;
-  let selected = drawings.visuals.find(
-    (item) => item.visual === visual,
-  );
+  let selected = drawings.visuals.find((item) => item.visual === visual);
   if (!selected) {
     selected = drawings.visuals.sort((a, b) => b.score - a.score)[0];
     visual = selected.visual;
@@ -182,7 +180,7 @@ const generateDrawing = async (part) => {
     type: "drawing",
     src: JSON.stringify({ elements, files }),
   };
-}
+};
 
 const generateLecture = async () => {
   let lectureId;
@@ -255,19 +253,19 @@ const generateLecture = async () => {
   lecture.steps.push(connectStep);
   lecturePreview.value = lecture;
 
-  if (props.useVisuals){
+  if (props.useVisuals) {
     await Promise.all(
       connectStep.parts
-          .filter((part) => part.text)
-          .map(async (part) => {
-            // generate the visuals for each part
-            const newPart = await generateDrawing(part);
+        .filter((part) => part.text)
+        .map(async (part) => {
+          // generate the visuals for each part
+          const newPart = await generateDrawing(part);
 
-            // insert the drawing part after the text part
-            const index = connectStep.parts.indexOf(part);
-            connectStep.parts.splice(index + 1, 0, newPart);
-          }),
-        );
+          // insert the drawing part after the text part
+          const index = connectStep.parts.indexOf(part);
+          connectStep.parts.splice(index + 1, 0, newPart);
+        }),
+    );
 
     await lectureStepService.update(connectStep);
   }
@@ -335,7 +333,7 @@ const generateLecture = async () => {
       nextTick(() => {
         lecturePreview.value = lecture;
       });
-      if (props.useVisuals){
+      if (props.useVisuals) {
         await Promise.all(
           conceptStep.parts
             .filter((part) => part.text)

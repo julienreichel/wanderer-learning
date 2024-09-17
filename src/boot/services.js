@@ -36,6 +36,6 @@ export default boot(({ app }) => {
     quizReporting,
     storage,
     ai,
-    excalidraw
+    excalidraw,
   });
 });

@@ -2,19 +2,17 @@
   <q-card-section style="height: 80vh">
     <escalidraw-wrapper
       :initial-data="data"
-      @change="
-        (elements, appState, files) => changed(elements, files)
-      "
+      @change="(elements, appState, files) => changed(elements, files)"
     />
   </q-card-section>
   <q-card-actions>
-      <q-space />
-      <q-btn
-        size="sm"
-        icon="switch_access_shortcut_add"
-        @click="wizardVisible = true"
-      />
-    </q-card-actions>
+    <q-space />
+    <q-btn
+      size="sm"
+      icon="switch_access_shortcut_add"
+      @click="wizardVisible = true"
+    />
+  </q-card-actions>
   <drawing-generation-dialog
     v-model="wizardVisible"
     :parts="parts"
@@ -36,16 +34,20 @@ const props = defineProps({
 const part = defineModel({ type: Object });
 
 const data = ref();
-watch(() => props.index, () => {
-  data.value = JSON.parse(part.value.src || "{}");
-}, { immediate: true });
+watch(
+  () => props.index,
+  () => {
+    data.value = JSON.parse(part.value.src || "{}");
+  },
+  { immediate: true },
+);
 
 const changed = (elements, files) => {
   part.value.src = JSON.stringify({ elements, files });
 };
 
 let wizardVisible = ref(false);
-const applyDrawing = ({elements, files}) => {
+const applyDrawing = ({ elements, files }) => {
   data.value = { elements, files };
 };
 </script>

@@ -12,7 +12,12 @@
     />
     <video-editing v-if="part.type === 'video'" v-model="part" />
     <iframe-editing v-if="part.type === 'iframe'" v-model="part" />
-    <drawing-editing v-if="part.type === 'drawing'" v-model="part" :parts="parts" :index="index"/>
+    <drawing-editing
+      v-if="part.type === 'drawing'"
+      v-model="part"
+      :parts="parts"
+      :index="index"
+    />
     <graph-editing v-if="part.type === 'graph'" v-model="part" />
   </q-card>
 </template>

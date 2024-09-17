@@ -65,16 +65,23 @@ const options = ref([
 ]);
 
 watch(selectedOption, (value) => {
-  if (value === "bullsEyes" || value === "timeline" || value === "pyramid" || value === "funnel" || value === "cycle" || value === "staircases") {
+  if (
+    value === "bullsEyes" ||
+    value === "timeline" ||
+    value === "pyramid" ||
+    value === "funnel" ||
+    value === "cycle" ||
+    value === "staircases"
+  ) {
     jsonText.value = {
-      text: ['1st', '2nd', '3rd', '4th', '5th'],
-    }
+      text: ["1st", "2nd", "3rd", "4th", "5th"],
+    };
   }
 
   if (value === "podium" || value === "pillars") {
     jsonText.value = {
-      text: ['1st', '2nd', '3rd'],
-    }
+      text: ["1st", "2nd", "3rd"],
+    };
   }
 
   if (value === "mermaid") {
@@ -86,8 +93,8 @@ watch(selectedOption, (value) => {
   end
   subgraph two
   b1-->b2
-  end`
-    }
+  end`,
+    };
     jsonText.value.base = "Base";
   }
 
@@ -98,18 +105,22 @@ watch(selectedOption, (value) => {
 
   if (value === "matrix") {
     jsonText.value = {
-      text: ['NW', 'NE', 'SW', 'SE'],
-      axis: { x :['West', 'East'], y: ['North', 'South']},
-    }
+      text: ["NW", "NE", "SW", "SE"],
+      axis: { x: ["West", "East"], y: ["North", "South"] },
+    };
   }
 
   if (value === "bars") {
     jsonText.value = {
-      bars: [{ value: 50, text: "1st" }, { value: 30, text: "2nd" }, { value: 20, text: "3rd" }, { value: 5, text: "4th" }],
-      axis: { x : "Points", y: "Ranks"},
-    }
+      bars: [
+        { value: 50, text: "1st" },
+        { value: 30, text: "2nd" },
+        { value: 20, text: "3rd" },
+        { value: 5, text: "4th" },
+      ],
+      axis: { x: "Points", y: "Ranks" },
+    };
   }
-
 });
 const jsonText = ref({});
 const editorOptions = ref({
@@ -126,8 +137,9 @@ const editorOptions = ref({
 });
 
 const applyChanges = async () => {
-
-  const {elements, files} = await excalidrawService[selectedOption.value](jsonText.value);
+  const { elements, files } = await excalidrawService[selectedOption.value](
+    jsonText.value,
+  );
 
   excalidrawData.value = { elements, files };
 };

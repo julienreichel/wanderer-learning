@@ -281,9 +281,7 @@ export default class AIService {
   }
 
   getDrawingsSugestions(description) {
-    const system = drawings.system(
-      this.language,
-    );
+    const system = drawings.system(this.language);
 
     return this.query({ system, prompt: description, token: 2000 });
   }
@@ -397,6 +395,4 @@ export default class AIService {
     }
     return tree;
   }
-
-
 }
