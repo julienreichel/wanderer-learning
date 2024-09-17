@@ -52,6 +52,9 @@ const point = (angle, radius) => {
 
 export default class ExcalidrawService {
   constructor() {
+    this["mermaid - mindmap"] = this.mermaid;
+    this["mermaid - sequence"] = this.mermaid;
+    this["mermaid - flowchart"] = this.mermaid;
   }
 
   /**
