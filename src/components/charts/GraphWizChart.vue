@@ -5,8 +5,7 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import Viz from "viz.js";
-import { Module, render } from "viz.js/full.render.js";
+import { instance } from "@viz-js/viz";
 
 // Props
 const props = defineProps({
@@ -26,7 +25,7 @@ const graphHtml = ref("");
 
 // Method to render the graph
 const renderGraph = async (dot, engine) => {
-  const viz = new Viz({ Module, render });
+  const viz = await instance()
   try {
     const html = await viz.renderSVGElement(dot, { engine });
     graphHtml.value = html.outerHTML;
