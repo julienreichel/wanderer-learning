@@ -243,6 +243,7 @@ export default {
       model: "Modèle",
       advanced: "Avancé",
       queryType: "Utiliser une requête étendue pour les concepts",
+      useVisuals: "Inclure des visuels",
     },
     titleKeyConceptsObjectives: {
       title: "Concepts",

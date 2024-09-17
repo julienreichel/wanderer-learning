@@ -32,6 +32,7 @@ const {
   concept: conceptService,
   lectureConcept: lectureConceptService,
   lectureStep: lectureStepService,
+  excalidraw: excalidrawService,
 } = inject("services");
 
 const props = defineProps({
@@ -44,6 +45,7 @@ const props = defineProps({
   courseId: { type: String, required: true },
   step: { type: Number, required: true },
   extendedQueryForConcept: { type: Boolean, required: true },
+  useVisuals: { type: Boolean, required: true },
   model: { type: String, required: true },
 });
 
@@ -91,15 +93,13 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
       .replace(/\t/g, "\\t")
       .replace(/\f/g, "\\f")
       .replace(/\n/g, "\\n")
-      .replace(/\r/g, "\\r")
-      .replace(/\b/g, "\\b");
+      .replace(/\r/g, "\\r");
 
     question.explanations = question.explanations
       ?.replace(/\t/g, "\\t")
       .replace(/\f/g, "\\f")
       .replace(/\n/g, "\\n")
-      .replace(/\r/g, "\\r")
-      .replace(/\b/g, "\\b");
+      .replace(/\r/g, "\\r");
 
     question.answers.forEach((answer) => {
       // remove starting A. or B. or C. or D. from the answer
@@ -109,8 +109,7 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
         .replace(/\t/g, "\\t")
         .replace(/\f/g, "\\f")
         .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r")
-        .replace(/\b/g, "\\b");
+        .replace(/\r/g, "\\r");
     });
 
     // if there is only one answer, we add the missing one
@@ -162,6 +161,28 @@ const createQuizPart = (questions, nbQuestions, conceptIdMap) => {
     },
   };
 };
+
+const generateDrawing = async (part) => {
+  // generate the visuals for each part
+  const text = htmlToMarkdown(part.text);
+  const drawings = await aiService.getDrawingsSugestions(text);
+  console.log('drawings', drawings);
+  let visual = drawings.selection.visual;
+  let selected = drawings.visuals.find(
+    (item) => item.visual === visual,
+  );
+  if (!selected) {
+    selected = drawings.visuals.sort((a, b) => b.score - a.score)[0];
+    visual = selected.visual;
+  }
+  const { elements, files } = await excalidrawService[visual](
+    selected.parameters,
+  );
+  return {
+    type: "drawing",
+    src: JSON.stringify({ elements, files }),
+  };
+}
 
 const generateLecture = async () => {
   let lectureId;
@@ -234,6 +255,23 @@ const generateLecture = async () => {
   lecture.steps.push(connectStep);
   lecturePreview.value = lecture;
 
+  if (props.useVisuals){
+    await Promise.all(
+      connectStep.parts
+          .filter((part) => part.text)
+          .map(async (part) => {
+            // generate the visuals for each part
+            const newPart = await generateDrawing(part);
+
+            // insert the drawing part after the text part
+            const index = connectStep.parts.indexOf(part);
+            connectStep.parts.splice(index + 1, 0, newPart);
+          }),
+        );
+
+    await lectureStepService.update(connectStep);
+  }
+
   // Creating the concept steps
   const nbQuestion = 12;
   progress.value = 20 / 100;
@@ -247,6 +285,11 @@ const generateLecture = async () => {
         "gpt-3": 10,
         "gpt-40-mini": 5, // reate limits is very high, jsut wait a bit for the backend
         "gpt-4o": 40, // (10K for the HTML, 10K for the quiz for a rate limit of 30K, so 40s between runs)
+      }[props.model];
+      const maxChars = {
+        "gpt-3": 4000,
+        "gpt-40-mini": 10000,
+        "gpt-4o": 4000,
       }[props.model];
       if (props.model === "gpt-4o" && index > 0) {
         await new Promise((resolve) =>
@@ -274,14 +317,7 @@ const generateLecture = async () => {
       }
 
       progressLabel.value = t("wizard.generating.concept") + " " + conceptName;
-      progress.value += 0.3 / props.tableOfContent.length;
-
-      const shortLectureContent = htmlToMarkdown(parts[0].text);
-
-      const fullLectureContent = parts
-        .filter((part) => part.text)
-        .map((part) => htmlToMarkdown(part.text))
-        .join("\n\n");
+      progress.value += 0.2 / props.tableOfContent.length;
 
       const conceptStep = await lectureStepService.create({
         title: step.name,
@@ -292,12 +328,41 @@ const generateLecture = async () => {
         level: step.level,
         parts,
       });
+
+      lecture.steps.push(conceptStep);
+
+      lecturePreview.value = null;
+      nextTick(() => {
+        lecturePreview.value = lecture;
+      });
+      if (props.useVisuals){
+        await Promise.all(
+          conceptStep.parts
+            .filter((part) => part.text)
+            .map(async (part) => {
+              // generate the visuals for each part
+              const newPart = await generateDrawing(part);
+
+              // insert the drawing part after the text part
+              const index = conceptStep.parts.indexOf(part);
+              conceptStep.parts.splice(index + 1, 0, newPart);
+            }),
+        );
+      }
+      progress.value += 0.1 / props.tableOfContent.length;
+
+      const shortLectureContent = htmlToMarkdown(parts[0].text);
+
+      const fullLectureContent = conceptStep.parts
+        .filter((part) => part.text)
+        .map((part) => htmlToMarkdown(part.text))
+        .join("\n\n");
       // order of the question is not important
       await Promise.all(
         [1, 2, 3, 4].map(async (level) => {
           const conceptQuiz = await aiService.singleQuiz(
             step.name,
-            fullLectureContent.length > 4000
+            fullLectureContent.length > maxChars
               ? shortLectureContent
               : fullLectureContent,
             level,
@@ -317,12 +382,6 @@ const generateLecture = async () => {
       );
       await lectureStepService.update(conceptStep);
 
-      lecturePreview.value = null;
-
-      lecture.steps.push(conceptStep);
-      nextTick(() => {
-        lecturePreview.value = lecture;
-      });
       return conceptStep;
     }),
   );

@@ -75,6 +75,10 @@
         :label="$t('wizard.lecture.model')"
       />
       <q-toggle
+        v-model="useVisuals"
+        :label="$t('wizard.lecture.useVisuals')"
+      />
+      <q-toggle
         v-model="extendedQueryForConcept"
         :label="$t('wizard.lecture.queryType')"
       />
@@ -103,9 +107,11 @@ const options = {
   tone: "Educational: Informative, structured, and explanatory, providing detailed explanations and examples.",
   model: "gpt-4o-mini",
   extendedQueryForConcept: true,
+  useVisuals: false,
   ...$q.localStorage.getItem("aiOptions"),
 };
 const extendedQueryForConcept = ref(options.extendedQueryForConcept);
+const useVisuals = ref(options.useVisuals);
 const model = ref(options.model);
 const formatOption = (text) => {
   return {
@@ -159,7 +165,8 @@ watch(
     tone.value +
     audience.value +
     model.value +
-    extendedQueryForConcept.value,
+    extendedQueryForConcept.value +
+    useVisuals.value,
   () => {
     const options = {
       prompt: courseDescription.value,
@@ -168,6 +175,7 @@ watch(
       audience: audience.value,
       model: model.value,
       extendedQueryForConcept: extendedQueryForConcept.value,
+      useVisuals: useVisuals.value,
     };
     $q.localStorage.set("aiOptions", options);
     emit("options", options);
@@ -185,6 +193,7 @@ watch(
       audience: audience.value,
       model: model.value,
       extendedQueryForConcept: extendedQueryForConcept.value,
+      useVisuals: useVisuals.value,
     };
     $q.localStorage.set("aiOptions", options);
     emit("courseDescription", value);

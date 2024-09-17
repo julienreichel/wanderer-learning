@@ -241,6 +241,7 @@ export default {
       model: "Model",
       advanced: "Advanced",
       queryType: "Use extended query for the concepts",
+      useVisuals: "Include visuals",
     },
     titleKeyConceptsObjectives: {
       title: "Concepts",

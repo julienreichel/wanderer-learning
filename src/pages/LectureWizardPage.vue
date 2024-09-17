@@ -80,6 +80,7 @@
           :locale="locale"
           :step="step"
           :extended-query-for-concept="options.extendedQueryForConcept"
+          :use-visuals="options.useVisuals"
           :model="options.model"
           @lecture-created="lectureId = $event.id"
         />
