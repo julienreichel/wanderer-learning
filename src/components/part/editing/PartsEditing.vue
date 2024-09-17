@@ -178,7 +178,7 @@ const hasNext = computed(() => step.value < parts.value.length - 1);
 const remove = (index) => {
   const part = parts.value.splice(index, 1)[0];
   // need to delete image if any
-  if (part.src && !part.src.startsWith("http")) {
+  if (part.src && !part.src.startsWith("http") && part.type !== "drawing" && part.type !== "graph") {
     storageService.removeImg(part.src);
   }
   part.url = null;
