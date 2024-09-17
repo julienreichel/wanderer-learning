@@ -3,7 +3,7 @@
     <escalidraw-wrapper
       :initial-data="data"
       @change="
-        (elements, appState, files) => changed(elements, appState, files)
+        (elements, appState, files) => changed(elements, files)
       "
     />
   </q-card-section>
@@ -40,8 +40,8 @@ watch(() => props.index, () => {
   data.value = JSON.parse(part.value.src || "{}");
 }, { immediate: true });
 
-const changed = (elements) => {
-  part.value.src = JSON.stringify({ elements });
+const changed = (elements, files) => {
+  part.value.src = JSON.stringify({ elements, files });
 };
 
 let wizardVisible = ref(false);
