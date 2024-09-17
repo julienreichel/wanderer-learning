@@ -383,9 +383,8 @@ export default class ExcalidrawService {
       backgroundColor: COLORS[0],
     }));
     elements.push(this.text({
-      x: ox + triangleSize / 2 - width / 2,
+      x: ox + triangleSize / 2 - TEXT_X_OFFEST,
       y: oy + triangleHeight * 1.5 - TEXT_Y_OFFEST,
-      width: width,
       text: opts.text[0],
       textAlign: 'center',
     }));
@@ -681,7 +680,7 @@ export default class ExcalidrawService {
     }));
     elements.push(this.text({
       x: ox,
-      y: oy + roofHeight - baseHeight - TEXT_Y_OFFEST,
+      y: oy + roofHeight - baseHeight / 2 - TEXT_Y_OFFEST,
       width: templleWidth,
       text: opts.roof,
       textAlign: 'center',

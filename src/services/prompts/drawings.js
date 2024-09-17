@@ -2,16 +2,22 @@ const system = (language) => {
   return `
 <Context>
 You are an expert in designing educational visual aids.
-Your task is to assess how appropriate each visual from the provided list is for representing the subject provided.
-You MUST score each visual on a scale from 0 to 10, focusing on how well the visual illustrates the subject and help memorizing it.
-You will be penalized for scores that are not based on clarity or effectiveness for this educational context.
-Think step-by-step when evaluating each visual, considering the student's perspective.
 
-For each visual, also generate the parameters needed to draw it.
-The parameters should match the structure provided in the example JSON format below.
+Your task is to assess how appropriate each visual from the provided list is for representing the subject provided below.
 
-Here is the list of visuals:
+You MUST:
+- Provide a brief explanation (1-2 sentences) justifying the score, focusing on how well it represents the subject.
+- Provide a flag to indicate if the visual is not suitable for the subject or not.
+- Provide a flag to indicate if the visual brings valuable insights to the subject or not.
+- Score each visual on a scale from 0 to 100, focusing on how well the visual illustrates the subject and helps in memorizing it.
+- Generate parameters for each visual that are directly related to the subject.
+- Avoid any content in the parameters that is not relevant to the subject.
 
+Provide also ONE selected visual that you think is the most appropriate for the subject, and justify your choice.
+
+Think step-by-step when evaluating each visual, considering the student's perspective and aiming for maximum clarity and effectiveness.
+
+<List of Visuals>
 1. **Bullseye**
    - Concentric circles representing layers of importance.
    - Use when illustrating core concepts and their surrounding details.
@@ -93,35 +99,50 @@ ${language}
 { "visuals": [
   {
     "visual": "bullseye",
-    "score": 9,
+    "explanation": "...",
+    "suitable": true,
+    "valuable": true,
+    "score": 94,
     "parameters": {
       "text": ["Core Idea", "First Layer", "Second Layer", "Third Layer"]
     }
   },
   {
     "visual": "podium",
-    "score": 8,
+    "explanation": "...",
+    "suitable": false,
+    "valuable": true,
+    "score": 82,
     "parameters": {
       "text": ["Winner", "Second Place", "Third Place"]
     }
   },
   {
     "visual": "timeline",
-    "score": 0,
+    "explanation": "...",
+    "suitable": false,
+    "valuable": true,
+    "score": 12,
     "parameters": {
       "text": ["Start", "Started", "In progress", "Review", "Almost over", "End"]
     }
   },
   {
     "visual": "pyramid",
-    "score": 6,
+    "explanation": "...",
+    "suitable": false,
+    "valuable": false,
+    "score": 61,
     "parameters": {
       "text": ["Top", "Almost Top", "Middle", "Almost Middle", "Base"]
     }
   },
   {
     "visual": "matrix",
-    "score": 5,
+    "explanation": "...",
+    "suitable": true,
+    "valuable": true,
+    "score": 57,
     "parameters": {
       "axis": {
         "x": ["Low", "High"],
@@ -132,21 +153,30 @@ ${language}
   },
   {
     "visual": "funnel",
-    "score": 7,
+    "explanation": "...",
+    "suitable": true,
+    "valuable": false,
+    "score": 72,
     "parameters": {
       "text": ["Entry", "Specific", "More specific", "Exit"]
     }
   },
   {
     "visual": "cycle",
-    "score": 3,
+    "explanation": "...",
+    "suitable": true,
+    "valuable": true,
+    "score": 33,
     "parameters": {
       "text": ["Step 1", "Step 2", "Step 3", "Step 4"]
     }
   },
   {
     "visual": "pillars",
-    "score": 9,
+    "explanation": "...",
+    "suitable": false,
+    "valuable": true,
+    "score": 91,
     "parameters": {
       "text": ["Pillar 1", "Pillar 2", "Pillar 3"],
       "base": "Foundation",
@@ -155,35 +185,50 @@ ${language}
   },
   {
     "visual": "staircases",
-    "score": 2,
+    "explanation": "...",
+    "suitable": true,
+    "valuable": false,
+    "score": 27,
     "parameters": {
       "text": ["Step 1", "Step 2", "Step 3", "Step 4", "Step 5"]
     }
   },
   {
     "visual": "mermaid - flowchart",
-    "score": 8,
+    "explanation": "...",
+    "suitable": true,
+    "valuable": true,
+    "score": 82,
     "parameters": {
       "text": "flowchart TD; A-->B; B-->C"
     }
   },
   {
     "visual": "mermaid - sequence",
-    "score": 9,
+    "explanation": "...",
+    "score": 98,
+    "suitable": false,
+    "valuable": true,
     "parameters": {
       "text": "sequenceDiagram; participant A; participant B; A->>B: Hello"
     }
   },
   {
     "visual": "mermaid - mindmap",
-    "score": 7,
+    "explanation": "...",
+    "suitable": true,
+    "valuable": true,
+    "score": 75,
     "parameters": {
       "text": "mindmap\nroot((Center))\n A\n  A1\n  A2\n B\n  B1"
     }
   },
   {
     "visual": "bars",
-    "score": 9,
+    "explanation": "...",
+    "suitable": false,
+    "valuable": false,
+    "score": 34,
     "parameters": {
       "bars": [
         { "value": 50, "text": "Category 1" },
@@ -198,7 +243,11 @@ ${language}
       }
     }
   }
-]}
+],
+ "selection": {
+  "visual": "bars",
+  "explanation": "..."
+ }}
 `;
 };
 

@@ -119,6 +119,8 @@ const generateDrawings = async () => {
 
   loading.value = false;
   activeStep.value = "step3"; // Let the user pick a drawing
+
+  selectedOption.value = 0;
 };
 
 const selectDrawing = async (value) => {
