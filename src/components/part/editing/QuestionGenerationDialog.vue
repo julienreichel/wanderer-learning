@@ -95,7 +95,7 @@ import DifficultySlider from "src/components/common/DifficultySlider.vue";
 import { ref, inject } from "vue";
 
 import { useFormatter, useIris } from "src/composables/iris";
-const { t } = useIris();
+const { t, locale } = useIris();
 const { htmlToMarkdown } = useFormatter();
 
 const { ai: aiService } = inject("services");
@@ -155,6 +155,7 @@ const nextStep = () => {
 const finishStepper = async () => {
   loading.value = true;
   const quizType = type.value.value || "choice";
+  aiService.setOptions({ locale: locale.value });
   const response = await aiService.getQuiz(
     subject.value,
     difficulty.value,

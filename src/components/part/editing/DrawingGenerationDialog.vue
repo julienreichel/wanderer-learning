@@ -57,8 +57,9 @@
 <script setup>
 import { ref, inject, watch } from "vue";
 
-import { useFormatter } from "src/composables/iris";
+import { useFormatter, useIris } from "src/composables/iris";
 const { htmlToMarkdown } = useFormatter();
+const { locale } = useIris();
 
 const { ai: aiService, excalidraw: excalidrawService } = inject("services");
 
@@ -110,6 +111,7 @@ const options = ref([]);
 let selectedOption = ref(null);
 const generateDrawings = async () => {
   loading.value = true;
+  aiService.setOptions({ locale: locale.value });
   drawings = await aiService.getDrawingsSugestions(subject.value);
   console.log(drawings);
   drawings.visuals = drawings.visuals.sort((a, b) => b.score - a.score);
