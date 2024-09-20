@@ -41,7 +41,10 @@ You are tasked with creating a quiz for an online lecture based on the provided 
 Given the description, create a quiz, with ${difficultyLevel} level and ${nbQuestions} questions.
 ${explanation ? "Questions should help the user to understand the subject matter of the lecture." : "Questions should check the user's understanding of the lecture."}
 ${explanation ? "Each question should be accompanied by a one-paragraph explanation. The explanation should not reiterate the question but offers supplementary information, giving the user a broader perspective." : ""}
-For mathematical formulas, use Katex format using $$ as delimiter (i.e. $$\frac{1}{}$$).
+For mathematical formulas, use Katex format using $$ as delimiter (i.e. $$\frac{1}{5}$$).
+
+You will be penalized if the quiz do not have ${nbQuestions} questions.
+Think step by step and consider all necessary information.
 <Quiz format>
 ${format}
 <Quiz level>
@@ -53,15 +56,8 @@ ${language}
 `;
 };
 
-const prompt = (description, nbQuestions) => `
-Your task is to create a quiz for an online lecture.
-The quiz MUST have ${nbQuestions} questions and cover the content described below.
-You will be penalized if the quiz do not have ${nbQuestions} questions.
-Think step by step and consider all necessary information.
-
-Description:
+const prompt = (description) => `
 ${description}
-
 `;
 
 export default { system, prompt };

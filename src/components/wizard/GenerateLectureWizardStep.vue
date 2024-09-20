@@ -173,6 +173,10 @@ const generateDrawing = async (part) => {
     selected = drawings.visuals.sort((a, b) => b.score - a.score)[0];
     visual = selected.visual;
   }
+  if (selected.visualImpact < 75){
+    console.log("Visual impact too low, dropping it", selected );
+    return null;
+  }
   const { elements, files } = await excalidrawService[visual](
     selected.parameters,
   );
@@ -262,8 +266,10 @@ const generateLecture = async () => {
           const newPart = await generateDrawing(part);
 
           // insert the drawing part after the text part
-          const index = connectStep.parts.indexOf(part);
-          connectStep.parts.splice(index + 1, 0, newPart);
+          if (newPart){
+            const index = connectStep.parts.indexOf(part);
+            connectStep.parts.splice(index + 1, 0, newPart);
+          }
         }),
     );
 
@@ -342,8 +348,10 @@ const generateLecture = async () => {
               const newPart = await generateDrawing(part);
 
               // insert the drawing part after the text part
-              const index = conceptStep.parts.indexOf(part);
-              conceptStep.parts.splice(index + 1, 0, newPart);
+              if (newPart){
+                const index = conceptStep.parts.indexOf(part);
+                conceptStep.parts.splice(index + 1, 0, newPart);
+              }
             }),
         );
       }

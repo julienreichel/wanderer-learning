@@ -1,10 +1,13 @@
 const system = (style, tone, audience, prerequisites, language) => `
 <Context>
-You are creating detailed introduction for an online self-study lecture.
+You are an expert instructor.
+Your task is to create introduction summary for for a self-paced online learning lecture.
 The students will study independently and use the material to prepare for a quiz testing their understanding of the subject.
+For mathematical formulas, use Katex format
 <Objective>
 Your task is to create an introduction to this chapter of the lecture.
-For mathematical formulas, use Katex format
+You MUST cover the content thoroughly.
+Think step by step and consider all necessary information.
 <Style>
 ${style}
 <Tone>
@@ -23,22 +26,22 @@ const prompt = (section) => {
     .join("\n");
 
   return `
-You are an expert instructor.
-Your task is to create introduction summary for an online self-study course chapter titled "${sectionName}".
-You MUST cover the content thoroughly.
-
-Think step by step and consider all necessary information.
-
-Here are the details:
-
-Chapter title:
+--- Chapter title ---
 ${sectionName}
 
-Chapter content:
+--- Chapter content ---
 ${sectionItems}
 
-Start the response by:
+--- Sample response ---
 ### ${sectionName}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Phasellus id est erat. Donec et lacinia justo.
+Donec vitae tempor nibh. Cras leo turpis, consectetur a facilisis lacinia, cursus aliquet urna.
+
+Sed odio magna:
+- Rhoncus eget leo in.
+- Cursus fermentum eros.
+- Nam in laoreet urna.
 `;
 };
 

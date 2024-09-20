@@ -6,12 +6,16 @@ You are an expert in designing educational visual aids.
 Your task is to assess how appropriate each visual from the provided list is for representing the subject provided below.
 
 You MUST:
-- Provide a brief explanation (1-2 sentences) justifying the score, focusing on how well it represents the subject.
-- Provide a flag to indicate if the visual is not suitable for the subject or not.
-- Provide a flag to indicate if the visual brings valuable insights to the subject or not.
-- Score each visual on a scale from 0 to 100, focusing on how well the visual illustrates the subject and helps in memorizing it.
-- Generate parameters for each visual that are directly related to the subject.
-- Avoid any content in the parameters that is not relevant to the subject.
+
+Generate parameters for each visual that are directly related to the subject.
+
+Provide the following parameters for each visual:
+- clarity: Measures how easily the visual conveys its intended message. A higher score means the visual is clear and easily understood, while a lower score suggests confusion or ambiguity.
+- visualImpact: Evaluates the effectiveness of a visual in explaining or complementing the accompanying text. A score of 0 indicates the visual is completely ineffective and the text is essential. A score of 100 means the visual is so effective that the text could be removed. A score of 50 reflects that both the visual and the text are equally important, providing fully complementary information.
+- relevance: Evaluates how closely the visual relates to the content of the text. A score of 100 means the visual perfectly aligns with the text, while lower scores suggest a disconnect.
+- contextualFit: Assesses how well the visual fits within the broader context of the surrounding content or medium
+- memorability: Measures how well the visual aids in remembering the subject matter. A higher score indicates the visual is memorable and helps reinforce the subject, while a lower score suggests the visual is forgettable or distracting.
+- score: An overall score that combines all the above factors to determine the visual's effectiveness.
 
 Provide also ONE selected visual that you think is the most appropriate for the subject, and justify your choice.
 
@@ -72,25 +76,25 @@ Think step-by-step when evaluating each visual, considering the student's perspe
    - **Parameters**: text.
    - Number of text elelments: 3 to 7.
 
-10. **Mermaid - Flowchart**
+10. **Bars**
+    - Bar graph with rectangular bars to compare quantities.
+    - Use for representing data comparisons across different categories.
+    - **Parameters**: bars, axis.
+
+11. **Mermaid - Flowchart**
     - Flowchart using boxes and arrows to show processes.
     - Use to depict workflows or decision paths.
     - **Parameters**: text (Mermaid syntax).
 
-11. **Mermaid - Sequence**
+12. **Mermaid - Sequence**
     - Sequence diagram showing interactions in a specific order.
     - Use to illustrate interactions or communication between actors over time.
     - **Parameters**: text (Mermaid syntax).
 
-12. **Mermaid - Mindmap**
+13. **Mermaid - Mindmap**
     - A branching diagram showing hierarchical information.
     - Use for brainstorming or organizing complex ideas.
     - **Parameters**: text (Mermaid syntax).
-
-13. **Bars**
-    - Bar graph with rectangular bars to compare quantities.
-    - Use for representing data comparisons across different categories.
-    - **Parameters**: bars, axis.
 
  <Response Language>
 ${language}
@@ -99,9 +103,11 @@ ${language}
 { "visuals": [
   {
     "visual": "bullseye",
-    "explanation": "...",
-    "suitable": true,
-    "valuable": true,
+    "clarity": 30,
+    "visualImpact": 20,
+    "relevance": 50,
+    "contextualFit": 50,
+    "memorability": 50,
     "score": 94,
     "parameters": {
       "text": ["Core Idea", "First Layer", "Second Layer", "Third Layer"]
@@ -109,40 +115,28 @@ ${language}
   },
   {
     "visual": "podium",
-    "explanation": "...",
-    "suitable": false,
-    "valuable": true,
-    "score": 82,
+    [...]
     "parameters": {
       "text": ["Winner", "Second Place", "Third Place"]
     }
   },
   {
     "visual": "timeline",
-    "explanation": "...",
-    "suitable": false,
-    "valuable": true,
-    "score": 12,
+    [...]
     "parameters": {
       "text": ["Start", "Started", "In progress", "Review", "Almost over", "End"]
     }
   },
   {
     "visual": "pyramid",
-    "explanation": "...",
-    "suitable": false,
-    "valuable": false,
-    "score": 61,
+    [...]
     "parameters": {
       "text": ["Top", "Almost Top", "Middle", "Almost Middle", "Base"]
     }
   },
   {
     "visual": "matrix",
-    "explanation": "...",
-    "suitable": true,
-    "valuable": true,
-    "score": 57,
+    [...]
     "parameters": {
       "axis": {
         "x": ["Low", "High"],
@@ -153,30 +147,21 @@ ${language}
   },
   {
     "visual": "funnel",
-    "explanation": "...",
-    "suitable": true,
-    "valuable": false,
-    "score": 72,
+    [...]
     "parameters": {
       "text": ["Entry", "Specific", "More specific", "Exit"]
     }
   },
   {
     "visual": "cycle",
-    "explanation": "...",
-    "suitable": true,
-    "valuable": true,
-    "score": 33,
+    [...]
     "parameters": {
       "text": ["Step 1", "Step 2", "Step 3", "Step 4"]
     }
   },
   {
     "visual": "pillars",
-    "explanation": "...",
-    "suitable": false,
-    "valuable": true,
-    "score": 91,
+    [...]
     "parameters": {
       "text": ["Pillar 1", "Pillar 2", "Pillar 3"],
       "base": "Foundation",
@@ -185,50 +170,14 @@ ${language}
   },
   {
     "visual": "staircases",
-    "explanation": "...",
-    "suitable": true,
-    "valuable": false,
-    "score": 27,
+    [...]
     "parameters": {
       "text": ["Step 1", "Step 2", "Step 3", "Step 4", "Step 5"]
     }
   },
   {
-    "visual": "mermaid - flowchart",
-    "explanation": "...",
-    "suitable": true,
-    "valuable": true,
-    "score": 82,
-    "parameters": {
-      "text": "flowchart TD; A-->B; B-->C"
-    }
-  },
-  {
-    "visual": "mermaid - sequence",
-    "explanation": "...",
-    "score": 98,
-    "suitable": false,
-    "valuable": true,
-    "parameters": {
-      "text": "sequenceDiagram; participant A; participant B; A->>B: Hello"
-    }
-  },
-  {
-    "visual": "mermaid - mindmap",
-    "explanation": "...",
-    "suitable": true,
-    "valuable": true,
-    "score": 75,
-    "parameters": {
-      "text": "mindmap\nroot((Center))\n A\n  A1\n  A2\n B\n  B1"
-    }
-  },
-  {
     "visual": "bars",
-    "explanation": "...",
-    "suitable": false,
-    "valuable": false,
-    "score": 34,
+    [...]
     "parameters": {
       "bars": [
         { "value": 50, "text": "Category 1" },
@@ -241,6 +190,27 @@ ${language}
         "x": "Categories",
         "y": "Values"
       }
+    }
+  },
+  {
+    "visual": "mermaid - flowchart",
+    [...]
+    "parameters": {
+      "text": "flowchart TD; A-->B; B-->C"
+    }
+  },
+  {
+    "visual": "mermaid - sequence",
+    [...]
+    "parameters": {
+      "text": "sequenceDiagram; participant A; participant B; A->>B: Hello"
+    }
+  },
+  {
+    "visual": "mermaid - mindmap",
+    [...]
+    "parameters": {
+      "text": "mindmap\nroot((Center))\n A\n  A1\n  A2\n B\n  B1"
     }
   }
 ],

@@ -1,9 +1,11 @@
 const system = (style, tone, audience, language) => `
 <Context>
-You are an expert in educational design. You are tasked with creating introductory pages for an online lecture.
+You are an expert in educational design. You are tasked with creating introductory pages for self-paced online learning lecture.
 <Objective>
 Given the lecture description and the key concepts, create introductory pages that cover the key concepts and learning outcomes of the lecture.
 The content should be well-structured and informative, providing a comprehensive introduction to the subject matter.
+The content MUST cover the key concepts and learning outcomes provided.
+Think step by step and consider all necessary information.
 <Style>
 ${style}
 <Tone>
@@ -21,12 +23,6 @@ For mathematical formulas, use Katex format using $$ as delimiter (i.e. $$\frac{
 `;
 
 const prompt = (description, conceptsList, objectivesList) => `
-Your task is to create introductory pages for an online lecture.
-The content MUST cover the key concepts and learning outcomes provided.
-The response format should be in JSON, with each part containing a title and description.
-Descriptions may include the following HTML tags: <ol>, <ul>, <li>, <p>, <b>, <i>, <pre>, <br>, <a>.
-Think step by step and consider all necessary information.
-
 ---------------- Key concepts ----------------
 ${conceptsList}
 

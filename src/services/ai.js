@@ -239,11 +239,25 @@ export default class AIService {
           });
           // marked will replace \[ \] \( and \) by simply [ } ( ), so wee need to add an extra \ to escape it.
           markdown = markdown.replace(/\\([[\]()])/g, "\\\\$1");
-          const html = marked.parse(markdown);
-          return html;
+
+          // let split the markdown in pages, one page per title
+          const pages = markdown.split(/\n#+([. \d)])*/).filter((page) => page.trim().length).map((page) => page.startsWith("#") ? page : "### " + page);
+          // if this is split in too many pages,  merge smaller pages into the previous ones
+          if (pages.length > 10) {
+            for (let i = 1; i < pages.length;) {
+              if (pages[i].length < 250) {
+                pages[i - 1] += pages[i];
+                pages.splice(i, 1);
+              } else {
+                i++;
+              }
+            }
+          }
+
+          return pages.map(marked.parse);
         }),
       );
-      pages.push(...contentPages);
+      pages.push(...contentPages.flat());
 
       return { pages };
     } else {
