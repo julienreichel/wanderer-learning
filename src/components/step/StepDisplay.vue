@@ -22,6 +22,8 @@
                       video: 'smart_display',
                       quiz: 'help_center',
                       iframe: 'open_in_browser',
+                      drawing: 'edit_square',
+                      graph: 'assessment',
                     }[part.type]
                   "
                 />

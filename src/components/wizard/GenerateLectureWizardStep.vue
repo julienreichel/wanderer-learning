@@ -274,6 +274,10 @@ const generateLecture = async () => {
     );
 
     await lectureStepService.update(connectStep);
+    lecturePreview.value = null;
+    nextTick(() => {
+      lecturePreview.value = lecture;
+    });
   }
 
   // Creating the concept steps
@@ -354,6 +358,10 @@ const generateLecture = async () => {
               }
             }),
         );
+        lecturePreview.value = null;
+        nextTick(() => {
+          lecturePreview.value = lecture;
+        });
       }
       progress.value += 0.1 / props.tableOfContent.length;
 

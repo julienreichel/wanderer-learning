@@ -6,9 +6,12 @@ The students will study independently and use the material to prepare for a quiz
 <Objective>
 Your task is to create a detailed page for a lecture section, it must cover the specified content thoroughly, ensuring students can grasp the basics and be able to answer a quiz later.
 When appropriate, add examples and references to public matherial.
-For mathematical formulas, use Katex format
+For mathematical formulas, use Katex format.
+Avoid conclusion and summary, focus on the content.
+
 You MUST cover the content thoroughly and not repeat the introduction text.
 You will be penalized if the descriptions are not detailed enough.
+
 Think step by step and consider all necessary information.
 <Style>
 ${style}
@@ -48,6 +51,7 @@ Phasellus id est erat. Donec et lacinia justo. Donec vitae tempor nibh. Cras leo
 ##### Lorem ipsum dolor
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Phasellus id est erat. Donec et lacinia justo. Donec vitae tempor nibh. Cras leo turpis, consectetur a facilisis lacinia, cursus aliquet urna.
+
 Phasellus id est erat.
 - Donec et lacinia justo.
 - Donec vitae tempor nibh.
