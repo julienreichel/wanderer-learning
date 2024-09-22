@@ -40,14 +40,14 @@ const events = [
 </script>
 
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onUnmounted, ref, watch } from "vue";
 import { createRoot } from "react-dom/client";
 import { createElement } from "react";
 import { Excalidraw, MainMenu } from "@excalidraw/excalidraw";
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, onMounted } from "vue";
 
 const props = defineProps({
-  initialData: {
+  data: {
     type: Object,
     default: () => ({}),
   },
@@ -186,13 +186,18 @@ const eventHandlers = createEventHandlers(events);
 
 const createExcalidrawElement = (props, eventHandlers) => {
   //const attributes = props.viewModeEnabled ? { style: 'display: none', className: 'hide-menu' } : {};
+  const excProps = {
+    ...props,
+    initialData: JSON.parse(JSON.stringify(props.data || {})),
+    UIOptions: props.options,
+    ...eventHandlers,
+  };
+  delete excProps.data;
+  delete excProps.options;
+
   return createElement(
     Excalidraw,
-    {
-      ...props,
-      UIOptions: props.options,
-      ...eventHandlers,
-    },
+    excProps,
     createElement(
       MainMenu,
       null,
@@ -210,12 +215,12 @@ onMounted(() => {
 
 watch(
   () => props,
-  (newProps) => {
+  () => {
     if (root) {
       root.unmount();
+      root = createRoot(excalidraw.value);
     }
-    root = createRoot(excalidraw.value);
-    root.render(createExcalidrawElement(newProps, eventHandlers));
+    root.render(createExcalidrawElement(props, eventHandlers));
   },
   { deep: true },
 );

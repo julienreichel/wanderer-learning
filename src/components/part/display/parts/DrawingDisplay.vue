@@ -1,7 +1,7 @@
 <template>
   <q-card-section style="height: 70vh">
     <escalidraw-wrapper
-      :initial-data="data"
+      :data="data"
       view-mode-enabled
       zen-mode-enabled
     />

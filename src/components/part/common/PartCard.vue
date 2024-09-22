@@ -73,7 +73,7 @@
           <div class="sub">
             <div class="full-height">
               <escalidraw-wrapper
-                :initial-data="drawData"
+                :data="drawData"
                 view-mode-enabled
                 zen-mode-enabled
               />
@@ -126,7 +126,7 @@
 <script setup>
 import EscalidrawWrapper from "src/components/common/EscalidrawWrapper.vue";
 import FunctionPlotter from "src/components/charts/FunctionPlotterChart.vue";
-import { inject, computed } from "vue";
+import { inject, computed, ref } from "vue";
 const userAttributes = inject("userAttributes");
 const { isAdmin } = userAttributes.value;
 
@@ -168,10 +168,20 @@ const textPreview = computed(() => {
   return text.substring(0, 21) + " ...";
 });
 
-const drawData = computed(() => ({
-  ...JSON.parse(props.part.src || "{}"),
-  appState: { zoom: { value: 0.15 } },
-}));
+let drawData;
+if (props.editing) {
+  // we do not use a computed here, because updating the data live while editing is causing issues
+  // the main editing window looses the focus, and this breaks the editing
+  drawData = ref({
+    ...JSON.parse(props.part.src || "{}"),
+    appState: { zoom: { value: 0.15 } },
+  });
+} else {
+  drawData = computed(() => ({
+    ...JSON.parse(props.part.src || "{}"),
+    appState: { zoom: { value: 0.15 } },
+  }));
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <template>
   <q-card-section style="height: 80vh">
     <escalidraw-wrapper
-      :initial-data="data"
+      :data="data"
       @change="(elements, appState, files) => changed(elements, files)"
     />
   </q-card-section>
@@ -33,10 +33,11 @@ const props = defineProps({
 
 const part = defineModel({ type: Object });
 
-const data = ref();
+const data = ref({});
 watch(
   () => props.index,
   () => {
+    console.log("index", props.index);
     data.value = JSON.parse(part.value.src || "{}");
   },
   { immediate: true },
