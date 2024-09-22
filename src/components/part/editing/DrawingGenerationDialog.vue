@@ -113,6 +113,9 @@ const generateDrawings = async () => {
   loading.value = true;
   aiService.setOptions({ locale: locale.value });
   drawings = await aiService.getDrawingsSugestions(subject.value);
+  if (!drawings?.visuals) {
+    return;
+  }
   console.log(drawings);
   drawings.visuals = drawings.visuals.sort((a, b) => b.score - a.score);
   drawings.visuals.forEach((drawing, idx) => {

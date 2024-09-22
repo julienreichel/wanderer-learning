@@ -244,7 +244,7 @@ export default class AIService {
           const pages = markdown
             .split(/\n#+([. \d)])*/)
             .filter((page) => page.trim().length)
-            .map((page) => (page.startsWith("#") ? page : "### " + page));
+            .map((page) => (page.startsWith("#") ? page : "##### " + page));
           // if this is split in too many pages,  merge smaller pages into the previous ones
           if (pages.length > 10) {
             for (let i = 1; i < pages.length; ) {

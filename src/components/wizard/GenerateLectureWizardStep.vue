@@ -167,6 +167,9 @@ const generateDrawing = async (part) => {
   const text = htmlToMarkdown(part.text);
   const drawings = await aiService.getDrawingsSugestions(text);
   console.log("drawings", drawings);
+  if (!drawings?.visuals || !drawings?.selection) {
+    return null;
+  }
   let visual = drawings.selection.visual;
   let selected = drawings.visuals.find((item) => item.visual === visual);
   if (!selected) {

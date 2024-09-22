@@ -8,10 +8,10 @@
         <q-card-section class="q-pa-sm">
           <q-list dense>
             <q-item
-              v-for="(part, index) in step.parts"
+              v-for="(part, index) in partsToList"
               :key="index"
               clickable
-              @click="viewStep(step, index)"
+              @click="viewStep(step, step.parts.indexOf(part))"
             >
               <q-item-section side>
                 <q-icon
@@ -64,14 +64,19 @@
 <script setup>
 import StepScore from "src/components/charts/StepScore.vue";
 import { useIris } from "src/composables/iris";
+
+import { computed } from "vue";
+
 const { router, t } = useIris();
 
-defineProps({
+const props = defineProps({
   step: {
     type: Object,
     default: () => ({}),
   },
 });
+
+const partsToList = computed(() => props.step.parts.filter((part) => (part.type === "text" && part.text.startsWith("<h3>")) || part.type === "quiz" ));
 
 const getTitle = (part) => {
   if (part.type === "text") {
