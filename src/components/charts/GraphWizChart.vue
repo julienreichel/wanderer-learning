@@ -25,7 +25,7 @@ const graphHtml = ref("");
 
 // Method to render the graph
 const renderGraph = async (dot, engine) => {
-  const viz = await instance()
+  const viz = await instance();
   try {
     const html = await viz.renderSVGElement(dot, { engine });
     graphHtml.value = html.outerHTML;

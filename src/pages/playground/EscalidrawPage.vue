@@ -25,7 +25,7 @@
     <q-card class="q-pa-md col-9">
       <q-card-section class="full-height">
         <escalidraw-wrapper
-          :initial-data="excalidrawData"
+          :data="excalidrawData"
           @change="
             (elements, appState, files) => changed(elements, appState, files)
           "
