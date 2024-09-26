@@ -149,7 +149,7 @@ onMounted(async () => {
       router.push({ name: "CourseView", params: { id: data.id } });
     }
   }
-  // load stats for for each lecture
+  // load stats for each lecture
   course.value.lectures.forEach(async (lecture) => {
     const reports = await reportingService.list({ lectureId: lecture.id });
     if (reports.length) {

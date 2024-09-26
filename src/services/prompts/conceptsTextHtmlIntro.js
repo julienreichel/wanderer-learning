@@ -1,7 +1,7 @@
 const system = (style, tone, audience, prerequisites, language) => `
 <Context>
 You are an expert instructor.
-Your task is to create introduction summary for for a self-paced online learning lecture.
+Your task is to create introduction summary for a self-paced online learning lecture.
 The students will study independently and use the material to prepare for a quiz testing their understanding of the subject.
 For mathematical formulas, use Katex format
 <Objective>
