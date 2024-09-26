@@ -35,6 +35,7 @@
     :part="part"
     :has-next="hasNext && hasAnsweredCurrentQuizz"
     :has-answered-all-quizzes="hasAnsweredAllQuizzes"
+    :answered-questions="answeredQuestions"
     @results="processResults"
     @next-step="step++"
     @finish="finish"
@@ -52,21 +53,29 @@ const props = defineProps({
   parts: { type: Array, required: true },
   stepIdx: { type: String, default: "0" },
   udpdateRoute: { type: Boolean, default: false },
+  previousReports: { type: Array, default: () => [] },
+  answeredQuestions: { type: Array, default: () => [] },
 });
-const emit = defineEmits(["finished"]);
+const emit = defineEmits(["finished", "updated"]);
 import { useIris } from "src/composables/iris";
 const { router } = useIris();
 
 const step = ref(Number(props.stepIdx) || 0);
 
 let timeStart = new Date();
-let reportings = ref(props.parts.map(() => ({ time: 0 })));
+let reportings = ref(props.previousReports.length ? props.previousReports : props.parts.map(() => ({ time: 0 })));
+
 const updateTimings = (index) => {
   if (reportings.value.length <= index) return;
 
   const timeEnd = new Date();
   reportings.value[index].time += Math.round((timeEnd - timeStart) / 1000);
   timeStart = timeEnd;
+
+  emit("updated", {
+    reportings: reportings.value,
+    responses: quizResponses.value.flat().filter(Boolean),
+  });
 };
 
 watch(step, (newStep, oldStep) => {
@@ -76,12 +85,33 @@ watch(step, (newStep, oldStep) => {
   }
 });
 
-let quizResponses = ref(
-  props.parts.map((part) => (part.type !== "quiz" ? [] : null)),
-);
+const initQuizResponses = () => {
+  const responses = props.parts.map(() => []);
+  if (props.answeredQuestions?.length) {
+    props.answeredQuestions.forEach((response) => {
+      // find the index of the parts containing the reponse.questionId
+      const index = props.parts.findIndex((part) =>
+        part.type === "quiz" && part.questions.some((q) => q.id === response.questionId),
+      );
+      if (index !== -1) {
+        responses[index].push(response);
+      }
+    });
+  }
+  return responses;
+
+}
+
+let quizResponses = ref(initQuizResponses());
+
 const processResults = ({ responses }) => {
   const index = step.value;
   quizResponses.value[index] = responses;
+
+  emit("updated", {
+    reportings: reportings.value,
+    responses: quizResponses.value.flat().filter(Boolean),
+  });
 };
 
 const part = computed(() => props.parts[step.value]);
@@ -101,23 +131,27 @@ const fillerCards = computed(() => {
 });
 
 const hasNext = computed(() => step.value < props.parts.length - 1);
-const hasAnsweredAllQuizzes = computed(() =>
-  quizResponses.value.every(Boolean),
-);
-const hasAnsweredCurrentQuizz = computed(() =>
-  Boolean(quizResponses.value[step.value]),
-);
 
 const hasQuizAnswer = (part) => {
   const idx = props.parts.indexOf(part);
-  return part.type === "quiz" && Boolean(quizResponses.value[idx]);
+  return (
+    part.type !== "quiz" ||
+    quizResponses.value[idx]?.length === part.options.nbQuestions
+  );
 };
+const hasAnsweredAllQuizzes = computed(() =>
+  props.parts.every(hasQuizAnswer),
+);
+const hasAnsweredCurrentQuizz = computed(() =>
+  hasQuizAnswer(props.parts[step.value]),
+);
+
 const finish = (finished = true) => {
   updateTimings(step.value);
   emit("finished", {
     finished,
     reportings: reportings.value,
-    responses: quizResponses.value.flat(),
+    responses: quizResponses.value.flat().filter(Boolean),
   });
 };
 </script>

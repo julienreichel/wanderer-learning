@@ -191,10 +191,8 @@ let previousQuestions = [];
 let getActiveQuestions = () => {
   if (!previousQuestions.length) {
     // check if there are some questions that have been validated, and add them to the list
-    props.questions.forEach((question) => {
-      if (question.validated) {
-        previousQuestions.push(question);
-      }
+    props.questions.filter((q) => q.validated).forEach((q) => {
+      previousQuestions.push(q);
     });
     if (previousQuestions.length >= realMax.value) {
       step.value = realMax.value;
@@ -330,7 +328,7 @@ let getActiveQuestions = () => {
 };
 
 const getQuestionsPerLevels = () => {
-  let questionsPerLevels = props.questions.reduce((acc, q) => {
+  let questionsPerLevels = props.questions.filter((q) => !q.validated ).reduce((acc, q) => {
     const level = q.level;
     if (!acc[level]) acc[level] = [];
     acc[level].push(q);
@@ -353,7 +351,7 @@ watch(
     if (props.answeredQuestions?.length) {
       // pre-populate the questions with the answers
       props.answeredQuestions.forEach((answeredQuestion, idx) => {
-        if (answeredQuestion.valid === null) {
+        if (!answeredQuestion || answeredQuestion.valid === null) {
           // the question has not been validated otherwise it would be true or false
           return;
         }
@@ -424,7 +422,6 @@ const hasResults = computed(() =>
 );
 watch(hasResults, (hasResults) => {
   if (hasResults) {
-    console.log("results", activeQuestions.value);
     emit("results", activeQuestions.value);
   }
 });

@@ -14,6 +14,7 @@
     <quiz-runner
       v-if="part.type === 'quiz'"
       :questions="part.questions"
+      :answered-questions="answeredQuestions"
       :max="Number(part.options.nbQuestions) || 0"
       adaptative
       :next-actions-icon="
@@ -21,6 +22,7 @@
       "
       :prev-actions-icon="null"
       :exam-mode="Boolean(part.options.examMode)"
+      @progress="submitResults"
       @results="submitResults"
       @finished="
         hasNext
@@ -61,6 +63,7 @@ const props = defineProps({
   part: { type: Object, required: true },
   hasNext: { type: Boolean, default: false },
   hasAnsweredAllQuizzes: { type: Boolean, default: false },
+  answeredQuestions: { type: Array, default: () => [] },
   flat: { type: Boolean, default: false },
 });
 
