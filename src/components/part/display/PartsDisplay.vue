@@ -141,7 +141,7 @@ const hasQuizAnswer = (part) => {
   const idx = props.parts.indexOf(part);
   return (
     part.type !== "quiz" ||
-    quizResponses.value[idx]?.length === part.options.nbQuestions
+    quizResponses.value[idx]?.length === Number(part.options.nbQuestions)
   );
 };
 const hasAnsweredAllQuizzes = computed(() => props.parts.every(hasQuizAnswer));
