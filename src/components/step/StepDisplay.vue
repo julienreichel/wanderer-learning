@@ -76,7 +76,13 @@ const props = defineProps({
   },
 });
 
-const partsToList = computed(() => props.step.parts.filter((part) => (part.type === "text" && part.text.startsWith("<h3>")) || part.type === "quiz" ));
+const partsToList = computed(() =>
+  props.step.parts.filter(
+    (part) =>
+      (part.type === "text" && part.text.startsWith("<h3>")) ||
+      part.type === "quiz",
+  ),
+);
 
 const getTitle = (part) => {
   if (part.type === "text") {

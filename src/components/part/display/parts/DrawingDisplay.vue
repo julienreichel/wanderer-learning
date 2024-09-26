@@ -1,10 +1,6 @@
 <template>
   <q-card-section style="height: 70vh">
-    <escalidraw-wrapper
-      :data="data"
-      view-mode-enabled
-      zen-mode-enabled
-    />
+    <escalidraw-wrapper :data="data" view-mode-enabled zen-mode-enabled />
   </q-card-section>
 </template>
 

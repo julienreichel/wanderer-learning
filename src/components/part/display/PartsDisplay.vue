@@ -63,7 +63,11 @@ const { router } = useIris();
 const step = ref(Number(props.stepIdx) || 0);
 
 let timeStart = new Date();
-let reportings = ref(props.previousReports.length ? props.previousReports : props.parts.map(() => ({ time: 0 })));
+let reportings = ref(
+  props.previousReports.length
+    ? props.previousReports
+    : props.parts.map(() => ({ time: 0 })),
+);
 
 const updateTimings = (index) => {
   if (reportings.value.length <= index) return;
@@ -90,8 +94,10 @@ const initQuizResponses = () => {
   if (props.answeredQuestions?.length) {
     props.answeredQuestions.forEach((response) => {
       // find the index of the parts containing the reponse.questionId
-      const index = props.parts.findIndex((part) =>
-        part.type === "quiz" && part.questions.some((q) => q.id === response.questionId),
+      const index = props.parts.findIndex(
+        (part) =>
+          part.type === "quiz" &&
+          part.questions.some((q) => q.id === response.questionId),
       );
       if (index !== -1) {
         responses[index].push(response);
@@ -99,8 +105,7 @@ const initQuizResponses = () => {
     });
   }
   return responses;
-
-}
+};
 
 let quizResponses = ref(initQuizResponses());
 
@@ -139,9 +144,7 @@ const hasQuizAnswer = (part) => {
     quizResponses.value[idx]?.length === part.options.nbQuestions
   );
 };
-const hasAnsweredAllQuizzes = computed(() =>
-  props.parts.every(hasQuizAnswer),
-);
+const hasAnsweredAllQuizzes = computed(() => props.parts.every(hasQuizAnswer));
 const hasAnsweredCurrentQuizz = computed(() =>
   hasQuizAnswer(props.parts[step.value]),
 );

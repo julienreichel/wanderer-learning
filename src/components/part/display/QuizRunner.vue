@@ -191,9 +191,11 @@ let previousQuestions = [];
 let getActiveQuestions = () => {
   if (!previousQuestions.length) {
     // check if there are some questions that have been validated, and add them to the list
-    props.questions.filter((q) => q.validated).forEach((q) => {
-      previousQuestions.push(q);
-    });
+    props.questions
+      .filter((q) => q.validated)
+      .forEach((q) => {
+        previousQuestions.push(q);
+      });
     if (previousQuestions.length >= realMax.value) {
       step.value = realMax.value;
     }
@@ -328,12 +330,14 @@ let getActiveQuestions = () => {
 };
 
 const getQuestionsPerLevels = () => {
-  let questionsPerLevels = props.questions.filter((q) => !q.validated ).reduce((acc, q) => {
-    const level = q.level;
-    if (!acc[level]) acc[level] = [];
-    acc[level].push(q);
-    return acc;
-  }, {});
+  let questionsPerLevels = props.questions
+    .filter((q) => !q.validated)
+    .reduce((acc, q) => {
+      const level = q.level;
+      if (!acc[level]) acc[level] = [];
+      acc[level].push(q);
+      return acc;
+    }, {});
 
   // randomize the order of the questions in the levels
   questionsPerLevels = Object.keys(questionsPerLevels).reduce((acc, level) => {

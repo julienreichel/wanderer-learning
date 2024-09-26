@@ -63,11 +63,14 @@ onMounted(async () => {
     { label: data.title, id: data.id, edit },
   ]);
 
-  const existingReports = await stepReportingService.list({ lectureStepId: data.id, userId, username });
+  const existingReports = await stepReportingService.list({
+    lectureStepId: data.id,
+    userId,
+    username,
+  });
   activeReport.value = existingReports.find((report) => report.inProgress);
 
   lectureStep.value = data;
-
 });
 
 const saveReport = async (reportings, responses, inProgress) => {
@@ -77,7 +80,7 @@ const saveReport = async (reportings, responses, inProgress) => {
       ...activeReport.value,
       reportings,
       responses,
-      inProgress
+      inProgress,
     });
   } else {
     activeReport.value = await stepReportingService.create({
